@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ombre/ombre_objet.gd" id="1_r"]
+[ext_resource type="PackedScene" path="res://assets/ombre/decor/lampe_champignon_modele.glb" id="2_r"]
+
+[node name="LampeChampignon" type="Node3D"]
+script = ExtResource("1_r")
+footprint = 0.65
+
+[node name="Modele" parent="." instance=ExtResource("2_r")]
+
+[node name="Lumiere1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 0)
+light_color = Color(0.50, 1.00, 0.88, 1)
+light_energy = 0.6
+omni_range = 2.2
+omni_attenuation = 1.6

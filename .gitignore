@@ -1,0 +1,10 @@
+# Godot
+.godot/
+*.tmp
+export_presets.cfg
+# Python
+__pycache__/
+*.pyc
+# Blender backups
+*.blend1
+*.blend2

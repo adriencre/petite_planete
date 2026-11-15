@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/lueurs/pouponniere.gd" id="1_script"]
+[ext_resource type="Material" path="res://assets/lueurs/materials/lueur_plein.tres" id="2_plein"]
+[ext_resource type="PackedScene" path="res://assets/lueurs/habitant.tscn" id="3_habitant"]
+[ext_resource type="Script" path="res://scripts/lueurs/lueur_speech.gd" id="4_speech"]
+
+[sub_resource type="BoxMesh" id="Fente"]
+material = ExtResource("2_plein")
+size = Vector3(0.5, 0.006, 0.022)
+
+[node name="Pouponniere" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Fentes" type="Node3D" parent="."]
+
+[node name="Fente1" type="MeshInstance3D" parent="Fentes"]
+transform = Transform3D(0.97, 0, 0.26, 0, 1, 0, -0.26, 0, 0.97, -0.1, 0.005, -0.12)
+cast_shadow = 0
+mesh = SubResource("Fente")
+
+[node name="Fente2" type="MeshInstance3D" parent="Fentes"]
+transform = Transform3D(0.8, 0, -0.6, 0, 1, 0, 0.6, 0, 0.8, 0.18, 0.005, 0.1)
+cast_shadow = 0
+mesh = SubResource("Fente")
+
+[node name="Fente3" type="MeshInstance3D" parent="Fentes"]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.005, 0.22)
+cast_shadow = 0
+mesh = SubResource("Fente")
+
+[node name="Petite1" parent="." instance=ExtResource("3_habitant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.12, -0.1)
+size = 0.45
+wander_radius = 0.35
+speed = 0.6
+flee_distance = 2.0
+peek_time = 4.0
+snap_to_ground = false
+
+[node name="Parole" type="Node3D" parent="Petite1"]
+script = ExtResource("4_speech")
+text = "La Bouche est chaude. Maman dit de pas y aller."
+id = &"pouponniere_bouche"
+hear_distance = 2.6
+height = 0.7
+
+[node name="Petite2" parent="." instance=ExtResource("3_habitant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.12, 0.12)
+size = 0.38
+wander_radius = 0.3
+speed = 0.7
+flee_distance = 2.0
+peek_time = 4.5
+snap_to_ground = false
+
+[node name="Petite3" parent="." instance=ExtResource("3_habitant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.12, 0.25)
+size = 0.32
+wander_radius = 0.4
+speed = 0.5
+flee_distance = 2.0
+peek_time = 5.0
+snap_to_ground = false
+
+[node name="Petite4" parent="." instance=ExtResource("3_habitant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.12, -0.2)
+size = 0.4
+wander_radius = 0.3
+speed = 0.55
+flee_distance = 2.0
+peek_time = 6.0
+snap_to_ground = false

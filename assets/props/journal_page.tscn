@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/story/journal_page_pickup.gd" id="1_script"]
+[ext_resource type="Material" path="res://assets/materials/petal.tres" id="2_paper"]
+[ext_resource type="Material" path="res://assets/materials/stone.tres" id="3_stone"]
+[ext_resource type="PackedScene" path="res://scenes/components/interactable.tscn" id="4_interactable"]
+
+[sub_resource type="BoxMesh" id="Mesh_sheet"]
+size = Vector3(0.28, 0.008, 0.36)
+
+[sub_resource type="BoxMesh" id="Mesh_line"]
+size = Vector3(0.18, 0.004, 0.012)
+
+[sub_resource type="BoxMesh" id="Mesh_stone"]
+size = Vector3(0.12, 0.07, 0.1)
+
+[node name="JournalPage" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Sheet" type="Node3D" parent="."]
+transform = Transform3D(0.94, 0, 0.34, 0, 1, 0, -0.34, 0, 0.94, 0, 0.01, 0)
+
+[node name="Paper" type="MeshInstance3D" parent="Sheet"]
+mesh = SubResource("Mesh_sheet")
+surface_material_override/0 = ExtResource("2_paper")
+
+[node name="Ecriture" type="Node3D" parent="Sheet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
+
+[node name="Ligne1" type="MeshInstance3D" parent="Sheet/Ecriture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0, -0.12)
+cast_shadow = 0
+mesh = SubResource("Mesh_line")
+
+[node name="Ligne2" type="MeshInstance3D" parent="Sheet/Ecriture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, -0.07)
+cast_shadow = 0
+mesh = SubResource("Mesh_line")
+
+[node name="Ligne3" type="MeshInstance3D" parent="Sheet/Ecriture"]
+transform = Transform3D(0.8, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 0, -0.02)
+cast_shadow = 0
+mesh = SubResource("Mesh_line")
+
+[node name="Ligne4" type="MeshInstance3D" parent="Sheet/Ecriture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.03)
+cast_shadow = 0
+mesh = SubResource("Mesh_line")
+
+[node name="Ligne5" type="MeshInstance3D" parent="Sheet/Ecriture"]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, -0.035, 0, 0.08)
+cast_shadow = 0
+mesh = SubResource("Mesh_line")
+
+[node name="Pierre" type="MeshInstance3D" parent="Sheet"]
+transform = Transform3D(0.9, 0, 0.44, 0, 1, 0, -0.44, 0, 0.9, 0.07, 0.04, 0.12)
+mesh = SubResource("Mesh_stone")
+surface_material_override/0 = ExtResource("3_stone")
+
+[node name="Interactable" parent="." instance=ExtResource("4_interactable")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)

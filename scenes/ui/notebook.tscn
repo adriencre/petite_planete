@@ -1,0 +1,183 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/notebook/notebook.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/key_q.png" id="2_q"]
+[ext_resource type="Texture2D" path="res://assets/ui/key_d.png" id="3_d"]
+[ext_resource type="Texture2D" path="res://assets/ui/key_e.png" id="4_e"]
+[ext_resource type="Texture2D" path="res://assets/ui/notebook_icon.png" id="5_icon"]
+[ext_resource type="Texture2D" path="res://assets/ui/key_tab.png" id="6_tab"]
+
+[sub_resource type="StyleBoxFlat" id="Style_page"]
+bg_color = Color(0.94, 0.9, 0.82, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.79, 0.73, 0.6, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.1, 0.08, 0.12, 0.35)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="Style_toast"]
+bg_color = Color(0.94, 0.9, 0.82, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49, 0.65, 0.62, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Notebook" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.08, 0.08, 0.14, 0.55)
+
+[node name="Book" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -460.0
+offset_top = -290.0
+offset_right = 460.0
+offset_bottom = 290.0
+pivot_offset = Vector2(460, 290)
+mouse_filter = 2
+
+[node name="LeftPage" type="Panel" parent="Book"]
+layout_mode = 0
+offset_right = 452.0
+offset_bottom = 520.0
+theme_override_styles/panel = SubResource("Style_page")
+
+[node name="Margin" type="MarginContainer" parent="Book/LeftPage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Content" type="VBoxContainer" parent="Book/LeftPage/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="RightPage" type="Panel" parent="Book"]
+layout_mode = 0
+offset_left = 468.0
+offset_right = 920.0
+offset_bottom = 520.0
+theme_override_styles/panel = SubResource("Style_page")
+
+[node name="Margin" type="MarginContainer" parent="Book/RightPage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 30
+
+[node name="Content" type="VBoxContainer" parent="Book/RightPage/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Spine" type="ColorRect" parent="Book"]
+layout_mode = 0
+offset_left = 452.0
+offset_top = 10.0
+offset_right = 468.0
+offset_bottom = 510.0
+color = Color(0.49, 0.65, 0.62, 1)
+
+[node name="Dots" type="HBoxContainer" parent="Book"]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 534.0
+offset_right = 540.0
+offset_bottom = 548.0
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="KeyPrev" type="TextureRect" parent="Book"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 528.0
+offset_right = 44.0
+offset_bottom = 572.0
+texture = ExtResource("2_q")
+expand_mode = 1
+
+[node name="KeyNext" type="TextureRect" parent="Book"]
+layout_mode = 0
+offset_left = 876.0
+offset_top = 528.0
+offset_right = 920.0
+offset_bottom = 572.0
+texture = ExtResource("3_d")
+expand_mode = 1
+
+[node name="KeyClose" type="TextureRect" parent="Book"]
+layout_mode = 0
+offset_left = 438.0
+offset_top = -52.0
+offset_right = 482.0
+offset_bottom = -8.0
+texture = ExtResource("4_e")
+expand_mode = 1
+
+[node name="Toast" type="PanelContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -250.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 108.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_toast")
+
+[node name="Row" type="HBoxContainer" parent="Toast"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="Icon" type="TextureRect" parent="Toast/Row"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = ExtResource("5_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Picture" type="TextureRect" parent="Toast/Row"]
+modulate = Color(0.31, 0.25, 0.22, 0.92)
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Key" type="TextureRect" parent="Toast/Row"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("6_tab")
+expand_mode = 1
+stretch_mode = 5

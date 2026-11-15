@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/lueurs/lueur_trail.gd" id="1_trail"]
+
+[sub_resource type="Curve3D" id="Courbe"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0.5, 1.375, 0, 0, 0, 0, 0, 0, 0, 1.0, 1.21, 0, 0, 0, 0, 0, 0, 0, 1.5, 1.15, 0, 0, 0, 0, 0, 0, 0, 2.0, 1.21, 0, 0, 0, 0, 0, 0, 0, 2.5, 1.375, 0, 0, 0, 0, 0, 0, 0, 3.0, 1.6, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+}
+
+[node name="FilsLumiere" type="Path3D"]
+curve = SubResource("Courbe")
+script = ExtResource("1_trail")
+width = 0.06

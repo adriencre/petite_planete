@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ombre/ombre_objet.gd" id="1_r"]
+[ext_resource type="PackedScene" path="res://assets/ombre/decor/fougere_modele.glb" id="2_r"]
+
+[node name="Fougere" type="Node3D"]
+script = ExtResource("1_r")
+footprint = 0.65
+
+[node name="Modele" parent="." instance=ExtResource("2_r")]

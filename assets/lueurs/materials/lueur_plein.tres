@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/lueur.gdshader" id="1"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1")
+shader_parameter/billboard = false
+shader_parameter/round_sprite = false
+shader_parameter/intensity = 1.1
+shader_parameter/editor_preview = true

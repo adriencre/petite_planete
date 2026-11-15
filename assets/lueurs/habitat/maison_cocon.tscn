@@ -1,0 +1,110 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/lueurs/lueur_habitat.gd" id="1_script"]
+[ext_resource type="Material" path="res://assets/lueurs/materials/lueur_tisse.tres" id="2_tisse"]
+[ext_resource type="Material" path="res://assets/lueurs/materials/lueur_plein.tres" id="3_plein"]
+[ext_resource type="Material" path="res://assets/lueurs/materials/lueur_halo.tres" id="4_halo"]
+[ext_resource type="Material" path="res://assets/lueurs/materials/lueur_cendre.tres" id="5_cendre"]
+[ext_resource type="Material" path="res://assets/lueurs/materials/lueur_cendre_plein.tres" id="6_cendre_plein"]
+
+[sub_resource type="SphereMesh" id="Mesh_cocon"]
+material = ExtResource("2_tisse")
+radius = 0.42
+height = 1.15
+radial_segments = 10
+rings = 6
+
+[sub_resource type="TorusMesh" id="Mesh_seuil"]
+material = ExtResource("3_plein")
+inner_radius = 0.36
+outer_radius = 0.42
+rings = 12
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="Mesh_fil"]
+material = ExtResource("3_plein")
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.9
+radial_segments = 4
+rings = 0
+
+[sub_resource type="SphereMesh" id="Mesh_porte"]
+material = ExtResource("3_plein")
+radius = 0.13
+height = 0.3
+radial_segments = 8
+rings = 4
+
+[sub_resource type="QuadMesh" id="Mesh_halo"]
+material = ExtResource("4_halo")
+size = Vector2(2.2, 2.2)
+
+[sub_resource type="SphereMesh" id="Mesh_cocon_mort"]
+material = ExtResource("5_cendre")
+radius = 0.42
+height = 1.15
+radial_segments = 10
+rings = 6
+
+[sub_resource type="BoxMesh" id="Mesh_eclat"]
+material = ExtResource("6_cendre_plein")
+size = Vector3(0.18, 0.04, 0.1)
+
+[node name="MaisonCocon" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Vivant" type="Node3D" parent="."]
+
+[node name="Cocon" type="MeshInstance3D" parent="Vivant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_cocon")
+
+[node name="Seuil" type="MeshInstance3D" parent="Vivant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_seuil")
+
+[node name="Porte" type="MeshInstance3D" parent="Vivant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, 0.38)
+cast_shadow = 0
+mesh = SubResource("Mesh_porte")
+
+[node name="Fil1" type="MeshInstance3D" parent="Vivant"]
+transform = Transform3D(0.98, 0.2, 0, -0.2, 0.98, 0, 0, 0, 1, -0.08, 1.55, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_fil")
+
+[node name="Fil2" type="MeshInstance3D" parent="Vivant"]
+transform = Transform3D(0.98, -0.2, 0, 0.2, 0.98, 0, 0, 0, 1, 0.08, 1.55, 0.04)
+cast_shadow = 0
+mesh = SubResource("Mesh_fil")
+
+[node name="Halo" type="MeshInstance3D" parent="Vivant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_halo")
+
+[node name="Effondre" type="Node3D" parent="."]
+visible = false
+
+[node name="Cocon" type="MeshInstance3D" parent="Effondre"]
+transform = Transform3D(0.88, -0.48, 0, 0.21, 0.38, 0, 0, 0, 1, 0.15, 0.2, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_cocon_mort")
+
+[node name="Eclat1" type="MeshInstance3D" parent="Effondre"]
+transform = Transform3D(0.8, 0, 0.6, 0, 1, 0, -0.6, 0, 0.8, -0.45, 0.02, 0.3)
+cast_shadow = 0
+mesh = SubResource("Mesh_eclat")
+
+[node name="Eclat2" type="MeshInstance3D" parent="Effondre"]
+transform = Transform3D(0.3, 0, -0.95, 0, 1, 0, 0.95, 0, 0.3, 0.5, 0.02, -0.35)
+cast_shadow = 0
+mesh = SubResource("Mesh_eclat")
+
+[node name="Eclat3" type="MeshInstance3D" parent="Effondre"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.02, -0.5)
+cast_shadow = 0
+mesh = SubResource("Mesh_eclat")

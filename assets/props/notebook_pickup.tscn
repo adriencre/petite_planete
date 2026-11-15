@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/story/notebook_pickup.gd" id="1_script"]
+[ext_resource type="Material" path="res://assets/materials/robot_accent.tres" id="2_cover"]
+[ext_resource type="Material" path="res://assets/materials/petal.tres" id="3_paper"]
+[ext_resource type="PackedScene" path="res://scenes/components/interactable.tscn" id="4_interactable"]
+
+[sub_resource type="BoxMesh" id="Mesh_cover"]
+size = Vector3(0.3, 0.05, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_pages"]
+size = Vector3(0.27, 0.035, 0.2)
+
+[node name="NotebookPickup" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Cover" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.97, 0, 0.26, 0, 1, 0, -0.26, 0, 0.97, 0, 0.025, 0)
+mesh = SubResource("Mesh_cover")
+surface_material_override/0 = ExtResource("2_cover")
+
+[node name="Pages" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.97, 0, 0.26, 0, 1, 0, -0.26, 0, 0.97, 0.01, 0.04, 0)
+mesh = SubResource("Mesh_pages")
+surface_material_override/0 = ExtResource("3_paper")
+
+[node name="Interactable" parent="." instance=ExtResource("4_interactable")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)

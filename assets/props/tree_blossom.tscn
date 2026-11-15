@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/trunk.tres" id="1_trunk"]
+[ext_resource type="Material" path="res://assets/materials/blossom.tres" id="2_blossom"]
+[ext_resource type="Material" path="res://assets/materials/blossom_dark.tres" id="3_blossom_dark"]
+
+[sub_resource type="CylinderMesh" id="Mesh_trunk"]
+top_radius = 0.07
+bottom_radius = 0.13
+height = 1.4
+radial_segments = 7
+rings = 0
+
+[sub_resource type="CylinderMesh" id="Mesh_branch"]
+top_radius = 0.04
+bottom_radius = 0.07
+height = 0.8
+radial_segments = 6
+rings = 0
+
+[sub_resource type="SphereMesh" id="Mesh_blob"]
+radius = 0.42
+height = 0.84
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CylinderShape3D" id="Shape_trunk"]
+radius = 0.22
+height = 1.6
+
+[node name="TreeBlossom" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("Shape_trunk")
+
+[node name="Trunk" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.7, 0)
+mesh = SubResource("Mesh_trunk")
+surface_material_override/0 = ExtResource("1_trunk")
+
+[node name="BranchR" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.765, 0.644, 0, -0.644, 0.765, 0, 0, 0, 1, 0.25, 1.1, 0)
+mesh = SubResource("Mesh_branch")
+surface_material_override/0 = ExtResource("1_trunk")
+
+[node name="BranchL" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.765, -0.644, 0, 0.617, 0.733, -0.296, 0.19, 0.226, 0.955, -0.2, 1.15, 0.1)
+mesh = SubResource("Mesh_branch")
+surface_material_override/0 = ExtResource("1_trunk")
+
+[node name="Canopy" type="Node3D" parent="."]
+
+[node name="Blob1" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(1, 0, 0, 0, 1.35, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("Mesh_blob")
+surface_material_override/0 = ExtResource("2_blossom")
+
+[node name="Blob2" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(1, 0, 0, 0, 1.35, 0, 0, 0, 1, 0.55, 1.75, 0.15)
+mesh = SubResource("Mesh_blob")
+surface_material_override/0 = ExtResource("3_blossom_dark")
+
+[node name="Blob3" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(1, 0, 0, 0, 1.35, 0, 0, 0, 1, -0.5, 1.8, 0.2)
+mesh = SubResource("Mesh_blob")
+surface_material_override/0 = ExtResource("2_blossom")
+
+[node name="Blob4" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(1, 0, 0, 0, 1.35, 0, 0, 0, 1, 0.1, 1.75, -0.5)
+mesh = SubResource("Mesh_blob")
+surface_material_override/0 = ExtResource("3_blossom_dark")
+
+[node name="Blob5" type="MeshInstance3D" parent="Canopy"]
+transform = Transform3D(1, 0, 0, 0, 1.35, 0, 0, 0, 1, 0.05, 1.7, 0.5)
+mesh = SubResource("Mesh_blob")
+surface_material_override/0 = ExtResource("2_blossom")

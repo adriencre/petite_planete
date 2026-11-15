@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/lueurs/compteur.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/lueurs/habitant.tscn" id="2_habitant"]
+[ext_resource type="Script" path="res://scripts/lueurs/lueur_speech.gd" id="3_speech"]
+
+[node name="Compteur" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Tas" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0, 0.1)
+
+[node name="Heron" parent="." instance=ExtResource("2_habitant")]
+form = 2
+shy = false
+follows = false
+wander_radius = 0.2
+speed = 0.15
+snap_to_ground = false
+
+[node name="Parole" type="Node3D" parent="Heron"]
+script = ExtResource("3_speech")
+text = "Encore un."
+id = &"compteur_encore_un"
+auto = false
+hear_distance = 5.0
+height = 1.5
+
+[node name="Verite" type="Node3D" parent="Heron"]
+script = ExtResource("3_speech")
+id = &"compteur_214"
+auto = false
+height = 1.5
+
+[node name="Cadeau" type="Node3D" parent="Heron"]
+script = ExtResource("3_speech")
+text = "Tiens. C'était le premier. Celui-là, je l'ai gardé pour toi."
+id = &"compteur_premier"
+auto = false
+height = 1.5

@@ -1,0 +1,130 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/materials/trunk.tres" id="wood"]
+[ext_resource type="Material" path="res://assets/materials/root_bark.tres" id="wood_light"]
+[ext_resource type="Material" path="res://assets/materials/stone.tres" id="stone"]
+[ext_resource type="Material" path="res://assets/materials/stone_dark.tres" id="stone_dark"]
+[ext_resource type="Material" path="res://assets/materials/soil.tres" id="soil"]
+[ext_resource type="Material" path="res://assets/materials/pine.tres" id="dry"]
+[ext_resource type="Material" path="res://assets/materials/blossom.tres" id="pink"]
+[ext_resource type="Material" path="res://assets/materials/robot_accent.tres" id="accent"]
+[ext_resource type="Script" path="res://scripts/notebook/landmark.gd" id="landmark"]
+[ext_resource type="Texture2D" path="res://assets/textures/story/sketch_cart.png" id="sketch"]
+
+[sub_resource type="SphereShape3D" id="R1"]
+radius = 2.4
+
+[sub_resource type="BoxMesh" id="R2"]
+size = Vector3(1.0, 0.1, 1.6)
+
+[sub_resource type="BoxMesh" id="R3"]
+size = Vector3(0.08, 0.3, 1.6)
+
+[sub_resource type="BoxMesh" id="R4"]
+size = Vector3(0.08, 0.3, 1.6)
+
+[sub_resource type="CylinderMesh" id="R5"]
+top_radius = 0.32
+bottom_radius = 0.32
+height = 0.08
+radial_segments = 12
+rings = 0
+
+[sub_resource type="CylinderMesh" id="R6"]
+top_radius = 0.32
+bottom_radius = 0.32
+height = 0.08
+radial_segments = 12
+rings = 0
+
+[sub_resource type="BoxMesh" id="R7"]
+size = Vector3(0.06, 0.06, 1.0)
+
+[sub_resource type="CylinderMesh" id="R8"]
+top_radius = 0.1
+bottom_radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 0
+
+[sub_resource type="CylinderMesh" id="R9"]
+top_radius = 0.1
+bottom_radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 0
+
+[sub_resource type="CylinderMesh" id="R10"]
+top_radius = 0.1
+bottom_radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 0
+
+[sub_resource type="BoxShape3D" id="R11"]
+size = Vector3(1.1, 0.9, 1.7)
+
+[node name="Cart" type="Node3D"]
+
+[node name="Landmark" type="Area3D" parent="."]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.8000, 0.0000)
+script = ExtResource("landmark")
+place_id = &"charrette"
+sketch = ExtResource("sketch")
+map_icon = "eye"
+
+[node name="Shape" type="CollisionShape3D" parent="Landmark"]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000)
+shape = SubResource("R1")
+
+[node name="Solid" type="StaticBody3D" parent="."]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000)
+
+[node name="Bed" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9759, 0.2182, 0.0000, -0.2182, 0.9759, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.4500, 0.0000)
+mesh = SubResource("R2")
+surface_material_override/0 = ExtResource("wood_light")
+
+[node name="SideL" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9759, 0.2182, 0.0000, -0.2182, 0.9759, 0.0000, 0.0000, 0.0000, 1.0000, -0.4800, 0.5500, 0.0000)
+mesh = SubResource("R3")
+surface_material_override/0 = ExtResource("wood")
+
+[node name="SideR" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9759, 0.2182, 0.0000, -0.2182, 0.9759, 0.0000, 0.0000, 0.0000, 1.0000, 0.5000, 0.7500, 0.0000)
+mesh = SubResource("R4")
+surface_material_override/0 = ExtResource("wood")
+
+[node name="Wheel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0000, 1.0000, 0.0000, -1.0000, 0.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.6200, 0.3300, 0.2000)
+mesh = SubResource("R5")
+surface_material_override/0 = ExtResource("wood")
+
+[node name="FallenWheel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9211, 0.0000, -0.3894, 0.0000, 1.0000, 0.0000, 0.3894, 0.0000, 0.9211, -0.9000, 0.0400, 0.6000)
+mesh = SubResource("R6")
+surface_material_override/0 = ExtResource("wood")
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 0.9394, 0.3429, 0.0000, -0.3429, 0.9394, 0.1000, 0.3500, -1.2000)
+mesh = SubResource("R7")
+surface_material_override/0 = ExtResource("wood")
+
+[node name="Pot1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.1000, 0.6400, 0.3000)
+mesh = SubResource("R8")
+surface_material_override/0 = ExtResource("pink")
+
+[node name="Pot2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, -0.1500, 0.5900, -0.2000)
+mesh = SubResource("R9")
+surface_material_override/0 = ExtResource("pink")
+
+[node name="Pot3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.2500, 0.6700, -0.4000)
+mesh = SubResource("R10")
+surface_material_override/0 = ExtResource("pink")
+
+[node name="CartCol" type="CollisionShape3D" parent="Solid"]
+transform = Transform3D(1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.4500, 0.0000)
+shape = SubResource("R11")

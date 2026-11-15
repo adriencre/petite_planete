@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ombre/ombre_objet.gd" id="1_r"]
+[ext_resource type="PackedScene" path="res://assets/ombre/decor/ilot_corail_modele.glb" id="2_r"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
+radius = 2.1
+height = 0.6
+
+[node name="IlotCorail" type="StaticBody3D"]
+script = ExtResource("1_r")
+footprint = 2.45
+
+[node name="Modele" parent="." instance=ExtResource("2_r")]
+
+[node name="Collision2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("CylinderShape3D_1")
+
+[node name="Lumiere1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1.25, 0.9)
+light_color = Color(0.50, 1.00, 0.88, 1)
+light_energy = 0.6
+omni_range = 3.0
+omni_attenuation = 1.6
+
+[node name="Lumiere2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+light_color = Color(1.00, 0.60, 0.78, 1)
+light_energy = 0.5
+omni_range = 3.5
+omni_attenuation = 1.6
