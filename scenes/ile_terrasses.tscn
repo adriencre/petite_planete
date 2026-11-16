@@ -1,0 +1,245 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile_terrain.glb" id="m_terrain"]
+[ext_resource type="PackedScene" path="res://assets/models/maison_semeur.glb" id="m_maison"]
+[ext_resource type="PackedScene" path="res://assets/models/squelette_semeur.glb" id="m_squelette"]
+[ext_resource type="PackedScene" path="res://assets/models/rocher_dos.glb" id="m_rocher_dos"]
+[ext_resource type="PackedScene" path="res://assets/models/jardin_semeur.glb" id="m_jardin"]
+[ext_resource type="PackedScene" path="res://assets/models/arbre_spirale.glb" id="m_arbre"]
+[ext_resource type="PackedScene" path="res://assets/models/buisson.glb" id="m_buisson"]
+[ext_resource type="PackedScene" path="res://assets/models/pierre_soleil.glb" id="m_pierre"]
+[ext_resource type="PackedScene" path="res://assets/models/lanterne_semeur.glb" id="m_lanterne"]
+[ext_resource type="PackedScene" path="res://assets/models/rocher.glb" id="m_rocher"]
+[ext_resource type="PackedScene" path="res://assets/models/tour_semeurs.glb" id="m_tour"]
+[ext_resource type="Shader" path="res://shaders/ciel_pastel.gdshader" id="s_ciel"]
+[ext_resource type="Shader" path="res://shaders/mer.gdshader" id="s_mer"]
+[ext_resource type="Shader" path="res://shaders/roche_herbe.gdshader" id="s_terrain"]
+[ext_resource type="Shader" path="res://shaders/vegetation.gdshader" id="s_vege"]
+[ext_resource type="Shader" path="res://shaders/vision.gdshader" id="s_vision"]
+[ext_resource type="Script" path="res://scripts/semis_vegetation.gd" id="sc_semis"]
+[ext_resource type="Script" path="res://scripts/ile_test.gd" id="sc_ile"]
+[ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
+[ext_resource type="PackedScene" path="res://assets/models/lanterne_fleur.glb" id="m_lanterne_fleur"]
+[ext_resource type="Script" path="res://scripts/lanterne_fleur.gd" id="sc_lanterne"]
+[ext_resource type="Script" path="res://scripts/zone_endormie.gd" id="sc_zone"]
+[ext_resource type="Shader" path="res://shaders/zone_endormie.gdshader" id="s_zone"]
+[ext_resource type="Script" path="res://scripts/terrasses.gd" id="sc_terrasses"]
+[ext_resource type="PackedScene" path="res://assets/models/ruine_porte.glb" id="m_ruine"]
+
+[sub_resource type="ShaderMaterial" id="zone_mat"]
+render_priority = -10
+shader = ExtResource("s_zone")
+
+[sub_resource type="ShaderMaterial" id="ciel_mat"]
+shader = ExtResource("s_ciel")
+
+[sub_resource type="Sky" id="ciel"]
+sky_material = SubResource("ciel_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("ciel")
+ambient_light_source = 3
+ambient_light_color = Color(0.95, 0.82, 0.9, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.75
+tonemap_mode = 2
+tonemap_white = 4.0
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.06
+fog_enabled = true
+fog_light_color = Color(0.96, 0.8, 0.84, 1)
+fog_sun_scatter = 0.25
+fog_density = 0.0018
+fog_sky_affect = 0.0
+fog_height = 1.0
+fog_height_density = 0.05
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(1, 0.9, 0.92, 1)
+volumetric_fog_emission = Color(0.55, 0.42, 0.5, 1)
+volumetric_fog_emission_energy = 0.5
+volumetric_fog_length = 160.0
+adjustment_enabled = true
+adjustment_saturation = 1.25
+adjustment_contrast = 1.06
+
+[sub_resource type="ShaderMaterial" id="mer_mat"]
+shader = ExtResource("s_mer")
+
+[sub_resource type="PlaneMesh" id="mer_mesh"]
+material = SubResource("mer_mat")
+size = Vector2(2000, 2000)
+
+[sub_resource type="ShaderMaterial" id="terrain_mat"]
+shader = ExtResource("s_terrain")
+shader_parameter/hauteur_sable = 1.3
+
+[sub_resource type="ShaderMaterial" id="vege_mat"]
+shader = ExtResource("s_vege")
+
+[sub_resource type="ShaderMaterial" id="vision_mat"]
+shader = ExtResource("s_vision")
+shader_parameter/vignette = 0.25
+
+[sub_resource type="FogMaterial" id="brume_mat"]
+density = 0.35
+albedo = Color(1, 0.94, 0.95, 1)
+height_falloff = 1.2
+edge_fade = 0.6
+
+[node name="IleTerrasses" type="Node3D"]
+script = ExtResource("sc_ile")
+
+[node name="Environnement" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.82404, 0.56642, -0.01100, 0.00000, 0.01942, 0.99981, 0.56653, 0.82389, -0.01600, 0.00000, 50.00000, 0.00000)
+light_color = Color(1, 0.86, 0.7, 1)
+light_energy = 2.0
+shadow_enabled = true
+directional_shadow_max_distance = 90.0
+
+[node name="Mer" type="MeshInstance3D" parent="."]
+mesh = SubResource("mer_mesh")
+
+[node name="Brume" type="Node3D" parent="."]
+
+[node name="Banc1" type="FogVolume" parent="Brume"]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, -30.00000, 0.60000, 20.00000)
+size = Vector3(40, 3, 25)
+shape = 0
+material = SubResource("brume_mat")
+
+[node name="Banc2" type="FogVolume" parent="Brume"]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 35.00000, 0.60000, 5.00000)
+size = Vector3(30, 3, 40)
+shape = 0
+material = SubResource("brume_mat")
+
+[node name="Banc3" type="FogVolume" parent="Brume"]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 5.00000, 0.60000, 55.00000)
+size = Vector3(60, 3, 25)
+shape = 0
+material = SubResource("brume_mat")
+
+[node name="Banc4" type="FogVolume" parent="Brume"]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, -60.00000, 0.80000, -30.00000)
+size = Vector3(40, 4, 50)
+shape = 0
+material = SubResource("brume_mat")
+
+[node name="Banc5" type="FogVolume" parent="Brume"]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 60.00000, 0.80000, -50.00000)
+size = Vector3(50, 4, 40)
+shape = 0
+material = SubResource("brume_mat")
+
+[node name="Terrasses" type="MeshInstance3D" parent="."]
+script = ExtResource("sc_terrasses")
+carte = ". . . . . . . . . . . . . .
+. . . 3 3 3 3 . . . . . . .
+. . . 3 3 3 3 2 2 . . . . .
+. . 2 2^ 2 2 2 2 2t . . 4 . .
+. . 2t 2 2 2 2 2 2 . . 4t 4 .
+. . 1 1 1 1^ 1 1 1 . . . . .
+. 1t 1 1 1 1 1 1 1 1 . . . .
+. 1 1 1 1 1 1 0 0 1t . . . .
+. 0 0 1 1 0^ 0 0 0 . . . . .
+. . 0 0 0 0 0 0 0 0 . . . .
+. . . 0 0 0 0 0 . . . . . .
+. . . . . . . . . . . . . ."
+materiau_terrain = SubResource("terrain_mat")
+
+[node name="Monde" type="Node3D" parent="."]
+
+[node name="MaisonSemeur" parent="Monde" instance=ExtResource("m_maison")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -8, 8.1, -16)
+
+[node name="PierreSoleil" parent="Monde" instance=ExtResource("m_pierre")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -2, 8.1, -18)
+
+[node name="Lumiere" type="OmniLight3D" parent="Monde/PierreSoleil"]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0, 1.2, 0)
+light_color = Color(1, 0.78, 0.45, 1)
+light_energy = 2.0
+omni_range = 6.0
+
+[node name="SqueletteSemeur" parent="Monde" instance=ExtResource("m_squelette")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 2, 5.6, -6)
+
+[node name="Arbre1" parent="Monde" instance=ExtResource("m_arbre")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 6, 3.1, 2)
+
+[node name="Buisson1" parent="Monde" instance=ExtResource("m_buisson")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -14, 3.1, 6)
+
+[node name="Ruine" parent="Monde" instance=ExtResource("m_ruine")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 20, 10.6, -8)
+
+[node name="TourLointaine" parent="Monde" instance=ExtResource("m_tour")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 70, 10.5, -110)
+
+[node name="Herbe" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("cible")]
+cast_shadow = 0
+material_override = SubResource("vege_mat")
+script = ExtResource("sc_semis")
+cible = NodePath("../Terrasses")
+nombre = 70000
+pente_min = 0.8
+hauteur = Vector2(0.14, 0.32)
+niveau_eau = 0.5
+
+[node name="Fleurs" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("cible")]
+cast_shadow = 0
+material_override = SubResource("vege_mat")
+script = ExtResource("sc_semis")
+cible = NodePath("../Terrasses")
+forme = 1
+nombre = 5000
+pente_min = 0.85
+hauteur = Vector2(0.6, 1.0)
+graine = 7
+niveau_eau = 0.5
+
+[node name="ZoneEndormie" type="MeshInstance3D" parent="."]
+material_override = SubResource("zone_mat")
+script = ExtResource("sc_zone")
+
+[node name="Lanternes" type="Node3D" parent="."]
+
+[node name="PremiereLumiere" parent="Lanternes" instance=ExtResource("m_lanterne_fleur")]
+transform = Transform3D(0.95534, 0.00000, 0.29552, 0.00000, 1.00000, 0.00000, -0.29552, 0.00000, 0.95534, -10.00000, 3.10000, 6.00000)
+script = ExtResource("sc_lanterne")
+premiere_fois = true
+index_zone = 0
+rayon_zone = 11.0
+
+[node name="LanterneSuivante" parent="Lanternes" instance=ExtResource("m_lanterne_fleur")]
+transform = Transform3D(0.36236, 0.00000, 0.93204, 0.00000, 1.00000, 0.00000, -0.93204, 0.00000, 0.36236, -2.00000, 5.60000, -6.00000)
+script = ExtResource("sc_lanterne")
+premiere_fois = false
+index_zone = 1
+rayon_zone = 8.0
+
+[node name="Joueur" parent="." instance=ExtResource("p_joueur")]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, -6.00000, 2.00000, 14.00000)
+premiere_personne = true
+
+[node name="CameraApercu" type="Camera3D" parent="."]
+transform = Transform3D(0.91037, 0.03074, 0.41266, 0.00000, 0.99724, -0.07428, -0.41380, 0.06762, 0.90785, -6.00000, 4.00000, 22.00000)
+current = true
+fov = 55.0
+
+[node name="Vision" type="CanvasLayer" parent="."]
+
+[node name="Ecran" type="ColorRect" parent="Vision"]
+material = SubResource("vision_mat")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

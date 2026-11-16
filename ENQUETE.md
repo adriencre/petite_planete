@@ -13,7 +13,7 @@
 - **Le robot** a été fabriqué par les Semeurs pour garder les lanternes (« Garder la lumière jusqu'à notre retour »). Le berceau le fait revenir pour toujours. Il continue leur erreur sans le savoir.
 
 ### Le monde caché
-- Comme dans Outer Wilds, **rien n'est donné** (pas d'objet magique à la fin). Dès le début, un joueur curieux ou malin **pourrait** voir le peuple caché dans la brume (antenne éteinte, `N`, le noir). On ne le comprend qu'en avançant.
+- Comme dans Outer Wilds, **rien n'est donné** (pas d'objet magique à la fin). **Décidé le 2026-11-16 : plus de touche `N`.** Le robot ne voit le peuple de la brume **qu'une fois accepté par eux, en coupant la ligne de son berceau** (la fin). Avant, seulement des bribes à batterie presque vide.
 
 ### L'enquête
 - **4 fils mélangés**, chacun traverse plusieurs îles, chaque île contient des morceaux de plusieurs fils :
@@ -22,7 +22,7 @@
   3. **Le berceau et les corps** (qui suis-je, combien de fois suis-je mort ?) ;
   4. **La Gardienne** (sa vie, ses doutes ; on la retrouve à la fin).
 - **Les traces des Semeurs** : notes et lettres (plusieurs voix), souvenirs rejoués en lumière, fresques et dessins, lieux et objets.
-- **Le carnet devient un tableau d'enquête** (comme le journal du vaisseau d'Outer Wilds) : des lieux, des rumeurs qui les relient, des points d'interrogation. Jamais de solution écrite.
+- **Le carnet garde juste ce qu'on a vu** (décidé le 2026-11-16) : lieux, textes, dessins, cartes. Pas de flèches ni de questions : il n'indique jamais où aller.
 
 ### Les énigmes
 - Sur **toutes** les îles, mélangés : **temps et cycles**, **lieux cachés et observation**, **mécanismes et codes**.
@@ -53,6 +53,9 @@
 - **Les noms** : Iris (la Gardienne ; **son prénom est connu pendant l'enquête**, la fin secrète changera de phrase), Ysolde (la Commandante), Tavin (l'Ingénieur), Saule (la Médecin), Orme (le Pilote), Aube (l'Enfant).
 - **La grande nuit**, il y a **des siècles** : la centrale poussait toujours plus. Iris savait que si elle ne faisait rien, le peuple de la brume mourrait entièrement. **Elle a coupé la centrale**, en sachant qu'elle se tuait elle-même et tuait les siens. Toutes les lanternes se sont éteintes d'un coup, et la brume affamée a vidé tous les Semeurs là où ils étaient. Mais le peuple de la brume **l'a acceptée** : elle ne meurt pas, parce qu'elle a sauvé tout ce peuple. Elle devient l'une d'eux.
 - **Le robot a survécu** grâce au berceau, qui a sa propre ligne d'énergie (le câble de la crypte du Phare), protégée en priorité par les Semeurs. Il s'est réveillé après, seul, et a recommencé à rallumer.
+- **Pourquoi il revient toujours : la promesse (décidé le 2026-11-16)**. La grande nuit, Iris n'a pas eu le cœur de tuer le petit jardinier, innocent, qui ne fait qu'obéir. Quand le peuple de la brume l'a acceptée, elle leur a demandé une seule chose : **« Gardez le petit en vie. »** Le peuple de la brume tient toujours ses promesses : depuis des siècles, **à chaque mort du robot, il donne un peu de sa propre lumière à la ligne du berceau** pour le faire revenir. Même s'il a peur de lui, même s'il en meurt un peu à chaque fois.
+  - « Il revient toujours » : c'est vrai, puisque ce sont eux qui le font revenir.
+  - Les pierres du Compteur (île 1, « Encore un. ») comptent ce que chaque retour leur coûte.
 - **Le peuple de la brume (les Lueurs)** : on garde un vrai peuple, avec des maisons et des habitants qui parlent en mots de lumière, sur chaque île, visible dans le noir pour qui sait. Ils ont vécu la grande nuit de l'autre côté : leurs souvenirs sont des indices.
 - **Les cycles** : marée 8 min, faisceau du Phare 40 s, lune 24 min, sur tout l'archipel.
 
@@ -64,7 +67,10 @@
 
 ### La fin
 - **Le dernier geste** (décidé) : dans la dernière boucle, descendre au fond de la Centrale et **couper la ligne du berceau**, la dernière lumière des Semeurs, là où Iris a coupé les autres. Le robot refait son geste et termine ce qu'elle a commencé. Le trajet jusque-là est l'épreuve finale.
-- **On garde la suite** : éteindre toutes les lanternes et le berceau, le monde caché s'illumine, le robot devient un nid de lumière, la Gardienne s'assoit à côté de lui.
+- **La raison de couper (décidé le 2026-11-16)** : le robot comprend qu'il vit du sacrifice du peuple de la brume. Il coupe la ligne pour **les libérer de leur promesse**. À l'île cachée, la dernière page du carnet d'Iris, écrite après la grande nuit : « Je leur ai demandé de garder le petit. Je n'aurais pas dû. »
+- **Comment** (décidé le 2026-11-16) : une barrière de sécurité protège tous les câbles de la Centrale ; Iris avait fabriqué en secret un **boîtier** qui la désactive. Le souvenir de la grande nuit la montre s'en servir, épargner le berceau, et poser le boîtier au pied de son câble. Le robot le retrouve et refait son geste. Détails : `ILE_06_CENTRALE.md`.
+- **La fin secrète** : si on a trouvé Iris avant, elle dit « Merci. » en s'asseyant à côté du robot ; sinon, elle s'assoit en silence.
+- **La suite (mise à jour le 2026-11-16)** : le berceau s'éteint ; en coupant, le robot est **accepté** par le peuple de la brume et **les voit pour la première fois**. Le monde caché s'illumine. Iris s'assoit à côté de lui. Puis une petite cinématique : **le robot vit sa vie dans sa nouvelle famille, la brume**.
 
 ### Divers (décidé le 2026-11-15)
 - **Durée visée** : 8 à 12 heures (environ 1 h 30 à 2 h par grande île).
@@ -87,7 +93,7 @@
 
 ### Comment ils parlent
 - En **mots de lumière**, en français, qui flottent près de celui qui parle, puis s'effacent comme de la buée.
-- **Plus le robot est dans le noir, plus on les comprend** : antenne allumée, rien ; batterie basse, des **bribes** (« …il… revient… ») ; antenne éteinte (`N`), des **phrases complètes**.
+- **Avant la fin, on ne les comprend presque pas** : antenne allumée, rien ; batterie presque vide, des **bribes** (« …il… revient… »). **Les phrases complètes, seulement une fois accepté** (la fin).
 - Les phrases importantes se recopient dans le carnet (« Paroles »).
 
 ### Ce qu'ils pensent du robot

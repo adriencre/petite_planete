@@ -13,7 +13,7 @@ Le prologue : on se réveille dans un corps neuf, sur une île grise et noyée d
 - **La maison.** C'est ici qu'on se réveille à chaque boucle, dans le berceau de l'abri.
 - **Dans l'histoire (v4)** : c'est l'**île du robot**. Les Semeurs y avaient installé le **berceau** et l'**atelier des robots**, mais personne n'y vivait : **pas de squelettes ici**, et rien qui contredise la fausse piste « ils sont partis ».
 - **Ce qu'elle apprend** (sans un mot) : la batterie, la brume, allumer, reprendre la lumière, planter, mourir et revenir, le carnet.
-- **Ce qu'elle cache** : le mode nuit (`N`), la page 7 d'Iris, la ville des Pins dans le noir.
+- **Ce qu'elle cache** : la page 7 d'Iris, l'atelier. (La ville des Pins n'apparaît qu'à la fin.)
 - **Ce qu'elle ouvre** : la barque, donc tout l'archipel. On voit le Phare au loin.
 - **Les fils de l'enquête présents ici** :
   - **le berceau et les corps** (le berceau, l'atelier, le premier ancien corps) ;
@@ -38,24 +38,36 @@ Le prologue : on se réveille dans un corps neuf, sur une île grise et noyée d
 ```
 *(Les détails exacts sont dans la scène ; la carte du carnet est dessinée depuis le GridMap.)*
 
+### Forme v6 (décidée le 2026-11-16) : **gradins**
+L'île monte en **3 marches** de la plage au sommet : plage (abri, pierre-soleil) → niveau 1 (lanternes, grande lanterne) → niveau 2 (racines-escalier, cascade, atelier) → niveau 3 (sommet). On voit le but dès le réveil. La crique ouest est une entaille dans la brume, au niveau de la mer. Environ 12 × 10 cases de 4 m.
+Schéma : `concept/ile_01_formes.png` (variante A), dessiné par `tools/carte_iso.py`.
+
+### Détails v6 (décidés question par question)
+- **L'abri** (2026-11-16) : sur un **petit promontoire à l'est**, un peu à l'écart, porte tournée vers l'ouest. En sortant, **toute l'île se dévoile en panorama** (lanternes éteintes, gradins, sommet) ; le Phare est dans le dos. La pierre-soleil est juste devant la porte. Schéma : `concept/ile_01_abri.png` (variante C).
+- **Les lanternes 1-2-3** (2026-11-16) : **en triangle autour de la grande lanterne**, qui est au centre du niveau 1. Lanterne 1 près de l'abri (est, sur la plage), lanterne 2 à l'ouest **au bord de la brume** (apprend que la brume vide la batterie), lanterne 3 à l'est du niveau 1. Les **racines lumineuses** de la grande partent vers les trois : on comprend sans texte qu'il faut les trois, dans l'ordre qu'on veut. Schéma : `concept/ile_01_lanternes.png` (variante B).
+- **La cascade et l'atelier** (2026-11-16) : **à l'est**. Une rivière descend du sommet en marches jusqu'à la mer ; on la voit dès l'abri, dans le panorama. Le **rebord caché** est derrière la chute, au niveau 2 ; la **grotte et l'atelier** sont creusés sous le sommet. Le **terreau et les racines-escalier** sont à l'ouest du niveau 1, de l'autre côté : l'ouest (racines, brume, crique) et l'est (cascade, atelier) s'équilibrent. Schéma : `concept/ile_01_cascade.png` (variante A).
+- **La crique ouest** (2026-11-16) : **encaissée**, une poche fermée par de hautes falaises où la brume stagne comme dans un bol, avec **une seule entrée** par la plage, au sud. La **barque** est au pied de la falaise, sous les racines ; l'**ancien corps** et la **pierre-soleil cachée** sont dans la poche. Schéma : `concept/ile_01_crique.png` (variante B).
+- **Le plateau et le sommet** (2026-11-16) : le **sommet est au centre**, petit pic au niveau 3, visible de partout (y compris du panorama de l'abri). Sur le plateau (niveau 2), en arrivant par les racines-escalier : la charrette, le banc, le jardin mort, puis la montée vers le sommet. La rivière de la cascade prend sa source juste à l'est du sommet. Schéma : `concept/ile_01_sommet.png` (variante A).
+- **Plan complet** : `concept/ile_01_plan.png` (`tools/carte_iso.py ile_01_plan`). La grille de ce plan sert de base à la maquette jouable.
+
 ### Les lieux
 | Lieu | Ce qu'on y trouve |
 |---|---|
-| **L'abri** | Le berceau (lumière qui s'allume à chaque réveil), l'horloge arrêtée, le carnet, un coin sombre où quelque chose scintille, la veilleuse au-dessus de la porte. L'abri est **à la taille du robot**. |
+| **L'abri** | Le berceau (lumière qui s'allume à chaque réveil), **un papier posé à côté du berceau : l'ordre d'Ysolde** (§7), l'horloge arrêtée, le carnet, un coin sombre où quelque chose scintille, la veilleuse au-dessus de la porte. L'abri est **à la taille du robot**. |
 | **La pierre-soleil** | Juste à la sortie de l'abri : l'antenne vide s'y recharge. Premier geste du jeu. |
 | **Les lanternes 1, 2, 3** | Le chemin vers le centre de l'île. Chacune réveille sa zone. |
 | **La grande lanterne** | Au centre. Elle ne s'allume qu'une fois les trois petites allumées (racines lumineuses qui convergent). Grande vague de couleur. |
 | **Le terreau** | Une cosse s'ouvre, le robot porte la graine et la plante dans le terreau gravé : des **racines-escalier** poussent jusqu'au plateau. |
 | **Le plateau et le sommet** | Le jardin mort, la charrette, le banc. Au sommet, la **lanterne du sommet** : l'île entière s'éveille. |
 | **La cascade** | Derrière l'eau, un rebord caché → une grotte → **l'atelier des robots**. |
-| **L'atelier des robots** | Le moule, les pièces détachées, l'établi, la lanterne de l'atelier, la **page 7**. **À la taille des Semeurs** (très grands) : établi immense, outils géants **[à valider]**. |
+| **L'atelier des robots** | Le moule, les pièces détachées, l'établi, la lanterne de l'atelier, la **page 7**. **Un peu trop grand pour le robot** (Semeurs de 2,50 à 3 m) : établi à hauteur de poitrine, portes d'environ 3 m, marches un peu hautes. |
 | **La crique ouest** | Noyée de **brume épaisse**. Le **premier ancien corps**, couvert de mousse. La **barque**, cachée sous les racines. La **pierre-soleil cachée**. |
 | **Au loin** | La silhouette sombre du Phare, et la petite lueur de la bouée de son port. |
 
 ---
 
 ## 4. Les cycles sur l'île
-- La **marée** (8 min) touche la crique et la plage **[à valider : est-ce qu'on s'en sert ici ?]**.
+- **Pas de marée sur l'île 1** (décidé le 2026-11-16) : la marée est propre à certaines îles (le Phare d'abord).
 - Une fois le Phare rallumé (dans la même boucle), on voit son **faisceau** balayer la mer depuis le sommet.
 
 ---
@@ -81,7 +93,7 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 | **La batterie** | La brume vide, la lumière recharge, allumer coûte. On avance de lumière en lumière. |
 | **La grande lanterne** | Elle a besoin des trois petites (les racines lumineuses le montrent). |
 | **Monter au plateau** | La cosse donne une graine ; le terreau gravé attend une graine ; les racines font l'escalier. |
-| **La crique** | La brume épaisse vide trop vite : il faut y arriver avec assez de batterie, ou avec la pierre-soleil cachée, ou dans le noir (`N`). |
+| **La crique** | La brume épaisse vide trop vite : il faut y arriver avec assez de batterie, ou avec la pierre-soleil cachée. |
 
 ### Le premier « échec »
 - Tôt ou tard, la batterie se vide : le robot s'éteint **sur place** et se réveille dans l'abri, **dans un corps neuf**. Son ancien corps reste là-bas.
@@ -95,18 +107,17 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 | Secret | Ce qu'il donne |
 |---|---|
 | **La pierre-soleil cachée** | Le raccourci vers la barque dès le début. |
-| **L'atelier des robots** (derrière la cascade) | Le moule, les pièces : on fabrique des robots ici. Le croquis de la touche `N`. **L'ordre des Semeurs** gravé sur le moule (§7). |
-| **La page 7 d'Iris** (lumineuse, sur l'établi) | Blanche tant que la lanterne de l'atelier brille. Il faut **reprendre sa lumière, puis éteindre l'antenne (`N`)** pour la lire. |
-| **La graine cachée** (coin de l'abri) | En mode nuit, une traînée de Lueurs en part et file sous le berceau. |
-| **Le premier ancien corps** (crique) | Couvert de mousse ; dans le noir, des Lueurs brillent dessus. |
+| **L'atelier des robots** (derrière la cascade) | Le moule, les pièces : on fabrique des robots ici. |
+| **La page 7 d'Iris** (sur l'établi) | **Lisible normalement** (décidé le 2026-11-16 : plus de peinture qui brille). |
+| **La graine cachée** (coin de l'abri) | À batterie presque vide, une traînée floue en part et file sous le berceau. |
+| **Le premier ancien corps** (crique) | Couvert de mousse ; dans le noir, des Lueurs brillent dessus. Il porte **exactement la même écharpe que le robot, avec le même nœud** (décidé le 2026-11-16) : le premier détail du fil « les corps, c'est moi », à remarquer sans comprendre. |
 
 ---
 
-## 6. Le mode nuit (touche `N`, secret)
-- Jamais indiqué. Indices : le croquis de l'atelier (robot antenne éteinte sous la lune, touche « N » griffonnée), la page 7.
-- Antenne éteinte : la brume ne vide plus, la lumière ne recharge plus, **aucune action de lumière**, le peuple caché est visible.
-- Sur l'île 1, ça transforme tout (§8) : la nuit tombe, la lune, la ville des Pins pousse du sol.
-- **C'est le principe v4 du « monde caché »** : rien n'est donné, mais dès l'île 1, un joueur curieux **peut** voir le peuple de la brume.
+## 6. Le monde de la brume (plus de touche `N`, décidé le 2026-11-16)
+- **Plus de mode nuit ni de touche `N`.** Le robot ne voit le peuple de la brume qu'une fois accepté par eux, en coupant la ligne de son berceau (la fin, voir `DESIGN.md`).
+- Avant, seulement **des bribes à batterie presque vide** : des formes floues, quelques mots (« …il… revient… »).
+- **À retirer du jeu** : le croquis de la touche `N` dans l'atelier, le mode nuit.
 
 ---
 
@@ -117,14 +128,14 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 - Quelqu'un, de très grand, fabriquait des robots comme moi (l'atelier), et **m'a laissé une consigne**.
 - La page 7, pour qui la trouve : *« Elles ne sont pas la brume. Elles sont dans la brume… »* C'est le premier vrai doute, très tôt, pour les curieux.
 
-### L'ordre des Semeurs (gravé sur le moule de l'atelier) **[nouveau, à valider]**
+### L'ordre des Semeurs (un papier posé à côté du berceau) — *décidé le 2026-11-16*
+Ce n'est pas une énigme : on le lit dès le réveil.
 > « Garder la lumière jusqu'à notre retour. »
 > — Ysolde, Commandante
 
 *(La première trace de la fausse piste « ils sont partis » : ils vont revenir. Le nom d'Ysolde mène à la Colonie.)*
 
 ### La page 7 (déjà dans le jeu)
-> J'écris ici à la peinture qui brille. Seuls ceux qui éteignent pourront me lire.
 > Elles ne sont pas la brume. Elles sont dans la brume. Chaque fois que je souffle ma lanterne, elles s'allument tout autour de moi, comme si elles m'attendaient.
 > Les autres disent que le pollen m'a pris la tête.
 > Le petit jardinier qu'ils moulent dans cet atelier ne les voit pas : son antenne les éblouit, elle aussi.
@@ -134,7 +145,7 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 ---
 
 ## 8. Le peuple caché : la ville des Pins
-> Déjà construit (phases E à I de `archive/ROADMAP_v3.md`). Dans la v4, il n'y a plus de 2e moitié : tout ce qui suit est un **secret**, visible pour qui éteint.
+> Déjà construit (phases E à I de `archive/ROADMAP_v3.md`). **Décidé le 2026-11-16 : plus de touche `N`.** La ville des Pins n'est plus jouable pendant la partie : on la voit dans **la cinématique de fin**, où le robot vit sa vie dans sa nouvelle famille, la brume. Avant, seulement des bribes à batterie presque vide. Ce qui suit reste comme matière pour cette fin (et pour les bribes).
 
 ### Ce qui se passe quand on éteint
 - La nuit tombe (ciel, lune, brume bleue). **La ville pousse du sol** en vague depuis le robot, avec ses collisions (ses chemins n'existent que dans le noir).
@@ -179,13 +190,9 @@ Ils vaquent (routines), rentrent chez eux s'ils ont peur, et ressortent si le ro
 
 ---
 
-## 9. Le carnet (tableau d'enquête)
+## 9. Le carnet (juste ce qu'on a vu, sans flèches ni questions — décidé le 2026-11-16)
 - **Lieux** : l'abri, la pierre-soleil, les lanternes, le terreau, la cascade, l'atelier, le sommet, la crique, la barque.
-- **Rumeurs** **[à valider]** :
-  - « Garder la lumière jusqu'à notre retour. — Ysolde » → **où sont-ils partis ?** (mène à la Colonie) ;
-  - « On voit un phare au loin, éteint. » → **le Phare** ;
-  - (page 7) « Suis-les. Elles connaissent le chemin de chez moi. » → **qui est G. ?**
-- **Questions ouvertes** : « Qui sont les autres robots ? », « Qui m'a fabriqué ? », « Où sont ceux qui vont revenir ? ».
+- **Textes** : l'ordre d'Ysolde (papier du berceau), la page 7 (pour qui la trouve). **Croquis** : le Phare vu du sommet.
 - **Bestiaire** : la méduse. **Paroles** : la 1re bribe, et celles de la ville des Pins.
 
 ## 10. Son et ambiance
@@ -196,7 +203,7 @@ Ils vaquent (routines), rentrent chez eux s'ils ont peur, et ressortent si le ro
 | Sens | Lien |
 |---|---|
 | île 1 → île 2 (Phare) | On voit le Phare au loin. Le Guetteur parle de ceux du Phare. |
-| île 1 → île 3 (Colonie) | L'ordre d'Ysolde gravé sur le moule (« jusqu'à notre retour ») **[à valider]**. |
+| île 1 → île 3 (Colonie) | L'ordre d'Ysolde, sur le papier à côté du berceau (« jusqu'à notre retour »). |
 | île 1 → île 7 (île cachée) | L'Ancienne : Celle-qui-a-soufflé est partie **vers le nord**. La page 7 : « suis-les, elles connaissent le chemin de chez moi ». |
 | île 1 → île 6 (Centrale) | Le berceau a sa propre ligne d'énergie : c'est elle qu'on coupera à la fin. |
 | île 2 → île 1 | Le câble de la crypte du Phare est la ligne du berceau. |
@@ -221,6 +228,7 @@ Ils vaquent (routines), rentrent chez eux s'ils ont peur, et ressortent si le ro
    - l'aide « essaim de la Pouponnière » ;
    - l'extension du hameau et la 3e couche musicale (le chœur du peuple après la libération).
 
-**À valider**
-4. Ajouter **l'ordre d'Ysolde** gravé sur le moule de l'atelier.
-5. Agrandir l'atelier à la **taille des Semeurs** (établi et outils géants), pour qu'on sente dès l'île 1 qu'ils étaient très grands.
+**Décidé le 2026-11-16**
+4. Ajouter **l'ordre d'Ysolde** sur un papier posé à côté du berceau (pas une énigme).
+5. L'atelier est **un peu trop grand** pour le robot (Semeurs de 2,50 à 3 m) : établi à hauteur de poitrine, portes d'environ 3 m.
+6. **Pas de marée** sur l'île 1.

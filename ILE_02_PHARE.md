@@ -35,6 +35,10 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 
 **Plan vu de dessus : `tools/plan_ile2.png`** (généré par `tools/plan_ile2.py`, qui contient les zones en mètres et servira à construire le GridMap).
 
+### Forme v6 (décidée le 2026-11-16) : **croix**
+Le rocher du Phare au centre (niveau le plus haut) et trois bras : le cap Ouest par le sentier dans la brume, le cap Est, et le cap du Large par le gué (estran). Au sud, la chaussée (estran dans la brume) mène au port. L'épave est sur un estran au sud-ouest, dans la brume. Plan validé conservé, en plateaux carrés.
+Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_iso.py ile_02`.
+
 ```
                     CAP DU LARGE (1,5 m) — lanterne + miroir, ancien corps échoué
                           ▲
@@ -57,7 +61,7 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 ```
 
 - **Taille** : environ 1 190 cases de terre ferme (île 1 : 887), mais beaucoup plus **verticale** (rocher à 4 m, plateau à 5 m, tour d'environ 18 m).
-- **Échelle (v4)** : le Phare est bâti **à la taille des Semeurs** (très grands, fins) : marches hautes, portes immenses, une table de travail au-dessus de la tête du robot **[à valider]**.
+- **Échelle (DA v5)** : le Phare est bâti à la taille des Semeurs (2,50 à 3 m), donc **un peu trop grand pour le robot**, comme l'atelier de l'île 1 : marches un peu hautes, portes d'environ 3 m, table à hauteur de poitrine.
 - **Marée** : l'eau est à −0,6 m à marée basse et à +0,5 m à marée haute. Tout ce qui est à 0 m (chaussée, gué, estran, flaque, épave) n'existe qu'à marée basse.
 - **Palette** : pierre claire, falaises grises, phare blanc à bandes rouille délavée, varech, eau verte des flaques, brume froide.
 
@@ -74,7 +78,7 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 | 10 | **L'entrée des grottes** | Sur une petite plage d'estran, au pied du rocher. |
 | 11 | **La crypte des Semeurs** | Au fond des grottes, sous le phare : le **câble du berceau**. |
 | 12 | **Le banc d'Iris** | Au bord du rocher, tourné vers le nord-ouest (vers sa maison, qu'on ne voit pas). |
-| 13 | **Le jardin mort** | Des bacs de terre sèche, un arrosoir, un **arbre rose mort** **[à valider]**. |
+| 13 | **Le jardin mort** | Des bacs de terre sèche, un arrosoir, un **arbre rose mort**. |
 | 14 | **Le Cap Est** | Facile d'accès. Lanterne + station de miroir. |
 | 15 | **La flaque du Cap Est** | À marée basse : une **pierre-soleil** au fond. |
 | 16 | **Le Cap Ouest** | Au bout d'un sentier de falaise noyé de brume. Lanterne + station de miroir. |
@@ -143,7 +147,7 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 - **La situation** : sur la galerie, une **lunette** sur pied. Son socle a **des crans gravés**, avec un nom à chaque cran.
 - **Ce qu'on voit** : chaque cran cadre un lieu lointain, en gros plan : le quai de la Colonie (des caisses de départ empilées), la ville haute couverte de lanternes, la Nef échouée au loin, la brume blanche de l'île blanche…
 - **Le cran sans nom** : il cadre **la mer vide**, au nord-ouest. Il n'y a rien, juste de l'eau. C'est la direction du banc d'Iris, celle de la **ligne sans nom du registre**, et celle où l'on verra l'île cachée à la pleine lune.
-- **Ce que ça donne** : des **rumeurs** dans le carnet vers les autres îles, et un **mystère** (pourquoi regarder la mer vide ?).
+- **Ce que ça donne** : des croquis de lieux lointains dans le carnet (sans flèche), et un **mystère** (pourquoi regarder la mer vide ?).
 
 ### Les petites
 - **Le miroir du port** : un miroir d'essai renvoie la lumière de la bouée sur la porte du hangar, qui s'ouvre. C'est le tutoriel muet des miroirs.
@@ -160,7 +164,7 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 | **L'Écoute** | Près de la bouée, à batterie basse | Une créature sans yeux (bestiaire). |
 | **Le banc d'Iris** | Au bord du rocher | On s'y assoit : la caméra montre ce qu'elle regardait, le nord-ouest et la mer vide. |
 | **La pierre-soleil** | La flaque du Cap Est, à marée basse | Une recharge sûre pour G2. |
-| **L'arbre rose mort** | Le jardin mort | Iris en avait un ici. Elle l'a laissé mourir **[à valider]**. Seul le sens change après la Colonie (les arbres roses viennent de chez eux). |
+| **L'arbre rose mort** | Le jardin mort | Iris en avait un ici. Elle l'a laissé mourir. Seul le sens change après la Colonie (les arbres roses viennent de chez eux). |
 
 ---
 
@@ -184,25 +188,24 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 *(À remplacer dans le jeu : `assets/notebook/journal/page_01.tres` contient l'ancienne version.)*
 
 ### Les notes du bureau
-- **La note de la clé** **[à valider]** : « J'ai laissé la clé de la salle des cartes dans la cabine, à bord du ravitailleur. Je la reprendrai à la prochaine basse mer. Pas sans le Phare : la brume du large y est trop épaisse. »
+- **La note de la clé** (validée) : « J'ai laissé la clé de la salle des cartes dans la cabine, à bord du ravitailleur. Je la reprendrai à la prochaine basse mer. Pas sans le Phare : la brume du large y est trop épaisse. »
 - **La ligne de la pleine lune** (dans la marge d'un relevé, d'une autre encre) : « Les nuits de pleine lune, le Phare chante, et je vois ma maison. »
-- **La table des marées** (validée pour les six tours) : un dessin de l'échelle du quai, avec « basse » et « haute », et dessous : « Basse mer : six tours du faisceau. Pas un de plus. » **[nouveau, à valider]** Plus bas, un troisième trait : « Pleine lune : plus bas que tout. Le vieux port respire. » (C'est un indice pour le vieux port de la Colonie.)
+- **La table des marées** (validée pour les six tours) : un dessin de l'échelle du quai, avec « basse » et « haute », et dessous : « Basse mer : six tours du faisceau. Pas un de plus. » (validé) Plus bas, un troisième trait : « Pleine lune : plus bas que tout. Le vieux port respire. » (C'est un indice pour le vieux port de la Colonie.)
 - **Le plan des miroirs** : les trois caps et le Phare vus de dessus ; une partie effacée par l'eau (on voit la flèche Est → Large, le reste est illisible).
 
-### La chambre d'Iris (G5) **[textes à valider]**
-- Un lit à sa taille, une seule tasse, une lanterne **éteinte et débranchée** sur la table de nuit.
-- Au mur, **le dessin d'Aube** : des silhouettes de brume qui dansent autour d'une grande et d'une petite Semeuse. « Iris et moi et nos amis. »
-- Une lettre jamais envoyée, à Ysolde :
+### La chambre d'Iris (G5)
+- Un lit à sa taille, une seule tasse, une lanterne **éteinte et débranchée** sur la table de nuit.- Au mur, **le dessin d'Aube** : des silhouettes de brume qui dansent autour d'une grande et d'une petite Semeuse. « Pour Iris. Nos amis du noir. » (validé le 2026-11-16)
+- Une lettre jamais envoyée, à Ysolde (**validée le 2026-11-16**, version mystérieuse) :
 > Ysolde,
-> Tu me demandes d'ajouter des lanternes à l'île blanche. Je ne le ferai pas.
-> Les malades vont plus mal à chaque lanterne que j'allume, pas mieux. Saule le voit aussi, mais elle n'ose pas te le dire.
+> Tu me demandes encore des lanternes pour l'île blanche. Je ne les poserai pas.
+> J'ai vu ce qu'elles font là-bas. Demande à Saule ce qu'elle a vu, elle.
 > Éteins une seule nuit, avec moi. Une seule. Tu verras ce que je vois.
 > — Iris
 
-*(Le premier vrai indice de « ils se sont tués eux-mêmes ». Le prénom « Iris » est connu pendant l'enquête : validé.)*
+*(Un doute, pas une explication : la vérité « les lanternes tuaient » reste pour la Quarantaine. Le nom de Saule y mène. Le prénom « Iris » est connu pendant l'enquête : validé.)*
 
 ### La salle des cartes (G3)
-- **Le registre des lanternes** : un grand livre, une page par île, avec le nombre de lanternes année après année. Les lignes **[nouvelles, à valider]** :
+- **Le registre des lanternes** : un grand livre, une page par île, avec le nombre de lanternes année après année. Les lignes (validées le 2026-11-16) :
   - « Réveil : l'abri, la veilleuse, le sommet. Rien à signaler. Le jardinier dort. »
   - « Colonie : 40… 90… 160… 310. » *(les chiffres explosent d'année en année)*
   - « Île blanche : on m'en demande encore. Ils disent que c'est pour soigner. Je n'y crois plus. »
@@ -211,15 +214,10 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
   - **Une ligne sans nom**, avec seulement le dessin d'une petite maison, et aucune lanterne *(validé : comprise plus tard)*.
 - **Les relèvements** : sur le mur, une rose des vents gravée avec l'angle de chaque île (« Colonie », « Île blanche », « Nef », « Centrale »). Ils se recopient dans le carnet.
 
-### Ce qui s'inscrit dans le carnet (tableau d'enquête)
+### Ce qui s'inscrit dans le carnet (juste ce qu'on a vu, sans flèches)
 - **Carte** de l'île 2, puis **la carte de l'archipel** (G2).
 - **Lieux** : le port, la chaussée, le phare (4 niveaux), les trois caps, l'épave, la crypte.
-- **Rumeurs** :
-  - « Le registre : la Colonie a de plus en plus de lanternes. » → **la Colonie** ;
-  - « Iris refuse d'ajouter des lanternes à l'île blanche. » → **la Quarantaine** ;
-  - « La lunette cadre une épave géante au loin. » → **la Nef** ;
-  - « Ligne du berceau. Ne jamais couper. » → **la Centrale** ;
-  - « Le cran sans nom regarde la mer vide. » / « Je vois ma maison. » → **?** (l'île cachée).
+- **Textes** : la page 1, les notes du bureau, la lettre à Ysolde, le registre, la plaque du câble, ce qu'on a vu dans la lunette.
 - **Notes** recopiées : la table des marées, les relèvements.
 - **Bestiaire** : l'Écoute.
 
@@ -240,7 +238,10 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 ## 9. Les liens avec les autres îles
 
 ### Ce qui vient d'ailleurs
-- **La pleine lune et l'île cachée** : « Les nuits de pleine lune, le Phare chante, et je vois ma maison. » À la pleine lune, la lentille pointée **au cran sans nom** concentre le clair de lune et **montre l'île cachée**. La clé de lecture viendra d'ailleurs (une île à décider : la Nef ou la Quarantaine) **[à décider]**. C'est la seule chose impossible à la première visite.
+- **La pleine lune et l'île cachée** : « Les nuits de pleine lune, le Phare chante, et je vois ma maison. » À la pleine lune, la lentille pointée **au cran sans nom** et **éteinte** (le Phare « dort ») concentre le clair de lune et **montre l'île cachée**. C'est la seule chose impossible à la première visite.
+  - **La clé de lecture (décidé le 2026-11-16)** : une **lettre d'Iris à Saule**, à la Quarantaine : « Le Phare ne chante que quand il dort. Une nuit de grosse lune, laisse-le dormir, tourné vers rien, et tu verras où je suis. »
+  - **Le bonus des observateurs** : une nuit de pleine lune, si la lentille est éteinte (quelle que soit son orientation), un **reflet argenté** court sur la mer depuis le Phare. On le voit sans le comprendre.
+  - *Comment on fait, dans une même boucle* : rallumer le Phare (G2), réparer les engrenages (G4), tourner la lentille au cran sans nom, puis **reprendre la lumière d'un cap** : la lentille s'éteint mais garde son orientation.
 - **L'ancien lien avec le Marais** (« quand le grand œil nous regarde, la brume s'ouvre ») **est à remplacer**, puisque le Marais n'existe plus. Décidé : pointé vers **l'île blanche** (la Quarantaine), le faisceau ouvre **un couloir dans la brume de la mer** qui l'entoure. C'est une **deuxième route** pour y aller (la première : bien préparer la lanterne de la barque).
 
 ### Ce que l'île 2 donne ailleurs
@@ -300,9 +301,11 @@ Le poste d'Iris, la Gardienne : un phare sur un rocher coupé du monde par la ma
 - Les nouvelles énigmes **G4** (salle des machines), **G5** (chambre d'Iris) et **G6** (lunette d'Iris).
 - **Le prénom « Iris » est connu pendant l'enquête** (Aube, la lettre de sa chambre). La fin secrète changera de phrase.
 - **Le faisceau orienté vers l'île blanche** ouvre un couloir dans la brume de la mer qui l'entoure : une 2e route vers la Quarantaine.
-- **La clé de lecture de la pleine lune** sera fixée en concevant la Quarantaine ou la Nef.
 
-**Encore à valider**
-1. Le câble de la crypte devient **la ligne du berceau** (« Ne jamais couper »).
-2. Les nouveaux textes : la lettre d'Iris à Ysolde, le registre par île, le trait de la pleine lune sur la table des marées, la note de la clé.
-3. L'arbre rose mort dans le jardin d'Iris.
+**Validé le 2026-11-16**
+- **La clé de lecture de la pleine lune** : la lentille doit être éteinte ; l'indice est une lettre d'Iris à Saule, à la Quarantaine, plus le reflet argenté au Phare (§9).
+- Le câble de la crypte est **la ligne du berceau**, avec sa plaque (« Ligne du berceau. Prioritaire. Ne jamais couper. »).
+- L'**arbre rose mort** dans le jardin d'Iris.
+- Les textes : la lettre d'Iris à Ysolde (version mystérieuse), le registre, la table des marées, la note de la clé, la légende du dessin d'Aube (« Pour Iris. Nos amis du noir. »).
+
+**Plus rien à valider** sur le côté lumière de l'île 2 (le côté ombre reste reporté).

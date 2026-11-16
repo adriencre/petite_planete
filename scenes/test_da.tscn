@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/models/robot.glb" id="1_robot"]
 [ext_resource type="PackedScene" path="res://assets/models/tour_semeurs.glb" id="2_tour"]
@@ -11,9 +11,11 @@
 [ext_resource type="Shader" path="res://shaders/roche_herbe.gdshader" id="8_terrain"]
 [ext_resource type="Shader" path="res://shaders/vegetation.gdshader" id="9_vege"]
 [ext_resource type="Script" path="res://scripts/semis_vegetation.gd" id="10_semis"]
+[ext_resource type="Texture2D" path="res://assets/textures/roche_normal.jpg" id="11_relief"]
 
 [sub_resource type="ShaderMaterial" id="terrain_mat"]
 shader = ExtResource("8_terrain")
+shader_parameter/roche_normal = ExtResource("11_relief")
 
 [sub_resource type="ShaderMaterial" id="vege_mat"]
 shader = ExtResource("9_vege")

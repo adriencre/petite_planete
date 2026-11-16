@@ -22,11 +22,12 @@ Un petit robot jardinier se réveille sur un archipel noyé de brume, où tout e
 - **Reprendre la lumière** (`E` sur une lanterne allumée) : la lumière descend en spirale dans l'antenne, la batterie remonte, la lanterne s'éteint et sa zone se rendort.
 - *(Dans l'histoire : les Semeurs vivaient exactement comme ça. Le robot est fait à leur image, et sa batterie raconte déjà leur mort.)*
 
-### Le mode nuit (secret, touche `N`)
-- **Jamais indiqué à l'écran.** Indices : un vieux croquis de l'atelier (robot antenne éteinte sous la lune, touche « N » griffonnée), la page 7 d'Iris.
-- Le robot éteint sa propre antenne : la brume **ne le vide plus**, la lumière ne le recharge plus, **aucune action de lumière**, et **le peuple caché est visible**.
-- C'est le principe du monde caché : **rien n'est donné**. Dès l'île 1, un joueur curieux peut voir le peuple de la brume ; il ne le comprend qu'en avançant.
-- Voir à **batterie presque vide** est la version accidentelle : l'antenne s'assombrit et des formes apparaissent dans la brume.
+### Le monde de la brume : on le voit une fois accepté (décidé le 2026-11-16)
+- **Plus de touche `N`, plus de mode nuit.**
+- Le robot ne voit le monde de la brume **qu'une fois accepté par le peuple de la brume**, comme Iris l'a été.
+- **Ce qui le fait accepter : couper la ligne de son berceau.** Le monde de la brume se révèle donc **à la fin du jeu**, au moment où il coupe : c'est la grande image finale.
+- **Avant la fin : seulement des bribes à batterie basse.** Quand la batterie est presque vide, des formes floues apparaissent dans la brume, et quelques mots (« …il… revient… »). Assez pour intriguer, jamais assez pour comprendre.
+- **La fin** : une petite cinématique où le robot **vit sa vie dans sa nouvelle famille, la brume**.
 
 ### La boucle
 - La conscience du robot vit dans le **berceau** (l'abri de l'île 1). Le robot n'est qu'un **corps**.
@@ -35,9 +36,9 @@ Un petit robot jardinier se réveille sur un archipel noyé de brume, où tout e
 - **Ce qui reste** : le savoir du joueur, le carnet, **les anciens corps** (là où ils sont tombés). **Aucun changement définitif.**
 - Le robot ne comprend pas que les anciens corps sont lui-même.
 
-### Le carnet : un tableau d'enquête
-- Comme le journal du vaisseau d'Outer Wilds : chaque **lieu** est une fiche ; des **rumeurs** relient les lieux par des flèches ; des **points d'interrogation** montrent ce qu'il reste à trouver.
-- Il garde aussi : les cartes à l'encre, les croquis, les dessins d'Aube, les pages et lettres des Semeurs, les paroles du peuple caché, le bestiaire.
+### Le carnet : juste ce qu'on a vu (décidé le 2026-11-16)
+- Il garde **les lieux visités, les textes lus** (papiers, pages, lettres, dessins d'Aube), les cartes à l'encre, les croquis, les paroles du peuple caché, le bestiaire.
+- **Aucune flèche, aucun point d'interrogation, aucune question** : le carnet n'indique jamais où aller. Le joueur se balade comme il veut et fait les liens dans sa tête.
 - **Il note ce qu'on a vu, jamais ce qu'il faut faire.**
 
 ---
@@ -71,7 +72,7 @@ Apprendre les cycles fait partie du savoir.
 
 ## Son
 - Piano doux et nature ; la musique est en **couches** qui s'ajoutent quand on allume.
-- Une **seconde musique**, celle du peuple caché (cristalline, aquatique), qui apparaît quand on éteint.
+- Une **seconde musique**, celle du peuple caché (cristalline, aquatique) : quelques notes dans les bribes à batterie basse, puis en entier à la fin, quand le robot est accepté.
 
 ## Technique
 - Godot 4.7, PC clavier.

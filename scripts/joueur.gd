@@ -10,6 +10,12 @@ extends CharacterBody3D
 @export_group("3e personne")
 @export var distance_camera: float = 4.2
 @export var hauteur_pivot: float = 1.5
+@export_group("Vue de dessus")
+## Caméra haute et fixe (DA v6) : la souris ne tourne plus la vue, ZQSD suit l'écran.
+@export var vue_dessus: bool = false
+@export var distance_dessus: float = 20.0
+@export_range(20.0, 89.0) var angle_dessus: float = 50.0
+@export var orientation_dessus: float = 45.0
 @export_group("1re personne")
 @export var hauteur_yeux: float = 1.74
 @export_group("Batterie")
@@ -70,6 +76,9 @@ var _depart: Vector3
 
 
 func _ready() -> void:
+	# le modèle importé peut contenir des collisions (nœud « col ») : le robot se cognerait à lui-même
+	for corps in modele.find_children("*", "CollisionObject3D", true, false):
+		corps.queue_free()
 	_depart = global_position
 	_yaw = rotation.y
 	rotation.y = 0.0
@@ -85,7 +94,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if cinematique and event is InputEventMouseMotion:
+	if (cinematique or vue_dessus) and event is InputEventMouseMotion:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var m := event as InputEventMouseMotion
@@ -158,6 +167,15 @@ func _animer(delta: float, dir: Vector3) -> void:
 
 
 func _placer_camera(delta: float) -> void:
+	if vue_dessus:
+		_pitch = -deg_to_rad(angle_dessus)
+		_yaw = deg_to_rad(orientation_dessus)
+		var b := Basis.from_euler(Vector3(_pitch, _yaw, 0))
+		camera.global_transform = Transform3D(b, global_position + Vector3.UP + b * Vector3(0, 0, distance_dessus))
+		modele.visible = true
+		antenne_vue.visible = false
+		lumiere.global_position = global_position + Vector3(0, 2.0 + modele.position.y, 0)
+		return
 	_blend = move_toward(_blend, 1.0 if premiere_personne else 0.0, delta * 2.5)
 	var t := _blend * _blend * (3.0 - 2.0 * _blend)
 	pivot.position = Vector3(0, hauteur_pivot, 0)

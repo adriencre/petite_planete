@@ -18,6 +18,8 @@ extends MultiMeshInstance3D
 @export var graine: int = 1:
 	set(v): graine = v; _regenerer()
 @export var niveau_eau: float = 0.5
+## Boîtes (repère monde) où rien ne pousse : rivière, marches…
+@export var exclusions: Array[AABB] = []
 
 
 func _ready() -> void:
@@ -65,7 +67,8 @@ func _regenerer() -> void:
 		var pos: Vector3 = t[0] + (t[1] - t[0]) * u + (t[2] - t[0]) * v
 		var s := rng.randf_range(hauteur.x, hauteur.y)
 		var base_rot := Basis(Vector3.UP, rng.randf() * TAU).scaled(Vector3(s, s, s))
-		if (global_transform * pos).y < niveau_eau:
+		var gp: Vector3 = global_transform * pos
+		if gp.y < niveau_eau or exclusions.any(func(b: AABB) -> bool: return b.has_point(gp)):
 			base_rot = base_rot.scaled(Vector3.ZERO)
 		mm.set_instance_transform(k, Transform3D(base_rot, pos))
 		var col := Color.WHITE

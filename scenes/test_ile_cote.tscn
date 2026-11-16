@@ -1,0 +1,103 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/models/ile_cote.res" id="1_terrain"]
+[ext_resource type="Shader" path="res://shaders/roche_herbe.gdshader" id="2_terrain"]
+[ext_resource type="Texture2D" path="res://assets/textures/roche_normal.jpg" id="3_relief"]
+[ext_resource type="Shader" path="res://shaders/vegetation.gdshader" id="4_vege"]
+[ext_resource type="Script" path="res://scripts/semis_vegetation.gd" id="5_semis"]
+[ext_resource type="Shader" path="res://shaders/ciel_pastel.gdshader" id="6_ciel"]
+[ext_resource type="Shader" path="res://shaders/mer.gdshader" id="7_mer"]
+[ext_resource type="ArrayMesh" path="res://assets/models/ile_cote_formes.res" id="8_formes"]
+
+[sub_resource type="ShaderMaterial" id="terrain_mat"]
+shader = ExtResource("2_terrain")
+shader_parameter/roche_normal = ExtResource("3_relief")
+shader_parameter/hauteur_sable = 1.2
+
+[sub_resource type="ShaderMaterial" id="vege_mat"]
+shader = ExtResource("4_vege")
+
+[sub_resource type="ShaderMaterial" id="ciel_mat"]
+shader = ExtResource("6_ciel")
+
+[sub_resource type="Sky" id="ciel"]
+sky_material = SubResource("ciel_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("ciel")
+ambient_light_source = 3
+ambient_light_color = Color(0.95, 0.82, 0.9, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.75
+tonemap_mode = 2
+tonemap_white = 4.0
+glow_enabled = true
+glow_intensity = 0.7
+glow_bloom = 0.08
+fog_enabled = true
+fog_light_color = Color(0.96, 0.8, 0.84, 1)
+fog_light_energy = 1.0
+fog_sun_scatter = 0.25
+fog_density = 0.0016
+fog_sky_affect = 0.0
+fog_height = 2.0
+fog_height_density = 0.04
+adjustment_enabled = true
+adjustment_saturation = 1.3
+adjustment_contrast = 1.08
+
+[sub_resource type="ShaderMaterial" id="mer_mat"]
+shader = ExtResource("7_mer")
+
+[sub_resource type="PlaneMesh" id="mer_mesh"]
+material = SubResource("mer_mat")
+size = Vector2(2000, 2000)
+
+[node name="TestIleCote" type="Node3D"]
+
+[node name="Environnement" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.83049, 0.07271, -0.55227, 0.00000, 0.99144, 0.13054, 0.55704, 0.10841, -0.82338, 0.00000, 50.00000, 0.00000)
+light_color = Color(1, 0.84, 0.66, 1)
+light_energy = 2.2
+shadow_enabled = true
+directional_shadow_max_distance = 250.0
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 75, 110)
+current = true
+fov = 55.0
+
+[node name="Mer" type="MeshInstance3D" parent="."]
+mesh = SubResource("mer_mesh")
+
+[node name="Terrain" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_terrain")
+material_override = SubResource("terrain_mat")
+
+[node name="Formes" type="MeshInstance3D" parent="."]
+mesh = ExtResource("8_formes")
+material_override = SubResource("terrain_mat")
+
+[node name="Herbe" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("cible")]
+cast_shadow = 0
+material_override = SubResource("vege_mat")
+script = ExtResource("5_semis")
+cible = NodePath("../Terrain")
+nombre = 120000
+hauteur = Vector2(0.14, 0.32)
+niveau_eau = 1.8
+
+[node name="Fleurs" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("cible")]
+cast_shadow = 0
+material_override = SubResource("vege_mat")
+script = ExtResource("5_semis")
+cible = NodePath("../Terrain")
+forme = 1
+nombre = 6000
+hauteur = Vector2(0.6, 1.0)
+graine = 7
+niveau_eau = 1.8

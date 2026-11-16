@@ -12,7 +12,7 @@ La ville des Semeurs, vide, haute et trop grande pour le petit robot : des valis
 - **L'île où l'enquête commence vraiment.** On y vient naturellement après le Phare : c'est la plus facile d'accès.
 - **La fausse piste** y est la plus forte : valises prêtes, affiche « Départ ce soir ». Tout dit **« ils sont partis avec la Nef »**.
 - **Ce qu'on y apprend** : comment vivaient les Semeurs, la peur qui grandit (toujours plus de lumière), les arbres roses venus de chez eux, Aube et ses « amis de la brume ».
-- **Pas de squelettes ici** : la dernière nuit, la ville était déjà presque vide (les malades à la Quarantaine, les ouvriers à la Centrale, les autres à la Nef).
+- **Pas de squelettes ici, sauf un, caché** : la dernière nuit, la ville était déjà presque vide (les malades à la Quarantaine, les ouvriers à la Centrale, les autres à la Nef). **Seule Aube est restée** : on la trouve au coin noir (§6), seulement en suivant son dernier dessin (décidé le 2026-11-16).
 - **Durée** : environ 1 h 30 à 2 h la première fois.
 
 ---
@@ -38,7 +38,11 @@ La ville des Semeurs, vide, haute et trop grande pour le petit robot : des valis
 - **Forme : une baie en croissant.** Le vieux port englouti est au centre, sous l'eau. La ville monte en arc autour, et les serres sont en haut, sur la crête. **Depuis la ville, on voit le port sous l'eau**, ce qui donne envie d'y aller.
 - **Échelle** : tout est à la taille des Semeurs (très grands, fins, avec une tête-lanterne). Le petit robot s'y sent **minuscule** : portes immenses, tables au-dessus de sa tête, marches trop hautes (il prend les rampes, les caisses, les passages d'enfant).
 - **Le décor raconte l'escalade des lanternes en couches d'époques.** Dans les vieilles rues, il y a une lanterne par maison. Dans les plus récentes, il y en a dix, plus des projecteurs, des câbles partout et des fenêtres murées pour garder la lumière. On voit la peur grandir en marchant.
-- **Palette** **[à valider]** : pierre claire et bois peint (bleu passé, ocre) dans la ville basse, métal et câbles noirs dans la ville haute, verre et rose poudré dans les serres, vert d'eau et sable dans la baie.
+- **Palette** : **ocre + pêche** (DA v5, `DA.md`). Détail possible : pierre claire et bois peint (bleu passé, ocre) dans la ville basse, métal et câbles noirs dans la ville haute, verre et rose poudré dans les serres, vert d'eau et sable dans la baie.
+
+### Forme v6 (décidée le 2026-11-16) : **lagon fermé**
+La baie devient un **bassin presque clos** au cœur de la ville : le vieux port englouti au centre, la ville en anneau autour (ville basse au niveau 1, ville haute au niveau 2, serres et jardin du haut sur la crête au niveau 3). Une **seule passe étroite** relie le lagon à la mer, au sud, avec l'écluse. **À revoir** : le trajet du canal de l'écluse jusqu'au jardin du haut (dans le schéma, l'écluse est à la passe).
+Schéma : `concept/ile_03_formes.png` (variante C), dessiné par `tools/carte_iso.py ile_03`.
 
 ### Les zones
 | Zone | Ce qu'on y trouve |
@@ -76,8 +80,19 @@ La ville des Semeurs, vide, haute et trop grande pour le petit robot : des valis
 - **Ce que ça ouvre** : sa chambre intacte, ses dessins au mur, et **son carnet** (§7) : le lien Aube → Iris, et la date de la grande nuit.
 
 ### G2. « La rue des Trois-Soleils » (mécanisme + observation)
-- **La situation** : au bout de la rue, la grande porte de la maison commune est fermée. La rue est bordée de lanternes éteintes **[à valider : 9 lanternes]**.
-- **Où on l'apprend** : les **affiches** de la Commandante, dans la ville haute. Chacune montre la rue avec quelques lanternes allumées, mais elles sont **déchirées** : il faut en trouver plusieurs et reconstituer le motif complet **[à valider]**.
+- **La situation** : au bout de la rue, la grande porte de la maison commune est fermée. La rue est bordée de **9 lanternes éteintes** (3 rangées de 3) (validé le 2026-11-16).
+- **Où on l'apprend** : **3 affiches déchirées** de la Commandante, dans la ville haute. Chacune montre un morceau différent du motif ; le carnet recopie chaque morceau tel quel, et le joueur les assemble dans sa tête (validé le 2026-11-16).
+  ```
+  Affiche A      Affiche B      Affiche C
+  ● ○ ░          ░ ░ ●          ░ ░ ░
+  ░ ░ ░          ○ ○ ○          ░ ░ ░
+  ░ ░ ░          ░ ░ ░          ○ ● ○
+
+  Motif complet (3 soleils, comme le nom de la rue) :
+  ● ○ ●
+  ○ ○ ○
+  ○ ● ○
+  ```
 - **La solution** : allumer **exactement** les lanternes du motif (et pas les autres). La batterie compte : on n'a pas de quoi tout allumer au hasard, et on peut reprendre la lumière d'une lanterne mal allumée.
 - **Ce que ça ouvre** : la **maison commune** : les ordres d'Ysolde, les lettres de Tavin, le **plan de l'archipel des Semeurs** (§7).
 
@@ -94,29 +109,29 @@ La ville des Semeurs, vide, haute et trop grande pour le petit robot : des valis
 
 ### G4. « Le vieux port » (temps, le plus difficile)
 - **La situation** : depuis la ville, on voit des toits et des rues sous l'eau, au centre de la baie. On n'y descend jamais : même à marée basse, ils restent noyés.
-- **Où on l'apprend** **[à valider]** :
+- **Où on l'apprend** (validé le 2026-11-16 : le dessin et le trait sur place, plus la table des marées du Phare) :
   - un **dessin d'Aube** : « La nuit de la grosse lune, on marche dans la mer » (des enfants qui marchent entre des toits) ;
   - l'**échelle de marée** du quai porte un trait plus bas que les autres, avec un petit rond plein ;
-  - pour qui a lu la table des marées du Phare et regardé le ciel : la lune revient pleine toutes les 24 minutes.
+  - au Phare, la table des marées : « Pleine lune : plus bas que tout. Le vieux port respire. » ; et pour qui regarde le ciel : la lune revient pleine toutes les 24 minutes.
 - **La solution** : être là **à la pleine lune** (en marée basse), descendre dans le vieux port, et explorer **vite**, avant que l'eau remonte.
 - **Ce que ça ouvre** :
   - **le camp de l'arrivée** : les premiers abris, la première lanterne ;
   - **une fresque et un souvenir rejoué** (la plus grande révélation de l'île) : le jour de l'arrivée, **avant la première lanterne, la brume brillait**, magnifique. Les Semeurs ont eu peur et ont allumé ;
-  - **l'entrée de la Centrale** (une porte sous-marine des Semeurs), qu'on ne peut pas encore ouvrir **[à concevoir avec l'île 6]**.
+  - **l'entrée de la Centrale** (une porte sous-marine des Semeurs), avec une prise et une plaque « Entrée de service. Jardinier. » : le robot y branche son câble et elle s'ouvre (voir `ILE_06_CENTRALE.md`).
 
 ### Les petites
 - **Les dessins d'Aube** : chaque dessin montre un endroit vu à hauteur d'enfant. Se placer au même point de vue révèle quelque chose (une cachette, un objet, un passage).
 - **La comptine de l'école** : écrite au tableau, on la lit sans comprendre. Elle donne l'ordre des couleurs d'une porte de la Nef (§10).
-- **Les valises** : dans chaque maison, des valises prêtes et des étiquettes « Nef », sauf dans quelques maisons marquées « Centrale » ou « île blanche » **[à valider]**. Une première piste sur les groupes de la dernière nuit.
+- **Les valises** : dans chaque maison, des valises prêtes, **toutes étiquetées « Nef »** (validé le 2026-11-16). La fausse piste pure : tout le monde part. Qui était ailleurs la dernière nuit s'apprend sur les autres îles.
 
 ---
 
 ## 6. Les secrets
 | Secret | Où | Ce qu'il raconte |
 |---|---|---|
-| **Là où mes amis dansent** | Le dernier dessin d'Aube : un coin sombre de la ville | Si on éteint là (`N`, ou batterie basse), on voit le peuple caché danser **exactement comme sur le dessin**. Le premier indice, sur cette île, qu'Aube ne les inventait pas. |
+| **Là où mes amis dansent (le coin noir)** | Le dernier dessin d'Aube : un coin sombre de la ville | **Aube est là**, le seul squelette de la Colonie : assise, petite, couverte de mousse et de fleurs. Elle n'a jamais embarqué : elle est venue dire au revoir à ses amis, et la grande nuit l'a prise ici. À batterie presque vide, on devine des formes floues **tout autour d'elle**, qui dansent comme sur le dessin. (On ne les voit vraiment qu'à la fin.) Doux, pas glauque (décidé le 2026-11-16). |
 | **L'ancien corps de l'école** | Devant la porte de l'école | Un ancien corps du robot, couvert de mousse, assis, qui **tient un dessin d'Aube qu'on a déjà ramassé**. « Il a fait exactement ce que je fais. » Premier petit doute sur les corps. |
-| **La porte de la Centrale** | Dans le vieux port | Une porte qu'on voit à la pleine lune, sans pouvoir l'ouvrir. |
+| **La porte de la Centrale** | Dans le vieux port | Une porte qu'on voit à la pleine lune : « Entrée de service. Jardinier. » Le robot est la clé. |
 
 ---
 
@@ -130,13 +145,20 @@ La ville des Semeurs, vide, haute et trop grande pour le petit robot : des valis
 - Une enfant, Aube, voyait des « amis » dans la brume. Iris aussi.
 - L'Ingénieur Tavin prévenait que **la centrale ne tiendrait pas**.
 
-### Le carnet d'Aube (dans sa chambre) **[texte à valider]**
-> Papa dit qu'on part ce soir avec la Nef. Tout le monde. Même les arbres, on les laisse.
-> Je veux pas laisser mes amis. Ils viennent quand il fait noir, et là il fait jamais noir.
-> Iris dit qu'elle les voit aussi. Elle dit qu'il faut pas avoir peur du noir.
-> Je vais leur dire au revoir avant de partir.
+### Le carnet d'Aube (dans sa chambre) — *validé le 2026-11-16, version enfantine*
+> Papa dit on part ce soir avec la Nef.
+> TOUT LE MONDE. même les arbres on les laisse.
+> mes amis viennent que quand il fait noir.
+> ici il fait jamais noir. ☹
+> Iris elle les voit aussi.
+> elle dit faut pas avoir peur du noir.
+> je vais leur dire au revoir
+> au coin noir. après je pars. promis.
+> *(dessin : des petites lumières qui font coucou)*
 
-### Les affiches de la Commandante (ville haute) **[textes à valider]**
+*(« Au coin noir » renvoie au secret « Là où mes amis dansent », §6.)*
+
+### Les affiches de la Commandante (ville haute) — *validées le 2026-11-16*
 De la plus ancienne à la plus récente :
 1. « Une lanterne par foyer. »
 2. « La nuit, restez dans la lumière. »
@@ -144,11 +166,11 @@ De la plus ancienne à la plus récente :
 4. « Toute ombre est un danger. Signalez les lanternes éteintes. »
 5. (la dernière, sur la porte de la maison commune) « Départ ce soir. Tous à la Nef. Sauf : personnel de la Centrale, malades de l'île blanche. »
 
-### Les ordres d'Ysolde et les lettres de Tavin (maison commune) **[textes à valider]**
+### Les ordres d'Ysolde et les lettres de Tavin (maison commune) — *validés le 2026-11-16*
 - **Ysolde** : « Doubler les lanternes de la ville haute avant la saison sombre. » / « Les malades seront envoyés à l'île blanche jusqu'à guérison. » / « La Nef est réparée. Nous partons. »
 - **Tavin** : « Commandante, la centrale ne tiendra pas une saison de plus à ce régime. » / « Chaque lanterne que nous ajoutons, la brume semble la sentir. Elle s'épaissit autour. » / « Le berceau du jardinier a sa propre ligne. Quoi qu'il arrive, il tiendra. »
 
-### La comptine (au tableau de l'école) **[texte à valider]**
+### La comptine (au tableau de l'école) — *validée le 2026-11-16*
 > Le ciel de chez nous est rose au matin,
 > bleu à midi, couleur d'or le soir,
 > et noir quand on dort.
@@ -156,12 +178,12 @@ De la plus ancienne à la plus récente :
 *(Pour la porte de la Nef : rose, bleu, or, noir.)*
 
 ### Le plan de l'archipel des Semeurs (maison commune)
-Une carte avec les îles **nommées par les Semeurs** : la Colonie, le Phare, **l'île blanche** (la Quarantaine), **la Nef**, **la Centrale**. Une île manque, mais une petite tache d'encre est là où devrait être la maison d'Iris **[à valider]**.
+Une carte avec les îles **nommées par les Semeurs** : la Colonie, le Phare, **l'île blanche** (la Quarantaine), **la Nef**, **la Centrale**. Une île manque, mais une **petite tache d'encre** est là où devrait être la maison d'Iris, au nord-ouest (validé le 2026-11-16). On croit à un accident ; on comprend plus tard.
 
 ---
 
 ## 8. Le peuple caché : les amis d'Aube
-> Visible dans le noir (`N`, ou batterie basse). Le côté ombre sera construit après le jeu de base.
+> Invisible avant la fin (plus de touche `N`, décidé le 2026-11-16) : seulement des bribes à batterie presque vide. On les voit vraiment dans la cinématique de fin.
 
 - Un **petit peuple joueur** qui vit dans les recoins sombres de la ville (sous les escaliers, dans les caves, dans les cachettes d'Aube).
 - Ils **dansent** là où Aube jouait avec eux.
@@ -169,14 +191,9 @@ Une carte avec les îles **nommées par les Semeurs** : la Colonie, le Phare, **
 
 ---
 
-## 9. Le carnet (tableau d'enquête)
+## 9. Le carnet (juste ce qu'on a vu, sans flèches)
 - **Lieux** : le quai, la ville basse, l'école, la maison d'Aube, la ville haute, la maison commune, les serres, le jardin du haut, le vieux port.
-- **Rumeurs** (des flèches vers d'autres îles) :
-  - « Ils sont tous partis avec la Nef, un soir. » → **la Nef** ;
-  - « Les malades étaient envoyés à l'île blanche. » → **la Quarantaine** ;
-  - « Iris dit qu'elle les voit aussi. » → **le Phare / Iris** ;
-  - « La centrale ne tiendra pas. » → **la Centrale**.
-- **Questions ouvertes** : « Qui sont les amis d'Aube ? », « Pourquoi la brume brillait-elle le jour de l'arrivée ? », « Où mène la porte du vieux port ? ».
+- **Textes** : le carnet d'Aube, les affiches, les ordres d'Ysolde, les lettres de Tavin, la comptine, le plan de l'archipel.
 - **Dessins** : les dessins d'Aube se rangent dans le carnet.
 
 ## 10. Les liens avec les autres îles
@@ -191,12 +208,11 @@ Une carte avec les îles **nommées par les Semeurs** : la Colonie, le Phare, **
 ## 11. Son et ambiance
 - Une ville **silencieuse** : le vent dans les câbles, une enseigne qui grince, le clapotis de la baie. **Le carillon** à marée haute.
 - Dans les serres, une **chaleur** (bourdonnement des vieilles lampes).
-- **Musique** **[à valider]** : une boîte à musique d'enfant, quelques notes, qui revient dans la maison d'Aube.
+- **Musique** (validée le 2026-11-16) : une **boîte à musique d'enfant**, quelques notes fragiles, qui revient plus fort dans la maison d'Aube. C'est le thème d'Aube.
 
 ## 12. Points à valider
-1. Le nombre de lanternes de la rue des Trois-Soleils et les affiches déchirées à reconstituer.
-2. Comment on apprend la très basse mer de la pleine lune (dessin d'Aube, trait sur l'échelle du quai).
-3. Les étiquettes des valises (Nef / Centrale / île blanche).
-4. Tous les textes (§7).
-5. La palette et la musique.
-6. L'île d'Iris marquée d'une tache d'encre sur le plan des Semeurs.
+**Validé le 2026-11-16** : la rue des Trois-Soleils (9 lanternes, 3 affiches déchirées) ; le dessin d'Aube et le trait du quai pour la pleine lune ; les valises toutes « Nef » ; la tache d'encre sur le plan.
+
+**Textes validés le 2026-11-16** : le carnet d'Aube (version enfantine), les affiches, les ordres d'Ysolde et les lettres de Tavin, la comptine.
+
+**La porte de la Centrale** (décidé le 2026-11-16 avec l'île 6) : une prise et une plaque « Entrée de service. Jardinier. » ; le robot branche son câble et elle s'ouvre. Voir `ILE_06_CENTRALE.md`.

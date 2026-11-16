@@ -12,12 +12,13 @@
 - [x] `ILE_01_REVEIL.md` (mis à jour v4)
 - [x] `ILE_02_PHARE.md` (mis à jour v4 ; quelques textes encore à valider)
 - [x] `ILE_03_COLONIE.md` (quelques points encore à valider)
-- [ ] `ILE_04_QUARANTAINE.md` (l'île blanche)
-- [ ] `ILE_05_NEF.md` (le crash et l'antenne d'appel au secours)
-- [ ] `ILE_06_CENTRALE.md` (sous la mer, la fin)
-- [ ] `ILE_07_ILE_CACHEE.md` (la maison d'Iris)
-- [ ] La toile de l'enquête : tous les liens et rumeurs entre les îles, sur une page
-- [ ] La fin et la fin secrète (nouvelle phrase d'Iris)
+- [x] `ILE_04_QUARANTAINE.md` (l'île blanche)
+- [x] `ILE_05_NEF.md` (le crash et l'antenne d'appel au secours)
+- [x] `ILE_06_CENTRALE.md` (sous la mer, la fin)
+- [x] `ILE_07_ILE_CACHEE.md` (la maison d'Iris)
+- [x] La toile de l'enquête (doc de conception, pas dans le jeu) : `TOILE_ENQUETE.md`
+- [x] La fin et la fin secrète (« Merci. », voir `ILE_06_CENTRALE.md` §7)
+- [x] La touche `N` : **retirée** (2026-11-16). On voit la brume une fois accepté (en coupant son câble) ; avant, des bribes à batterie basse.
 
 ---
 
@@ -35,10 +36,11 @@ Détail complet dans `archive/ROADMAP_v3.md`.
 Voir `ILE_01_REVEIL.md` §13.
 - [ ] Fin de l'île : plus de fondu, plus de Phare qui s'allume au loin (silhouette sombre + lueur de la bouée).
 - [ ] Barque cachée dans la crique à chaque boucle, toujours à flot.
+- [ ] Retirer le mode nuit `N` et le croquis de l'atelier ; la ville des Pins devient la matière de la cinématique de fin.
 - [ ] Retirer l'ancienne 2e moitié : touche de debug « bascule », « Tu es revenu deux cent quatorze fois », mission « Laisser sortir les petits », répliques de l'Ancienne après la bascule, aide de l'essaim, extension du hameau, 3e couche musicale.
 - [ ] Remplacer la page 1 (`assets/notebook/journal/page_01.tres`) par la nouvelle version (voir `ILE_02_PHARE.md` §7).
-- [ ] (à valider) L'ordre d'Ysolde gravé sur le moule de l'atelier ; l'atelier à l'échelle des Semeurs.
-- [ ] Le carnet en tableau d'enquête (lieux, rumeurs, questions).
+- [ ] L'ordre d'Ysolde sur un papier à côté du berceau ; l'atelier un peu trop grand pour le robot (décidé le 2026-11-16).
+- [ ] Le carnet : juste ce qu'on a vu (lieux, textes, dessins, cartes), sans flèches ni questions.
 
 ## Étape 3 — L'archipel et l'île 2
 Voir `ILE_02_PHARE.md` §11 (phases J et K).
@@ -47,5 +49,5 @@ Voir `ILE_02_PHARE.md` §11 (phases J et K).
 ## Étape 4 — Les îles 3 à 7
 Une fois leurs documents validés.
 
-## Plus tard — le peuple caché des îles 2 à 7
+## Plus tard — le peuple caché des îles 2 à 7 (visible seulement dans la cinématique de fin et les bribes à batterie basse)
 Après le jeu de lumière (décision : on se concentre d'abord sur le jeu de lumière).

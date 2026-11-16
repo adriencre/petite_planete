@@ -131,6 +131,8 @@ func _process(_delta: float) -> void:
 
 
 func _proche_et_regarde(distance: float) -> bool:
+	if _joueur.vue_dessus:  # vue de dessus : on ne vise pas avec la caméra, la proximité suffit
+		return _joueur.global_position.distance_to(global_position) < distance
 	var cam: Camera3D = _joueur.camera
 	var vers := (global_position + Vector3.UP * 1.2) - cam.global_position
 	if vers.length() > distance:
