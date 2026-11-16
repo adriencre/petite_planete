@@ -66,7 +66,7 @@ Le prologue : on se réveille dans un corps neuf, sur une île grise et noyée d
 1. **Le réveil** (~23 s, sans contrôle) : noir → le robot couché sur le flanc → un œil vacille, puis l'autre → il se redresse, regarde ses mains, se lève en titubant, regarde autour de lui. On prend la main.
 2. **La sortie** : la caméra recule lentement sur l'île grise (sans contrôle). Une **luciole** apparaît et guide.
 3. **L'antenne est vide** : on la recharge à la **pierre-soleil**.
-4. **La première lumière** (longue cinématique) : glyphe tracé dans l'air → filaments → la lanterne fleurit → la zone se réveille en vague de couleur. Les suivantes sont plus courtes.
+4. **La première lumière** (longue cinématique) : le robot s'accroupit, branche le câble de son poignet dans la prise de la lanterne → pulsations dorées → la lanterne se charge et s'ouvre en crans → la zone se réveille en vague de couleur → il débranche. Les suivantes sont plus courtes. *(2026-11-16 : remplace le glyphe tracé dans l'air — pas de magie, voir DA.md.)*
 5. Lanternes 1, 2, 3 → **racines lumineuses** → **la grande lanterne**.
 6. **Planter** : la cosse, la graine, le terreau, les racines-escalier → le plateau.
 7. **La lanterne du sommet** : toute l'île s'éveille, coucher de soleil. On voit le Phare éteint et la lueur de sa bouée.

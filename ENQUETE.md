@@ -1,10 +1,6 @@
 # Petite Planète — l'enquête (v4, en cours de décision)
 
-> Refonte décidée le 2026-11-15 après la remarque de l'utilisateur : chaque île ne doit pas tourner autour d'**une seule mécanique**.
-> Comme dans Outer Wilds, le jeu est une **grande enquête**, avec **beaucoup d'énigmes variées sur chaque île**.
-> Ce document rassemble les décisions au fur et à mesure des questions. Les anciennes versions (v3) sont dans `archive/`.
-
-## Décisions (2026-11-15)
+## Décisions
 
 ### La question du jeu
 - **« Où sont les Semeurs ? »** Tout est construit, éclairé, habité… mais il n'y a personne.

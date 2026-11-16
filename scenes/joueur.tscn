@@ -1,0 +1,248 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/joueur.gd" id="1_joueur"]
+[ext_resource type="PackedScene" path="res://assets/models/robot_final.glb" id="2_robot"]
+[ext_resource type="Script" path="res://scripts/robot_anim.gd" id="4_anim"]
+[ext_resource type="PackedScene" path="res://assets/models/antenne_vue.glb" id="3_antenne"]
+
+[sub_resource type="CapsuleShape3D" id="capsule"]
+radius = 0.4
+height = 1.9
+
+[sub_resource type="SphereShape3D" id="sphere_cam"]
+radius = 0.25
+
+[sub_resource type="SphereMesh" id="ampoule_mesh"]
+radius = 0.028
+height = 0.06
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="coque"]
+albedo_color = Color(0.88, 0.73, 0.58, 1)
+metallic = 0.5
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="sombre"]
+albedo_color = Color(0.29, 0.27, 0.35, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="paume"]
+material = SubResource("coque")
+radius = 0.048
+height = 0.07
+radial_segments = 20
+rings = 10
+
+[sub_resource type="CapsuleMesh" id="doigt"]
+material = SubResource("coque")
+radius = 0.014
+height = 0.085
+radial_segments = 12
+rings = 4
+
+[sub_resource type="SphereMesh" id="phalange"]
+material = SubResource("coque")
+radius = 0.018
+height = 0.034
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="poignet"]
+material = SubResource("sombre")
+top_radius = 0.028
+bottom_radius = 0.032
+height = 0.09
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="segment_bras"]
+material = SubResource("coque")
+top_radius = 0.032
+bottom_radius = 0.04
+height = 1.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="SphereMesh" id="articulation"]
+material = SubResource("sombre")
+radius = 0.042
+height = 0.084
+radial_segments = 14
+rings = 7
+
+[sub_resource type="StandardMaterial3D" id="or_fiche"]
+albedo_color = Color(0.85, 0.72, 0.48, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="fiche_corps"]
+material = SubResource("sombre")
+top_radius = 0.018
+bottom_radius = 0.022
+height = 0.06
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="fiche_bout"]
+material = SubResource("or_fiche")
+top_radius = 0.008
+bottom_radius = 0.01
+height = 0.03
+radial_segments = 10
+rings = 1
+
+[node name="Joueur" type="CharacterBody3D" groups=["joueur"]]
+floor_snap_length = 0.3
+script = ExtResource("1_joueur")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("capsule")
+
+[node name="Modele" parent="." instance=ExtResource("2_robot")]
+script = ExtResource("4_anim")
+
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Bras" type="SpringArm3D" parent="Pivot"]
+shape = SubResource("sphere_cam")
+spring_length = 4.2
+margin = 0.1
+
+[node name="Camera" type="Camera3D" parent="."]
+fov = 60.0
+near = 0.02
+
+[node name="AntenneVue" parent="Camera" instance=ExtResource("3_antenne")]
+
+[node name="Ampoule" type="MeshInstance3D" parent="Camera/AntenneVue"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.035, 0.185, -0.38)
+cast_shadow = 0
+mesh = SubResource("ampoule_mesh")
+
+
+[node name="Mains" type="Node3D" parent="Camera"]
+visible = false
+
+[node name="MainDroite" type="Node3D" parent="Camera/Mains"]
+transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, 0.2, -0.62, -0.38)
+
+[node name="Paume" type="MeshInstance3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("paume")
+
+[node name="Index" type="MeshInstance3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.012, -0.08)
+cast_shadow = 0
+mesh = SubResource("doigt")
+
+[node name="Replie1" type="MeshInstance3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.024, -0.012, -0.045)
+cast_shadow = 0
+mesh = SubResource("phalange")
+
+[node name="Replie2" type="MeshInstance3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.006, -0.018, -0.05)
+cast_shadow = 0
+mesh = SubResource("phalange")
+
+[node name="Pouce" type="MeshInstance3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.045, 0.004, -0.03)
+cast_shadow = 0
+mesh = SubResource("doigt")
+
+[node name="Poignet" type="MeshInstance3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0.06)
+cast_shadow = 0
+mesh = SubResource("poignet")
+
+[node name="MainGauche" type="Node3D" parent="Camera/Mains"]
+transform = Transform3D(0.966, 0, 0.259, 0, 1, 0, -0.259, 0, 0.966, -0.22, -0.62, -0.38)
+
+[node name="Paume" type="MeshInstance3D" parent="Camera/Mains/MainGauche"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("paume")
+
+[node name="Doigt1" type="MeshInstance3D" parent="Camera/Mains/MainGauche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.025, 0.004, -0.075)
+cast_shadow = 0
+mesh = SubResource("doigt")
+
+[node name="Doigt2" type="MeshInstance3D" parent="Camera/Mains/MainGauche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.002, 0.008, -0.082)
+cast_shadow = 0
+mesh = SubResource("doigt")
+
+[node name="Doigt3" type="MeshInstance3D" parent="Camera/Mains/MainGauche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.028, 0.004, -0.072)
+cast_shadow = 0
+mesh = SubResource("doigt")
+
+[node name="Pouce" type="MeshInstance3D" parent="Camera/Mains/MainGauche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.048, 0.0, -0.025)
+cast_shadow = 0
+mesh = SubResource("doigt")
+
+[node name="Poignet" type="MeshInstance3D" parent="Camera/Mains/MainGauche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0.06)
+cast_shadow = 0
+mesh = SubResource("poignet")
+
+[node name="BrasDroit" type="Node3D" parent="Camera/Mains"]
+
+[node name="Epaule" type="MeshInstance3D" parent="Camera/Mains/BrasDroit"]
+cast_shadow = 0
+mesh = SubResource("articulation")
+
+[node name="Haut" type="MeshInstance3D" parent="Camera/Mains/BrasDroit"]
+cast_shadow = 0
+mesh = SubResource("segment_bras")
+
+[node name="Coude" type="MeshInstance3D" parent="Camera/Mains/BrasDroit"]
+cast_shadow = 0
+mesh = SubResource("articulation")
+
+[node name="Avant" type="MeshInstance3D" parent="Camera/Mains/BrasDroit"]
+cast_shadow = 0
+mesh = SubResource("segment_bras")
+
+[node name="BrasGauche" type="Node3D" parent="Camera/Mains"]
+
+[node name="Epaule" type="MeshInstance3D" parent="Camera/Mains/BrasGauche"]
+cast_shadow = 0
+mesh = SubResource("articulation")
+
+[node name="Haut" type="MeshInstance3D" parent="Camera/Mains/BrasGauche"]
+cast_shadow = 0
+mesh = SubResource("segment_bras")
+
+[node name="Coude" type="MeshInstance3D" parent="Camera/Mains/BrasGauche"]
+cast_shadow = 0
+mesh = SubResource("articulation")
+
+[node name="Avant" type="MeshInstance3D" parent="Camera/Mains/BrasGauche"]
+cast_shadow = 0
+mesh = SubResource("segment_bras")
+
+[node name="Fiche" type="Node3D" parent="Camera/Mains/MainDroite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, -0.13)
+visible = false
+
+[node name="Corps" type="MeshInstance3D" parent="Camera/Mains/MainDroite/Fiche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0.0)
+cast_shadow = 0
+mesh = SubResource("fiche_corps")
+
+[node name="Bout" type="MeshInstance3D" parent="Camera/Mains/MainDroite/Fiche"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.045)
+cast_shadow = 0
+mesh = SubResource("fiche_bout")
+
+[node name="Lumiere" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+light_energy = 1.6
+omni_range = 5.5
+omni_attenuation = 1.4

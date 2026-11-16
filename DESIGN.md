@@ -1,14 +1,5 @@
 # Petite Planète — les règles du jeu (v4)
 
-> **Les documents du projet :**
-> - `DESIGN.md` (ce fichier) : les règles du jeu, le moteur, la mer, les cycles, la direction artistique.
-> - `ENQUETE.md` : l'histoire (« Où sont les Semeurs ? »), les personnages, les 7 îles, la fin.
-> - `ILE_01_REVEIL.md`, `ILE_02_PHARE.md`, `ILE_03_COLONIE.md`… : une île par document, au complet.
-> - `ROADMAP.md` : ce qui est construit, et ce qui reste à faire.
-> - `archive/` : les anciennes versions (v3), gardées pour mémoire.
-
----
-
 ## En une phrase
 Un petit robot jardinier se réveille sur un archipel noyé de brume, où tout est construit, éclairé… et vide. Il enquête : où sont les Semeurs ? Il finit par comprendre qu'ils sont morts de leur propre lumière, et qu'un peuple vit caché dans la brume depuis le début.
 
