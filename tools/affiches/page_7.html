@@ -1,0 +1,50 @@
+<!doctype html>
+<!-- Page 7 du journal d'Iris, sur l'établi de l'atelier (ILE_01_REVEIL.md §7) : une page lignée arrachée,
+     écrite vite, avec dans la marge les petites lueurs qu'elle voit dans la brume. Rendu : 1100 × 1400. -->
+<html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="commun.css">
+<style>
+  .feuille { inset: 40px 50px 44px 46px; transform: rotate(1.4deg);
+    clip-path: polygon(0% 2.2%, 4% 0.6%, 9% 1.9%, 14% 0.4%, 19% 1.6%, 25% 0.2%, 31% 1.4%, 37% 0.5%, 43% 1.8%, 49% 0.3%, 55% 1.5%, 61% 0.4%, 67% 1.7%, 73% 0.6%, 79% 1.9%, 85% 0.3%, 91% 1.4%, 96% 0.5%, 100% 1.6%, 100% 100%, 0% 100%);
+    background:
+      radial-gradient(circle at 76% 74%, transparent 0 6.2%, rgba(140,100,60,.28) 6.5% 7%, rgba(140,100,60,.08) 7.2%, transparent 8%),
+      radial-gradient(ellipse at 20% 90%, rgba(170,130,80,.22), transparent 35%),
+      repeating-linear-gradient(180deg, transparent 0 58px, rgba(110,150,190,.35) 58px 60px),
+      linear-gradient(90deg, transparent 0 112px, rgba(210,110,100,.45) 112px 114px, transparent 114px),
+      radial-gradient(ellipse at 50% 45%, #f6eedb 50%, #e6d5b2 100%); }
+  .trous { position: absolute; left: 34px; top: 0; bottom: 0; width: 30px; }
+  .numero { position: absolute; top: 46px; right: 64px; font-family: 'Caveat', cursive; font-size: 54px; color: var(--encre-pale); }
+  .numero::after { content: ""; position: absolute; inset: -4px -14px; border: 2.5px solid var(--encre-pale); border-radius: 50%; transform: rotate(-8deg); }
+  .texte { position: absolute; top: 132px; left: 140px; right: 60px;
+    font-family: 'Caveat', cursive; font-weight: 500; font-size: 51px; line-height: 60px; color: #2f2d4a; }
+  .texte p { margin-bottom: 60px; }
+  .texte p:last-of-type { margin-bottom: 0; }
+  .barre { text-decoration: line-through; text-decoration-thickness: 3px; opacity: .7; }
+  .souligne { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+  .signe { position: absolute; right: 110px; bottom: 120px; font-family: 'Caveat', cursive; font-size: 58px; color: #2f2d4a; transform: rotate(-4deg); }
+  .marge { position: absolute; left: 0; top: 0; width: 120px; height: 100%; }
+</style></head>
+<body>
+<div class="feuille">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="11"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.3 0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+  <svg width="0" height="0" style="position:absolute"><defs>
+    <filter id="aqua" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="6" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="2"/></filter>
+    <radialGradient id="lueur-brume"><stop offset="0" stop-color="#e9fffb"/><stop offset=".35" stop-color="#7fe0d6" stop-opacity=".8"/><stop offset="1" stop-color="#5cc7c9" stop-opacity="0"/></radialGradient>
+  </defs></svg>
+
+  <!-- dans la marge : la brume au lavis, et les petites lueurs qui s'y allument -->
+  <svg class="marge" viewBox="0 0 120 1320" preserveAspectRatio="none">
+    <g fill="#b9acd6" opacity=".45" filter="url(#aqua)"><ellipse cx="60" cy="300" rx="52" ry="120"/><ellipse cx="56" cy="760" rx="50" ry="150"/><ellipse cx="64" cy="1120" rx="46" ry="90"/></g>
+    <g><circle cx="48" cy="250" r="16" fill="url(#lueur-brume)"/><circle cx="78" cy="330" r="12" fill="url(#lueur-brume)"/><circle cx="40" cy="700" r="18" fill="url(#lueur-brume)"/><circle cx="82" cy="780" r="11" fill="url(#lueur-brume)"/><circle cx="56" cy="860" r="14" fill="url(#lueur-brume)"/><circle cx="70" cy="1100" r="13" fill="url(#lueur-brume)"/></g>
+  </svg>
+  <div class="numero">7</div>
+
+  <div class="texte">
+    <p>Elles ne sont pas la brume. Elles sont <span class="souligne">dans</span> la brume. Chaque fois que je souffle ma lanterne, elles s'allument tout autour de moi, comme si elles m'attendaient.</p>
+    <p>Les autres disent que le pollen m'a pris la tête.</p>
+    <p>Le petit jardinier qu'ils moulent dans cet atelier ne les voit pas : son antenne les éblouit, elle aussi.</p>
+    <p>Si tu lis ceci, suis-les. Elles connaissent le chemin de chez moi.</p>
+  </div>
+  <div class="signe">— G.</div>
+</div>
+</body></html>

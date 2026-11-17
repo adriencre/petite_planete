@@ -1,0 +1,35 @@
+/* Les documents des Semeurs (affiches, lettres, pages) : rendus en PNG par tools/affiches/rendre.py.
+   Papier crème vieilli, encre brune, aquarelle pâle (DA.md). */
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Caveat:wght@500;600&family=Dancing+Script:wght@500;600&family=Mrs+Saint+Delafield&display=block');
+
+:root {
+  --encre: #4f3624;
+  --encre-pale: #8a6a4f;
+  --papier: #f4ead3;
+  --papier-fonce: #e6d6b4;
+  --or: #c89a3f;
+  --or-clair: #e6c06a;
+  --sauge: #9fb88e;
+  --rose: #e2b0a4;
+  --lavande: #b9acd6;
+  --ciel: #a7cbd2;
+  --cire: #a8432f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* le fond hors de la feuille : remplacé au rendu par du noir puis du blanc (rendre.py), pour la transparence */
+html, body { width: 100%; height: 100%; background: #1f1424; overflow: hidden; }
+
+/* la feuille : un dégradé chaud, des taches de vieillissement, et le grain du papier (SVG plus bas) */
+.feuille {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(196, 160, 100, 0.18), transparent 38%),
+    radial-gradient(ellipse at 85% 88%, rgba(170, 130, 80, 0.22), transparent 42%),
+    radial-gradient(ellipse at 72% 22%, rgba(200, 170, 120, 0.12), transparent 30%),
+    radial-gradient(ellipse at 50% 50%, var(--papier) 55%, var(--papier-fonce) 100%);
+  color: var(--encre);
+  overflow: hidden;
+}
+.grain { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: multiply; opacity: 0.55; pointer-events: none; }
+svg { overflow: visible; }

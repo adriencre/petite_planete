@@ -1,0 +1,10 @@
+# graphify : ce qui ne fait pas partie du jeu lui-même
+.claude/
+.godot/
+addons/
+assets/
+captures/
+concept/
+graphify-out/
+scenes/archive/
+skills-lock.json

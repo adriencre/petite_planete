@@ -19,14 +19,15 @@ extends CharacterBody3D
 @export_group("1re personne")
 @export var hauteur_yeux: float = 1.74
 @export_group("Batterie")
-## Touche B maintenue : simule la brume qui vide la batterie.
-@export var vidage_brume: float = 0.12
+## Recharge passive (mise à 0 par reveil.gd : seules la lumière et les pierres-soleil rechargent).
 @export var recharge: float = 0.05
-@export var energie_lumiere: float = 1.6
+@export var energie_lumiere: float = 4.0
 @export var couleur_lumiere: Color = Color(1.0, 0.8, 0.5)
 @export_group("Animation")
 @export var rebond: float = 0.04
 @export var cadence_pas: float = 8.5
+## Rebond et penché ajoutés par code. À décocher quand le modèle a ses propres animations de marche.
+@export var balancement_procedural: bool = true
 
 @onready var modele: Node3D = $Modele
 @onready var pivot: Node3D = $Pivot
@@ -42,6 +43,15 @@ extends CharacterBody3D
 ## Mode cinématique : plus de contrôle, le regard est guidé vers `regard_cible`.
 var cinematique := false
 var regard_cible := Vector3.ZERO
+## Caméra de mise en scène quand on voit le robot (vue de dessus, 3e personne) :
+## 0 = caméra de jeu, 1 = plan imposé depuis `cine_position` vers `cine_cible`.
+var cine_melange := 0.0
+var cine_position := Vector3.ZERO
+var cine_cible := Vector3.ZERO
+## Le véhicule qui porte le robot (la barque) : tant qu'il est là, c'est lui qui place le robot,
+## son modèle et la caméra ; le joueur ne gère plus que la batterie (voir barque.gd).
+var embarque: Node3D = null
+var _pos_prec := Vector3.ZERO
 var fov_normal := 60.0
 ## Position du bout de l'index droit (repère de la main) et poses des mains (repère caméra).
 const BOUT_INDEX := Vector3(0.0, 0.012, -0.13)
@@ -91,6 +101,50 @@ func _ready() -> void:
 	_ampoule_mat.emission = couleur_lumiere
 	ampoule_vue.material_override = _ampoule_mat
 	lumiere.light_color = couleur_lumiere
+	lumiere.omni_attenuation = 0.8
+	lumiere.light_volumetric_fog_energy = 2.5   # un halo dans la brume autour du robot
+	_preparer_lueur()
+
+
+## La lueur de l'antenne : accrochée en haut de la tête du modèle (os « head_end »), elle suit la tête
+## même pendant les animations ; un halo doux toujours tourné vers la caméra, et la lumière part de là.
+var _lueur: Node3D
+var _halo_mat := StandardMaterial3D.new()
+
+
+func _preparer_lueur() -> void:
+	var squelettes := modele.find_children("*", "Skeleton3D", true, false)
+	if squelettes.is_empty():
+		return
+	var sk := squelettes[0] as Skeleton3D
+	if sk.find_bone("head_end") < 0:
+		return
+	var accroche := BoneAttachment3D.new()
+	accroche.bone_name = "head_end"
+	sk.add_child(accroche)
+	_lueur = Node3D.new()
+	_lueur.position = Vector3(0, 0.18, 0.05)
+	accroche.add_child(_lueur)
+	var q := QuadMesh.new()
+	q.size = Vector2(0.9, 0.9)
+	var degrade := Gradient.new()
+	degrade.set_color(0, Color(1, 1, 1, 1))
+	degrade.set_color(1, Color(1, 1, 1, 0))
+	var tex := GradientTexture2D.new()
+	tex.gradient = degrade
+	tex.fill = GradientTexture2D.FILL_RADIAL
+	tex.fill_from = Vector2(0.5, 0.5)
+	tex.fill_to = Vector2(0.5, 0.0)
+	_halo_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_halo_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	_halo_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_halo_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	_halo_mat.albedo_texture = tex
+	q.material = _halo_mat
+	var halo := MeshInstance3D.new()
+	halo.mesh = q
+	halo.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_lueur.add_child(halo)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -112,6 +166,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if embarque:
+		velocity = Vector3.ZERO
+		_gerer_batterie(delta)
+		return
 	var dir_input := Vector2(
 		float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
 		float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W)))
@@ -141,6 +199,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 	_animer(delta, dir)
 	_placer_camera(delta)
+	_appliquer_cine()
 	_gerer_batterie(delta)
 	_placer_index()
 	if mains.visible:
@@ -153,25 +212,46 @@ func _animer(delta: float, dir: Vector3) -> void:
 	_vitesse_lissee = lerpf(_vitesse_lissee, vh, 1.0 - exp(-8.0 * delta))
 	# en 3e personne le corps se tourne vers la marche ; en 1re il suit le regard
 	var cible_yaw := modele.rotation.y
+	var souplesse := 10.0
 	if _blend > 0.5:
 		cible_yaw = _yaw + PI
+	elif cinematique:
+		# mise en scène vue de l'extérieur : il regarde où il va, puis ce qu'on lui montre
+		var dep := Vector2(global_position.x - _pos_prec.x, global_position.z - _pos_prec.z)
+		var vers := Vector2(regard_cible.x - global_position.x, regard_cible.z - global_position.z)
+		if dep.length() > 0.5 * delta:
+			cible_yaw = atan2(dep.x, dep.y)
+		elif vers.length() > 0.05:
+			cible_yaw = atan2(vers.x, vers.y)
+		souplesse = 6.0
 	elif dir.length() > 0.1:
 		cible_yaw = atan2(dir.x, dir.z)
-	modele.rotation.y = lerp_angle(modele.rotation.y, cible_yaw, 1.0 - exp(-10.0 * delta))
+	_pos_prec = global_position
+	modele.rotation.y = lerp_angle(modele.rotation.y, cible_yaw, 1.0 - exp(-souplesse * delta))
 	# petits pas rebondis et un peu maladroits
 	_phase += delta * cadence_pas * clampf(_vitesse_lissee / vitesse, 0.0, 1.6)
 	var force := clampf(_vitesse_lissee / vitesse, 0.0, 1.0)
+	if not balancement_procedural:
+		modele.position.y = 0.0
+		modele.rotation.x = 0.0
+		modele.rotation.z = 0.0
+		return
 	modele.position.y = absf(sin(_phase)) * rebond * force
 	modele.rotation.z = sin(_phase) * 0.03 * force
 	modele.rotation.x = -0.12 * force if is_on_floor() else 0.1
+
+
+## Le cadrage de la vue de dessus autour de `centre` (sert aussi à la barque pour y revenir en douceur).
+func transform_vue_dessus(centre: Vector3) -> Transform3D:
+	var b := Basis.from_euler(Vector3(-deg_to_rad(angle_dessus), deg_to_rad(orientation_dessus), 0))
+	return Transform3D(b, centre + Vector3.UP + b * Vector3(0, 0, distance_dessus))
 
 
 func _placer_camera(delta: float) -> void:
 	if vue_dessus:
 		_pitch = -deg_to_rad(angle_dessus)
 		_yaw = deg_to_rad(orientation_dessus)
-		var b := Basis.from_euler(Vector3(_pitch, _yaw, 0))
-		camera.global_transform = Transform3D(b, global_position + Vector3.UP + b * Vector3(0, 0, distance_dessus))
+		camera.global_transform = transform_vue_dessus(global_position)
 		modele.visible = true
 		antenne_vue.visible = false
 		lumiere.global_position = global_position + Vector3(0, 2.0 + modele.position.y, 0)
@@ -214,11 +294,32 @@ func lever_mains(levees: bool, duree: float = 0.8) -> Tween:
 	return tw
 
 
+## Vrai quand on voit le robot de l'extérieur (vue de dessus ou caméra 3e personne).
+func troisieme_personne() -> bool:
+	return vue_dessus or _blend < 0.5
+
+
+func _appliquer_cine() -> void:
+	if cine_melange <= 0.001 or not troisieme_personne():
+		return
+	if cine_position.distance_to(cine_cible) < 0.01:
+		return
+	var plan := Transform3D(Basis.IDENTITY, cine_position).looking_at(cine_cible, Vector3.UP)
+	var t := cine_melange * cine_melange * (3.0 - 2.0 * cine_melange)
+	camera.global_transform = camera.global_transform.interpolate_with(plan, t)
+
+
 func bout_index_monde() -> Vector3:
+	if troisieme_personne() and modele.has_method("main_droite_monde"):
+		var p: Vector3 = modele.call("main_droite_monde")
+		return p
 	return main_droite.global_transform * BOUT_INDEX
 
 
 func poignet_droit_monde() -> Vector3:
+	if troisieme_personne() and modele.has_method("main_droite_monde"):
+		var p: Vector3 = modele.call("main_droite_monde")
+		return p
 	return main_droite.global_transform * Vector3(0, 0, 0.09)
 
 
@@ -265,9 +366,7 @@ func _placer_index() -> void:
 
 
 func _gerer_batterie(delta: float) -> void:
-	if Input.is_physical_key_pressed(KEY_B):
-		batterie -= vidage_brume * delta
-	elif antenne_allumee:
+	if antenne_allumee:  # la brume, elle, est gérée par brume_batterie.gd
 		batterie += recharge * delta
 	batterie = clampf(batterie, 0.02, 1.0)
 	_allumage = move_toward(_allumage, 1.0 if antenne_allumee else 0.0, delta * 1.5)
@@ -275,6 +374,10 @@ func _gerer_batterie(delta: float) -> void:
 	if batterie < 0.3:
 		niveau *= 0.55 + 0.45 * float(randf() > 0.25 - batterie * 0.5)
 	lumiere.light_energy = energie_lumiere * niveau
-	lumiere.omni_range = 2.0 + 3.5 * batterie
+	lumiere.omni_range = 3.0 + 4.5 * batterie
+	if _lueur:
+		_halo_mat.albedo_color = Color(couleur_lumiere.r, couleur_lumiere.g, couleur_lumiere.b, 0.75 * niveau)
+		if modele.visible:
+			lumiere.global_position = _lueur.global_position
 	_ampoule_mat.emission_energy_multiplier = 6.0 * niveau
 	_ampoule_mat.albedo_color = Color(0.25, 0.25, 0.3).lerp(Color(1.0, 0.95, 0.8), niveau)

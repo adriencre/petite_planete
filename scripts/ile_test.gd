@@ -1,6 +1,9 @@
 extends Node3D
 ## Île de test DA : collisions automatiques, robot posé sur le sol, vision trouble selon la batterie.
 
+## Batterie sous laquelle la vision commence à se brouiller (trouble maximal à 0).
+@export var seuil_trouble: float = 0.45
+
 @onready var monde: Node3D = $Monde
 @onready var joueur = $Joueur  # joueur.gd
 @onready var vision: ShaderMaterial = ($Vision/Ecran as ColorRect).material
@@ -27,4 +30,4 @@ func _ajouter_collisions(n: Node) -> void:
 
 func _process(_delta: float) -> void:
 	var b: float = joueur.batterie
-	vision.set_shader_parameter("trouble", clampf((0.45 - b) / 0.4, 0.0, 1.0))
+	vision.set_shader_parameter("trouble", clampf((seuil_trouble - b) / maxf(seuil_trouble, 0.01), 0.0, 1.0))

@@ -1,0 +1,190 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/robot.glb" id="1_robot"]
+[ext_resource type="PackedScene" path="res://assets/models/tour_semeurs.glb" id="2_tour"]
+[ext_resource type="PackedScene" path="res://assets/models/falaise.glb" id="3_falaise"]
+[ext_resource type="PackedScene" path="res://assets/models/rocher.glb" id="4_rocher"]
+[ext_resource type="Shader" path="res://shaders/ciel_pastel.gdshader" id="5_ciel"]
+[ext_resource type="Shader" path="res://shaders/mer.gdshader" id="6_mer"]
+
+[ext_resource type="PackedScene" path="res://assets/models/ruine_porte.glb" id="7_ruine"]
+[ext_resource type="Shader" path="res://shaders/roche_herbe.gdshader" id="8_terrain"]
+[ext_resource type="Shader" path="res://shaders/vegetation.gdshader" id="9_vege"]
+[ext_resource type="Script" path="res://scripts/semis_vegetation.gd" id="10_semis"]
+[ext_resource type="Texture2D" path="res://assets/textures/roche_normal.jpg" id="11_relief"]
+
+[sub_resource type="ShaderMaterial" id="terrain_mat"]
+shader = ExtResource("8_terrain")
+shader_parameter/roche_normal = ExtResource("11_relief")
+
+[sub_resource type="ShaderMaterial" id="vege_mat"]
+shader = ExtResource("9_vege")
+
+[sub_resource type="ShaderMaterial" id="ciel_mat"]
+shader = ExtResource("5_ciel")
+
+[sub_resource type="Sky" id="ciel"]
+sky_material = SubResource("ciel_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("ciel")
+ambient_light_source = 3
+ambient_light_color = Color(0.95, 0.82, 0.9, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.75
+tonemap_mode = 2
+tonemap_white = 4.0
+glow_enabled = true
+glow_intensity = 0.7
+glow_bloom = 0.08
+fog_enabled = true
+fog_light_color = Color(0.96, 0.8, 0.84, 1)
+fog_light_energy = 1.0
+fog_sun_scatter = 0.25
+fog_density = 0.0016
+fog_sky_affect = 0.0
+fog_height = 2.0
+fog_height_density = 0.04
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(1, 0.9, 0.92, 1)
+volumetric_fog_emission = Color(0.55, 0.42, 0.5, 1)
+volumetric_fog_emission_energy = 0.6
+volumetric_fog_length = 200.0
+adjustment_enabled = true
+adjustment_saturation = 1.3
+adjustment_contrast = 1.08
+
+[sub_resource type="ShaderMaterial" id="mer_mat"]
+shader = ExtResource("6_mer")
+
+[sub_resource type="PlaneMesh" id="mer_mesh"]
+material = SubResource("mer_mat")
+size = Vector2(2000, 2000)
+
+[sub_resource type="FogMaterial" id="brume_mat"]
+density = 0.025
+albedo = Color(1, 0.92, 0.94, 1)
+height_falloff = 0.4
+edge_fade = 0.3
+
+[node name="TestDA" type="Node3D"]
+
+[node name="Environnement" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.83049, 0.07271, -0.55227, 0.00000, 0.99144, 0.13054, 0.55704, 0.10841, -0.82338, 0.00000, 50.00000, 0.00000)
+light_color = Color(1, 0.84, 0.66, 1)
+light_energy = 2.2
+shadow_enabled = true
+directional_shadow_max_distance = 120.0
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(0.98358, -0.00448, 0.18044, 0.00000, 0.99969, 0.02484, -0.18050, -0.02444, 0.98327, 1.80000, 9.40000, -4.80000)
+current = true
+fov = 52.0
+
+[node name="Mer" type="MeshInstance3D" parent="."]
+mesh = SubResource("mer_mesh")
+
+[node name="Brume" type="FogVolume" parent="."]
+transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 0.00000, 1.00000, -150.00000)
+size = Vector3(700, 8, 700)
+material = SubResource("brume_mat")
+
+[node name="Falaise" parent="." instance=ExtResource("3_falaise")]
+transform = Transform3D(1.50000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.50000, 0.00000, 0.00000, 0.00000)
+
+[node name="Falaise" parent="Falaise" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Herbe" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("cible")]
+cast_shadow = 0
+material_override = SubResource("vege_mat")
+script = ExtResource("10_semis")
+cible = NodePath("../Falaise/Falaise")
+nombre = 40000
+hauteur = Vector2(0.14, 0.32)
+
+[node name="Fleurs" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("cible")]
+cast_shadow = 0
+material_override = SubResource("vege_mat")
+script = ExtResource("10_semis")
+cible = NodePath("../Falaise/Falaise")
+forme = 1
+nombre = 2500
+hauteur = Vector2(0.6, 1.0)
+graine = 7
+
+[node name="Ruine" parent="." instance=ExtResource("7_ruine")]
+transform = Transform3D(0.76484, 0.00000, 0.64422, 0.00000, 1.00000, 0.00000, -0.64422, 0.00000, 0.76484, -6.00000, 8.00000, -15.00000)
+
+[node name="Robot" parent="." instance=ExtResource("1_robot")]
+transform = Transform3D(-0.93937, 0.00000, -0.34290, 0.00000, 1.00000, 0.00000, 0.34290, 0.00000, -0.93937, 0.30000, 8.00000, -9.00000)
+
+[node name="Rochers" type="Node3D" parent="."]
+
+[node name="Rocher1" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(3.82135, 0.00000, 1.18208, 0.00000, 2.00000, 0.00000, -1.18208, 0.00000, 3.82135, 30.00000, -1.00000, -120.00000)
+
+[node name="Rocher" parent="Rochers/Rocher1" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher2" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(0.47107, 0.00000, 1.21165, 0.00000, 3.20000, 0.00000, -1.21165, 0.00000, 0.47107, -35.00000, -1.00000, -70.00000)
+
+[node name="Rocher" parent="Rochers/Rocher2" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher3" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(-0.33292, 0.00000, 0.72744, 0.00000, 2.00000, 0.00000, -0.72744, 0.00000, -0.33292, -16.00000, -1.00000, -40.00000)
+
+[node name="Rocher" parent="Rochers/Rocher3" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher4" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(0.91781, 0.00000, 0.77306, 0.00000, 3.40000, 0.00000, -0.77306, 0.00000, 0.91781, -48.00000, -1.00000, -105.00000)
+
+[node name="Rocher" parent="Rochers/Rocher4" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher5" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(-1.37102, 0.00000, 0.82480, 0.00000, 4.20000, 0.00000, -0.82480, 0.00000, -1.37102, 52.00000, -1.00000, -95.00000)
+
+[node name="Rocher" parent="Rochers/Rocher5" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher6" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(2.18901, 0.00000, 0.21963, 0.00000, 5.00000, 0.00000, -0.21963, 0.00000, 2.18901, -70.00000, -1.00000, -150.00000)
+
+[node name="Rocher" parent="Rochers/Rocher6" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher7" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(-0.06442, 0.00000, 0.49583, 0.00000, 1.20000, 0.00000, -0.49583, 0.00000, -0.06442, 6.00000, -1.00000, -30.00000)
+
+[node name="Rocher" parent="Rochers/Rocher7" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher8" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(1.86483, 0.00000, 2.34998, 0.00000, 6.00000, 0.00000, -2.34998, 0.00000, 1.86483, -30.00000, -1.00000, -210.00000)
+
+[node name="Rocher" parent="Rochers/Rocher8" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher9" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(-0.84055, 0.00000, 2.46038, 0.00000, 4.80000, 0.00000, -2.46038, 0.00000, -0.84055, 90.00000, -1.00000, -200.00000)
+
+[node name="Rocher" parent="Rochers/Rocher9" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="Rocher10" parent="Rochers" instance=ExtResource("4_rocher")]
+transform = Transform3D(0.63503, 0.00000, 1.24769, 0.00000, 3.00000, 0.00000, -1.24769, 0.00000, 0.63503, 75.00000, -1.00000, -140.00000)
+
+[node name="Rocher" parent="Rochers/Rocher10" index="0"]
+material_override = SubResource("terrain_mat")
+
+[node name="TourSemeurs" parent="." instance=ExtResource("2_tour")]
+transform = Transform3D(0.82895, 0.00000, 0.35048, 0.00000, 0.90000, 0.00000, -0.35048, 0.00000, 0.82895, 30.00000, 10.50000, -120.00000)

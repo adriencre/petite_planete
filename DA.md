@@ -2,7 +2,7 @@
 
 > **v6 décidée le 2026-11-16** : vue de dessus et low-poly à facettes, après le test 1re personne/formes rondes (« quelque chose d'arrondi pour un jeu géométrique », ça ne collait pas).
 > La v5 avait rejeté la v4 (diorama iso en blocs) pour ses **couleurs ternes** et parce qu'elle « ne raconte rien ». La v6 reprend la vue de dessus et les blocs, mais **garde les pastels lumineux et la narration de la v5**.
-> Scène de test du terrain en terrasses : `scenes/ile_terrasses.tscn` (+ `scripts/terrasses.gd`). L'ancienne référence v5 reste `scenes/test_da.tscn`.
+> Scène de test du terrain en terrasses : `scenes/archive/ile_terrasses.tscn` (+ `scripts/terrasses.gd`). L'ancienne référence v5 reste `scenes/archive/test_da.tscn`.
 
 ## En une phrase
 **Un monde 3D en maquette, low-poly à facettes, aux pastels lumineux** : plateaux carrés, angles nets, aplats de couleur, lumière dorée des Semeurs le jour, monde caché bleu et turquoise la nuit. Inspiration de forme : les jeux d'aventure isométriques en diorama (sans copier aucun jeu existant).
@@ -74,6 +74,8 @@ Même style partout ; on reconnaît chaque île d'un coup d'œil, même de loin.
 
 ## Interface et effets
 - **Zéro HUD.** La batterie se lit sur l'ampoule du robot, vue de dessus (lumière, grésillement, cercle éclairé au sol), et les actions possibles sur les objets (légère lueur).
+- **Le guidage** (décidé le 2026-11-17 : au réveil, on se sentait posé là sans repère) : tout ce qu'on peut utiliser scintille en doré (grains de lumière qui montent, halo doux), plus fort à portée de `E` ; une petite **touche E dorée** flotte au-dessus, jusqu'à ce que le geste soit appris (`scripts/guidage.gd`). Et, sur le tapis de l'abri, le **mode d'emploi du petit jardinier** signé Tavin, l'Ingénieur : une affiche illustrée, ce qu'il faut faire sur l'île 1 en 7 vignettes. *(Les « pensées du robot », essayées le même jour, ont été retirées.)*
+- **Les documents laissés par les gens sont de vrais documents dessinés** (décidé le 2026-11-17), jamais du texte brut : chacun a son style (affiche de l'atelier à cadre doré et vignettes ; ordre officiel plié en trois, scellé à la cire ; page de journal arrachée, lignée, écrite vite). Sources HTML/SVG dans `tools/affiches/` (papier vieilli, encre au trait tremblé, aquarelle), rendues en PNG transparents par `python tools/affiches/rendre.py` dans `assets/affiches/`. En jeu, E montre le document en grand ; la feuille posée dans le décor le porte en miniature, et le carnet en garde le dessin.
 - **Carnet papier dessiné** : papier crème, encre brune, aquarelle légère. Les croquis se dessinent trait par trait à la découverte, et les liens entre indices sont des fils ou des flèches à la main.
 - **Pas de magie** (décidé le 2026-11-16) : pas de glyphes tracés dans l'air ni de sorts. Le robot est une machine : la lumière passe par des **câbles, des prises, des mécanismes**. Effets = pulsations dorées dans les câbles, cœurs qui se chargent, pétales qui s'ouvrent en crans, un peu de pollen doré.
 - **Zones endormies** : autour d'une lanterne éteinte, le monde est gris et terne ; quand elle s'allume, une **vague de couleur** à front doré réveille la zone.
@@ -89,7 +91,7 @@ Même style partout ; on reconnaît chaque île d'un coup d'œil, même de loin.
 - **v6 — à adapter** : `roche_herbe.gdshader` (bruit et relief scanné → aplats et strates nettes), `vegetation.gdshader` (brins d'herbe → touffes low-poly ?), `joueur.gd` (caméra 1re personne → vue de dessus).
 
 ## Prochains tests
-1. ~~**Caméra**~~ : 1re personne validée, puis **remplacée par la vue de dessus** (v6, 2026-11-16). Prochain test : caméra de dessus + aplats low-poly sur `scenes/ile_terrasses.tscn`.
+1. ~~**Caméra**~~ : 1re personne validée, puis **remplacée par la vue de dessus** (v6, 2026-11-16). Prochain test : caméra de dessus + aplats low-poly sur `scenes/archive/ile_terrasses.tscn`.
 2. **Nuit / monde de la brume (fin)** : reporté bien plus tard (décision du 2026-11-16 : on fait d'abord tout le jour). À refaire plus sombre, plus douce, pastel.
-2b. ~~**Première lumière**~~ : câble + prise (test dans `scenes/ile_test.tscn`).
+2b. ~~**Première lumière**~~ : câble + prise (test dans `scenes/archive/ile_test.tscn`).
 3. **Peaufiner le jour** : robot usé, vraie ruine organique des Semeurs (avec un squelette pris dans la mousse), fleurs moins plates, bancs de brume.

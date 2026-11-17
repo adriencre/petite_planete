@@ -25,7 +25,7 @@
 ## Ce qui est déjà construit (île 1)
 Détail complet dans `archive/ROADMAP_v3.md`.
 - **Fondations** : maquette GridMap, effet endormi/éveillé, objets interactifs.
-- **Mécaniques** : rallumer, planter (racines-escalier), fin de l'île et barque.
+- **Mécaniques** : rallumer, fin de l'île et barque.
 - **Histoire** : réveil dans l'abri, atelier derrière la cascade, robot expressif, son et musique.
 - **Moteur** : batterie, boucle et berceau, anciens corps, vision à batterie basse, carnet (carte, croquis, bestiaire, pages), reprendre la lumière, mode nuit `N`, page 7.
 - **Le peuple caché de l'île 1** : paroles de lumière, kit d'habitat modélisé dans Blender, habitants avec routines et dialogues (`E`), cicatrices autour des lanternes, la ville des Pins, l'escalier des géants, le pont des pêcheurs et l'îlot de corail, musique de l'ombre.

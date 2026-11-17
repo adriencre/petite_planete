@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Petite Planète"
-run/main_scene="res://scenes/test_camera.tscn"
+run/main_scene="res://scenes/ile_01_maquette.tscn"
 config/features=PackedStringArray("4.7")
 
 [autoload]

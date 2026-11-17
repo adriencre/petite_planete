@@ -1,0 +1,12 @@
+- [Gamedev tooling](gamedev-tooling.md) — Godot exe path, Blender/Godot MCP + skills installed for petite-planete
+- [Editor-visible scenes](editor-visible-scenes.md) — user rejected all-in-code version; build chill, small, editor-editable .tscn scenes
+- [Art direction](art-direction.md) — v5 DA decided 2026-11-16, written in repo DA.md; 1st-person camera validated; night version to redo (too bright/vivid)
+- [Scale robot/Semeurs](scale-robot-semeurs.md) — robot ~1.90 m, Semeurs 2.5–3 m (not giants)
+- [No magic](no-magic-robot.md) — robot lights lanterns with a wrist cable + plug; no glyphs/spells; FP arms attached
+- [Game vision](game-vision.md) — v4: investigation « Où sont les Semeurs ? », 7 islands, docs DESIGN.md + ENQUETE.md + ILE_0X; v5 in petite-planete-v5; v3/v4 in old petite-planete folder
+- [Pacing feedback](pacing-feedback.md) — slow staged moments; first time of any mechanic = cinematic event; no instant actions
+- [Ask before launching](ask-before-launching.md) — warn the user before running the game/tests; no repeated relaunches
+- [Design docs first](design-docs-first.md) — write a complete ILE_0X doc per island before dev; 1-3 written (v4: see ENQUETE.md), 4-7 next
+- [Outer Wilds direction](outer-wilds-direction.md) — NOT one mechanic per island; investigation « Où sont les Semeurs ? », varied puzzles, hidden world seeable from start by knowledge
+- [No planting](no-planting.md) — planting/growing mechanics removed 2026-11-17; plain stairs, plateau open from start
+- [Music via ACE-Step](music-ace-step.md) — music remade on acemusic.ai (C: too full for local), chill Outer Wilds style, 4 synced layers

@@ -12,7 +12,7 @@ Le prologue : on se réveille dans un corps neuf, sur une île grise et noyée d
 ## 2. Sa place dans le jeu
 - **La maison.** C'est ici qu'on se réveille à chaque boucle, dans le berceau de l'abri.
 - **Dans l'histoire (v4)** : c'est l'**île du robot**. Les Semeurs y avaient installé le **berceau** et l'**atelier des robots**, mais personne n'y vivait : **pas de squelettes ici**, et rien qui contredise la fausse piste « ils sont partis ».
-- **Ce qu'elle apprend** (sans un mot) : la batterie, la brume, allumer, reprendre la lumière, planter, mourir et revenir, le carnet.
+- **Ce qu'elle apprend** (sans un mot) : la batterie, la brume, allumer, reprendre la lumière, mourir et revenir, le carnet.
 - **Ce qu'elle cache** : la page 7 d'Iris, l'atelier. (La ville des Pins n'apparaît qu'à la fin.)
 - **Ce qu'elle ouvre** : la barque, donc tout l'archipel. On voit le Phare au loin.
 - **Les fils de l'enquête présents ici** :
@@ -25,13 +25,13 @@ Le prologue : on se réveille dans un corps neuf, sur une île grise et noyée d
 ## 3. Le lieu
 
 ```
-                    ▲ sommet (6 m) : lanterne du sommet, vue sur le Phare
+                    ▲ sommet (6 m) : GRANDE LANTERNE, vue sur le Phare
                     │
         plateau (3 m) ── cascade ─┐ rebord caché → grotte → ATELIER DES ROBOTS
               ▲                   │
-   racines-escalier (terreau)     │
+   escalier                       │
               │                   │
-   GRANDE LANTERNE ── lanternes 1, 2, 3 ── ABRI (berceau) ── pierre-soleil
+   lanternes 1, 2, 3 (racines vers le sommet) ── ABRI (berceau) ── pierre-soleil
               │
    crique ouest (brume épaisse) : ancien corps, BARQUE cachée sous les racines,
                                   pierre-soleil cachée
@@ -39,26 +39,26 @@ Le prologue : on se réveille dans un corps neuf, sur une île grise et noyée d
 *(Les détails exacts sont dans la scène ; la carte du carnet est dessinée depuis le GridMap.)*
 
 ### Forme v6 (décidée le 2026-11-16) : **gradins**
-L'île monte en **3 marches** de la plage au sommet : plage (abri, pierre-soleil) → niveau 1 (lanternes, grande lanterne) → niveau 2 (racines-escalier, cascade, atelier) → niveau 3 (sommet). On voit le but dès le réveil. La crique ouest est une entaille dans la brume, au niveau de la mer. Environ 12 × 10 cases de 4 m.
+L'île monte en **3 marches** de la plage au sommet : plage (abri, pierre-soleil) → niveau 1 (lanternes 2 et 3) → niveau 2 (escalier, cascade, atelier) → niveau 3 (sommet, grande lanterne). On voit le but dès le réveil. La crique ouest est une entaille dans la brume, au niveau de la mer. Environ 12 × 10 cases de 4 m.
 Schéma : `concept/ile_01_formes.png` (variante A), dessiné par `tools/carte_iso.py`.
 
 ### Détails v6 (décidés question par question)
 - **L'abri** (2026-11-16) : sur un **petit promontoire à l'est**, un peu à l'écart, porte tournée vers l'ouest. En sortant, **toute l'île se dévoile en panorama** (lanternes éteintes, gradins, sommet) ; le Phare est dans le dos. La pierre-soleil est juste devant la porte. Schéma : `concept/ile_01_abri.png` (variante C).
-- **Les lanternes 1-2-3** (2026-11-16) : **en triangle autour de la grande lanterne**, qui est au centre du niveau 1. Lanterne 1 près de l'abri (est, sur la plage), lanterne 2 à l'ouest **au bord de la brume** (apprend que la brume vide la batterie), lanterne 3 à l'est du niveau 1. Les **racines lumineuses** de la grande partent vers les trois : on comprend sans texte qu'il faut les trois, dans l'ordre qu'on veut. Schéma : `concept/ile_01_lanternes.png` (variante B).
-- **La cascade et l'atelier** (2026-11-16) : **à l'est**. Une rivière descend du sommet en marches jusqu'à la mer ; on la voit dès l'abri, dans le panorama. Le **rebord caché** est derrière la chute, au niveau 2 ; la **grotte et l'atelier** sont creusés sous le sommet. Le **terreau et les racines-escalier** sont à l'ouest du niveau 1, de l'autre côté : l'ouest (racines, brume, crique) et l'est (cascade, atelier) s'équilibrent. Schéma : `concept/ile_01_cascade.png` (variante A).
+- **Les lanternes 1-2-3** (2026-11-16) : réparties autour du centre de l'île. **Décidé le 2026-11-17 : une seule grande lanterne, au sommet** (l'ancienne lanterne du sommet est retirée). Lanterne 1 près de l'abri (est, sur la plage), lanterne 2 à l'ouest **au bord de la brume** (apprend que la brume vide la batterie), lanterne 3 à l'est du niveau 1. Les **racines lumineuses** de la grande descendent du sommet vers les trois, en grimpant les falaises : on comprend sans texte qu'il faut les trois, dans l'ordre qu'on veut, et la lumière monte vers le but. Schéma : `concept/ile_01_lanternes.png` (variante B).
+- **La cascade et l'atelier** (2026-11-16) : **à l'est**. Une rivière descend du sommet en marches jusqu'à la mer ; on la voit dès l'abri, dans le panorama. Le **rebord caché** est derrière la chute, au niveau 2 ; la **grotte et l'atelier** sont creusés sous le sommet. L'**escalier** est à l'ouest du niveau 1, de l'autre côté : l'ouest (escalier, brume, crique) et l'est (cascade, atelier) s'équilibrent. Schéma : `concept/ile_01_cascade.png` (variante A).
 - **La crique ouest** (2026-11-16) : **encaissée**, une poche fermée par de hautes falaises où la brume stagne comme dans un bol, avec **une seule entrée** par la plage, au sud. La **barque** est au pied de la falaise, sous les racines ; l'**ancien corps** et la **pierre-soleil cachée** sont dans la poche. Schéma : `concept/ile_01_crique.png` (variante B).
-- **Le plateau et le sommet** (2026-11-16) : le **sommet est au centre**, petit pic au niveau 3, visible de partout (y compris du panorama de l'abri). Sur le plateau (niveau 2), en arrivant par les racines-escalier : la charrette, le banc, le jardin mort, puis la montée vers le sommet. La rivière de la cascade prend sa source juste à l'est du sommet. Schéma : `concept/ile_01_sommet.png` (variante A).
+- **Le plateau et le sommet** (2026-11-16) : le **sommet est au centre**, petit pic au niveau 3, visible de partout (y compris du panorama de l'abri). Sur le plateau (niveau 2), en arrivant par l'escalier : la charrette, le banc, le jardin mort, puis la montée vers le sommet. La rivière de la cascade prend sa source juste à l'est du sommet. Schéma : `concept/ile_01_sommet.png` (variante A).
 - **Plan complet** : `concept/ile_01_plan.png` (`tools/carte_iso.py ile_01_plan`). La grille de ce plan sert de base à la maquette jouable.
 
 ### Les lieux
 | Lieu | Ce qu'on y trouve |
 |---|---|
-| **L'abri** | Le berceau (lumière qui s'allume à chaque réveil), **un papier posé à côté du berceau : l'ordre d'Ysolde** (§7), l'horloge arrêtée, le carnet, un coin sombre où quelque chose scintille, la veilleuse au-dessus de la porte. L'abri est **à la taille du robot**. |
+| **L'abri** | Le berceau (lumière qui s'allume à chaque réveil), **un papier posé à côté du berceau : l'ordre d'Ysolde** (§7), **sur le tapis, le mode d'emploi du petit jardinier, signé Tavin** (ce qu'il faut faire sur l'île, décidé le 2026-11-17), l'horloge arrêtée, le carnet, un coin sombre où quelque chose scintille, la veilleuse au-dessus de la porte. L'abri est **à la taille du robot**. |
 | **La pierre-soleil** | Juste à la sortie de l'abri : l'antenne vide s'y recharge. Premier geste du jeu. |
 | **Les lanternes 1, 2, 3** | Le chemin vers le centre de l'île. Chacune réveille sa zone. |
-| **La grande lanterne** | Au centre. Elle ne s'allume qu'une fois les trois petites allumées (racines lumineuses qui convergent). Grande vague de couleur. |
-| **Le terreau** | Une cosse s'ouvre, le robot porte la graine et la plante dans le terreau gravé : des **racines-escalier** poussent jusqu'au plateau. |
-| **Le plateau et le sommet** | Le jardin mort, la charrette, le banc. Au sommet, la **lanterne du sommet** : l'île entière s'éveille. |
+| **La grande lanterne** | Au sommet, visible de partout. Elle ne s'allume qu'une fois les trois petites allumées (racines lumineuses qui montent jusqu'à elle). L'allumer, c'est la fin de l'île. |
+| **L'escalier** | Un simple escalier de pierre monte au plateau, ouvert dès le début. Rien à planter ni à faire pousser (décidé le 2026-11-17). |
+| **Le plateau et le sommet** | Le jardin mort, la charrette, le banc. Au sommet, la **grande lanterne** : l'île entière s'éveille. |
 | **La cascade** | Derrière l'eau, un rebord caché → une grotte → **l'atelier des robots**. |
 | **L'atelier des robots** | Le moule, les pièces détachées, l'établi, la lanterne de l'atelier, la **page 7**. **Un peu trop grand pour le robot** (Semeurs de 2,50 à 3 m) : établi à hauteur de poitrine, portes d'environ 3 m, marches un peu hautes. |
 | **La crique ouest** | Noyée de **brume épaisse**. Le **premier ancien corps**, couvert de mousse. La **barque**, cachée sous les racines. La **pierre-soleil cachée**. |
@@ -79,9 +79,9 @@ Schéma : `concept/ile_01_formes.png` (variante A), dessiné par `tools/carte_is
 2. **La sortie** : la caméra recule lentement sur l'île grise (sans contrôle). Une **luciole** apparaît et guide.
 3. **L'antenne est vide** : on la recharge à la **pierre-soleil**.
 4. **La première lumière** (longue cinématique) : le robot s'accroupit, branche le câble de son poignet dans la prise de la lanterne → pulsations dorées → la lanterne se charge et s'ouvre en crans → la zone se réveille en vague de couleur → il débranche. Les suivantes sont plus courtes. *(2026-11-16 : remplace le glyphe tracé dans l'air — pas de magie, voir DA.md.)*
-5. Lanternes 1, 2, 3 → **racines lumineuses** → **la grande lanterne**.
-6. **Planter** : la cosse, la graine, le terreau, les racines-escalier → le plateau.
-7. **La lanterne du sommet** : toute l'île s'éveille, coucher de soleil. On voit le Phare éteint et la lueur de sa bouée.
+5. Lanternes 1, 2, 3 → **racines lumineuses** qui montent vers le sommet.
+6. **Le plateau** : on monte par l'escalier ; la charrette, le banc, le jardin mort.
+7. **La grande lanterne, au sommet** : toutes les lanternes s'allument en cascade, la caméra s'élève sur l'île illuminée, passe par la barque, puis montre le Phare éteint et la lueur de sa bouée au coucher du soleil.
 8. **La barque** : on la trouve dans la crique, et on part librement (plus de fondu).
 
 ### Les énigmes
@@ -92,7 +92,6 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 | **L'antenne vide** | La pierre-soleil recharge. |
 | **La batterie** | La brume vide, la lumière recharge, allumer coûte. On avance de lumière en lumière. |
 | **La grande lanterne** | Elle a besoin des trois petites (les racines lumineuses le montrent). |
-| **Monter au plateau** | La cosse donne une graine ; le terreau gravé attend une graine ; les racines font l'escalier. |
 | **La crique** | La brume épaisse vide trop vite : il faut y arriver avec assez de batterie, ou avec la pierre-soleil cachée. |
 
 ### Le premier « échec »
@@ -159,7 +158,7 @@ Ce n'est pas une énigme : on le lit dès le réveil.
 | **La grande place** | La **fontaine** (là où se trouve la grande lanterne, côté lumière), des maisons et le marché. |
 | **Les champs** | Ils ne poussent que la nuit. |
 | **Le Levant** | Le côté où se levait le soleil, près de la cascade. |
-| **Les Hauts** | Le plateau, sous la lanterne du sommet. |
+| **Les Hauts** | Le plateau, sous la grande lanterne. |
 | **La forêt** | Des champignons géants. |
 | **La Pouponnière** | Sous le plancher de l'abri, dans les fentes. |
 | **La crique** | Le **Compteur** et son tas de pierres. |
@@ -191,8 +190,8 @@ Ils vaquent (routines), rentrent chez eux s'ils ont peur, et ressortent si le ro
 ---
 
 ## 9. Le carnet (juste ce qu'on a vu, sans flèches ni questions — décidé le 2026-11-16)
-- **Lieux** : l'abri, la pierre-soleil, les lanternes, le terreau, la cascade, l'atelier, le sommet, la crique, la barque.
-- **Textes** : l'ordre d'Ysolde (papier du berceau), la page 7 (pour qui la trouve). **Croquis** : le Phare vu du sommet.
+- **Lieux** : l'abri, la pierre-soleil, les lanternes, la cascade, l'atelier, le sommet, la crique, la barque.
+- **Textes** : le mode d'emploi de Tavin (sur le tapis de l'abri), l'ordre d'Ysolde (papier du berceau), la page 7 (pour qui la trouve). **Croquis** : le Phare vu du sommet.
 - **Bestiaire** : la méduse. **Paroles** : la 1re bribe, et celles de la ville des Pins.
 
 ## 10. Son et ambiance

@@ -1,41 +1,90 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://47fqbbttoutr"]
 
-[ext_resource type="PackedScene" path="res://assets/models/ile_terrain.glb" id="m_terrain"]
-[ext_resource type="PackedScene" path="res://assets/models/maison_semeur.glb" id="m_maison"]
-[ext_resource type="PackedScene" path="res://assets/models/squelette_semeur.glb" id="m_squelette"]
-[ext_resource type="PackedScene" path="res://assets/models/rocher_dos.glb" id="m_rocher_dos"]
-[ext_resource type="PackedScene" path="res://assets/models/jardin_semeur.glb" id="m_jardin"]
-[ext_resource type="PackedScene" path="res://assets/models/arbre_spirale.glb" id="m_arbre"]
-[ext_resource type="PackedScene" path="res://assets/models/buisson.glb" id="m_buisson"]
-[ext_resource type="PackedScene" path="res://assets/models/pierre_soleil.glb" id="m_pierre"]
-[ext_resource type="PackedScene" path="res://assets/models/lanterne_semeur.glb" id="m_lanterne"]
-[ext_resource type="PackedScene" path="res://assets/models/rocher.glb" id="m_rocher"]
-[ext_resource type="PackedScene" path="res://assets/models/tour_semeurs.glb" id="m_tour"]
-[ext_resource type="Shader" path="res://shaders/ciel_pastel.gdshader" id="s_ciel"]
-[ext_resource type="Shader" path="res://shaders/mer.gdshader" id="s_mer"]
-[ext_resource type="Shader" path="res://shaders/roche_herbe.gdshader" id="s_terrain"]
-[ext_resource type="Shader" path="res://shaders/vegetation.gdshader" id="s_vege"]
-[ext_resource type="Shader" path="res://shaders/vision.gdshader" id="s_vision"]
-[ext_resource type="Script" path="res://scripts/semis_vegetation.gd" id="sc_semis"]
-[ext_resource type="Script" path="res://scripts/ile_test.gd" id="sc_ile"]
+[ext_resource type="Script" uid="uid://c0kuo8ed53b8g" path="res://scripts/reveil.gd" id="10_v4x7g"]
+[ext_resource type="Script" uid="uid://c7hrsv5akempp" path="res://scripts/brume_batterie.gd" id="11_vhb12"]
+[ext_resource type="Script" uid="uid://cb6kgtatn847n" path="res://scripts/luciole.gd" id="12_qac1t"]
+[ext_resource type="Script" uid="uid://cya6nrimmo22e" path="res://scripts/fin_sommet.gd" id="13_cvxm1"]
+[ext_resource type="Script" uid="uid://cwxusqrds5ijn" path="res://scripts/ambiance_sonore.gd" id="14_qf1g3"]
+[ext_resource type="Script" uid="uid://b1qiswqy8wq58" path="res://scripts/carnet.gd" id="15_j7sqk"]
+[ext_resource type="PackedScene" path="res://scenes/ponton.tscn" id="16_3kbj5"]
+[ext_resource type="Script" uid="uid://c6qdtynw1ange" path="res://scripts/guidage.gd" id="17_o0wjb"]
 [ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
-[ext_resource type="PackedScene" path="res://assets/models/lanterne_fleur.glb" id="m_lanterne_fleur"]
-[ext_resource type="Script" path="res://scripts/lanterne_fleur.gd" id="sc_lanterne"]
-[ext_resource type="Script" path="res://scripts/zone_endormie.gd" id="sc_zone"]
-[ext_resource type="Shader" path="res://shaders/zone_endormie.gdshader" id="s_zone"]
-[ext_resource type="Script" path="res://scripts/maquette.gd" id="sc_maquette"]
-[ext_resource type="Shader" path="res://shaders/terrain_facettes.gdshader" id="s_facettes"]
-[ext_resource type="PackedScene" path="res://assets/models/ruine_porte.glb" id="m_ruine"]
-
-[sub_resource type="ShaderMaterial" id="zone_mat"]
-render_priority = -10
-shader = ExtResource("s_zone")
+[ext_resource type="Script" uid="uid://dnxu4hdr80jp5" path="res://scripts/ile_test.gd" id="sc_ile"]
+[ext_resource type="Script" uid="uid://cl10xpccufbht" path="res://scripts/maquette.gd" id="sc_maquette"]
+[ext_resource type="Script" uid="uid://b1728qdtebaac" path="res://scripts/zone_endormie.gd" id="sc_zone"]
+[ext_resource type="Shader" uid="uid://cljsnd7ner40e" path="res://shaders/ciel_pastel.gdshader" id="s_ciel"]
+[ext_resource type="Shader" uid="uid://7qouqxephsnd" path="res://shaders/terrain_facettes.gdshader" id="s_facettes"]
+[ext_resource type="Shader" uid="uid://c1d0stvhb3s2i" path="res://shaders/mer.gdshader" id="s_mer"]
+[ext_resource type="Shader" uid="uid://bu0ebrb5bkj3b" path="res://shaders/vision.gdshader" id="s_vision"]
+[ext_resource type="Shader" uid="uid://da3k48k6bfflr" path="res://shaders/zone_endormie.gdshader" id="s_zone"]
 
 [sub_resource type="ShaderMaterial" id="ciel_mat"]
 shader = ExtResource("s_ciel")
+shader_parameter/couleur_haut = Color(0.6, 0.53, 0.84, 1)
+shader_parameter/couleur_milieu = Color(0.96, 0.68, 0.76, 1)
+shader_parameter/couleur_horizon = Color(1, 0.83, 0.64, 1)
+shader_parameter/couleur_bas = Color(0.8, 0.78, 0.88, 1)
+shader_parameter/hauteur_milieu = 0.14
+shader_parameter/hauteur_haut = 0.6
+shader_parameter/taille_soleil = 0.9993
+shader_parameter/halo_soleil = 0.6
+shader_parameter/nuage_lumiere = Color(1, 0.88, 0.8, 1)
+shader_parameter/nuage_ombre = Color(0.8, 0.62, 0.82, 1)
+shader_parameter/nuage_couverture = 0.48
+shader_parameter/nuage_douceur = 0.18
+shader_parameter/nuage_echelle = 1.6
+shader_parameter/nuage_vitesse = 0.01
+shader_parameter/etoiles = 0.0
+shader_parameter/planete_direction = Vector3(-0.5, 0.3, -0.8)
+shader_parameter/planete_taille = 0.17
+shader_parameter/planete_couleur_a = Color(0.86, 0.62, 0.82, 1)
+shader_parameter/planete_couleur_b = Color(0.68, 0.58, 0.88, 1)
+shader_parameter/planete_bandes = 11.0
+shader_parameter/planete_brume = 0.35
 
 [sub_resource type="Sky" id="ciel"]
 sky_material = SubResource("ciel_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("ciel")
+ambient_light_source = 3
+ambient_light_color = Color(0.95, 0.82, 0.9, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.45
+tonemap_mode = 2
+tonemap_exposure = 0.9
+tonemap_white = 4.0
+ssao_enabled = true
+ssao_radius = 1.6
+ssao_intensity = 2.5
+ssao_light_affect = 0.15
+ssil_enabled = true
+ssil_radius = 4.0
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.03
+glow_hdr_threshold = 1.2
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.76, 0.72, 0.84, 1)
+fog_sun_scatter = 0.06
+fog_density = 0.97
+fog_sky_affect = 0.7
+fog_height = 1.0
+fog_height_density = 0.05
+fog_depth_curve = 1.3
+fog_depth_begin = 8.0
+fog_depth_end = 17.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(0.88, 0.8, 0.86, 1)
+volumetric_fog_emission = Color(0.55, 0.42, 0.5, 1)
+volumetric_fog_emission_energy = 0.2
+volumetric_fog_length = 40.0
+adjustment_enabled = true
+adjustment_contrast = 1.06
+adjustment_saturation = 1.25
 
 [sub_resource type="CameraAttributesPractical" id="flou_maquette"]
 dof_blur_far_enabled = true
@@ -46,62 +95,25 @@ dof_blur_near_distance = 2.5
 dof_blur_near_transition = 1.5
 dof_blur_amount = 0.06
 
-[sub_resource type="Environment" id="env"]
-background_mode = 2
-sky = SubResource("ciel")
-ambient_light_source = 3
-ambient_light_color = Color(0.95, 0.82, 0.9, 1)
-ambient_light_sky_contribution = 0.8
-ambient_light_energy = 0.55
-ssao_enabled = true
-ssao_radius = 1.6
-ssao_intensity = 2.5
-ssao_light_affect = 0.15
-ssil_enabled = true
-ssil_radius = 4.0
-tonemap_mode = 2
-tonemap_white = 4.0
-glow_enabled = true
-glow_intensity = 0.6
-glow_bloom = 0.03
-glow_hdr_threshold = 1.2
-fog_enabled = true
-fog_light_color = Color(0.96, 0.8, 0.84, 1)
-fog_sun_scatter = 0.25
-fog_density = 0.0018
-fog_sky_affect = 0.0
-fog_height = 1.0
-fog_height_density = 0.05
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
-volumetric_fog_albedo = Color(1, 0.9, 0.92, 1)
-volumetric_fog_emission = Color(0.55, 0.42, 0.5, 1)
-volumetric_fog_emission_energy = 0.5
-volumetric_fog_length = 160.0
-adjustment_enabled = true
-adjustment_saturation = 1.25
-adjustment_contrast = 1.06
-
 [sub_resource type="ShaderMaterial" id="mer_mat"]
+render_priority = 0
 shader = ExtResource("s_mer")
+shader_parameter/eau_profonde = Color(0.1, 0.52, 0.66, 1)
+shader_parameter/eau_claire = Color(0.36, 0.88, 0.8, 1)
+shader_parameter/ecume = Color(1, 0.97, 0.95, 1)
+shader_parameter/largeur_eau_claire = 7.0
+shader_parameter/largeur_ecume = 1.1
+shader_parameter/force_vagues = 0.1
+shader_parameter/vitesse = 0.35
+shader_parameter/brillance = 0.35
+shader_parameter/reflet = 0.15
+shader_parameter/nuit = 0.0
+shader_parameter/eau_nuit = Color(0.02, 0.06, 0.16, 1)
+shader_parameter/lueur_nuit = Color(0.2, 1, 0.85, 1)
 
 [sub_resource type="PlaneMesh" id="mer_mesh"]
 material = SubResource("mer_mat")
 size = Vector2(2000, 2000)
-
-[sub_resource type="ShaderMaterial" id="facettes_mat"]
-shader = ExtResource("s_facettes")
-
-[sub_resource type="ShaderMaterial" id="terrain_mat"]
-shader = ExtResource("s_terrain")
-shader_parameter/hauteur_sable = 1.3
-
-[sub_resource type="ShaderMaterial" id="vege_mat"]
-shader = ExtResource("s_vege")
-
-[sub_resource type="ShaderMaterial" id="vision_mat"]
-shader = ExtResource("s_vision")
-shader_parameter/vignette = 0.25
 
 [sub_resource type="FogMaterial" id="brume_mat"]
 density = 0.35
@@ -109,115 +121,153 @@ albedo = Color(1, 0.94, 0.95, 1)
 height_falloff = 1.2
 edge_fade = 0.6
 
-[node name="Ile01Maquette" type="Node3D"]
-script = ExtResource("sc_ile")
+[sub_resource type="ShaderMaterial" id="facettes_mat"]
+render_priority = 0
+shader = ExtResource("s_facettes")
+shader_parameter/herbe_a = Color(0.62, 0.82, 0.42, 1)
+shader_parameter/herbe_b = Color(0.54, 0.77, 0.4, 1)
+shader_parameter/herbe_c = Color(0.7, 0.85, 0.46, 1)
+shader_parameter/sable_a = Color(0.93, 0.84, 0.7, 1)
+shader_parameter/sable_b = Color(0.89, 0.79, 0.66, 1)
+shader_parameter/roche_a = Color(0.88, 0.6, 0.56, 1)
+shader_parameter/roche_b = Color(0.94, 0.74, 0.6, 1)
+shader_parameter/roche_c = Color(0.96, 0.86, 0.76, 1)
+shader_parameter/mousse = Color(0.47, 0.66, 0.4, 1)
+shader_parameter/taille_case = 6.0
+shader_parameter/hauteur_niveau = 2.5
+shader_parameter/hauteur_sable = 1.0
+shader_parameter/epaisseur_mousse = 0.3
 
-[node name="Environnement" type="WorldEnvironment" parent="."]
+[sub_resource type="ShaderMaterial" id="zone_mat"]
+render_priority = -10
+shader = ExtResource("s_zone")
+shader_parameter/zones = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/eveils = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/nombre_zones = 0
+shader_parameter/couleur_sommeil = Color(0.78, 0.76, 0.84, 1)
+shader_parameter/force_sommeil = 0.35
+shader_parameter/couleur_front = Color(1, 0.8, 0.45, 1)
+shader_parameter/largeur_front = 1.4
+shader_parameter/lueur_front = 0.55
+
+[sub_resource type="ShaderMaterial" id="vision_mat"]
+shader = ExtResource("s_vision")
+shader_parameter/trouble = 0.0
+shader_parameter/paupiere = 0.0
+shader_parameter/teinte_trouble = Color(0.62, 0.72, 0.95, 1)
+shader_parameter/vignette = 0.25
+
+[node name="Ile01Maquette" type="Node3D" unique_id=279401415]
+script = ExtResource("sc_ile")
+seuil_trouble = 0.1
+
+[node name="Environnement" type="WorldEnvironment" parent="." unique_id=257933421]
 environment = SubResource("env")
 camera_attributes = SubResource("flou_maquette")
 
-[node name="Soleil" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.86603, 0.30783, -0.39401, 0.00000, 0.78801, 0.61566, 0.50000, -0.53318, 0.68244, 0.00000, 50.00000, 0.00000)
+[node name="Soleil" type="DirectionalLight3D" parent="." unique_id=1319983666]
+transform = Transform3D(0.86603, 0.30783, -0.39401, 0, 0.78801, 0.61566, 0.5, -0.53318, 0.68244, 0, 50, 0)
 light_color = Color(1, 0.85, 0.68, 1)
-light_energy = 2.4
+light_energy = 2.1
 shadow_enabled = true
 shadow_blur = 1.5
 directional_shadow_max_distance = 60.0
 
-[node name="Mer" type="MeshInstance3D" parent="."]
+[node name="Mer" type="MeshInstance3D" parent="." unique_id=85356044]
+transform = Transform3D(0.8926008, 0, 0, 0, 0.8926008, 0, 0, 0, 0.8926008, 0, 0, 0)
+visible = false
 mesh = SubResource("mer_mesh")
 
-[node name="Brume" type="Node3D" parent="."]
+[node name="Brume" type="Node3D" parent="." unique_id=1676481027]
 
-[node name="Banc1" type="FogVolume" parent="Brume"]
-transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, -30.00000, 0.60000, 20.00000)
+[node name="Banc1" type="FogVolume" parent="Brume" unique_id=1092805574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0.6, 20)
 size = Vector3(40, 3, 25)
 shape = 0
 material = SubResource("brume_mat")
 
-[node name="Banc2" type="FogVolume" parent="Brume"]
-transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 35.00000, 0.60000, 5.00000)
+[node name="Banc2" type="FogVolume" parent="Brume" unique_id=229748078]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.6, 5)
 size = Vector3(30, 3, 40)
 shape = 0
 material = SubResource("brume_mat")
 
-[node name="Banc3" type="FogVolume" parent="Brume"]
-transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 5.00000, 0.60000, 55.00000)
+[node name="Banc3" type="FogVolume" parent="Brume" unique_id=1571593879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.6, 55)
 size = Vector3(60, 3, 25)
 shape = 0
 material = SubResource("brume_mat")
 
-[node name="Banc4" type="FogVolume" parent="Brume"]
-transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, -60.00000, 0.80000, -30.00000)
+[node name="Banc4" type="FogVolume" parent="Brume" unique_id=510523734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0.8, -30)
 size = Vector3(40, 4, 50)
 shape = 0
 material = SubResource("brume_mat")
 
-[node name="Banc5" type="FogVolume" parent="Brume"]
-transform = Transform3D(1.00000, 0.00000, 0.00000, 0.00000, 1.00000, 0.00000, -0.00000, 0.00000, 1.00000, 60.00000, 0.80000, -50.00000)
+[node name="Banc5" type="FogVolume" parent="Brume" unique_id=353816941]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0.8, -50)
 size = Vector3(50, 4, 40)
 shape = 0
 material = SubResource("brume_mat")
 
-[node name="Maquette" type="Node3D" parent="."]
+[node name="Maquette" type="Node3D" parent="." unique_id=1316080361]
 script = ExtResource("sc_maquette")
 carte = ". . . . . . . . . . . .
-. . . . 3 3S 3 3w 3X . . .
+. . . . 3 3G 3 3w 2X . . .
 . 2 2 2J 2 2^E 2 2wC 2W . . .
 . 2t 2N 2H 2R 2 2 2w 2 2t . .
-. 2 0bQ 12 1^T 1 1 1w 1 1 . .
-. 0bB 0bM 1 1 1G 1 1w 13 . . .
+. 2 0bQ 12 1^ 1 1 1w 1 1 . .
+. 0bB 0bM 1 1 1F 1 1w 13 . . .
 . 0bK 0b 0 0^ 0 0 0w 0 . . .
-. . 0 0 0 0 0 0w 01 1hA . .
-. . . 0 0 0 . . 0P 1 . .
+. . 0 0 0 0 0 0w 01 1h 1hA .
+. . . 0 0 0 . . 0P 0^ . .
 . . . . . . . . . . . ."
 noms = {
-"A": "Abri",
-"P": "Pierre-soleil",
 "1": "Lanterne 1",
 "2": "Lanterne 2",
 "3": "Lanterne 3",
-"G": "Grande lanterne",
-"T": "Terreau",
-"R": "Racines-escalier",
-"H": "Charrette",
-"N": "Banc",
-"J": "Jardin mort",
-"E": "Montée",
-"S": "Sommet (lanterne)",
+"A": "Abri",
+"B": "Barque",
 "C": "Cascade",
-"W": "Rebord caché",
-"X": "Atelier",
+"E": "Montée",
+"F": "La place",
+"G": "Grande lanterne (sommet)",
+"H": "Charrette",
+"J": "Jardin mort",
 "K": "Crique",
 "M": "Ancien corps",
-"B": "Barque",
-"Q": "Pierre-soleil cachée"
+"N": "Banc",
+"P": "Pierre-soleil",
+"Q": "Pierre-soleil cachée",
+"R": "Escalier",
+"W": "Rebord caché",
+"X": "Atelier"
 }
 materiau_terrain = SubResource("facettes_mat")
 taille_case = 6.0
-chemin = "AP1G2TRHNJES"
+chemin = "AP12RHNJEG"
 
-[node name="Monde" type="Node3D" parent="."]
+[node name="Monde" type="Node3D" parent="." unique_id=573836142]
 
-[node name="ZoneEndormie" type="MeshInstance3D" parent="."]
+[node name="ZoneEndormie" type="MeshInstance3D" parent="." unique_id=505952716]
 material_override = SubResource("zone_mat")
 script = ExtResource("sc_zone")
 
-[node name="Joueur" parent="." instance=ExtResource("p_joueur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 4, 16.5)
+[node name="Joueur" parent="." unique_id=1928620860 instance=ExtResource("p_joueur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.78, 4.6, 15)
 vue_dessus = true
 distance_dessus = 4.5
 angle_dessus = 40.0
 orientation_dessus = 0.0
 
-[node name="CameraApercu" type="Camera3D" parent="."]
-transform = Transform3D(0.91037, 0.03074, 0.41266, 0.00000, 0.99724, -0.07428, -0.41380, 0.06762, 0.90785, -6.00000, 4.00000, 22.00000)
+[node name="CameraApercu" type="Camera3D" parent="." unique_id=191535945]
+transform = Transform3D(0.91037, 0.03074, 0.41266, 0, 0.99724, -0.07428, -0.4138, 0.06762, 0.90785, -6, 4, 22)
 current = true
 fov = 55.0
 
-[node name="Vision" type="CanvasLayer" parent="."]
+[node name="Vision" type="CanvasLayer" parent="." unique_id=1256167617]
 
-[node name="Ecran" type="ColorRect" parent="Vision"]
+[node name="Ecran" type="ColorRect" parent="Vision" unique_id=953103370]
 material = SubResource("vision_mat")
 anchors_preset = 15
 anchor_right = 1.0
@@ -225,3 +275,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Reveil" type="Node" parent="." unique_id=679562811 node_paths=PackedStringArray("joueur")]
+script = ExtResource("10_v4x7g")
+joueur = NodePath("../Joueur")
+
+[node name="BrumeBatterie" type="Node" parent="." unique_id=1302531191 node_paths=PackedStringArray("maquette")]
+script = ExtResource("11_vhb12")
+maquette = NodePath("../Maquette")
+
+[node name="Luciole" type="Node3D" parent="." unique_id=2015029795]
+script = ExtResource("12_qac1t")
+
+[node name="FinSommet" type="Node3D" parent="." unique_id=1293840968 node_paths=PackedStringArray("soleil", "environnement")]
+script = ExtResource("13_cvxm1")
+soleil = NodePath("../Soleil")
+environnement = NodePath("../Environnement")
+
+[node name="AmbianceSonore" type="Node" parent="." unique_id=2133326713]
+script = ExtResource("14_qf1g3")
+
+[node name="Carnet" type="CanvasLayer" parent="." unique_id=1635031031 node_paths=PackedStringArray("maquette")]
+script = ExtResource("15_j7sqk")
+maquette = NodePath("../Maquette")
+
+[node name="PontonCrique" parent="." unique_id=1764502046 instance=ExtResource("16_3kbj5")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -30, 0, 3)
+port_attache = true
+
+[node name="PontonPlage" parent="." unique_id=1075713646 instance=ExtResource("16_3kbj5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 24)
+
+[node name="Guidage" type="Node3D" parent="." unique_id=1590087198]
+script = ExtResource("17_o0wjb")

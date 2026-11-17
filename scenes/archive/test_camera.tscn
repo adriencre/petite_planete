@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/test_camera.gd" id="1_test"]
-[ext_resource type="PackedScene" path="res://scenes/test_da.tscn" id="2_decor"]
+[ext_resource type="PackedScene" path="res://scenes/archive/test_da.tscn" id="2_decor"]
 [ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="3_joueur"]
 [ext_resource type="Shader" path="res://shaders/vision.gdshader" id="4_vision"]
 [ext_resource type="Script" path="res://scripts/meduse.gd" id="5_meduse"]

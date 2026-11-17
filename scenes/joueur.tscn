@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/joueur.gd" id="1_joueur"]
-[ext_resource type="PackedScene" path="res://assets/models/robot_final.glb" id="2_robot"]
-[ext_resource type="Script" path="res://scripts/robot_anim.gd" id="4_anim"]
+[ext_resource type="PackedScene" path="res://assets/models/robot_meshy.glb" id="2_robot"]
+[ext_resource type="Script" path="res://scripts/robot_meshy_anim.gd" id="4_anim"]
 [ext_resource type="PackedScene" path="res://assets/models/antenne_vue.glb" id="3_antenne"]
 
 [sub_resource type="CapsuleShape3D" id="capsule"]
@@ -94,6 +94,7 @@ rings = 1
 [node name="Joueur" type="CharacterBody3D" groups=["joueur"]]
 floor_snap_length = 0.3
 script = ExtResource("1_joueur")
+balancement_procedural = false
 
 [node name="Collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
