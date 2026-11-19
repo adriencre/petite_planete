@@ -9,9 +9,9 @@
 - **Île 1** jouable en maquette : `scenes/ile_01_maquette.tscn`.
 - **Île 2** (`scenes/ile_02_maquette.tscn`) : terrain refait dans Blender en « blocs taillés à facettes, strates nettes » (validé par l'utilisateur), généré par `tools/blender/terrain_ile_02.py` depuis la carte du nœud Maquette → `assets/models/ile02/terrain_ile_02.glb`, branché par `terrain_modele`. Ambiance : `assets/ambiances/ile_02.tres`. Objets (Phare, maisons, caps…) encore provisoires.
 
-## En chantier (non commité sur `main`)
-- Tout le travail île 2 du 2026-11-19 (voir journal `2026-11-19_claude_ile-02-terrain.md`).
-→ Proposer à l'utilisateur de committer.
+## En chantier
+- Rien de non commité : tout le travail île 2 du 2026-11-19 est poussé (commit 4ca2d67, journal `2026-11-19_claude_ile-02-terrain.md`).
+- Prochaine grosse étape proposée : **le Phare** (Blender, à l'échelle des Semeurs, extérieur + salle des machines d'abord ; question ouverte : vue en coupe étage par étage, ou changement de scène à l'intérieur ?).
 
 ## Prochaines étapes (île 2)
 1. Faire vérifier les escaliers en jeu par l'utilisateur (ou lancer `tests/diag_escaliers_ile_02.gd`, **avec son accord** : il a refusé une fois).
