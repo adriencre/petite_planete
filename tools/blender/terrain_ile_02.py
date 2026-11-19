@@ -48,6 +48,9 @@ PALIER = 1.8               # profondeur de l'encoche dans la falaise du haut = p
 SOL_PAS = 1.5              # taille des facettes du dessus des plateaux (m)
 SOL_RELIEF = 0.14          # bosses du sol à facettes (m) : assez pour la lumière, trop peu pour gêner
 SOL_MARGE = 0.5            # distance mini entre une facette et le bord du plateau (m)
+# Emprises de bâtiments (x, y Blender, rayon) : ni facettes ni décor dessous (sinon l'herbe perce leur plancher).
+# Le Phare : posé en Godot (3,5 ; 8,1 ; -8,0) → Blender (3,5 ; 8,0). Son annexe à l'ouest (chambre d'Iris).
+EMPRISES = [(3.5, 8.0, 4.7), (-1.6, 8.5, 3.6)]
 
 rng = random.Random(GRAINE)
 
@@ -396,6 +399,8 @@ def sol_facette(p, poly, z, teintes=None, relief=None, affleurements=True):
             continue
         if any(e.zone_libre(q, 0.4) for e in ESCALIERS for q in pts):
             continue
+        if any((q - Vector((ex, ey))).length < er for (ex, ey, er) in EMPRISES for q in pts):
+            continue
         # garder une marge avec le bord du cœur (sinon une facette déborde au-dessus d'un bloc)
         if min(min((q - v).length for v in poly) for q in pts) < SOL_MARGE:
             continue
@@ -415,6 +420,8 @@ def sol_facette(p, poly, z, teintes=None, relief=None, affleurements=True):
     for _ in range(int(abs(aire(poly)) / 60) if affleurements else 0):
         c = Vector((rng.uniform(min(xs), max(xs)), rng.uniform(min(ys), max(ys))))
         if not dedans(c, poly) or any(e.zone_libre(c, 1.0) for e in ESCALIERS):
+            continue
+        if any((c - Vector((ex, ey))).length < er + 1.5 for (ex, ey, er) in EMPRISES):
             continue
         if min((c - v).length for v in poly) < 2.0:
             continue
@@ -614,7 +621,9 @@ d = TAILLE_CASE / 2
 
 
 def libre(x, y):
-    """Pas de décor sur les marches, les paliers et leurs abords."""
+    """Pas de décor sur les marches, les paliers et leurs abords, ni sous un bâtiment."""
+    if any((Vector((x, y)) - Vector((ex, ey))).length < er + 0.5 for (ex, ey, er) in EMPRISES):
+        return False
     return not any(e.zone_libre(Vector((x, y)), 0.6) for e in ESCALIERS)
 
 

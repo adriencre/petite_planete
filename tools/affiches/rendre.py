@@ -26,6 +26,7 @@ DOCUMENTS = {
     "ordre_ysolde": (1400, 1000),
     "page_7": (1100, 1400),
     "cahier_passages": (1800, 1150),
+    "releves_iris": (1200, 760),
 }
 
 

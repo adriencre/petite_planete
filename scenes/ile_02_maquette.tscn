@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://clpp6kqimndyi" path="res://assets/models/ile02/terrain_ile_02.glb" id="5_m0eg5"]
 [ext_resource type="PackedScene" uid="uid://b4jkbjvfoynwl" path="res://assets/models/lanterne_tulipe.glb" id="6_0v5bu"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/maison_quai.tscn" id="6_53bsb"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/phare.tscn" id="phare_ile_02"]
 [ext_resource type="Script" uid="uid://du5i4605732ws" path="res://scripts/lanterne_fleur.gd" id="7_q2ixi"]
 [ext_resource type="Script" uid="uid://c7hrsv5akempp" path="res://scripts/brume_batterie.gd" id="9_m8apa"]
 [ext_resource type="Script" uid="uid://b05k7c4lsyakt" path="res://scripts/maree_estran.gd" id="10_53bsb"]
@@ -39,42 +40,9 @@ shader_parameter/epaisseur_mousse = 0.3
 albedo_color = Color(0.94, 0.92, 0.88, 1)
 roughness = 0.9
 
-[sub_resource type="CylinderMesh" id="tour"]
-material = SubResource("m_blanc")
-top_radius = 2.4
-bottom_radius = 3.0
-height = 18.0
-radial_segments = 12
-
 [sub_resource type="StandardMaterial3D" id="m_rouille"]
 albedo_color = Color(0.74, 0.44, 0.34, 1)
 roughness = 0.9
-
-[sub_resource type="CylinderMesh" id="bande"]
-material = SubResource("m_rouille")
-top_radius = 2.86
-bottom_radius = 2.9
-height = 1.6
-radial_segments = 12
-
-[sub_resource type="StandardMaterial3D" id="m_verre"]
-albedo_color = Color(0.7, 0.8, 0.85, 1)
-metallic = 0.4
-roughness = 0.2
-
-[sub_resource type="CylinderMesh" id="lanterne_phare"]
-material = SubResource("m_verre")
-top_radius = 2.0
-bottom_radius = 2.0
-height = 2.6
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="toit_phare"]
-material = SubResource("m_rouille")
-top_radius = 0.0
-bottom_radius = 2.6
-height = 1.6
-radial_segments = 12
 
 [sub_resource type="StandardMaterial3D" id="m_sombre"]
 albedo_color = Color(0.12, 0.11, 0.15, 1)
@@ -252,32 +220,8 @@ suit_la_maree = true
 
 [node name="Monde" type="Node3D" parent="." unique_id=994186121]
 
-[node name="Phare" type="Node3D" parent="Monde" unique_id=1804327501]
+[node name="Phare" parent="Monde" unique_id=1804327501 instance=ExtResource("phare_ile_02")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -10.5)
-
-[node name="Tour" type="MeshInstance3D" parent="Monde/Phare" unique_id=860485997]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
-mesh = SubResource("tour")
-
-[node name="Bande1" type="MeshInstance3D" parent="Monde/Phare" unique_id=831496991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
-mesh = SubResource("bande")
-
-[node name="Bande2" type="MeshInstance3D" parent="Monde/Phare" unique_id=1494460432]
-transform = Transform3D(0.94, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, 12.5, 0)
-mesh = SubResource("bande")
-
-[node name="Lanterne" type="MeshInstance3D" parent="Monde/Phare" unique_id=1042536996]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.3, 0)
-mesh = SubResource("lanterne_phare")
-
-[node name="Toit" type="MeshInstance3D" parent="Monde/Phare" unique_id=230667444]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.4, 0)
-mesh = SubResource("toit_phare")
-
-[node name="Porte" type="MeshInstance3D" parent="Monde/Phare" unique_id=1829014228]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.85)
-mesh = SubResource("porte_semeur")
 
 [node name="BancIris" type="Node3D" parent="Monde" unique_id=1580987435]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -3.5)

@@ -14,6 +14,8 @@ const SONS := preload("res://scripts/sons.gd")  # les effets sonores (assets/aud
 @export_multiline var texte: String = ""
 @export var signature: String = ""
 @export var distance_lecture: float = 2.4
+## Écart vertical maximal entre les pieds du robot et la feuille. Zéro garde la portée horizontale.
+@export var hauteur_lecture: float = 0.0
 @export var taille_feuille: Vector2 = Vector2(0.34, 0.26)
 ## Le papier à l'écran : taille du texte et largeur (px). Un long texte (le mode d'emploi, abri.gd) : plus large.
 @export var taille_police: int = 21
@@ -100,7 +102,11 @@ func point_appel() -> Vector3:
 
 
 func _distance() -> float:
+	if _joueur == null:
+		return INF
 	var a := _joueur.global_position
+	if hauteur_lecture > 0.0 and absf(a.y - global_position.y) > hauteur_lecture:
+		return INF
 	return Vector2(a.x - global_position.x, a.z - global_position.z).length()
 
 
