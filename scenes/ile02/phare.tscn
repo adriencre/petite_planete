@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/phare_coupe.gd" id="1_coupe"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/phare.glb" id="2_modele"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="3_page"]
+[ext_resource type="Texture2D" path="res://assets/affiches/releves_iris.png" id="4_releves"]
+
+[sub_resource type="BoxShape3D" id="zone_tour"]
+size = Vector3(6.3, 13.65, 6.9)
+
+[sub_resource type="BoxShape3D" id="zone_aile"]
+size = Vector3(3.54, 5.4, 4.48)
+
+[sub_resource type="CylinderShape3D" id="zone_galerie"]
+height = 2.5
+radius = 3.79
+
+[sub_resource type="BoxShape3D" id="porte_cartes"]
+size = Vector3(1.17, 2.39, 0.2)
+
+[node name="Phare" type="Node3D"]
+script = ExtResource("1_coupe")
+a_effacer = PackedStringArray("Coupe")
+duree_fondu = 0.8
+
+[node name="Modele" parent="." instance=ExtResource("2_modele")]
+
+[node name="Interieur" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="Tour" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(0, 6.85, 0)
+shape = SubResource("zone_tour")
+
+[node name="AileEtEscalier" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(4.51, 2.65, -0.07)
+shape = SubResource("zone_aile")
+
+[node name="Galerie" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(0, 14.25, 0)
+shape = SubResource("zone_galerie")
+
+[node name="LumiereDeLAtelier" type="OmniLight3D" parent="."]
+position = Vector3(-0.8, 3.55, -1.3)
+light_color = Color(1, 0.83, 0.64, 1)
+light_energy = 0.55
+omni_range = 4.8
+
+[node name="RepereSeuil" type="Marker3D" parent="."]
+position = Vector3(0, 0.35, 3.45)
+
+[node name="ReperePalierIris" type="Marker3D" parent="."]
+position = Vector3(5.2, 4.1, 1.7)
+
+[node name="ReperePalierCartes" type="Marker3D" parent="."]
+position = Vector3(0, 8.95, -2.27)
+
+[node name="RepereSeuilGalerie" type="Marker3D" parent="."]
+position = Vector3(2.16, 13.62, -0.77)
+
+[node name="PorteCartesVerrouillee" type="StaticBody3D" parent="."]
+position = Vector3(0, 10.145, -1.52)
+
+[node name="Forme" type="CollisionShape3D" parent="PorteCartesVerrouillee"]
+shape = SubResource("porte_cartes")
+
+[node name="DocumentsBureau" type="Node3D" parent="."]
+
+[node name="Page1" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(-1.23, 5.489, -0.89)
+script = ExtResource("3_page")
+texte = "Tournée du Phare, jour 112.\n\nPour les nouveaux, puisque personne ne lit les consignes : le Phare ne fait pas de lumière. Il la rassemble. Les trois caps la lui renvoient, quand les miroirs sont bien tournés. Si un seul cap s'éteint, la lentille ne voit rien.\n\nJ'ai nettoyé les vitres du Cap Est. Le miroir du Large a encore bougé avec la tempête. N'allez jamais au Large à marée montante : la mer ne prévient pas.\n\nRappel : on ne reprend pas la lumière devant les arbres roses. Ils ne le supportent pas."
+signature = "G."
+distance_lecture = 1.85
+hauteur_lecture = 1.92
+taille_feuille = Vector2(0.45, 0.30)
+
+[node name="RelevesIris" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(-0.35, 5.489, -0.91)
+script = ExtResource("3_page")
+texte = "Plan des miroirs : Cap Est → Cap du Large. Le reste du tracé est effacé.\n\nBasse mer : six tours du faisceau. Pas un de plus.\nPleine lune : plus bas que tout. Le vieux port respire."
+distance_lecture = 1.85
+hauteur_lecture = 1.92
+taille_feuille = Vector2(0.52, 0.33)
+ramasser = false
+image = ExtResource("4_releves")
+
+[node name="NoteDeLaCle" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(0.43, 5.489, -0.75)
+script = ExtResource("3_page")
+texte = "J'ai laissé la clé de la salle des cartes dans la cabine, à bord du ravitailleur. Je la reprendrai à la prochaine basse mer. Pas sans le Phare : la brume du large y est trop épaisse.\n\n[i]Les nuits de pleine lune, le Phare chante, et je vois ma maison.[/i]"
+distance_lecture = 1.85
+hauteur_lecture = 1.92
+taille_feuille = Vector2(0.44, 0.28)
+ramasser = false
+
+[node name="DessinDAube" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(3.68, 5.84, 1.183)
+rotation = Vector3(1.570796, 0, 0)
+script = ExtResource("3_page")
+texte = "Pour Iris. Ma cachette, c'est par le toit."
+distance_lecture = 1.15
+hauteur_lecture = 1.96
+taille_feuille = Vector2(0.30, 0.24)
+ramasser = false
+
+[node name="DocumentsCartes" type="Node3D" parent="."]
+
+[node name="RegistreDesLanternes" type="Node3D" parent="DocumentsCartes"]
+position = Vector3(0, 10.208, 0.71)
+script = ExtResource("3_page")
+texte = "Registre des lanternes\n\nRéveil : l'abri, la veilleuse, le sommet. Rien à signaler. Le jardinier dort.\n\nColonie : 40… 90… 160… 310.\n\nÎle blanche : on m'en demande encore. Ils disent que c'est pour soigner. Je n'y crois plus.\n\nNef : aucune, en attendant le départ.\n\nCentrale : ne pas toucher. Tavin s'en occupe.\n\n⌂"
+distance_lecture = 1.35
+hauteur_lecture = 1.75
+taille_feuille = Vector2(0.71, 0.49)
+ramasser = false
