@@ -1,31 +1,33 @@
 # État du projet — passation entre agents
 
-> Mis à jour le **2026-11-19** par **claude** (session : création du dossier `.agents/`).
+> Mis à jour le **2026-11-19** par **claude** (session : île 2, terrain « blocs taillés » + lumière).
 > À réécrire à chaque fin de session (voir `procedures/fin-de-session.md`). ≤ 1 page.
 
 ## Où on en est
-- **Docs de conception** : les 7 îles sont écrites (`ILE_01` … `ILE_07`, `TOILE_ENQUETE.md`) ; quelques points « à valider ». Feuille de route : `ROADMAP.md`.
-- **DA v6** (`DA.md`) : vue de dessus, low-poly à facettes, pastels lumineux. La 1re personne est abandonnée.
-- **Île 1** jouable en maquette : `scenes/ile_01_maquette.tscn` (abri, pierre-soleil, lanternes, cascade/atelier, barque, fin au sommet).
-- **Île 2** : une maquette grise a démarré (`scenes/ile_02_maquette.tscn`, non commitée).
+- **Docs de conception** : les 7 îles sont écrites (`ILE_01` … `ILE_07`, `TOILE_ENQUETE.md`). Feuille de route : `ROADMAP.md`.
+- **DA v6** (`DA.md`) : vue de dessus, low-poly à facettes, pastels lumineux.
+- **Île 1** jouable en maquette : `scenes/ile_01_maquette.tscn`.
+- **Île 2** (`scenes/ile_02_maquette.tscn`) : terrain refait dans Blender en « blocs taillés à facettes, strates nettes » (validé par l'utilisateur), généré par `tools/blender/terrain_ile_02.py` depuis la carte du nœud Maquette → `assets/models/ile02/terrain_ile_02.glb`, branché par `terrain_modele`. Ambiance : `assets/ambiances/ile_02.tres`. Objets (Phare, maisons, caps…) encore provisoires.
 
 ## En chantier (non commité sur `main`)
-Gros lot de travail du 2026-11-17/18 pas encore commité :
-- Pour les joueurs : écran titre (`scenes/ecran_titre.tscn`, scène principale), menu pause, réglages (`scenes/ui/`, `scripts/ui/`, `scripts/reglages.gd`), sauvegarde auto (`scripts/sauvegarde.gd`), jauge batterie HUD (`scenes/ui/hud_batterie.tscn`), thème `assets/ui/theme_carnet.tres`, bus audio `default_bus_layout.tres`.
-- Île 1 (décisions du 2026-11-18 dans `ILE_01_REVEIL.md` §13 points 7-9) : abri vieilli sauf le berceau, « pas de géants » (dalles) vers l'atelier (`chemin_geants`), Tavin envoie au Phare ; affiches `mode_emploi` / `ordre_ysolde` refaites.
-- Ce dossier `.agents/` + `AGENTS.md` + `tools/agents/sync.py` (2026-11-19).
-→ Proposer à l'utilisateur de committer ce lot (il n'a pas encore été demandé).
+- Tout le travail île 2 du 2026-11-19 (voir journal `2026-11-19_claude_ile-02-terrain.md`).
+→ Proposer à l'utilisateur de committer.
 
-## Prochaines étapes (d'après ROADMAP.md)
-1. Étape 2 : finir d'adapter l'île 1 à la v4 (liste dans ROADMAP.md).
-2. Étape 3 : archipel + île 2 (ordre K1 → J4 → K2 … dans `ILE_02_PHARE.md` §11).
+## Prochaines étapes (île 2)
+1. Faire vérifier les escaliers en jeu par l'utilisateur (ou lancer `tests/diag_escaliers_ile_02.gd`, **avec son accord** : il a refusé une fois).
+2. Faire tester en jeu la brume épaisse (branchée sur la batterie) et la marée (autoload `HorlogeMonde`, F8 accélère) ; régler les chiffres. Mettre en scène « emporté par la mer » (pour l'instant un simple retour au sec).
+3. Fondu des obstacles entre la caméra et le robot (le Phare le cachera). Relief : on GARDE 2,5 m par niveau (décidé).
+4. K2 (G1 : chaussée + 3 balises à allumer, échelle de marée, ancien corps), chaussée en dalles.
+5. Maison du quai : construite (Blender + scène `scenes/ile02/maison_quai.tscn`) ; reste les objets héros Meshy (poêle, cirés/bottes…), la lanterne de recharge (modèle des Semeurs à poser au repère `RepereLanterne`), le texte du cahier.
+6. Autres objets Meshy (~120 crédits : Phare, maison du quai, hangar, miroirs, banc, arbre rose mort…) — annoncer le coût avant.
 
 ## Pièges actifs
-- MCP `godot-ai` : timeout si l'éditeur Godot n'est pas ouvert (normal).
-- MCP `blender` : l'utilisateur doit cliquer « Start MCP Server » dans Blender.
-- MCP `meshy` : il faut la variable d'environnement `MESHY_API_KEY` (voir `.agents/README.md`).
+- Modifier la carte de l'île 2 → relancer `terrain_ile_02.py` dans Blender, puis réimporter le .glb (`filesystem_manage reimport`).
+- Le jeu lancé depuis l'éditeur bloque toutes les écritures MCP : demander à l'utilisateur de l'arrêter.
+- Script `@tool` modifié de l'extérieur : ses nouvelles `@export` peuvent rester `null` dans l'éditeur → les régler via MCP (voir procedures/godot.md).
+- Le MCP Blender n'a pas d'état entre deux appels (`exec` du script à chaque fois).
 - Toujours **demander avant de lancer** le jeu ou un test.
+- Meshy : 2 637 des 2 836 crédits sont mensuels (renouvellement 2026-12-16).
 
 ## Questions ouvertes pour l'utilisateur
-- Caméra v6 : angle/focale, fixe ou orientable, tilt-shift ? (`DA.md`, « À décider »)
-- Vision trouble à batterie basse en vue de dessus : effet d'écran ou seulement l'ampoule ?
+- Caméra v6 : angle/focale, fixe ou orientable, tilt-shift ? (`DA.md`)

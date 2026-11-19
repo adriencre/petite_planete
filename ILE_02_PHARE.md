@@ -64,13 +64,15 @@ Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_is
 - **Échelle (DA v5)** : le Phare est bâti à la taille des Semeurs (2,50 à 3 m), donc **un peu trop grand pour le robot**, comme l'atelier de l'île 1 : marches un peu hautes, portes d'environ 3 m, table à hauteur de poitrine.
 - **Marée** : l'eau est à −0,6 m à marée basse et à +0,5 m à marée haute. Tout ce qui est à 0 m (chaussée, gué, estran, flaque, épave) n'existe qu'à marée basse.
 - **Palette** : pierre claire, falaises grises, phare blanc à bandes rouille délavée, varech, eau verte des flaques, brume froide.
+- **Style du terrain (validé le 2026-11-19)** : « blocs taillés à facettes, strates nettes » : falaises en strates de blocs qui avancent / reculent, fissures, escaliers creusés dans des encoches, éboulis et varech au pied, herbe rase + lichen doré dessus. Plus de damier de plateaux. Généré par `tools/blender/terrain_ile_02.py` depuis la carte du nœud Maquette → `assets/models/ile02/terrain_ile_02.glb` (branché par `terrain_modele` dans `scripts/maquette.gd`). Test d'origine : `concept/ile_02_falaise_test_v1.png`.
+- **Image cible d'ambiance (2026-11-19)** : `concept/ile_02_cible_v1.png` (Meshy, depuis la variante « croix »). Elle sert de référence pour **l'ambiance** (lumière dorée, brume en nappes, phare vieilli, détails) ; **pas** pour la forme (le port y est collé au rocher, la chaussée trop courte) : la forme reste celle du plan.
 
 ### Les zones
 | # | Zone | Ce qu'on y trouve |
 |---|---|---|
 | 1 | **Le ponton** | L'arrivée en barque, accessible à toute marée. |
 | 2 | **La bouée-lanterne** | Dans la passe, à rallumer depuis la barque. Point de recharge. |
-| 3 | **La maison du quai** | Le logement des gardiens de passage : lits géants, cirés, une lanterne. |
+| 3 | **La maison du quai** | Le logement des gardiens de passage : lits géants, cirés, une lanterne. Intérieur détaillé (décidé le 2026-11-19, voir ci-dessous). |
 | 4 | **Le hangar** | Des barques retournées, le **miroir d'essai** et sa porte. |
 | 5 | **L'échelle de marée** | Des repères peints sur le mur du quai. |
 | 6–8 | **La chaussée et ses balises** | Un chemin de dalles posé sur l'eau, couvert de brume épaisse. Trois balises. |
@@ -85,6 +87,14 @@ Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_is
 | 17 | **Le Cap du Large** | Au nord, au bout du gué. Lanterne + station de miroir. |
 | 18 | **L'ancien corps échoué** | Sur les rochers du Large : il s'est fait prendre par la marée. |
 | 19 | **L'épave du ravitailleur** | Au sud-ouest, couchée sur un banc de sable. Entourée de brume épaisse. |
+
+### La maison du quai (décidé le 2026-11-19)
+Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (portes ~3 m, plafond haut). Le toit s'efface quand le robot entre (comme l'abri de l'île 1). Fabrication : structure et intérieur dans Blender, meubles « héros » par Meshy.
+- **Le décor** : un grand poêle en fonte froid (la bouilloire dessus), deux lits géants superposés aux couvertures pliées, des cirés jaunes et des bottes immenses près de la porte, une table et des tasses, une carte marine au mur, une grande fenêtre tournée vers la chaussée et le Phare.
+- **La lanterne** de la maison : à rallumer avec le câble ; c'est le point de recharge avant la traversée (G1).
+- **Le cahier des passages** sur la table : les traversées notées par les gardiens (« Parti au début de la basse mer, arrivé sec »…), la dernière ligne inachevée (l'ancien corps de la chaussée). Indice muet du piège de G1 : partir au **début** de la basse mer.
+- **L'horloge de marée** au mur : une aiguille qui suit la vraie marée du jeu (HorlogeMonde).
+- **La couchette d'Aube** : une troisième couchette, à taille d'enfant, un dessin d'Aube sous l'oreiller. Aube venait ici avec Iris (lien avec la Colonie).
 
 ### Le Phare, de bas en haut
 | Niveau | Ce qu'on y trouve |

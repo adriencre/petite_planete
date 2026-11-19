@@ -19,6 +19,9 @@ const CABLE := preload("res://scripts/cable.gd")
 ## Distance à laquelle le cœur éteint commence à scintiller quand on le regarde.
 @export var distance_appel: float = 9.0
 @export var couleur_or: Color = Color(1.0, 0.78, 0.4)
+## Pour se poser au sol, la lanterne cherche le sol en partant de cette hauteur au-dessus d'elle.
+## Sous un toit (maison du quai) : petite valeur, sinon elle se pose sur ce qui est au-dessus.
+@export var hauteur_recherche_sol: float = 30.0
 @export var energie_lumiere: float = 2.4
 
 ## Batterie rendue au robot quand il reprend la lumière (`E` sur la lanterne allumée).
@@ -148,7 +151,7 @@ func _pos_coeur() -> Vector3:
 ## Pose la lanterne sur le terrain, en ignorant ses propres collisions (socle, bassin).
 func _poser_au_sol() -> void:
 	var p := global_position
-	var q := PhysicsRayQueryParameters3D.create(p + Vector3.UP * 30.0, p + Vector3.DOWN * 30.0)
+	var q := PhysicsRayQueryParameters3D.create(p + Vector3.UP * hauteur_recherche_sol, p + Vector3.DOWN * 30.0)
 	var exclus: Array[RID] = []
 	for c in find_children("*", "CollisionObject3D", true, false):
 		exclus.append((c as CollisionObject3D).get_rid())

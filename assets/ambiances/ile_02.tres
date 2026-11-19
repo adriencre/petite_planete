@@ -1,0 +1,65 @@
+[gd_resource type="Environment" format=3 uid="uid://6ed2n2pcb23t"]
+
+[ext_resource type="Shader" uid="uid://cljsnd7ner40e" path="res://shaders/ciel_pastel.gdshader" id="s_ciel"]
+
+[sub_resource type="ShaderMaterial" id="ciel_mat"]
+shader = ExtResource("s_ciel")
+shader_parameter/couleur_haut = Color(0.47, 0.66, 0.9, 1)
+shader_parameter/couleur_milieu = Color(0.78, 0.86, 0.96, 1)
+shader_parameter/couleur_horizon = Color(1, 0.86, 0.68, 1)
+shader_parameter/couleur_bas = Color(0.76, 0.86, 0.92, 1)
+shader_parameter/hauteur_milieu = 0.14
+shader_parameter/hauteur_haut = 0.6
+shader_parameter/taille_soleil = 0.9993
+shader_parameter/halo_soleil = 0.6
+shader_parameter/nuage_lumiere = Color(1, 0.93, 0.82, 1)
+shader_parameter/nuage_ombre = Color(0.72, 0.78, 0.92, 1)
+shader_parameter/nuage_couverture = 0.42
+shader_parameter/nuage_douceur = 0.18
+shader_parameter/nuage_echelle = 1.6
+shader_parameter/nuage_vitesse = 0.01
+shader_parameter/etoiles = 0.0
+shader_parameter/planete_direction = Vector3(-0.5, 0.3, -0.8)
+shader_parameter/planete_taille = 0.17
+shader_parameter/planete_couleur_a = Color(0.86, 0.62, 0.82, 1)
+shader_parameter/planete_couleur_b = Color(0.68, 0.58, 0.88, 1)
+shader_parameter/planete_bandes = 11.0
+shader_parameter/planete_brume = 0.35
+
+[sub_resource type="Sky" id="ciel"]
+sky_material = SubResource("ciel_mat")
+
+[resource]
+background_mode = 2
+sky = SubResource("ciel")
+ambient_light_source = 3
+ambient_light_color = Color(0.78, 0.86, 1, 1)
+ambient_light_sky_contribution = 0.6
+ambient_light_energy = 0.5
+tonemap_mode = 2
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 1.2
+ssao_light_affect = 0.1
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.02
+glow_hdr_threshold = 1.1
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.86, 0.9, 0.97, 1)
+fog_sun_scatter = 0.25
+fog_density = 0.85
+fog_sky_affect = 0.5
+fog_height = 0.6
+fog_depth_curve = 1.6
+fog_depth_begin = 45.0
+fog_depth_end = 160.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(0.92, 0.93, 0.97, 1)
+volumetric_fog_emission = Color(0.55, 0.56, 0.62, 1)
+volumetric_fog_emission_energy = 0.2
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.08

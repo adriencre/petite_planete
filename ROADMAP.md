@@ -51,7 +51,7 @@ Voir `ILE_01_REVEIL.md` §13.
 
 ## Étape 3 — L'archipel et l'île 2
 Voir `ILE_02_PHARE.md` §11 (phases J et K).
-- Ordre : K1 (maquette grise) → J4 (`WorldClock`, marée) → K2 → K3 → K4 → J1–J3 (scène Archipel, barque pilotable, brume en mer) → K5 → K6 → K7.
+- Ordre : K1 (maquette grise) → J4 (`WorldClock`, marée — fait le 2026-11-19 : autoload `HorlogeMonde`) → K2 → K3 → K4 → J1–J3 (scène Archipel, barque pilotable, brume en mer) → K5 → K6 → K7.
 
 ## Étape 4 — Les îles 3 à 7
 Une fois leurs documents validés.

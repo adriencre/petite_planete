@@ -1,0 +1,191 @@
+<!doctype html>
+<!-- Le cahier des passages, sur la table de la maison du quai (ILE_02_PHARE.md §3, « La maison du quai »).
+     Un registre de gardiens ouvert en double page. À gauche : le titre, l'aquarelle de la chaussée et de ses
+     trois balises, la règle de lecture de l'horloge de marée. À droite : les traversées, chacune avec sa petite
+     horloge (l'indice muet de G1 : plus on part tard dans la basse mer, plus on arrive mouillé), la ligne
+     d'Aube, et la dernière ligne qui s'interrompt. Rendu : 1800 × 1150. -->
+<html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="commun.css">
+<style>
+  /* la reliure : du cuir bleu-gris usé, qui déborde autour des pages */
+  .reliure { position: absolute; inset: 34px 30px 40px 30px; border-radius: 26px 26px 30px 30px;
+    background: radial-gradient(ellipse at 30% 20%, #6f8792, #4e6470 60%, #3e515c);
+    box-shadow: 0 18px 30px rgba(20, 12, 8, .45), inset 0 0 0 6px rgba(255,255,255,.05); transform: rotate(-.6deg); }
+  .reliure::after { content: ""; position: absolute; inset: 10px; border: 2px dashed rgba(230, 210, 170, .35); border-radius: 20px; }
+  .page { position: absolute; top: 58px; bottom: 66px; width: 840px; overflow: hidden; color: var(--encre);
+    background:
+      radial-gradient(ellipse at 50% 45%, #f6eedb 48%, #e7d6b3 100%); }
+  .gauche { left: 64px; border-radius: 14px 4px 4px 18px; transform: rotate(-.6deg);
+    box-shadow: inset -40px 0 50px -30px rgba(120, 80, 40, .45); }
+  .droite { right: 64px; border-radius: 4px 14px 18px 4px; transform: rotate(-.6deg);
+    box-shadow: inset 40px 0 50px -30px rgba(120, 80, 40, .45);
+    background:
+      repeating-linear-gradient(180deg, transparent 0 63px, rgba(110,150,190,.28) 63px 65px),
+      radial-gradient(ellipse at 50% 45%, #f6eedb 48%, #e7d6b3 100%); }
+  .pli { position: absolute; top: 50px; bottom: 58px; left: 50%; width: 22px; margin-left: -11px; transform: rotate(-.6deg);
+    background: linear-gradient(90deg, rgba(90,60,30,.0), rgba(90,60,30,.35) 50%, rgba(90,60,30,0)); }
+  .titre { position: absolute; top: 60px; left: 0; right: 0; text-align: center;
+    font-family: 'IM Fell English SC', serif; font-size: 62px; letter-spacing: 3px; color: #3e3a5a; }
+  .sous-titre { position: absolute; top: 140px; left: 0; right: 0; text-align: center;
+    font-family: 'IM Fell English', serif; font-style: italic; font-size: 30px; color: var(--encre-pale); }
+  .filet { position: absolute; top: 190px; left: 210px; right: 210px; height: 2px; background: var(--encre-pale); opacity: .6; }
+  .aquarelle { position: absolute; top: 215px; left: 50px; width: 740px; height: 470px; }
+  .legende { position: absolute; top: 690px; left: 60px; right: 60px; font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 26px; color: var(--encre-pale); text-align: center; }
+  .regle { position: absolute; bottom: 70px; left: 70px; right: 70px; height: 180px; }
+  .regle-texte { font-family: 'Caveat', cursive; font-size: 34px; fill: #2f2d4a; }
+  /* la page de droite : en-têtes de colonnes, puis les traversées */
+  .entetes { position: absolute; top: 44px; left: 40px; right: 40px; font-family: 'IM Fell English SC', serif;
+    font-size: 24px; color: var(--encre-pale); letter-spacing: 1px; }
+  .entetes span { position: absolute; }
+  .colonne { position: absolute; top: 40px; bottom: 30px; width: 2px; background: rgba(210,110,100,.45); }
+  .ligne { position: absolute; left: 40px; right: 30px; font-family: 'Caveat', cursive; font-weight: 500; font-size: 36px;
+    line-height: 64px; color: #2f2d4a; }
+  .ligne .jour { position: absolute; left: 0; width: 90px; text-align: center; font-size: 38px; }
+  .ligne .horloge { position: absolute; left: 112px; top: -2px; width: 74px; height: 74px; }
+  .ligne .mots { position: absolute; left: 212px; right: 0; }
+  .signe { font-size: 40px; transform: rotate(-4deg); display: inline-block; margin-left: 10px; }
+  .tache-eau { position: absolute; }
+  .goutte { position: absolute; }
+</style></head>
+<body>
+<div class="reliure"></div>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="aqua" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="16" result="d"/><feGaussianBlur in="d" stdDeviation="1.6"/></filter>
+  <filter id="aqua-fort" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="30" result="d"/><feGaussianBlur in="d" stdDeviation="3"/></filter>
+  <filter id="trait" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/></filter>
+  <radialGradient id="lueur"><stop offset="0" stop-color="#fff6d8"/><stop offset=".35" stop-color="#f0c45a" stop-opacity=".85"/><stop offset="1" stop-color="#e6a93a" stop-opacity="0"/></radialGradient>
+  <!-- la petite horloge de marée : moitié basse claire, moitié haute foncée, une aiguille (rotation en degrés via transform) -->
+  <g id="cadran">
+    <circle cx="37" cy="37" r="33" fill="#f8f1df" stroke="#4f3624" stroke-width="2.5" filter="url(#trait)"/>
+    <path d="M4 37 A33 33 0 0 0 70 37 Z" fill="#a7d3d6" opacity=".85"/>
+    <path d="M4 37 A33 33 0 0 1 70 37 Z" fill="#5f8fb0" opacity=".75"/>
+    <line x1="4" y1="37" x2="70" y2="37" stroke="#4f3624" stroke-width="1.6" opacity=".6"/>
+    <circle cx="37" cy="37" r="4" fill="#3b3436"/>
+  </g>
+</defs></svg>
+
+<div class="pli"></div>
+
+<!-- ======================= PAGE DE GAUCHE ======================= -->
+<div class="page gauche">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g1"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="21"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.3 0"/></filter><rect width="100%" height="100%" filter="url(#g1)"/></svg>
+  <div class="titre">Cahier des passages</div>
+  <div class="sous-titre">Maison du quai — gardiens de la chaussée</div>
+  <div class="filet"></div>
+
+  <!-- l'aquarelle : le quai en bas, la chaussée dans la brume, les trois balises, le rocher et le Phare en haut -->
+  <svg class="aquarelle" viewBox="0 0 740 470">
+    <!-- la mer -->
+    <g filter="url(#aqua-fort)" opacity=".55"><rect x="10" y="20" width="720" height="440" rx="40" fill="#a7cbd2"/></g>
+    <!-- le rocher et le Phare -->
+    <g filter="url(#aqua)">
+      <path d="M210 40 L520 30 L560 120 L470 150 L250 150 L190 110 Z" fill="#e6dccb"/>
+      <path d="M230 110 L520 100 L540 140 L250 148 Z" fill="#b9c98e" opacity=".9"/>
+    </g>
+    <g filter="url(#trait)">
+      <rect x="372" y="-6" width="34" height="112" fill="#f7f1e6" stroke="#4f3624" stroke-width="2.5"/>
+      <rect x="372" y="22" width="34" height="12" fill="#c4775c"/><rect x="372" y="60" width="34" height="12" fill="#c4775c"/>
+      <path d="M366 -6 L412 -6 L389 -30 Z" fill="#c4775c" stroke="#4f3624" stroke-width="2.5"/>
+    </g>
+    <!-- la chaussée : des dalles qui descendent vers le quai -->
+    <g filter="url(#aqua)"><path d="M330 150 L420 150 L410 360 L320 360 Z" fill="#dfcfae"/></g>
+    <g stroke="#4f3624" stroke-width="2" opacity=".55" filter="url(#trait)" fill="none">
+      <path d="M330 150 L320 360"/><path d="M420 150 L410 360"/>
+      <path d="M328 192 L418 192"/><path d="M326 236 L416 236"/><path d="M324 280 L414 280"/><path d="M322 322 L412 322"/>
+    </g>
+    <!-- la brume épaisse, au lavis -->
+    <g fill="#ffffff" opacity=".75" filter="url(#aqua-fort)">
+      <ellipse cx="300" cy="230" rx="120" ry="50"/><ellipse cx="450" cy="290" rx="130" ry="46"/><ellipse cx="360" cy="330" rx="150" ry="36"/>
+    </g>
+    <!-- les trois balises allumées -->
+    <g>
+      <circle cx="312" cy="200" r="34" fill="url(#lueur)"/><circle cx="430" cy="262" r="34" fill="url(#lueur)"/><circle cx="312" cy="318" r="34" fill="url(#lueur)"/>
+      <g stroke="#4f3624" stroke-width="2.5" fill="#f0c45a" filter="url(#trait)">
+        <circle cx="312" cy="200" r="7"/><circle cx="430" cy="262" r="7"/><circle cx="312" cy="318" r="7"/>
+      </g>
+      <g font-family="Caveat" font-size="30" fill="#2f2d4a"><text x="262" y="208">3</text><text x="448" y="270">2</text><text x="262" y="326">1</text></g>
+    </g>
+    <!-- le quai et la maison -->
+    <g filter="url(#aqua)"><path d="M180 360 L560 360 L570 450 L170 450 Z" fill="#e3dacb"/></g>
+    <g filter="url(#trait)">
+      <rect x="230" y="372" width="90" height="62" fill="#efe6d6" stroke="#4f3624" stroke-width="2.5"/>
+      <path d="M222 374 L275 340 L328 374 Z" fill="#c4775c" stroke="#4f3624" stroke-width="2.5"/>
+      <rect x="262" y="398" width="18" height="36" fill="#9c7048"/>
+    </g>
+    <g font-family="Caveat" font-size="28" fill="#4f3624">
+      <text x="560" y="96">le Phare</text><text x="470" y="210" transform="rotate(-6 470 210)">brume !</text><text x="340" y="420">ici</text>
+    </g>
+    <path d="M356 412 Q 300 400 292 380" stroke="#4f3624" stroke-width="2" fill="none" filter="url(#trait)"/>
+  </svg>
+  <div class="legende">Une balise après l'autre. Jamais deux pas dans le noir.</div>
+
+  <!-- la règle de lecture de l'horloge de marée -->
+  <svg class="regle" viewBox="0 0 700 180">
+    <g transform="translate(40 40) scale(1.5)"><use href="#cadran"/><line x1="37" y1="37" x2="37" y2="64" stroke="#3b3436" stroke-width="4" stroke-linecap="round"/></g>
+    <text class="regle-texte" x="175" y="62">en bas : la mer est basse, on peut passer.</text>
+    <text class="regle-texte" x="175" y="112">en haut : la mer est haute. On attend ici.</text>
+    <text class="regle-texte" x="175" y="160" fill="#a8432f">Basse mer : six tours du faisceau. Pas un de plus.</text>
+  </svg>
+</div>
+
+<!-- ======================= PAGE DE DROITE ======================= -->
+<div class="page droite">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g2"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="37"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.3 0"/></filter><rect width="100%" height="100%" filter="url(#g2)"/></svg>
+  <!-- une tache d'eau de mer, en haut à droite -->
+  <svg class="tache-eau" style="top:-40px; right:-50px; width:340px; height:300px" viewBox="0 0 340 300">
+    <g filter="url(#aqua-fort)"><ellipse cx="190" cy="140" rx="130" ry="110" fill="none" stroke="rgba(120,90,50,.35)" stroke-width="10"/><ellipse cx="190" cy="140" rx="120" ry="100" fill="rgba(160,190,190,.12)"/></g>
+  </svg>
+  <div class="colonne" style="left:120px"></div>
+  <div class="colonne" style="left:238px"></div>
+  <div class="entetes"><span style="left:6px">Jour</span><span style="left:104px">Départ</span><span style="left:230px">Ce qui s'est passé</span></div>
+
+  <!-- les traversées : l'aiguille tourne de -90° (début de la basse mer, côté gauche) à +90° (fin, côté droit) en passant par le bas -->
+  <div class="ligne" style="top:110px">
+    <div class="jour">3</div>
+    <svg class="horloge" viewBox="0 0 74 74"><use href="#cadran"/><line x1="37" y1="37" x2="12" y2="47" stroke="#3b3436" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <div class="mots">Parti au début de la basse mer. Les trois balises, une à une. Arrivé sec. <span class="signe">— G.</span></div>
+  </div>
+  <div class="ligne" style="top:270px">
+    <div class="jour">9</div>
+    <svg class="horloge" viewBox="0 0 74 74"><use href="#cadran"/><line x1="37" y1="37" x2="37" y2="64" stroke="#3b3436" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <div class="mots">Parti au milieu de la basse mer. Brume épaisse. Arrivé les pieds dans l'eau.</div>
+  </div>
+  <div class="ligne" style="top:398px">
+    <div class="jour">17</div>
+    <svg class="horloge" viewBox="0 0 74 74"><use href="#cadran"/><line x1="37" y1="37" x2="62" y2="45" stroke="#3b3436" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <div class="mots">Parti tard. J'ai couru la dernière balise. <span style="text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px;">Plus jamais.</span></div>
+  </div>
+  <div class="ligne" style="top:526px">
+    <div class="jour">22</div>
+    <svg class="horloge" viewBox="0 0 74 74"><use href="#cadran"/><line x1="37" y1="37" x2="37" y2="10" stroke="#3b3436" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <div class="mots">La petite voulait voir la mer remonter. Nous sommes restées à la fenêtre. Elle a dormi dans la petite couchette. <span class="signe">— G.</span></div>
+  </div>
+  <!-- un petit dessin d'Aube dans la marge, au crayon de couleur : la maison, deux silhouettes, une grande et une petite -->
+  <svg style="position:absolute; top:640px; left:665px; width:150px; height:110px" viewBox="0 0 200 150">
+    <g stroke-linecap="round" fill="none" stroke-width="4">
+      <path d="M30 120 L30 70 L70 45 L110 70 L110 120 Z" stroke="#e88fa8"/>
+      <path d="M140 120 L140 80" stroke="#5fa8d3"/><circle cx="140" cy="70" r="10" stroke="#5fa8d3"/>
+      <path d="M170 120 L170 100" stroke="#f0c24b"/><circle cx="170" cy="92" r="7" stroke="#f0c24b"/>
+      <path d="M10 130 Q 100 120 195 132" stroke="#5fa8d3" opacity=".6"/>
+    </g>
+  </svg>
+  <div class="ligne" style="top:782px">
+    <div class="jour">40</div>
+    <svg class="horloge" viewBox="0 0 74 74"><use href="#cadran"/><line x1="37" y1="37" x2="64" y2="34" stroke="#3b3436" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <div class="mots" style="color:#3b3058">Le petit jardinier est reparti vers le Phare à la fin de la basse mer. Je lui ai crié d'attendre. Il n'entend</div>
+  </div>
+  <!-- la goutte d'encre où la phrase s'arrête -->
+  <svg class="goutte" style="top:898px; left:520px; width:120px; height:80px" viewBox="0 0 120 80">
+    <g filter="url(#aqua)"><ellipse cx="50" cy="34" rx="18" ry="13" fill="#2f2d4a"/><circle cx="76" cy="44" r="5" fill="#2f2d4a"/><circle cx="88" cy="30" r="3" fill="#2f2d4a"/></g>
+  </svg>
+  <!-- une algue séchée glissée entre les pages -->
+  <svg style="position:absolute; bottom:-70px; left:-20px; width:170px; height:230px; transform: rotate(-35deg)" viewBox="0 0 200 260">
+    <g filter="url(#aqua)" fill="#7d8a52" opacity=".85">
+      <path d="M100 250 C 96 190, 80 160, 92 110 C 100 80, 86 50, 100 10 C 112 50, 104 84, 110 112 C 120 160, 106 196, 104 250 Z"/>
+      <ellipse cx="78" cy="150" rx="22" ry="9" transform="rotate(-30 78 150)"/><ellipse cx="124" cy="120" rx="22" ry="9" transform="rotate(30 124 120)"/>
+      <ellipse cx="80" cy="90" rx="18" ry="7" transform="rotate(-35 80 90)"/><ellipse cx="120" cy="70" rx="16" ry="7" transform="rotate(35 120 70)"/>
+    </g>
+  </svg>
+</div>
+</body></html>

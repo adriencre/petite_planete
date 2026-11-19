@@ -12,6 +12,9 @@ uniform int nombre_zones = 0;
 uniform vec3 couleur : source_color = vec3(0.74, 0.71, 0.83);
 // Avant le 2026-11-17 : 0.85, en voile continu presque blanc (4 couches empilées) : l'île paraissait surexposée.
 uniform float opacite : hint_range(0.0, 1.0) = 0.3;
+// Couverture : seuils du motif (plus bas = moins de trouées). Brume épaisse de l'île 2 : 0.34 / 0.62.
+uniform float seuil_bas = 0.46;
+uniform float seuil_haut = 0.74;
 // Taille des nappes : plus grand = nappes plus petites.
 uniform float echelle = 0.22;
 uniform vec2 vent = vec2(0.6, 0.2);
@@ -62,7 +65,7 @@ void fragment() {
 	// le motif se tord lentement sur lui-même, comme de la fumée
 	q += vec2(fbm(q * 0.7 + TIME * 0.02), fbm(q * 0.7 - TIME * 0.025)) * 1.2;
 	// des nappes denses et de vraies trouées entre elles (avant : un voile continu, qui délavait toute l'île)
-	float n = 0.04 + 0.96 * smoothstep(0.46, 0.74, fbm(q));
+	float n = 0.04 + 0.96 * smoothstep(seuil_bas, seuil_haut, fbm(q));
 
 	float reveil = 0.0;
 	for (int i = 0; i < 4; i++) {
@@ -95,5 +98,6 @@ void fragment() {
 	fondu *= barque.w > 0.0 ? smoothstep(barque.w * 0.55, barque.w, d_barque) : 1.0;
 	n = min(n + bord_bulle, 1.0);
 	// les couches hautes sont plus légères (la brume s'amincit en montant)
-	ALPHA = opacite * mix(1.0, 0.5, couche) * n * contact * pres * fondu * mix(1.0, reste_eveil, reveil);
+	// COLOR.a : force de la nappe (1 en général ; plus faible là où la brume épaisse déborde sur la mer)
+	ALPHA = opacite * mix(1.0, 0.5, couche) * n * contact * pres * fondu * mix(1.0, reste_eveil, reveil) * COLOR.a;
 }

@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/batiment_coupe.gd" id="1_coupe"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/maison_quai.glb" id="2_modele"]
+[ext_resource type="Script" path="res://scripts/horloge_maree.gd" id="3_horloge"]
+[ext_resource type="PackedScene" path="res://assets/models/lanterne_tulipe.glb" id="4_lanterne"]
+[ext_resource type="Script" path="res://scripts/lanterne_fleur.gd" id="5_lanterne_script"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="6_page"]
+[ext_resource type="Texture2D" path="res://assets/affiches/cahier_passages.png" id="7_cahier"]
+
+[sub_resource type="BoxShape3D" id="zone_interieur"]
+size = Vector3(7, 3, 9)
+
+[node name="MaisonDuQuai" type="Node3D"]
+script = ExtResource("1_coupe")
+
+[node name="Modele" parent="." instance=ExtResource("2_modele")]
+
+[node name="Interieur" type="Area3D" parent="."]
+
+[node name="Forme" type="CollisionShape3D" parent="Interieur"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("zone_interieur")
+
+[node name="LumiereInterieure" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 3.4, 0)
+light_color = Color(1, 0.82, 0.6, 1)
+light_energy = 0.7
+omni_range = 7.5
+
+[node name="HorlogeMaree" type="Node" parent="." node_paths=PackedStringArray("aiguille")]
+script = ExtResource("3_horloge")
+aiguille = NodePath("../Modele/AiguilleMaree")
+
+[node name="Lanterne" parent="." instance=ExtResource("4_lanterne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.33, -3.4)
+script = ExtResource("5_lanterne_script")
+premiere_fois = false
+index_zone = 0
+rayon_zone = 4.5
+hauteur_recherche_sol = 1.0
+
+[node name="Cahier" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.47, 0.8)
+script = ExtResource("6_page")
+texte = "Cahier des passages — maison du quai
+
+L'horloge de marée : en bas, la mer est basse, on peut passer. En haut, la mer est haute : on attend ici. Basse mer : six tours du faisceau. Pas un de plus.
+Une balise après l'autre. Jamais deux pas dans le noir.
+
+Jour 3. Parti au début de la basse mer. Les trois balises, une à une. Arrivé sec. — G.
+
+Jour 9. Parti au milieu de la basse mer. Brume épaisse. Arrivé les pieds dans l'eau.
+
+Jour 17. Parti tard. J'ai couru la dernière balise. Plus jamais.
+
+Jour 22. La petite voulait voir la mer remonter. Nous sommes restées à la fenêtre. Elle a dormi dans la petite couchette. — G.
+
+Jour 40. Le petit jardinier est reparti vers le Phare à la fin de la basse mer. Je lui ai crié d'attendre. Il n'entend"
+distance_lecture = 2.8
+taille_feuille = Vector2(0.84, 0.6)
+ramasser = false
+image = ExtResource("7_cahier")

@@ -26,10 +26,43 @@ const PIERRE_SCRIPT := preload("res://scripts/pierre_soleil.gd")  # recharge de 
 	set(v): noms = v; _construire()
 @export var materiau_terrain: Material:
 	set(v): materiau_terrain = v; _construire()
+## Terrain modélisé dans Blender (ex. tools/blender/terrain_ile_02.py) à la place des terrasses en cubes.
+## Il doit suivre la même grille ; ses collisions viennent des suffixes « -col » / « -colonly » du .glb.
+## L'herbe pousse sur son mesh « plateaux ».
+@export var terrain_modele: PackedScene:
+	set(v): terrain_modele = v; _construire()
 @export var taille_case: float = 4.0:
 	set(v): taille_case = v; _construire()
 @export var hauteur_niveau: float = 2.5:
 	set(v): hauteur_niveau = v; _construire()
+## Hauteur du sol des cases d'estran (« _ »), découvertes seulement à marée basse. = Z_ESTRAN de terrain_ile_02.py.
+@export var hauteur_estran: float = 0.1:
+	set(v): hauteur_estran = v; _construire()
+## Île 1 : la brume « endormie » couvre toute l'île (chassée par les lanternes). Décoché (île 2) :
+## pas de grand volume, les nappes et bancs de brume ne sont que sur les cases « b ».
+@export var brume_partout: bool = true:
+	set(v): brume_partout = v; _construire()
+@export_group("Brume épaisse (cases « b », sans brume_partout)")
+## Opacité, couleur et hauteur des nappes de la brume épaisse.
+@export_range(0.0, 1.0) var epaisse_opacite: float = 0.78:
+	set(v): epaisse_opacite = v; _construire()
+@export var epaisse_couleur: Color = Color(0.84, 0.88, 0.95):
+	set(v): epaisse_couleur = v; _construire()
+@export var epaisse_hauteur: float = 4.0:
+	set(v): epaisse_hauteur = v; _construire()
+@export_range(2, 12) var epaisse_couches: int = 8:
+	set(v): epaisse_couches = v; _construire()
+## Voile sur la mer autour (0 à 1) : la brume déborde des cases « b » sur l'eau voisine.
+@export_range(0.0, 1.0) var epaisse_debord: float = 0.6:
+	set(v): epaisse_debord = v; _construire()
+## Jusqu'où (en cases) la brume déborde autour des cases « b », en s'éclaircissant.
+@export_range(1, 4) var epaisse_rayon: int = 2:
+	set(v): epaisse_rayon = v; _construire()
+## Densité des bancs de brume volumétriques (cases « b »). 0 = aucun. Attention : le rond de lumière du robot
+## n'écarte pas ce brouillard en volume (seulement les nappes) : trop dense, il noie l'eau et le sol.
+@export var densite_bancs: float = 0.07:
+	set(v): densite_bancs = v; _construire()
+@export_group("")
 ## Affiche le nom des objets provisoires (en attendant Meshy).
 @export var etiquettes: bool = false:
 	set(v): etiquettes = v; _construire()
@@ -115,7 +148,8 @@ func _lire() -> void:
 		for c in jetons.size():
 			var j: String = jetons[c]
 			var niv := -1 if j[0] in ".~" else int(j[0])
-			var centre := Vector3((c - jetons.size() * 0.5 + 0.5) * taille_case, 0.6 + niv * hauteur_niveau, (r - lignes.size() * 0.5 + 0.5) * taille_case)
+			var y := hauteur_estran if j[0] == "_" else 0.6 + niv * hauteur_niveau  # « _ » : estran (int("_") vaut 0)
+			var centre := Vector3((c - jetons.size() * 0.5 + 0.5) * taille_case, y, (r - lignes.size() * 0.5 + 0.5) * taille_case)
 			rang.append({"niv": niv, "suf": j.substr(1), "centre": centre})
 		_grille.append(rang)
 
@@ -127,6 +161,11 @@ func _case(r: int, c: int) -> Dictionary:
 
 
 func _terrain() -> MeshInstance3D:
+	if terrain_modele != null:
+		var modele := terrain_modele.instantiate()
+		modele.name = "Terrain"
+		add_child(modele)
+		return modele.find_child("plateaux*", true, false) as MeshInstance3D
 	var lignes := PackedStringArray()
 	for rang in _grille:
 		var l := PackedStringArray()
@@ -149,6 +188,8 @@ func _terrain() -> MeshInstance3D:
 ## Elle reçoit une carte des côtes : la grille de l'île (terre = 1), avec une marge de mer, floutée
 ## pour faire un halo d'eau claire et d'écume autour du rivage (shaders/mer_facettes.gdshader).
 @export_group("Mer")
+## Île 2 : en jeu, la mer monte et descend avec la marée de l'autoload HorlogeMonde.
+@export var suit_la_maree: bool = false
 @export var taille_mer: float = 520.0
 @export var cases_mer: int = 208
 ## Marge de mer (en cases) autour de la grille, dans la carte des côtes.
@@ -283,7 +324,16 @@ func _mat_eau(chute: bool, vitesse: float) -> ShaderMaterial:
 
 
 func _brume() -> void:
-	# la brume de toute l'île : un grand volume, chassé par les lanternes (shaders/brume_ile.gdshader)
+	if brume_partout:
+		_brume_ile()
+		_nappes()
+	else:
+		_brume_epaisse()
+	_bancs_de_brume()
+
+
+## La brume de toute l'île : un grand volume, chassé par les lanternes (shaders/brume_ile.gdshader).
+func _brume_ile() -> void:
 	var lignes := _grille.size()
 	var colonnes: int = _grille[0].size() if lignes > 0 else 0
 	var ile := FogVolume.new()
@@ -305,10 +355,14 @@ func _brume() -> void:
 	sm.set_shader_parameter("sol_max", sol_max)
 	ile.material = sm
 	add_child(ile)
-	_nappes()
-	# la brume épaisse (cases « b ») : des bancs denses en plus
+
+
+## La brume épaisse (cases « b ») : des bancs denses en plus.
+func _bancs_de_brume() -> void:
+	if densite_bancs <= 0.0:   # île 2 : pas de bancs volumétriques (le rond de lumière du robot ne les écarte pas)
+		return
 	var mat := FogMaterial.new()
-	mat.density = 0.07
+	mat.density = densite_bancs
 	mat.albedo = Color(1, 0.93, 0.95)
 	mat.edge_fade = 0.4
 	for rang in _grille:
@@ -317,10 +371,66 @@ func _brume() -> void:
 				var fv := FogVolume.new()
 				fv.add_to_group("brume_qui_derive")
 				fv.set_meta("origine", k.centre + Vector3.UP * 1.2)
-				fv.size = Vector3(taille_case * 1.3, 4.0, taille_case * 1.3)
+				fv.size = Vector3(taille_case * 1.3, 4.0, taille_case * 1.3) * (1.0 if brume_partout else 1.5)
 				fv.material = mat
 				fv.position = k.centre + Vector3.UP * 1.2
 				add_child(fv)
+
+
+## La brume épaisse (île 2) : sur chaque case « b », des nappes plus nombreuses, plus hautes et plus
+## opaques que les nappes ordinaires (même shader). Elle déborde sur la mer voisine en voile plus léger
+## (alpha du sommet = force, lu par le shader). Le robot y creuse son rond de lumière (brume_batterie.gd).
+func _brume_epaisse() -> void:
+	var force := {}   # Vector2i(ligne, colonne) -> [force, hauteur du sol]
+	for r in _grille.size():
+		for c in _grille[r].size():
+			var k: Dictionary = _grille[r][c]
+			if not "b" in str(k.suf):
+				continue
+			force[Vector2i(r, c)] = [1.0, k.centre.y]
+			for dr in range(-epaisse_rayon, epaisse_rayon + 1):
+				for dc in range(-epaisse_rayon, epaisse_rayon + 1):
+					var v := Vector2i(r + dr, c + dc)
+					var kv := _case(v.x, v.y)
+					if "b" in str(kv.suf) or epaisse_debord <= 0.0:
+						continue
+					var sol: float = kv.centre.y
+					if kv.niv < 0:
+						sol = 0.0                     # la mer
+					elif sol > hauteur_estran + 0.2:
+						continue                      # la brume ne monte pas sur les plateaux voisins
+					var dist := maxi(absi(dr), absi(dc))
+					var f := epaisse_debord * (1.0 - float(dist - 1) / float(epaisse_rayon))
+					if not force.has(v) or force[v][0] < f:
+						force[v] = [f, sol]
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var d := taille_case * 0.85
+	var lignes := _grille.size()
+	var colonnes: int = _grille[0].size() if lignes > 0 else 0
+	for v: Vector2i in force:
+		var f: float = force[v][0]
+		var sol: float = force[v][1]
+		var centre := Vector3((v.y - colonnes * 0.5 + 0.5) * taille_case, sol, (v.x - lignes * 0.5 + 0.5) * taille_case)
+		for i in epaisse_couches:
+			var t := i / float(epaisse_couches - 1)
+			st.set_color(Color(t, 0, 0, f))
+			var p := centre + Vector3.UP * lerpf(0.2, epaisse_hauteur, t * t)
+			_quad_uv(st, p + Vector3(-d, 0, -d), p + Vector3(d, 0, -d), p + Vector3(d, 0, d), p + Vector3(-d, 0, d))
+	var m := MeshInstance3D.new()
+	m.name = "BrumeEpaisse"
+	m.mesh = st.commit()
+	m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var mat := ShaderMaterial.new()
+	mat.shader = BRUME_NAPPES
+	mat.set_shader_parameter("opacite", epaisse_opacite)
+	mat.set_shader_parameter("couleur", epaisse_couleur)
+	mat.set_shader_parameter("echelle", 0.16)
+	mat.set_shader_parameter("seuil_bas", 0.34)
+	mat.set_shader_parameter("seuil_haut", 0.62)
+	m.material_override = mat
+	m.add_to_group("brume_ile")
+	add_child(m)
 
 
 ## Nappes de brume au ras du sol : 4 couches horizontales sur chaque case de terre (sauf l'abri et
@@ -999,6 +1109,11 @@ func _case_a(p: Vector3) -> Dictionary:
 # --- La vie : pollen, papillons, oiseaux, écume, brume qui dérive ---
 
 func _process(_delta: float) -> void:
+	if suit_la_maree and not Engine.is_editor_hint():
+		var horloge := get_node_or_null("/root/HorlogeMonde")
+		var mer := get_node_or_null("Mer") as Node3D
+		if horloge and mer:
+			mer.position.y = float(horloge.call("niveau_mer"))
 	var t := Time.get_ticks_msec() / 1000.0
 	var i := 0
 	for fv in get_tree().get_nodes_in_group("brume_qui_derive"):

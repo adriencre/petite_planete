@@ -6,6 +6,9 @@ var _eveils: Array[float] = [0.0, 0.0, 0.0, 0.0]
 var _nombre := 0
 ## Combien de fois plus loin on voit quand toutes les zones sont réveillées.
 @export var recul_max: float = 3.5
+## Île 1 : le brouillard de distance recule quand l'île se réveille. Île 2 : décoché (les zones ne servent
+## qu'à creuser la brume épaisse autour des lanternes et balises allumées).
+@export var reculer_brouillard: bool = true
 var _env: Environment
 var _debut0 := -1.0
 var _fin0 := -1.0
@@ -52,7 +55,7 @@ func _maj() -> void:
 ## Le brouillard de distance (Environment, mode profondeur) recule à mesure que l'île se réveille :
 ## île endormie = on voit à ~25 m ; toutes les zones réveillées = on voit `recul_max` fois plus loin.
 func _reculer_brouillard() -> void:
-	if not is_inside_tree() or get_tree().current_scene == null:
+	if not reculer_brouillard or not is_inside_tree() or get_tree().current_scene == null:
 		return
 	if _env == null:
 		for n in get_tree().current_scene.find_children("*", "WorldEnvironment", true, false):

@@ -25,6 +25,7 @@ DOCUMENTS = {
     "mode_emploi": (1200, 1700),
     "ordre_ysolde": (1400, 1000),
     "page_7": (1100, 1400),
+    "cahier_passages": (1800, 1150),
 }
 
 

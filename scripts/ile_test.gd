@@ -21,9 +21,15 @@ func _ready() -> void:
 		joueur.set("_depart", joueur.global_position)
 
 
+## Collisions pour ce qui est posé dans `Monde`. Une scène instanciée qui a déjà ses propres collisions
+## (la maison du quai : « -col » du .glb) est laissée telle quelle : sinon son toit devient solide (une
+## lanterne s'y pose), ses cirés et ses papiers bloquent le robot…
 func _ajouter_collisions(n: Node) -> void:
-	if n is MeshInstance3D and not (n is MultiMeshInstance3D):
-		(n as MeshInstance3D).create_trimesh_collision()
+	if n != monde and n.scene_file_path != "" and not n.find_children("*", "StaticBody3D", true, false).is_empty():
+		return
+	var mi := n as MeshInstance3D
+	if mi and mi.mesh and not mi.mesh.get_faces().is_empty():   # (un mesh sans face : pas de collision possible)
+		mi.create_trimesh_collision()
 	for c in n.get_children():
 		_ajouter_collisions(c)
 

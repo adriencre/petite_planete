@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="mat_ecume"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.96, 0.99, 1, 0.85)
+
+[sub_resource type="TorusMesh" id="anneau"]
+material = SubResource("mat_ecume")
+inner_radius = 0.42
+outer_radius = 0.78
+rings = 10
+ring_segments = 4
+
+[sub_resource type="StandardMaterial3D" id="mat_goutte"]
+shading_mode = 0
+albedo_color = Color(0.93, 0.98, 1, 1)
+
+[sub_resource type="BoxMesh" id="goutte"]
+material = SubResource("mat_goutte")
+size = Vector3(0.09, 0.09, 0.09)
+
+[sub_resource type="Curve" id="taille"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="EffetsMaree" type="Node3D"]
+
+[node name="Ecume" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.18, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+cast_shadow = 0
+mesh = SubResource("anneau")
+
+[node name="Eclaboussures" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 28
+lifetime = 0.6
+mesh = SubResource("goutte")
+emission_shape = 3
+emission_box_extents = Vector3(0.45, 0.05, 0.45)
+direction = Vector3(0, 1, 0)
+spread = 55.0
+initial_velocity_min = 1.4
+initial_velocity_max = 2.6
+scale_amount_curve = SubResource("taille")
+
+[node name="Voile" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="Ecran" type="ColorRect" parent="Voile"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.86, 0.94, 0.96, 0)

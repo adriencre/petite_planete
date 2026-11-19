@@ -65,10 +65,10 @@ func _physics_process(delta: float) -> void:
 			return
 	if "h" in suf or "X" in suf:
 		return
-	if epaisse:
-		b -= vidage_epais * delta
-	elif _dans_la_lumiere():
+	if _dans_la_lumiere():   # la lumière d'une lanterne allumée repousse même la brume épaisse
 		b += recharge_lumiere * delta
+	elif epaisse:
+		b -= vidage_epais * delta
 	else:
 		b -= vidage_leger * delta
 	_joueur.set("batterie", clampf(b, 0.0, 1.0))

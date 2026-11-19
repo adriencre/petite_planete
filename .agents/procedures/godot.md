@@ -21,6 +21,9 @@ Godot n'est pas dans le PATH :
 - L'éditeur garde `project.godot` en mémoire : après une modif sur disque (actions, `[shader_globals]`, scène principale), l'utilisateur doit faire **Projet > Recharger le projet actuel**, sinon l'éditeur peut réécrire sa vieille copie. Avec le MCP godot-ai, préférer `project_manage(settings_set / set_main_scene)`.
 - Nouveaux scripts `class_name` écrits de l'extérieur : l'éditeur peut ne pas les enregistrer (« Could not find type X »). Correctif : arrêter le jeu, `filesystem_manage(op="reimport", paths=[...])` puis `filesystem_manage(op="scan")`, vérifier `.godot/global_script_class_cache.cfg`.
 - Une scène ouverte dans l'éditeur peut être ré-enregistrée après suppression. Pour déplacer/archiver des scènes : demander à l'utilisateur de fermer les onglets (ou l'éditeur), puis `git mv` + `--import` headless.
+- **Nouvelles `@export` d'un script `@tool` modifié de l'extérieur** : après le rechargement à chaud, l'éditeur peut les laisser à `null` (pas à leur valeur par défaut) sur les nœuds déjà ouverts → le script calcule avec `null` (ex. 0 couche de brume). Les régler explicitement via MCP (`node_set_property`) ou rouvrir la scène. Constaté le 2026-11-19 sur `maquette.gd`.
+- **Script ouvert dans un onglet de l'éditeur** : une modif faite sur disque peut être écrasée quand l'éditeur ré-enregistre son tampon (vu le 2026-11-19 sur `maree_estran.gd`, avec une frappe parasite en plus). Pour un script ouvert, éditer avec `script_patch` (MCP godot-ai), qui passe par l'éditeur et vérifie la syntaxe.
+- Pièges GDScript : `bool(null)` plante (« Nonexistent 'bool' constructor ») ; `joueur.embarque` est un nœud (la barque) ou `null`, pas un booléen.
 - **Ne pas fermer deux onglets de scène à la suite via MCP** (`scene_manage(op="close")`) : crash de l'éditeur (0xc0000005) le 2026-11-16.
 
 ## MCP godot-ai
