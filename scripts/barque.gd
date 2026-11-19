@@ -34,6 +34,7 @@ const SONS := preload("res://scripts/sons.gd")
 @export var quille: float = 2.2
 ## On ne s'éloigne pas à plus de ça du centre de l'île (en attendant l'archipel et la brume en mer).
 @export var rayon_max: float = 60.0
+@export var suit_maree := false
 @export_group("Caméra")
 @export var distance_camera: float = 8.0
 @export var hauteur_camera: float = 4.2
@@ -70,7 +71,7 @@ const COQUE: Array[Vector3] = [
 ## Où la corde s'attache sur la barque (à la proue).
 const TAQUET := Vector3(0, 0.4, 1.15)
 
-var maquette: Node        # pour savoir où est la terre (maquette.gd : _case_a)
+@export var maquette: Node        # pour savoir où est la terre (maquette.gd : _case_a)
 var pilotee: bool = false
 var _joueur: CharacterBody3D
 var _robot: Node3D
@@ -103,6 +104,7 @@ var _corde
 var _noue: float = 0.0              # 0 = corde à bord, 1 = nouée à la bitte
 
 var _cable
+var _prise_externe: Marker3D
 var _branche: float = 0.0           # 0 = câble rangé, 1 = fiche dans la prise
 var _lanterne_mat: BaseMaterial3D
 var _lueur: OmniLight3D
@@ -110,6 +112,7 @@ var _sillage: CPUParticles3D
 var _ecume: CPUParticles3D
 var _rayon_brume: float = 0.0
 var _lanterne: Node3D
+@onready var _touche: Label3D = get_node_or_null("ToucheEmbarquement") as Label3D
 
 
 func _ready() -> void:
@@ -121,6 +124,7 @@ func _ready() -> void:
 	_pos = Vector3(global_position.x, 0.0, global_position.z)
 	_cap = rotation.y
 	add_to_group("interactif")
+	add_to_group("barque_qui_flotte")
 	_preparer_lanterne()
 	_sillage = _particules(Vector3(0, 0.05, -1.7), Color(1.0, 0.9, 0.6), Color(1.0, 0.7, 0.35, 0.0), 0.09, 2.6, 90)
 	_ecume = _particules(Vector3(0, 0.08, 1.55), Color(1.0, 1.0, 0.97, 0.9), Color(1.0, 1.0, 1.0, 0.0), 0.07, 0.9, 50)
@@ -230,14 +234,22 @@ func _process(delta: float) -> void:
 			_lumiere(0.0)
 			_appeler(delta)
 	_poser()
+	if _touche:
+		_touche.visible = etat_interaction() == 2
+		if _touche.visible:
+			_touche.global_position = point_appel() + Vector3.UP * 1.0
+			_touche.text = "E   Accoster" if pilotee else "E   Embarquer"
 	if _joueur and _joueur.get("embarque") == self:
 		if _tenir:
 			_tenir_robot()
 		_placer_camera(delta)
+		if is_instance_valid(_prise_externe):
+			_joueur.call("_appliquer_cine")
 	if _cable.visible and _joueur:
 		var poignet: Vector3 = _joueur.call("poignet_droit_monde")
 		_cable.debut = poignet
-		_cable.fin = poignet.lerp(_pos_prise(), _branche)
+		var prise := _prise_externe.global_position if is_instance_valid(_prise_externe) else _pos_prise()
+		_cable.fin = poignet.lerp(prise, _branche)
 	_brume(delta)
 	if _corde.visible:
 		var taquet := global_transform * TAQUET
@@ -251,7 +263,7 @@ func _poser() -> void:
 	var houle_y := sin(_t * 1.1) * 0.05 - _enfonce
 	var tangage := _tangage + sin(_t * 0.6) * 0.02
 	var roulis := _roulis + sin(_t * 0.8 + 1.0) * 0.035
-	global_transform = Transform3D(Basis.from_euler(Vector3(tangage, _cap, roulis)), _pos + Vector3.UP * houle_y)
+	global_transform = Transform3D(Basis.from_euler(Vector3(tangage, _cap, roulis)), _pos + Vector3.UP * (_eau() + houle_y))
 	set_meta("origine", _pos)
 
 
@@ -317,26 +329,40 @@ func _naviguer(delta: float) -> void:
 	_lumiere(t)
 	# un ponton tout près ? sa lanterne s'éveille
 	_ponton_vise = null
+	var distance_visee := distance_amarrage
 	for p in get_tree().get_nodes_in_group("pontons"):
 		var a: Transform3D = p.call("amarre")
-		var proche := _plat(a.origin - _pos).length() < distance_amarrage
-		p.call("signaler", proche)
-		if proche:
+		var distance := _plat(a.origin - _pos).length()
+		p.call("signaler", distance < distance_amarrage)
+		if distance < distance_visee and _amarrage_possible(p):
 			_ponton_vise = p
+			distance_visee = distance
+
+
+func _amarrage_possible(ponton: Node3D) -> bool:
+	return not ponton.has_method("amarrage_possible") or bool(ponton.call("amarrage_possible"))
+
+
+func _eau() -> float:
+	return HorlogeMonde.niveau_mer() if suit_maree else 0.0
 
 
 ## La côte, les rochers, les pontons : la barque s'y appuie et glisse le long, ou rebondit un peu.
 func _heurter() -> void:
 	var espace := get_world_3d().direct_space_state
-	var depuis := _pos + Vector3.UP * 0.3
+	var hauteur := _eau() + 0.3
+	var depuis := _pos + Vector3.UP * hauteur
 	var exclus: Array[RID] = [_joueur.get_rid()]
 	if _corps:
 		exclus.append(_corps.get_rid())
 	for local in COQUE:
-		var w := _pos + _base() * local + Vector3.UP * 0.3
+		var w := _pos + _base() * local + Vector3.UP * hauteur
 		var n := Vector3.ZERO
-		if maquette and int((maquette.call("_case_a", w) as Dictionary).niv) >= 0:
-			n = _plat(_pos - w).normalized()
+		if maquette:
+			var case: Dictionary = maquette.call("_case_a", w)
+			var terrain: Vector3 = case.centre
+			if int(case.niv) >= 0 and (not suit_maree or terrain.y >= _eau() - 0.14):
+				n = _plat(_pos - w).normalized()
 		var q := PhysicsRayQueryParameters3D.create(depuis, w)
 		q.exclude = exclus
 		var touche := espace.intersect_ray(q)
@@ -427,6 +453,42 @@ func _basculer_camera(vers: float) -> Tween:
 	return t
 
 
+## Une bouée ne peut prendre la main que pendant la navigation libre.
+func peut_recharger() -> bool:
+	return pilotee and not _en_cours and _ponton_vise == null
+
+
+func brancher_recharge(prise: Marker3D) -> void:
+	_en_cours = true
+	_vel = Vector3.ZERO
+	_lumiere(0.0)
+	SONS.jouer("clic", _pos_prise(), -8.0)
+	await _deplacer_fiche(0.0, 0.40)
+	_prise_externe = prise
+	await _deplacer_fiche(1.0, 0.62)
+	SONS.jouer("clic", prise.global_position, -5.0, 0.9)
+
+
+func _deplacer_fiche(fraction: float, duree: float) -> void:
+	var geste := create_tween().set_trans(Tween.TRANS_SINE)
+	geste.tween_property(self, "_branche", fraction, duree)
+	await geste.finished
+
+
+func flux_recharge(sens: float, intensite: float) -> void:
+	_cable.materiau.set_shader_parameter("sens", sens)
+	_cable.materiau.set_shader_parameter("flux", intensite)
+
+
+func reprendre_navigation() -> void:
+	flux_recharge(1.0, 0.0)
+	await _deplacer_fiche(0.0, 0.40)
+	_prise_externe = null
+	await _deplacer_fiche(1.0, 0.50)
+	SONS.jouer("clic", _pos_prise(), -8.0)
+	_en_cours = false
+
+
 # ---------------------------------------------------------------- monter / s'amarrer
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -436,7 +498,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not k.pressed or k.echo or k.physical_keycode != KEY_E:
 		return
 	if pilotee:
-		if _ponton_vise:
+		if _ponton_vise and _amarrage_possible(_ponton_vise):
 			get_viewport().set_input_as_handled()
 			_amarrer(_ponton_vise)
 	elif not bool(_joueur.get("cinematique")) and _peut_monter():
@@ -527,6 +589,8 @@ func _embarquer() -> void:
 
 
 func _amarrer(p: Node3D) -> void:
+	if not _amarrage_possible(p):
+		return
 	_en_cours = true
 	p.call("signaler", false)
 	_joueur.set("cinematique", true)

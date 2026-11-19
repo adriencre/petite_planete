@@ -17,6 +17,8 @@ const ENCRE := Color(0.33, 0.24, 0.17)
 const PAPIER := Color(0.97, 0.93, 0.84)
 
 @export var maquette: Node3D
+@export var disponible_au_depart := false
+@export var carte_archipel: Texture2D
 ## Distance (m) à laquelle un lieu est « vu » et entre dans le carnet.
 @export var distance_decouverte: float = 5.0
 ## Rayon (en cases) autour du robot que la carte dessine.
@@ -55,6 +57,7 @@ var _double: int = 0
 var _etait_cinematique := false
 var _echelle := 1.0
 var _en_capture := false
+var _archipel_releve := false
 var _sombre: ColorRect
 var _livre: Control
 var _pages: Array[VBoxContainer] = []
@@ -75,6 +78,8 @@ func _ready() -> void:
 		_reperes = maquette.call("reperes_carnet")
 		_grille = maquette.call("carte_carnet")
 	_charger(Sauvegarde.donnees(cle_sauvegarde()))
+	debloque = debloque or disponible_au_depart
+	_actualiser_papiers_illustres()
 	if exporter_photos:
 		_exporter_photos()
 	# pour guidage.gd : le carnet posé sur l'étagère appelle (lueur, touche E) tant qu'on ne l'a pas pris
@@ -113,13 +118,14 @@ func sauver() -> Dictionary:
 	var vu: Array = []
 	for v in _vu:
 		vu.append([v.x, v.y])
-	return {"debloque": debloque, "lieux": l, "textes": t, "dessins": d, "vu": vu}
+	return {"debloque": debloque, "lieux": l, "textes": t, "dessins": d, "vu": vu, "archipel": _archipel_releve}
 
 
 func _charger(d: Dictionary) -> void:
 	if d.is_empty():
 		return
 	debloque = bool(d.get("debloque", false))
+	_archipel_releve = bool(d.get("archipel", false))
 	if debloque:
 		for o in get_tree().get_nodes_in_group("carnet_objet"):
 			(o as Node3D).visible = false
@@ -194,6 +200,31 @@ func noter_texte(texte: String, signature: String, image: Texture2D = null) -> v
 	_signaler()
 
 
+func noter_archipel() -> void:
+	if carte_archipel and not _archipel_releve:
+		_archipel_releve = true
+		_signaler()
+
+
+func _actualiser_papiers_illustres() -> void:
+	for page in get_tree().get_nodes_in_group("pages_illustrees"):
+		var texte_ancien: String = page.get("texte_ancien")
+		for entree in textes:
+			var meme_texte: bool = entree.texte == page.get("texte") or (not texte_ancien.is_empty() and entree.texte == texte_ancien)
+			if meme_texte and entree.signature == page.get("signature"):
+				entree.texte = page.get("texte")
+				entree.image = page.get("image")
+
+
+## Ajoute une vue observée au carnet. La texture du projet est retrouvée au chargement.
+func noter_croquis(titre: String, image: Texture2D, dessine := false) -> void:
+	for dessin in dessins:
+		if dessin.titre == titre:
+			return
+	dessins.append({"titre": titre, "image": image, "dessine": dessine})
+	_signaler()
+
+
 ## Appelé par fin_sommet.gd pendant le plan sur le Phare.
 func noter_dessin(titre: String) -> void:
 	for d in dessins:
@@ -203,14 +234,12 @@ func noter_dessin(titre: String) -> void:
 	var cam := get_viewport().get_camera_3d()
 	var dessin := _dessin(DESSIN_PHARE)
 	if dessin:
-		dessins.append({"titre": titre, "image": dessin, "dessine": true})
-		_signaler()
+		noter_croquis(titre, dessin, true)
 		return
 	if cam == null:
 		return
 	var image: Texture2D = await _photographier(cam.global_transform, Vector2i(600, 380))
-	dessins.append({"titre": titre, "image": image, "dessine": false})
-	_signaler()
+	noter_croquis(titre, image)
 
 
 # ---------------------------------------------------------------- le « studio » : une photo propre
@@ -456,6 +485,8 @@ func _tourner(sens: int) -> void:
 
 func _toutes_les_pages() -> Array:
 	var pages: Array = [{"type": "carte"}]
+	if _archipel_releve and carte_archipel:
+		pages.append({"type": "archipel"})
 	for l in lieux:
 		if l.croquis != null:
 			pages.append({"type": "lieux", "items": [l]})
@@ -493,6 +524,9 @@ func _remplir() -> void:
 				carte.set("lanternes", ls)
 				carte.set("robot", _joueur.global_position)
 				conteneur.add_child(carte)
+			"archipel":
+				conteneur.add_child(_titre("L’archipel"))
+				conteneur.add_child(_image(carte_archipel, Vector2(420, 420), true))
 			"lieux":
 				for l in page.items:
 					conteneur.add_child(_espace(30))

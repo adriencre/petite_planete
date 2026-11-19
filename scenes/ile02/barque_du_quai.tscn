@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/barque.glb" id="1_coque"]
+[ext_resource type="Script" path="res://scripts/barque.gd" id="2_barque"]
+
+[sub_resource type="BoxShape3D" id="coque"]
+size = Vector3(1.20, 0.70, 3.0)
+
+[node name="BarqueDuQuai" instance=ExtResource("1_coque")]
+script = ExtResource("2_barque")
+suit_maree = true
+rayon_max = 90.0
+
+[node name="CorpsBarque" type="StaticBody3D" parent="."]
+
+[node name="Coque" type="CollisionShape3D" parent="CorpsBarque"]
+position = Vector3(0, 0.05, -0.10)
+shape = SubResource("coque")
+
+[node name="ToucheEmbarquement" type="Label3D" parent="."]
+visible = false
+billboard = 1
+font_size = 46
+outline_size = 7
+pixel_size = 0.005
+modulate = Color(1, 0.89, 0.66, 1)

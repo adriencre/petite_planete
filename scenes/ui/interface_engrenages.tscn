@@ -1,0 +1,219 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/interface_engrenages.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/case_engrenage.tscn" id="2_case"]
+[ext_resource type="FontFile" path="res://assets/fonts/Caveat.ttf" id="3_caveat"]
+
+[sub_resource type="StyleBoxFlat" id="cadre"]
+content_margin_left = 28.0
+content_margin_top = 20.0
+content_margin_right = 28.0
+content_margin_bottom = 24.0
+bg_color = Color(0.097, 0.151, 0.155, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.52, 0.44, 0.31, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_left = 15
+corner_radius_bottom_right = 15
+shadow_color = Color(0.02, 0.04, 0.045, 0.6)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="normal"]
+content_margin_left = 16.0
+content_margin_right = 16.0
+bg_color = Color(0.126, 0.188, 0.19, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28, 0.37, 0.34, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_left = 9
+corner_radius_bottom_right = 9
+
+[sub_resource type="StyleBoxFlat" id="survol"]
+bg_color = Color(0.174, 0.246, 0.232, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.46, 0.51, 0.38, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_left = 9
+corner_radius_bottom_right = 9
+
+[sub_resource type="StyleBoxFlat" id="selection"]
+bg_color = Color(0.174, 0.245, 0.228, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.88, 0.72, 0.46, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_left = 9
+corner_radius_bottom_right = 9
+
+[sub_resource type="StyleBoxFlat" id="focus"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.74, 0.53, 0.75)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_left = 9
+corner_radius_bottom_right = 9
+
+[sub_resource type="Theme" id="theme"]
+default_font_size = 19
+Button/colors/font_color = Color(0.95, 0.90, 0.78, 1)
+Button/colors/font_hover_color = Color(1, 0.93, 0.78, 1)
+Button/colors/font_pressed_color = Color(1, 0.93, 0.78, 1)
+Button/colors/font_disabled_color = Color(0.56, 0.62, 0.58, 1)
+Button/styles/normal = SubResource("normal")
+Button/styles/pressed = SubResource("selection")
+Button/styles/hover_pressed = SubResource("selection")
+Button/styles/hover = SubResource("survol")
+Button/styles/focus = SubResource("focus")
+Button/styles/disabled = SubResource("normal")
+Label/colors/font_color = Color(0.95, 0.90, 0.78, 1)
+
+[node name="InterfaceEngrenages" type="CanvasLayer"]
+layer = 23
+visible = false
+script = ExtResource("1_script")
+
+[node name="Voile" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.043, 0.046, 0.78)
+
+[node name="Panneau" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -546.0
+offset_top = -310.0
+offset_right = 546.0
+offset_bottom = 310.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("theme")
+theme_override_styles/panel = SubResource("cadre")
+
+[node name="Colonne" type="VBoxContainer" parent="Panneau"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Entete" type="HBoxContainer" parent="Panneau/Colonne"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Titre" type="Label" parent="Panneau/Colonne/Entete"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("3_caveat")
+theme_override_font_sizes/font_size = 49
+text = "Mécanisme du Phare"
+
+[node name="Fermer" type="Button" parent="Panneau/Colonne/Entete"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(142, 43)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Fermer  [Échap]"
+
+[node name="Corps" type="HBoxContainer" parent="Panneau/Colonne"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Mecanisme" type="VBoxContainer" parent="Panneau/Colonne/Corps"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Axes" type="HBoxContainer" parent="Panneau/Colonne/Corps/Mecanisme"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="AxeGauche" parent="Panneau/Colonne/Corps/Mecanisme/Axes" instance=ExtResource("2_case")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AxeCentral" parent="Panneau/Colonne/Corps/Mecanisme/Axes" instance=ExtResource("2_case")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AxeDroit" parent="Panneau/Colonne/Corps/Mecanisme/Axes" instance=ExtResource("2_case")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Panneau/Colonne/Corps/Mecanisme"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Tourner" type="Button" parent="Panneau/Colonne/Corps/Mecanisme/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tourner d’un cran"
+
+[node name="Retirer" type="Button" parent="Panneau/Colonne/Corps/Mecanisme/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Retirer la roue"
+
+[node name="Ratelier" type="VBoxContainer" parent="Panneau/Colonne/Corps"]
+custom_minimum_size = Vector2(206, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Titre" type="Label" parent="Panneau/Colonne/Corps/Ratelier"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.83, 0.73, 0.53, 1)
+text = "Râtelier"
+
+[node name="PetiteRoue" parent="Panneau/Colonne/Corps/Ratelier" instance=ExtResource("2_case")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 102)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RoueMoyenne" parent="Panneau/Colonne/Corps/Ratelier" instance=ExtResource("2_case")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 102)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GrandeRoue" parent="Panneau/Colonne/Corps/Ratelier" instance=ExtResource("2_case")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 102)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Instruction" type="Label" parent="Panneau/Colonne"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.80, 0.66, 1)
+theme_override_font_sizes/font_size = 18
+vertical_alignment = 1

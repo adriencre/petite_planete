@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/lunette_iris.gd" id="1_script"]
+[ext_resource type="Shader" path="res://shaders/oculaire.gdshader" id="2_oculaire"]
+[ext_resource type="FontFile" path="res://assets/fonts/Caveat.ttf" id="3_police"]
+[ext_resource type="Texture2D" path="res://assets/vues_lunette/nef.svg" id="4_nef"]
+[ext_resource type="Texture2D" path="res://assets/vues_lunette/ile_blanche.svg" id="5_blanche"]
+[ext_resource type="Texture2D" path="res://assets/vues_lunette/quai_colonie.svg" id="6_quai"]
+[ext_resource type="Texture2D" path="res://assets/vues_lunette/ville_haute.svg" id="7_ville"]
+[ext_resource type="Texture2D" path="res://assets/vues_lunette/mer_vide.svg" id="8_mer"]
+
+[sub_resource type="ShaderMaterial" id="matiere_oculaire"]
+shader = ExtResource("2_oculaire")
+
+[sub_resource type="StandardMaterial3D" id="laiton"]
+albedo_color = Color(0.65, 0.47, 0.27, 1)
+metallic = 0.25
+roughness = 0.69
+
+[sub_resource type="CylinderMesh" id="socle_crante"]
+material = SubResource("laiton")
+top_radius = 0.21
+bottom_radius = 0.24
+height = 0.095
+radial_segments = 12
+
+[node name="LunetteIris" type="Node3D"]
+script = ExtResource("1_script")
+noms = PackedStringArray("Nef", "Île blanche", "Quai de la Colonie", "Ville haute", "")
+orientations = PackedFloat32Array(9, 58, 129, 134, 318)
+vues = Array[Texture2D]([ExtResource("4_nef"), ExtResource("5_blanche"), ExtResource("6_quai"), ExtResource("7_ville"), ExtResource("8_mer")])
+
+[node name="Pivot" type="Marker3D" parent="."]
+position = Vector3(-0.37, 1.31, 0.56)
+
+[node name="SocleCrante" type="MeshInstance3D" parent="."]
+position = Vector3(-0.37, 1.215, 0.56)
+mesh = SubResource("socle_crante")
+
+[node name="Touche" type="Label3D" parent="."]
+visible = false
+position = Vector3(-0.37, 2.0, 0.56)
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.86, 0.56, 1)
+outline_modulate = Color(0.18, 0.12, 0.09, 0.95)
+text = "E · Lunette"
+font = ExtResource("3_police")
+font_size = 46
+outline_size = 8
+pixel_size = 0.008
+
+[node name="Oculaire" type="CanvasLayer" parent="."]
+layer = 17
+visible = false
+
+[node name="Fond" type="ColorRect" parent="Oculaire"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.026, 0.038, 0.043, 0.99)
+
+[node name="Vue" type="TextureRect" parent="Oculaire/Fond"]
+unique_name_in_owner = true
+material = SubResource("matiere_oculaire")
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Nom" type="Label" parent="Oculaire/Fond"]
+unique_name_in_owner = true
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.05
+offset_top = -22.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(0.91, 0.79, 0.59, 1)
+theme_override_fonts/font = ExtResource("3_police")
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+
+[node name="Commandes" type="Label" parent="Oculaire/Fond"]
+anchor_right = 1.0
+anchor_top = 0.95
+anchor_bottom = 0.95
+offset_top = -15.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(0.79, 0.78, 0.70, 1)
+theme_override_fonts/font = ExtResource("3_police")
+theme_override_font_sizes/font_size = 26
+text = "←  →   Tourner     ·     E   Quitter"
+horizontal_alignment = 1

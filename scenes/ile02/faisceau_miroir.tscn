@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="matiere_coeur"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 0.85, 0.5, 0.38)
+emission_enabled = true
+emission = Color(1, 0.68, 0.23, 1)
+emission_energy_multiplier = 1.6
+
+[sub_resource type="CylinderMesh" id="coeur"]
+material = SubResource("matiere_coeur")
+top_radius = 0.065
+bottom_radius = 0.15
+height = 1.0
+radial_segments = 12
+rings = 0
+
+[sub_resource type="StandardMaterial3D" id="matiere_halo"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 0.75, 0.35, 0.12)
+
+[sub_resource type="CylinderMesh" id="halo"]
+material = SubResource("matiere_halo")
+top_radius = 0.12
+bottom_radius = 0.32
+height = 1.0
+radial_segments = 12
+rings = 0
+
+[node name="Faisceau" type="Node3D"]
+visible = false
+
+[node name="Longueur" type="Node3D" parent="."]
+
+[node name="Coeur" type="MeshInstance3D" parent="Longueur"]
+position = Vector3(0, 0, -0.5)
+rotation = Vector3(-1.5707963, 0, 0)
+cast_shadow = 0
+mesh = SubResource("coeur")
+
+[node name="Halo" type="MeshInstance3D" parent="Longueur"]
+position = Vector3(0, 0, -0.5)
+rotation = Vector3(-1.5707963, 0, 0)
+cast_shadow = 0
+mesh = SubResource("halo")

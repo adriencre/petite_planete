@@ -16,6 +16,8 @@ extends Node
 const CHEMIN := "user://partie.json"
 const VERSION := 1
 const SCENE_ILE := "res://scenes/ile_01_maquette.tscn"
+const SCENE_ILE_02 := "res://scenes/ile_02_maquette.tscn"
+const CHEMIN_ILE_02 := "user://partie_ile_02.json"
 const SCENE_TITRE := "res://scenes/ecran_titre.tscn"
 ## Scripts dont des variables statiques sont sauvées (chargés à la demande : pas de preload, ces
 ## scripts utilisent eux-mêmes Sauvegarde).
@@ -27,12 +29,14 @@ const LANTERNE := "res://scripts/lanterne_fleur.gd"
 
 ## L'état lu au lancement de la partie : clé -> Dictionary.
 var _charge: Dictionary = {}
+var _charge_ile_02: Dictionary = {}
 var _minuterie: float = 0.0
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().set_auto_accept_quit(false)
+	_charge_ile_02 = _lire_fichier(CHEMIN_ILE_02)
 
 
 func _notification(what: int) -> void:
@@ -58,17 +62,32 @@ func existe() -> bool:
 
 ## Vrai si on est sur l'île (pas sur l'écran titre).
 func en_partie() -> bool:
-	return get_tree().current_scene != null and get_tree().current_scene.scene_file_path == SCENE_ILE
+	if not is_inside_tree():
+		return false
+	var scene := get_tree().current_scene
+	return scene != null and scene.scene_file_path in [SCENE_ILE, SCENE_ILE_02]
+
+
+func _sur_ile_02(source: Node = null) -> bool:
+	# Certains objets restaurent leur état avant que SceneTree ait fini d'installer la scène.
+	while source != null:
+		if source.scene_file_path == SCENE_ILE_02:
+			return true
+		source = source.get_parent()
+	var scene := get_tree().current_scene
+	return scene != null and scene.scene_file_path == SCENE_ILE_02
 
 
 ## Pour un objet qui va quitter la scène : son dernier état est gardé pour la prochaine sauvegarde.
 func noter(cle: String, etat: Dictionary) -> void:
-	_charge[cle] = etat
+	var charge := _charge_ile_02 if _sur_ile_02() else _charge
+	charge[cle] = etat
 
 
 ## L'état sauvé d'un objet (vide pour une nouvelle partie).
-func donnees(cle: String) -> Dictionary:
-	var d = _charge.get(cle, {})
+func donnees(cle: String, source: Node = null) -> Dictionary:
+	var charge := _charge_ile_02 if _sur_ile_02(source) else _charge
+	var d = charge.get(cle, {})
 	return d if d is Dictionary else {}
 
 
@@ -109,9 +128,11 @@ func quitter() -> void:
 
 
 func lire() -> Dictionary:
-	if not existe():
-		return {}
-	var f := FileAccess.open(CHEMIN, FileAccess.READ)
+	return _lire_fichier(CHEMIN)
+
+
+func _lire_fichier(chemin: String) -> Dictionary:
+	var f := FileAccess.open(chemin, FileAccess.READ)
 	if f == null:
 		return {}
 	var d = JSON.parse_string(f.get_as_text())
@@ -125,7 +146,8 @@ func ecrire() -> void:
 		return
 	# on part de l'état déjà sauvé : un objet qui a quitté la scène (feuille rangée dans le carnet,
 	# luciole partie) garde son dernier état
-	var d: Dictionary = _charge.duplicate(true)
+	var ile_02 := _sur_ile_02()
+	var d := (_charge_ile_02 if ile_02 else _charge).duplicate(true)
 	d["_version"] = VERSION
 	d["_date"] = Time.get_datetime_string_from_system()
 	d["_statiques"] = {
@@ -135,10 +157,13 @@ func ecrire() -> void:
 	for n in get_tree().get_nodes_in_group("sauvegarde"):
 		if n.has_method("cle_sauvegarde") and n.has_method("sauver"):
 			d[str(n.call("cle_sauvegarde"))] = n.call("sauver")
-	var f := FileAccess.open(CHEMIN, FileAccess.WRITE)
+	var f := FileAccess.open(CHEMIN_ILE_02 if ile_02 else CHEMIN, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(d, "\t"))
-	_charge = d   # un retour au titre puis « Continuer » repart de là
+	if ile_02:
+		_charge_ile_02 = d
+	else:
+		_charge = d
 
 
 ## Les « première fois » partagées entre objets (variables statiques des scripts).
@@ -179,8 +204,9 @@ func garder_image(tex: Texture2D, nom: String) -> String:
 	var img := tex.get_image()
 	if img == null:
 		return ""
-	var chemin := "user://images/%s.png" % nom
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://images"))
+	var dossier := "user://images_ile_02" if _sur_ile_02() else "user://images"
+	var chemin := "%s/%s.png" % [dossier, nom]
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dossier))
 	img.save_png(chemin)
 	return chemin
 

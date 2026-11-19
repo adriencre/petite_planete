@@ -11,6 +11,7 @@ Les polices viennent de Google Fonts : il faut Internet au moment du rendu.
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 import numpy as np
 from PIL import Image
@@ -18,7 +19,10 @@ from PIL import Image
 RACINE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SOURCES = os.path.join(RACINE, "tools", "affiches")
 SORTIE = os.path.join(RACINE, "assets", "affiches")
-CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+CHROME = os.environ.get("AFFICHES_CHROME") or (
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    if sys.platform == "darwin" else r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+)
 
 # nom -> (largeur, hauteur) en pixels
 DOCUMENTS = {
@@ -26,6 +30,14 @@ DOCUMENTS = {
     "ordre_ysolde": (1400, 1000),
     "page_7": (1100, 1400),
     "cahier_passages": (1800, 1150),
+    "releves_iris": (1200, 760),
+    "page_tournee_phare": (1000, 1320),
+    "billet_cle_phare": (1100, 755),
+    "dessin_aube_toit": (920, 740),
+    "registre_lanternes": (1520, 1020),
+    "relevements_cartes": (1100, 720),
+    "lettre_iris_ysolde": (1000, 1190),
+    "dessin_aube_brume": (960, 750),
 }
 
 
@@ -41,7 +53,7 @@ def _capture(source_html: str, fond: str, taille: tuple, sortie: str) -> np.ndar
         subprocess.run([
             CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--no-first-run",
             "--force-device-scale-factor=1", f"--window-size={taille[0]},{taille[1]}",
-            "--virtual-time-budget=8000", f"--screenshot={sortie}", "file:///" + temp.replace("\\", "/"),
+            "--virtual-time-budget=8000", f"--screenshot={sortie}", Path(temp).resolve().as_uri(),
         ], check=True, capture_output=True)
     finally:
         os.remove(temp)

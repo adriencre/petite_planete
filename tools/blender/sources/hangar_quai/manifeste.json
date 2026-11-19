@@ -1,0 +1,16 @@
+{
+  "fabrication": "Bâtiment, vantail, bouée et jauge conçus pour Petite Planète dans Blender.",
+  "script": "../../hangar_quai.py",
+  "exports": [
+    "hangar_quai.glb",
+    "vantail_hangar.glb",
+    "bouee_quai.glb",
+    "echelle_maree_quai.glb"
+  ],
+  "accessoires": {
+    "grappin.glb": "Meshy T2.5, géométrie seule, tâche 01a1f48b-375a-73f3-b2dd-ab283f5a65f8",
+    "toile_voile.glb": "Meshy T2.5, géométrie seule, tâche 01a1f48b-5baa-73c7-83ed-34a38926105e"
+  },
+  "droits": "Créations propres au projet et deux géométries générées sous les conditions du compte Meshy du projet.",
+  "validation": "Rendus Blender, vérification des liens de scène et essai de l’ouverture, du seuil, de la coupe et du flotteur dans Godot."
+}

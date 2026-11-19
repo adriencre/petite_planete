@@ -13,12 +13,18 @@ const SONS := preload("res://scripts/sons.gd")  # les effets sonores (assets/aud
 
 @export_multiline var texte: String = ""
 @export var signature: String = ""
+## Texte d'une version précédente, pour reconnaître la feuille déjà lue.
+@export_multiline var texte_ancien: String = ""
 @export var distance_lecture: float = 2.4
+## Écart vertical maximal entre les pieds du robot et la feuille. Zéro garde la portée horizontale.
+@export var hauteur_lecture: float = 0.0
 @export var taille_feuille: Vector2 = Vector2(0.34, 0.26)
 ## Le papier à l'écran : taille du texte et largeur (px). Un long texte (le mode d'emploi, abri.gd) : plus large.
 @export var taille_police: int = 21
 ## Le document dessiné (assets/affiches/*.png). Vide : un papier simple avec le texte.
 @export var image: Texture2D
+## Illustre une feuille déjà distribuée en conservant sa clé de sauvegarde.
+@export var garder_cle_sans_image := false
 ## Après la lecture, le robot la range dans son carnet : elle disparaît du décor.
 @export var ramasser: bool = true
 @export var largeur_papier: float = 560.0
@@ -41,6 +47,8 @@ func _ready() -> void:
 	add_to_group("interactif")
 	add_to_group("pages_lisibles")
 	add_to_group("sauvegarde")
+	if garder_cle_sans_image and image:
+		add_to_group("pages_illustrees")
 	# la lueur : un voile crème lumineux juste au-dessus de la feuille
 	_lueur = MeshInstance3D.new()
 	var q := PlaneMesh.new()
@@ -62,12 +70,18 @@ func _ready() -> void:
 	# « Continuer » : une feuille déjà lue et rangée dans le carnet n'est plus dans le décor
 	deja_lue = bool(Sauvegarde.donnees(cle_sauvegarde()).get("lue", false))
 	if deja_lue and ramasser:
+		hide()
+		# Les anciennes entrées du carnet sont chargées après la deuxième frame.
+		if is_in_group("pages_illustrees"):
+			await get_tree().process_frame
 		queue_free()
 
 
 ## Clé stable : ce qui est écrit (ou dessiné) sur la feuille.
 func cle_sauvegarde() -> String:
-	return "page:%d" % (signature + texte + (image.resource_path if image else "")).hash()
+	var chemin := image.resource_path if image and not garder_cle_sans_image else ""
+	var identifiant := texte_ancien if not texte_ancien.is_empty() else texte
+	return "page:%d" % (signature + identifiant + chemin).hash()
 
 
 func sauver() -> Dictionary:
@@ -77,7 +91,7 @@ func sauver() -> Dictionary:
 ## Pour guidage.gd : 2 = E possible maintenant, 1 = à découvrir (pas encore lue), 0 = rien à signaler.
 ## (`point_appel` : où se pose la lueur dorée.)
 func etat_interaction() -> int:
-	if _joueur == null or _ouverte or _en_cours:
+	if _joueur == null or _ouverte or _en_cours or not is_visible_in_tree():
 		return 0
 	if _a_portee() and not bool(_joueur.get("cinematique")):
 		return 2
@@ -100,7 +114,11 @@ func point_appel() -> Vector3:
 
 
 func _distance() -> float:
+	if _joueur == null or not is_visible_in_tree():
+		return INF
 	var a := _joueur.global_position
+	if hauteur_lecture > 0.0 and absf(a.y - global_position.y) > hauteur_lecture:
+		return INF
 	return Vector2(a.x - global_position.x, a.z - global_position.z).length()
 
 

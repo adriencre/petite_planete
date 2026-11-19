@@ -121,5 +121,7 @@ func _emporte() -> void:
 func _deposer(cible: Vector3) -> void:
 	_joueur.global_position = cible + Vector3.UP * 0.2
 	_joueur.velocity = Vector3.ZERO
+	for barque in get_tree().get_nodes_in_group("barque_qui_flotte"):
+		barque.call("revenir_au_port")
 	var b: float = _joueur.get("batterie")
 	_joueur.set("batterie", maxf(0.05, b - perte_batterie))

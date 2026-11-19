@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720">
+
+<defs>
+  <linearGradient id="ciel" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop stop-color="#8db9c6"/><stop offset="1" stop-color="#eadbc8"/>
+  </linearGradient>
+  <linearGradient id="mer" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop stop-color="#acc9c4"/><stop offset="1" stop-color="#527f87"/>
+  </linearGradient>
+</defs>
+<path fill="url(#ciel)" d="M0 0H720V306H0z"/>
+<path fill="#f6e7d1" opacity=".35" d="m0 174 127-13 113 5 75 15-146 5L0 183zM471 128l85-8 84 8 80 15-121 2z"/>
+<path fill="url(#mer)" d="M0 289H720V720H0z"/>
+<path fill="#cee0cf" opacity=".35" d="m0 326 227-3-56 5H0zm367 9 353-5v6zm-307 73 147-4 100 2-92 5zm333 72 327-11v5l-174 10zm-393 62 180-7-65 9H0zm257 42 210-10 118 3-219 13z"/>
+<path fill="#3c7180" opacity=".25" d="m0 457 160 3-118 4H0zm453-57 267-9v6zm38 138 229-19v8zm-491 74 276-7-106 13H0z"/>
+
+</svg>

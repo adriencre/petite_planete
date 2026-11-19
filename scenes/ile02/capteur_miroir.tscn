@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="bronze"]
+albedo_color = Color(0.32, 0.52, 0.51, 1)
+metallic = 0.35
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="ambre"]
+albedo_color = Color(0.86, 0.57, 0.29, 1)
+metallic = 0.16
+roughness = 0.28
+
+[sub_resource type="CylinderMesh" id="carter"]
+material = SubResource("bronze")
+top_radius = 0.29
+bottom_radius = 0.29
+height = 0.22
+radial_segments = 8
+rings = 0
+
+[sub_resource type="CylinderMesh" id="cellule"]
+material = SubResource("ambre")
+top_radius = 0.19
+bottom_radius = 0.23
+height = 0.066
+radial_segments = 8
+rings = 0
+
+[sub_resource type="CylinderMesh" id="pied"]
+material = SubResource("bronze")
+top_radius = 0.067
+bottom_radius = 0.12
+height = 1.66
+radial_segments = 6
+rings = 0
+
+[sub_resource type="Gradient" id="degrade"]
+offsets = PackedFloat32Array(0, 0.24, 1)
+colors = PackedColorArray(1, 0.93, 0.65, 1, 1, 0.71, 0.28, 0.8, 1, 0.55, 0.15, 0)
+
+[sub_resource type="GradientTexture2D" id="halo"]
+gradient = SubResource("degrade")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="CapteurMiroir" type="Marker3D"]
+
+[node name="Pied" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.91, -0.19)
+mesh = SubResource("pied")
+
+[node name="Carter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.16)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("carter")
+
+[node name="Cellule" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.039)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("cellule")
+
+[node name="Voyant" type="Sprite3D" parent="."]
+visible = false
+pixel_size = 0.014
+billboard = 1
+modulate = Color(3, 1.8, 0.8, 1)
+texture = SubResource("halo")

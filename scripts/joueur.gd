@@ -42,6 +42,8 @@ extends CharacterBody3D
 
 ## Mode cinématique : plus de contrôle, le regard est guidé vers `regard_cible`.
 var cinematique := false
+## Sur l’échelle, la scène place le robot au rythme des barreaux.
+var sur_echelle := false
 var regard_cible := Vector3.ZERO
 ## Caméra de mise en scène quand on voit le robot (vue de dessus, 3e personne) :
 ## 0 = caméra de jeu, 1 = plan imposé depuis `cine_position` vers `cine_cible`.
@@ -195,13 +197,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventKey and event.pressed and not event.echo:
 		var k := event as InputEventKey
-		if k.physical_keycode == KEY_V:   # (Échap : le menu pause, menu_pause.gd)
+		if k.physical_keycode == KEY_V and not sur_echelle:   # (Échap : le menu pause, menu_pause.gd)
 			premiere_personne = not premiere_personne
 
 
 func _physics_process(delta: float) -> void:
 	if embarque:
 		velocity = Vector3.ZERO
+		_gerer_batterie(delta)
+		return
+	if sur_echelle:
+		_pos_prec = global_position
+		var vers := regard_cible - global_position
+		modele.rotation.y = lerp_angle(modele.rotation.y, atan2(vers.x, vers.z), 1.0 - exp(-8.0 * delta))
+		_placer_camera(delta)
+		_appliquer_cine()
 		_gerer_batterie(delta)
 		return
 	var dir_input := Vector2(

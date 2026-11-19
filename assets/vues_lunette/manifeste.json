@@ -1,0 +1,17 @@
+{
+  "origine": "Illustrations SVG originales réalisées pour Petite Planète avec Codex, sans source externe.",
+  "droits": "Régies par les droits du projet, sans dépendance tierce.",
+  "validation": "Rendu SVG contrôlé hors moteur, cadrage Godot à vérifier.",
+  "dimensions": [
+    720,
+    720
+  ],
+  "transparence": false,
+  "vues": [
+    "ile_blanche.svg",
+    "mer_vide.svg",
+    "nef.svg",
+    "quai_colonie.svg",
+    "ville_haute.svg"
+  ]
+}

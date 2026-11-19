@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Relèvements du Phare</title>
+<link rel="stylesheet" href="commun.css">
+<style>
+html, body { margin: 0; width: 100%; height: 100%; background: transparent; }
+.carte { box-sizing: border-box; position: absolute; inset: 5%; padding: 34px 47px; overflow: hidden;
+  color: #63472f; background: #eed8ac; border: 2px solid #9f7349; border-radius: 8px 13px 7px 11px;
+  box-shadow: inset 0 0 64px #a66d3b44; }
+h1 { font: 700 78px Caveat, cursive; margin: 0 0 2px; }
+.ligne { display: grid; grid-template-columns: 49% 51%; align-items: center; }
+svg { display: block; width: 100%; height: 450px; }
+dl { margin: 6px 12px 0 26px; font: 700 44px Caveat, cursive; }
+dl div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  padding: 10px 4px; border-bottom: 1px solid #ad8c59; }
+dd { margin: 0; color: #926131; }
+</style>
+</head>
+<body>
+<main class="carte">
+<h1>Relèvements du Phare</h1>
+<div class="ligne">
+<svg viewBox="0 0 450 450" aria-hidden="true">
+  <circle cx="225" cy="223" r="165" fill="#e6c98f" stroke="#9c754b" stroke-width="3"/>
+  <circle cx="225" cy="223" r="147" fill="none" stroke="#a28354" stroke-dasharray="2 7.6" stroke-width="10"/>
+  <path d="M225 61 247 198 387 223 248 247 225 386 201 248 64 223 201 199Z"
+        fill="#af7750" stroke="#694a32" stroke-width="3"/>
+  <path d="M225 61 225 223 201 199ZM387 223 225 223 248 247ZM225 386 225 223 201 248ZM64 223 225 223 201 199Z"
+        fill="#f1e2bb"/>
+  <circle cx="225" cy="223" r="12" fill="#6b735b" stroke="#664e35" stroke-width="2"/>
+  <g fill="none" stroke="#5c7466" stroke-width="4" stroke-linecap="round">
+    <path d="M225 223 330 157M225 223 321 301M225 223 244 101M225 223 106 187"/>
+  </g>
+  <g fill="#5c7466">
+    <circle cx="330" cy="157" r="6"/><circle cx="321" cy="301" r="6"/>
+    <circle cx="244" cy="101" r="6"/><circle cx="106" cy="187" r="6"/>
+  </g>
+  <path d="M212 48V23l25 25V23" fill="none" stroke="#694a32" stroke-width="4" stroke-linecap="round"/>
+</svg>
+<dl>
+  <div><dt>Colonie</dt><dd>129°</dd></div>
+  <div><dt>Île blanche</dt><dd>058°</dd></div>
+  <div><dt>Nef</dt><dd>009°</dd></div>
+  <div><dt>Centrale</dt><dd>287°</dd></div>
+</dl>
+</div>
+</main>
+</body></html>

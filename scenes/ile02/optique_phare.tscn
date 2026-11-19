@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/rayon_lumiere.gdshader" id="1_rayon"]
+
+[sub_resource type="ShaderMaterial" id="matiere_faisceau"]
+resource_local_to_scene = true
+shader = ExtResource("1_rayon")
+shader_parameter/couleur = Color(1, 0.79, 0.43, 1)
+shader_parameter/hauteur = 118.0
+shader_parameter/intensite = 0.0
+shader_parameter/vitesse_pulse = 0.54
+
+[sub_resource type="CylinderMesh" id="faisceau"]
+material = SubResource("matiere_faisceau")
+top_radius = 5.6
+bottom_radius = 0.61
+height = 118.0
+radial_segments = 18
+rings = 0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="ShaderMaterial" id="matiere_montee"]
+shader = ExtResource("1_rayon")
+shader_parameter/couleur = Color(1, 0.61, 0.25, 1)
+shader_parameter/hauteur = 1.0
+shader_parameter/intensite = 0.68
+
+[sub_resource type="CylinderMesh" id="montee"]
+material = SubResource("matiere_montee")
+top_radius = 0.89
+bottom_radius = 0.25
+height = 1.0
+radial_segments = 12
+rings = 0
+cap_top = false
+cap_bottom = false
+
+[node name="Optique" type="Node3D"]
+position = Vector3(0, 15.56, 0)
+
+[node name="Montee" type="MeshInstance3D" parent="."]
+visible = false
+cast_shadow = 0
+mesh = SubResource("montee")
+
+[node name="AxeFaisceau" type="Node3D" parent="."]
+visible = false
+
+[node name="Inclinaison" type="Node3D" parent="AxeFaisceau"]
+
+[node name="Rayon" type="MeshInstance3D" parent="AxeFaisceau/Inclinaison"]
+position = Vector3(0, 0, -59.5)
+rotation = Vector3(-1.5707963, 0, 0)
+cast_shadow = 0
+mesh = SubResource("faisceau")
+
+[node name="Projecteur" type="SpotLight3D" parent="AxeFaisceau/Inclinaison"]
+position = Vector3(0, 0, -0.5)
+light_color = Color(1, 0.79, 0.48, 1)
+light_energy = 0.0
+spot_range = 118.0
+spot_attenuation = 0.7
+spot_angle = 7.5
+spot_angle_attenuation = 1.7
+
+[node name="CoeurLentille" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.73, 0.35, 1)
+light_energy = 0.0
+omni_range = 7.2

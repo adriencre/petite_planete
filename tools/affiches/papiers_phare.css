@@ -1,0 +1,43 @@
+.feuille {
+  inset: 38px 48px 45px;
+  padding: 68px 85px;
+  font: 500 49px/1.15 Caveat, cursive;
+  clip-path: polygon(0 1%, 24% 0, 57% 1%, 81% 0, 99.5% 1%, 100% 65%, 99% 100%, 83% 99%, 46% 100%, 19% 99.5%, 0 100%);
+  transform: rotate(-1deg);
+}
+.feuille::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='210' height='210'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.32'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply; opacity: .38; pointer-events: none;
+}
+.feuille > * { position: relative; }
+p + p { margin-top: .63em; }
+h1 { font: 600 63px/1 Caveat, cursive; margin-bottom: .52em; }
+.signe { display: block; text-align: right; font-size: 1.12em; margin-top: .43em; }
+.tournee { padding: 104px 65px 52px 134px; color: #3f322b;
+  background: radial-gradient(ellipse at 93% 89%, #aa865e78, transparent 29%),
+    linear-gradient(90deg, transparent 98px, #b073675e 99px 101px, transparent 102px),
+    repeating-linear-gradient(0deg, transparent 0 55px, #6b98a641 56px 57px),
+    linear-gradient(115deg, #f6ecd1, #ece0bd 84%, #d9c69b); }
+.tournee::after { content: ""; position: absolute; inset: 48px auto 52px 21px; width: 42px;
+  background: radial-gradient(ellipse at 17px 27px, #8c745548 0 8px, transparent 10px) top left / 40px 82px repeat-y; }
+.billet { transform: rotate(1.6deg); padding: 81px 107px;
+  background: linear-gradient(90deg, transparent 32%, #8a694321 33%, #fff7d961 33.4%, transparent 34%, transparent 65.4%, #92734b25 66%, #fff8df61 66.4%, transparent 67%),
+    radial-gradient(ellipse at 5% 80%, #b88c5470, transparent 40%), linear-gradient(100deg,#e6d3ad,#f7eacd 62%,#e5cda5); }
+.billet aside { margin-top: .78em; margin-left: 21%; transform: rotate(-3deg); color: #574262; font-size: 43px; border-bottom: 2px solid #6c567b55; }
+.lettre { padding: 144px 102px 62px; font-family: 'Dancing Script', cursive; font-size: 48px; line-height: 1.24; color: #46334e;
+  background: linear-gradient(0deg, transparent 33%, #8a694320 33.3%, #fff7d989 33.6%, transparent 34.4%, transparent 64%, #92734b25 64.4%, #fff8df61 64.7%, transparent 65.4%), radial-gradient(ellipse at 74% 99%, #ae895d47, transparent 39%), linear-gradient(101deg,#e7d3b1,#faf0d9 71%,#e6d1ad); }
+.lettre .signe { margin-top: .9em; }
+.dessin { padding: 31px 52px 50px; text-align: center; color: #534460;
+  background: radial-gradient(ellipse at 1% 90%,#c3a5766b, transparent 37%), linear-gradient(110deg,#f5e7c7,#fff3d9 53%,#eddbb4); }
+.dessin svg { display: block; width: 100%; height: 84%; margin: auto; }
+.dessin p { font-size: 48px; transform: rotate(-2deg); }
+.registre { inset: 44px 49px; padding: 45px 62px; color: #3c3440; transform: rotate(.7deg);
+  border: 16px solid #65565c; border-radius: 28px; clip-path: none;
+  background: linear-gradient(90deg,#d1b98c 0,#faf0d3 4%,#eddbb4 46%,#c2a783 49%,#a58a61 50%,#d6be95 51%,#f5e8c9 55%,#f7edd1 96%,#c8ad81 100%); }
+.registre section { display: grid; grid-template-columns: 1fr 1fr; gap: 110px; }
+.registre h1 { font-family: 'IM Fell English SC',serif; font-size: 64px; margin-bottom: 30px; }
+.registre article { border-top: 3px double #8c6e6c; }
+.registre p { font-size: 47px; min-height: 172px; margin: 0; padding: 19px 5px 14px; border-bottom: 2px solid #8a70664c; }
+.registre b { display: block; font-size: 40px; color: #775049; }

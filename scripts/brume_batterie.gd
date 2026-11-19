@@ -10,6 +10,7 @@ extends Node
 ## - La lanterne de proue de la barque repousse aussi la brume (barque.gd : bulle_lanterne, uniforme « barque »).
 
 @export var maquette: Node3D
+@export var phare: Node3D
 ## Batterie perdue par seconde dans la brume légère (0,006 ≈ 2 min 45 pour une batterie pleine).
 @export var vidage_leger: float = 0.006
 ## Batterie perdue par seconde dans la brume épaisse (0,05 ≈ 20 s).
@@ -45,6 +46,8 @@ func _physics_process(delta: float) -> void:
 	var k: Dictionary = maquette.call("_case_a", p)
 	var suf: String = str(k.get("suf", ""))
 	var epaisse := "b" in suf
+	if epaisse and phare and bool(phare.call("dissipe_brume", p)):
+		epaisse = false
 	var b: float = _joueur.get("batterie")
 	# le rond de lumière : il suit la batterie, se resserre dans la brume épaisse, disparaît antenne éteinte
 	var cible := lerpf(rayon_vide, rayon_plein, clampf(b, 0.0, 1.0)) * (reduction_epaisse if epaisse else 1.0)

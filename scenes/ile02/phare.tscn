@@ -1,0 +1,296 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/phare_coupe.gd" id="1_coupe"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/phare.glb" id="2_modele"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="3_page"]
+[ext_resource type="Texture2D" path="res://assets/affiches/releves_iris.png" id="4_releves"]
+
+[ext_resource type="Script" path="res://scripts/echelle_iris.gd" id="5_echelle"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/optique_phare.tscn" id="6_optique"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/capteur_miroir.tscn" id="7_capteur"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/engrenages_phare.tscn" id="8_engrenages"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/miroir_manivelle.glb" id="9_poignee"]
+[ext_resource type="Script" path="res://scripts/porte_cartes.gd" id="10_porte"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/cle_salle_cartes.glb" id="11_cle"]
+[ext_resource type="Texture2D" path="res://assets/affiches/page_tournee_phare.png" id="tournee"]
+[ext_resource type="Texture2D" path="res://assets/affiches/billet_cle_phare.png" id="billet"]
+[ext_resource type="Texture2D" path="res://assets/affiches/dessin_aube_toit.png" id="dessin_toit"]
+[ext_resource type="Texture2D" path="res://assets/affiches/registre_lanternes.png" id="registre"]
+[ext_resource type="Texture2D" path="res://assets/affiches/relevements_cartes.png" id="relevements_cartes"]
+[ext_resource type="Texture2D" path="res://assets/affiches/lettre_iris_ysolde.png" id="lettre"]
+[ext_resource type="Texture2D" path="res://assets/affiches/dessin_aube_brume.png" id="dessin_brume"]
+
+[ext_resource type="PackedScene" path="res://scenes/ile02/lunette_iris.tscn" id="lunette_iris"]
+
+[sub_resource type="BoxShape3D" id="zone_tour"]
+size = Vector3(6.3, 13.65, 6.9)
+
+[sub_resource type="BoxShape3D" id="zone_aile"]
+size = Vector3(3.54, 5.4, 4.48)
+
+[sub_resource type="BoxShape3D" id="zone_chambre"]
+size = Vector3(3.20, 2.15, 3.76)
+
+[sub_resource type="CylinderShape3D" id="zone_galerie"]
+height = 2.5
+radius = 3.79
+
+[sub_resource type="BoxShape3D" id="porte_cartes"]
+size = Vector3(1.17, 2.39, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="bronze_commande"]
+albedo_color = Color(0.27, 0.41, 0.39, 1)
+metallic = 0.4
+roughness = 0.46
+
+[sub_resource type="CylinderMesh" id="borne_commande"]
+material = SubResource("bronze_commande")
+top_radius = 0.16
+bottom_radius = 0.25
+height = 0.84
+radial_segments = 8
+rings = 0
+
+[node name="Phare" type="Node3D"]
+script = ExtResource("1_coupe")
+a_effacer = PackedStringArray("Coupe")
+duree_fondu = 0.8
+
+[node name="Modele" parent="." instance=ExtResource("2_modele")]
+
+[node name="Engrenages" parent="." instance=ExtResource("8_engrenages")]
+
+[node name="Optique" parent="." instance=ExtResource("6_optique")]
+
+[node name="ReceptionOuest" parent="." instance=ExtResource("7_capteur")]
+position = Vector3(-3.1, 15.56, 0.9)
+rotation = Vector3(0.4114353, -1.5814911, 0)
+
+[node name="CommandeLentille" type="Node3D" parent="."]
+position = Vector3(-1.78, 13.63, 1.68)
+
+[node name="Borne" type="MeshInstance3D" parent="CommandeLentille"]
+position = Vector3(0, 0.42, 0)
+mesh = SubResource("borne_commande")
+
+[node name="Manivelle" parent="CommandeLentille" instance=ExtResource("9_poignee")]
+position = Vector3(0, 0.71, 0.16)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="Touche" type="Label3D" parent="CommandeLentille"]
+position = Vector3(0, 1.29, 0.17)
+visible = false
+billboard = 1
+modulate = Color(1, 0.86, 0.57, 1)
+outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
+pixel_size = 0.004
+font_size = 46
+outline_size = 6
+text = "E   Orienter la lentille"
+
+[node name="Graduation" type="Label3D" parent="CommandeLentille"]
+position = Vector3(0, 0.96, 0.12)
+visible = false
+billboard = 1
+modulate = Color(1, 0.91, 0.68, 1)
+outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
+pixel_size = 0.0035
+font_size = 48
+outline_size = 6
+
+[node name="Interieur" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="Tour" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(0, 6.85, 0)
+shape = SubResource("zone_tour")
+
+[node name="AileEtEscalier" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(4.51, 2.65, -0.07)
+shape = SubResource("zone_aile")
+
+[node name="ChambreIris" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(7.94, 5.10, -0.88)
+shape = SubResource("zone_chambre")
+
+[node name="Galerie" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(0, 14.25, 0)
+shape = SubResource("zone_galerie")
+
+[node name="LumiereDeLAtelier" type="OmniLight3D" parent="."]
+position = Vector3(-0.8, 3.55, -1.3)
+light_color = Color(1, 0.83, 0.64, 1)
+light_energy = 0.55
+omni_range = 4.8
+
+[node name="RepereSeuil" type="Marker3D" parent="."]
+position = Vector3(0, 0.35, 3.45)
+
+[node name="ReperePalierIris" type="Marker3D" parent="."]
+position = Vector3(5.2, 4.1, 1.7)
+
+[node name="ReperePiedMonteeCartes" type="Marker3D" parent="."]
+position = Vector3(-2.11, 4.1, 0.77)
+
+[node name="ReperePalierCartes" type="Marker3D" parent="."]
+position = Vector3(0, 8.95, -2.27)
+
+[node name="RepereSeuilGalerie" type="Marker3D" parent="."]
+position = Vector3(2.16, 13.62, -0.77)
+
+[node name="PorteCartesVerrouillee" type="StaticBody3D" parent="."]
+position = Vector3(0.3419, 10.145, -1.4810)
+rotation = Vector3(0, -0.226893, 0)
+script = ExtResource("10_porte")
+
+[node name="Pivot" type="Node3D" parent="PorteCartesVerrouillee"]
+position = Vector3(-0.48, 0, 0)
+
+[node name="CleDansSerrure" type="Node3D" parent="PorteCartesVerrouillee"]
+position = Vector3(0.27, 0, -0.42)
+visible = false
+
+[node name="Cle" parent="PorteCartesVerrouillee/CleDansSerrure" instance=ExtResource("11_cle")]
+rotation = Vector3(0, -1.570796, 0)
+
+[node name="Invite" type="Label3D" parent="PorteCartesVerrouillee"]
+position = Vector3(0, 0.34, -0.55)
+visible = false
+billboard = 1
+font_size = 48
+outline_size = 7
+pixel_size = 0.004
+modulate = Color(1, 0.89, 0.68, 1)
+
+[node name="Forme" type="CollisionShape3D" parent="PorteCartesVerrouillee"]
+shape = SubResource("porte_cartes")
+
+[node name="PlaquePalier" type="Label3D" parent="PorteCartesVerrouillee"]
+position = Vector3(0, 0.61, -0.116)
+rotation = Vector3(0, 3.141593, 0)
+modulate = Color(1, 0.9, 0.66, 1)
+text = "Salle des cartes"
+font_size = 52
+outline_size = 3
+pixel_size = 0.0018
+
+[node name="PlaqueInterieure" type="Label3D" parent="PorteCartesVerrouillee"]
+position = Vector3(0, 0.61, 0.116)
+modulate = Color(1, 0.9, 0.66, 1)
+text = "Salle des cartes"
+font_size = 52
+outline_size = 3
+pixel_size = 0.0018
+
+[node name="EchelleIris" type="Node3D" parent="."]
+script = ExtResource("5_echelle")
+
+[node name="Galerie" type="Marker3D" parent="EchelleIris"]
+position = Vector3(3.42, 13.62, 1.25)
+
+[node name="Toit" type="Marker3D" parent="EchelleIris"]
+position = Vector3(4.39, 6.38, 1.25)
+
+[node name="Barreaux" type="Marker3D" parent="EchelleIris"]
+position = Vector3(4.06, 6.57, 1.25)
+
+[node name="DocumentsBureau" type="Node3D" parent="."]
+
+[node name="Page1" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(-1.23, 5.489, -0.89)
+script = ExtResource("3_page")
+texte = "Tournée du Phare, jour 112.\n\nPour les nouveaux, puisque personne ne lit les consignes : la lanterne du cap Est donne toute la lumière. Le premier miroir l'envoie vers le Large. Si une glace dévie, le rayon se perd avant d'atteindre le Phare.\n\nJ'ai nettoyé les vitres du Cap Est. Le miroir du Large a encore bougé avec la tempête. N'allez jamais au Large à marée montante : la mer ne prévient pas.\n\nRappel : on ne reprend pas la lumière devant les arbres roses. Ils ne le supportent pas."
+texte_ancien = "Tournée du Phare, jour 112.\n\nPour les nouveaux, puisque personne ne lit les consignes : le Phare ne fait pas de lumière. Il la rassemble. Les trois caps la lui renvoient, quand les miroirs sont bien tournés. Si un seul cap s'éteint, la lentille ne voit rien.\n\nJ'ai nettoyé les vitres du Cap Est. Le miroir du Large a encore bougé avec la tempête. N'allez jamais au Large à marée montante : la mer ne prévient pas.\n\nRappel : on ne reprend pas la lumière devant les arbres roses. Ils ne le supportent pas."
+signature = "G."
+distance_lecture = 1.85
+hauteur_lecture = 1.92
+taille_feuille = Vector2(0.31, 0.41)
+image = ExtResource("tournee")
+garder_cle_sans_image = true
+
+[node name="RelevesIris" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(-0.35, 5.489, -0.91)
+script = ExtResource("3_page")
+texte = "Plan des miroirs : Cap Est → Cap du Large. Le reste du tracé est effacé.\n\nBasse mer : six tours du faisceau. Pas un de plus.\nPleine lune : plus bas que tout. Le vieux port respire."
+distance_lecture = 1.85
+hauteur_lecture = 1.92
+taille_feuille = Vector2(0.52, 0.33)
+ramasser = false
+image = ExtResource("4_releves")
+
+[node name="NoteDeLaCle" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(0.43, 5.489, -0.75)
+script = ExtResource("3_page")
+texte = "J'ai laissé la clé de la salle des cartes dans la cabine, à bord du ravitailleur. Je la reprendrai à la prochaine basse mer. Pas sans le Phare : la brume du large y est trop épaisse.\n\n[i]Les nuits de pleine lune, le Phare chante, et je vois ma maison.[/i]"
+distance_lecture = 1.85
+hauteur_lecture = 1.92
+taille_feuille = Vector2(0.43, 0.295)
+image = ExtResource("billet")
+garder_cle_sans_image = true
+ramasser = false
+
+[node name="DessinDAube" type="Node3D" parent="DocumentsBureau"]
+position = Vector3(6.077, 5.457, 1.58)
+rotation = Vector3(1.570796, -1.570796, 0)
+script = ExtResource("3_page")
+texte = "Pour Iris. Ma cachette, c'est par le toit."
+distance_lecture = 1.15
+hauteur_lecture = 1.96
+taille_feuille = Vector2(0.34, 0.2735)
+image = ExtResource("dessin_toit")
+garder_cle_sans_image = true
+ramasser = false
+
+[node name="DocumentsCartes" type="Node3D" parent="."]
+
+[node name="Relevements" type="Node3D" parent="DocumentsCartes"]
+transform = Transform3D(0, 0, -1, 1, 0, 0, 0, -1, 0, -1.11, 10.78, 0.107)
+script = ExtResource("3_page")
+texte = "Relèvements du Phare\n\nColonie · 129°\nÎle blanche · 058°\nNef · 009°\nCentrale · 287°"
+distance_lecture = 0.98
+hauteur_lecture = 2.06
+taille_feuille = Vector2(0.75, 0.49)
+image = ExtResource("relevements_cartes")
+ramasser = false
+
+[node name="RegistreDesLanternes" type="Node3D" parent="DocumentsCartes"]
+position = Vector3(-0.1597, 10.172, 0.6918)
+rotation = Vector3(0, -0.226893, 0)
+script = ExtResource("3_page")
+texte = "Registre des lanternes\n\nRéveil : l'abri, la veilleuse, le sommet. Rien à signaler. Le jardinier dort.\n\nColonie : 40… 90… 160… 310.\n\nÎle blanche : on m'en demande encore. Ils disent que c'est pour soigner. Je n'y crois plus.\n\nNef : aucune, en attendant le départ.\n\nCentrale : ne pas toucher. Tavin s'en occupe.\n\n⌂"
+distance_lecture = 1.35
+hauteur_lecture = 1.75
+taille_feuille = Vector2(0.73, 0.49)
+image = ExtResource("registre")
+garder_cle_sans_image = true
+ramasser = false
+
+
+[node name="DocumentsChambre" type="Node3D" parent="."]
+visible = false
+
+[node name="LettreAYsolde" type="Node3D" parent="DocumentsChambre"]
+position = Vector3(8.85, 4.807, -2.28)
+script = ExtResource("3_page")
+texte = "Ysolde,\n\nTu me demandes encore des lanternes pour l'île blanche. Je ne les poserai pas.\n\nJ'ai vu ce qu'elles font là-bas. Demande à Saule ce qu'elle a vu, elle.\n\nÉteins une seule nuit, avec moi. Une seule. Tu verras ce que je vois."
+signature = "Iris"
+distance_lecture = 1.28
+hauteur_lecture = 1.20
+taille_feuille = Vector2(0.28, 0.333)
+image = ExtResource("lettre")
+
+[node name="DessinDAubeDansLaChambre" type="Node3D" parent="DocumentsChambre"]
+position = Vector3(8.19, 5.16, -2.647)
+rotation = Vector3(1.570796, 0, 0)
+script = ExtResource("3_page")
+texte = "Pour Iris. Nos amis du noir."
+distance_lecture = 1.25
+hauteur_lecture = 1.65
+taille_feuille = Vector2(0.39, 0.305)
+image = ExtResource("dessin_brume")
+ramasser = false
+
+[node name="LunetteIris" parent="." instance=ExtResource("lunette_iris")]
+position = Vector3(-1.26, 13.62, 1.87)

@@ -4,6 +4,18 @@
 [ext_resource type="PackedScene" uid="uid://clpp6kqimndyi" path="res://assets/models/ile02/terrain_ile_02.glb" id="5_m0eg5"]
 [ext_resource type="PackedScene" uid="uid://b4jkbjvfoynwl" path="res://assets/models/lanterne_tulipe.glb" id="6_0v5bu"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/maison_quai.tscn" id="6_53bsb"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/phare.tscn" id="phare_ile_02"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/miroir_cap.tscn" id="miroir_cap"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/hangar_quai.tscn" id="hangar_quai"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/bouee_quai.tscn" id="bouee_quai"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/echelle_maree_quai.glb" id="echelle_quai"]
+[ext_resource type="Script" path="res://scripts/reseau_miroirs.gd" id="reseau_miroirs"]
+[ext_resource type="PackedScene" path="res://assets/models/pierre_soleil_meshy.glb" id="modele_pierre"]
+[ext_resource type="Script" path="res://scripts/pierre_soleil.gd" id="script_pierre"]
+[ext_resource type="PackedScene" path="res://assets/models/ancien_corps.glb" id="modele_corps"]
+[ext_resource type="Texture2D" path="res://assets/affiches/carte_archipel.svg" id="carte_archipel"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/epave_ravitailleur.tscn" id="modele_epave"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/barque_du_quai.tscn" id="barque_du_quai"]
 [ext_resource type="Script" uid="uid://du5i4605732ws" path="res://scripts/lanterne_fleur.gd" id="7_q2ixi"]
 [ext_resource type="Script" uid="uid://c7hrsv5akempp" path="res://scripts/brume_batterie.gd" id="9_m8apa"]
 [ext_resource type="Script" uid="uid://b05k7c4lsyakt" path="res://scripts/maree_estran.gd" id="10_53bsb"]
@@ -35,53 +47,8 @@ shader_parameter/hauteur_niveau = 2.5
 shader_parameter/hauteur_sable = 1.0
 shader_parameter/epaisseur_mousse = 0.3
 
-[sub_resource type="StandardMaterial3D" id="m_blanc"]
-albedo_color = Color(0.94, 0.92, 0.88, 1)
-roughness = 0.9
-
-[sub_resource type="CylinderMesh" id="tour"]
-material = SubResource("m_blanc")
-top_radius = 2.4
-bottom_radius = 3.0
-height = 18.0
-radial_segments = 12
-
-[sub_resource type="StandardMaterial3D" id="m_rouille"]
-albedo_color = Color(0.74, 0.44, 0.34, 1)
-roughness = 0.9
-
-[sub_resource type="CylinderMesh" id="bande"]
-material = SubResource("m_rouille")
-top_radius = 2.86
-bottom_radius = 2.9
-height = 1.6
-radial_segments = 12
-
-[sub_resource type="StandardMaterial3D" id="m_verre"]
-albedo_color = Color(0.7, 0.8, 0.85, 1)
-metallic = 0.4
-roughness = 0.2
-
-[sub_resource type="CylinderMesh" id="lanterne_phare"]
-material = SubResource("m_verre")
-top_radius = 2.0
-bottom_radius = 2.0
-height = 2.6
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="toit_phare"]
-material = SubResource("m_rouille")
-top_radius = 0.0
-bottom_radius = 2.6
-height = 1.6
-radial_segments = 12
-
 [sub_resource type="StandardMaterial3D" id="m_sombre"]
 albedo_color = Color(0.12, 0.11, 0.15, 1)
-
-[sub_resource type="BoxMesh" id="porte_semeur"]
-material = SubResource("m_sombre")
-size = Vector3(1.6, 3, 0.6)
 
 [sub_resource type="StandardMaterial3D" id="m_bois"]
 albedo_color = Color(0.58, 0.44, 0.33, 1)
@@ -104,26 +71,6 @@ radial_segments = 5
 albedo_color = Color(0.62, 0.62, 0.68, 1)
 roughness = 0.9
 
-[sub_resource type="CylinderMesh" id="poteau"]
-material = SubResource("m_gris")
-top_radius = 0.18
-bottom_radius = 0.22
-height = 2.8
-radial_segments = 6
-
-[sub_resource type="BoxMesh" id="tete_lanterne"]
-material = SubResource("m_gris")
-size = Vector3(0.8, 0.9, 0.8)
-
-[sub_resource type="StandardMaterial3D" id="m_miroir"]
-albedo_color = Color(0.82, 0.86, 0.92, 1)
-metallic = 0.9
-roughness = 0.15
-
-[sub_resource type="BoxMesh" id="miroir"]
-material = SubResource("m_miroir")
-size = Vector3(2, 2.5, 0.15)
-
 [sub_resource type="BoxMesh" id="ancien_corps"]
 material = SubResource("m_gris")
 size = Vector3(0.8, 0.5, 1.9)
@@ -140,42 +87,9 @@ bottom_radius = 2.2
 height = 0.05
 radial_segments = 10
 
-[sub_resource type="BoxMesh" id="pierre_soleil"]
-material = SubResource("m_gris")
-size = Vector3(0.9, 0.7, 0.9)
-
 [sub_resource type="BoxMesh" id="grotte"]
 material = SubResource("m_sombre")
 size = Vector3(3, 3.2, 0.6)
-
-[sub_resource type="BoxMesh" id="hangar"]
-material = SubResource("m_bois")
-size = Vector3(6.5, 5, 6)
-
-[sub_resource type="BoxMesh" id="echelle_maree"]
-material = SubResource("m_blanc")
-size = Vector3(0.3, 4.5, 0.12)
-
-[sub_resource type="BoxMesh" id="epave"]
-material = SubResource("m_bois")
-size = Vector3(3, 1.6, 9)
-
-[sub_resource type="CylinderMesh" id="bouee"]
-material = SubResource("m_rouille")
-bottom_radius = 0.9
-height = 1.6
-radial_segments = 8
-
-[sub_resource type="StandardMaterial3D" id="m_lueur"]
-albedo_color = Color(1, 0.8, 0.45, 1)
-emission_enabled = true
-emission = Color(1, 0.75, 0.4, 1)
-emission_energy_multiplier = 3.0
-
-[sub_resource type="SphereMesh" id="feu"]
-material = SubResource("m_lueur")
-radius = 0.3
-height = 0.6
 
 [sub_resource type="ShaderMaterial" id="vision_mat"]
 shader = ExtResource("s_vision")
@@ -252,32 +166,8 @@ suit_la_maree = true
 
 [node name="Monde" type="Node3D" parent="." unique_id=994186121]
 
-[node name="Phare" type="Node3D" parent="Monde" unique_id=1804327501]
+[node name="Phare" parent="Monde" unique_id=1804327501 instance=ExtResource("phare_ile_02")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -10.5)
-
-[node name="Tour" type="MeshInstance3D" parent="Monde/Phare" unique_id=860485997]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
-mesh = SubResource("tour")
-
-[node name="Bande1" type="MeshInstance3D" parent="Monde/Phare" unique_id=831496991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
-mesh = SubResource("bande")
-
-[node name="Bande2" type="MeshInstance3D" parent="Monde/Phare" unique_id=1494460432]
-transform = Transform3D(0.94, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, 12.5, 0)
-mesh = SubResource("bande")
-
-[node name="Lanterne" type="MeshInstance3D" parent="Monde/Phare" unique_id=1042536996]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.3, 0)
-mesh = SubResource("lanterne_phare")
-
-[node name="Toit" type="MeshInstance3D" parent="Monde/Phare" unique_id=230667444]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.4, 0)
-mesh = SubResource("toit_phare")
-
-[node name="Porte" type="MeshInstance3D" parent="Monde/Phare" unique_id=1829014228]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.85)
-mesh = SubResource("porte_semeur")
 
 [node name="BancIris" type="Node3D" parent="Monde" unique_id=1580987435]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -3.5)
@@ -293,51 +183,55 @@ mesh = SubResource("arbre_mort")
 [node name="CapOuest" type="Node3D" parent="Monde" unique_id=852744214]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 5.6, -10.5)
 
-[node name="Poteau" type="MeshInstance3D" parent="Monde/CapOuest" unique_id=647023017]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1.4, 0)
-mesh = SubResource("poteau")
-
-[node name="Tete" type="MeshInstance3D" parent="Monde/CapOuest/Poteau" unique_id=1908593688]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
-mesh = SubResource("tete_lanterne")
-
-[node name="Miroir" type="MeshInstance3D" parent="Monde/CapOuest" unique_id=1394644259]
-transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 1.5, 1.25, 0)
-mesh = SubResource("miroir")
+[node name="StationMiroir" parent="Monde/CapOuest" node_paths=PackedStringArray("miroir_amont", "reception", "voyant_reception") instance=ExtResource("miroir_cap")]
+process_physics_priority = 2
+position = Vector3(1.5, 0, 0.5)
+rotation = Vector3(0, -1.5814911, 0)
+identifiant = "ouest"
+miroir_amont = NodePath("../../CapDuLarge/StationMiroir")
+reception = NodePath("../../Phare/ReceptionOuest")
+voyant_reception = NodePath("../../Phare/ReceptionOuest/Voyant")
+cran_initial = 2
+filmer_premier_alignement = false
 
 [node name="CapEst" type="Node3D" parent="Monde" unique_id=1842109049]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 3.1, -10.5)
 
-[node name="Poteau" type="MeshInstance3D" parent="Monde/CapEst" unique_id=1320707576]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.4, 0)
-mesh = SubResource("poteau")
+[node name="StationMiroir" parent="Monde/CapEst" node_paths=PackedStringArray("lanterne", "reception") instance=ExtResource("miroir_cap")]
+position = Vector3(-1.5, 0, 0)
+rotation = Vector3(0, 0.4540785, 0)
+identifiant = "est"
+lanterne = NodePath("../Lanterne")
+reception = NodePath("../../CapDuLarge/StationMiroir/PivotMiroir")
 
-[node name="Tete" type="MeshInstance3D" parent="Monde/CapEst/Poteau" unique_id=2096588215]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
-mesh = SubResource("tete_lanterne")
+[node name="Lanterne" parent="Monde/CapEst" instance=ExtResource("6_0v5bu")]
+position = Vector3(1.55, 0.12, 0)
+script = ExtResource("7_q2ixi")
+index_zone = -1
+rayon_zone = 5.5
+gain_reprise = 0.2
+distance_activation = 1.4
+hauteur_recherche_sol = 1.0
 
-[node name="Miroir" type="MeshInstance3D" parent="Monde/CapEst" unique_id=965218322]
-transform = Transform3D(0.7071, 0, -0.7071, 0, 1, 0, 0.7071, 0, 0.7071, -1.5, 1.25, 0)
-mesh = SubResource("miroir")
+[node name="SortieOptique" type="Marker3D" parent="Monde/CapEst/Lanterne"]
+position = Vector3(-0.004, 1.507, 0.008)
 
 [node name="CapDuLarge" type="Node3D" parent="Monde" unique_id=659793336]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3.1, -52.5)
 
-[node name="Poteau" type="MeshInstance3D" parent="Monde/CapDuLarge" unique_id=202826634]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.4, -1.5)
-mesh = SubResource("poteau")
+[node name="StationMiroir" parent="Monde/CapDuLarge" node_paths=PackedStringArray("miroir_amont", "reception") instance=ExtResource("miroir_cap")]
+process_physics_priority = 1
+position = Vector3(0.35, 0, -0.7)
+rotation = Vector3(0, 2.2816236, 0)
+identifiant = "large"
+miroir_amont = NodePath("../../CapEst/StationMiroir")
+reception = NodePath("../../CapOuest/StationMiroir/PivotMiroir")
+cran_initial = 2
+filmer_premier_alignement = false
 
-[node name="Tete" type="MeshInstance3D" parent="Monde/CapDuLarge/Poteau" unique_id=135749210]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
-mesh = SubResource("tete_lanterne")
-
-[node name="Miroir" type="MeshInstance3D" parent="Monde/CapDuLarge" unique_id=1131145093]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.25, 1.5)
-mesh = SubResource("miroir")
-
-[node name="AncienCorpsLarge" type="MeshInstance3D" parent="Monde" unique_id=582440539]
-transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 0, 3.35, -52.5)
-mesh = SubResource("ancien_corps")
+[node name="AncienCorpsLarge" parent="Monde" instance=ExtResource("modele_corps")]
+position = Vector3(0, 3.13, -52.5)
+rotation = Vector3(0, -0.52, 0)
 
 [node name="Flaque" type="Node3D" parent="Monde" unique_id=1707593172]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.1, -3.5)
@@ -346,9 +240,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.1, -3.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
 mesh = SubResource("flaque")
 
-[node name="PierreSoleil" type="MeshInstance3D" parent="Monde/Flaque" unique_id=1887915822]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.2, 0.4)
-mesh = SubResource("pierre_soleil")
+[node name="PierreSoleil" parent="Monde/Flaque" instance=ExtResource("modele_pierre")]
+position = Vector3(0.8, 0.025, 0.4)
+script = ExtResource("script_pierre")
+distance_activation = 2.4
+hauteur_rayon = 2.6
 
 [node name="EntreeGrottes" type="MeshInstance3D" parent="Monde" unique_id=2094456805]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1.7, 7.3)
@@ -383,44 +279,52 @@ rayon_zone = 5.5
 
 [node name="Port" type="Node3D" parent="Monde" unique_id=410752763]
 
-[node name="Hangar" type="MeshInstance3D" parent="Monde/Port" unique_id=1136165902]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 3.1, 38.5)
-mesh = SubResource("hangar")
+[node name="Hangar" parent="Monde/Port" node_paths=PackedStringArray("miroir") instance=ExtResource("hangar_quai")]
+position = Vector3(0.5, 0.69, 41)
+miroir = NodePath("../MiroirEssai")
 
-[node name="Porte" type="MeshInstance3D" parent="Monde/Port/Hangar" unique_id=1788586737]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 3)
-mesh = SubResource("porte_semeur")
-
-[node name="EchelleDeMaree" type="MeshInstance3D" parent="Monde/Port" unique_id=1311035418]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.6, 0.75, 43)
-mesh = SubResource("echelle_maree")
+[node name="EchelleDeMaree" parent="Monde/Port" instance=ExtResource("echelle_quai")]
+position = Vector3(-17.15, 0, 49.45)
 
 [node name="MaisonDuQuai" parent="Monde/Port" unique_id=185742127 instance=ExtResource("6_53bsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6, 0.6, 41)
 
-[node name="Epave" type="MeshInstance3D" parent="Monde" unique_id=1042739869]
-transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, -35, 0.4, 52.5)
-mesh = SubResource("epave")
+[node name="MiroirEssai" parent="Monde/Port" node_paths=PackedStringArray("lanterne", "reception", "voyant_reception") instance=ExtResource("miroir_cap")]
+position = Vector3(8.6, 0.6, 40)
+rotation = Vector3(0, 2.9816795, 0)
+identifiant = "essai"
+lanterne = NodePath("../LanterneEssai")
+reception = NodePath("../Hangar/Capteur")
+voyant_reception = NodePath("../Hangar/Capteur/Voyant")
+filmer_premier_alignement = false
 
-[node name="BoueeLanterne" type="Node3D" parent="Monde" unique_id=685338011]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, 52.5)
+[node name="LanterneEssai" parent="Monde/Port" instance=ExtResource("6_0v5bu")]
+position = Vector3(5.6, 0.73, 41.9)
+script = ExtResource("7_q2ixi")
+index_zone = -1
+rayon_zone = 4.0
+gain_reprise = 0.2
+distance_activation = 1.5
+hauteur_recherche_sol = 1.0
 
-[node name="Corps" type="MeshInstance3D" parent="Monde/BoueeLanterne" unique_id=2087282785]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-mesh = SubResource("bouee")
+[node name="SortieOptique" type="Marker3D" parent="Monde/Port/LanterneEssai"]
+position = Vector3(-0.004, 1.507, 0.008)
 
-[node name="Feu" type="MeshInstance3D" parent="Monde/BoueeLanterne" unique_id=1637393995]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
-mesh = SubResource("feu")
+[node name="Epave" parent="Monde" node_paths=PackedStringArray("reseau") instance=ExtResource("modele_epave")]
+position = Vector3(-35, 0.03, 52.5)
+rotation = Vector3(0, 0.523599, 0)
+reseau = NodePath("../../ReseauMiroirs")
 
-[node name="Lueur" type="OmniLight3D" parent="Monde/BoueeLanterne" unique_id=1754399019]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
-light_color = Color(1, 0.78, 0.45, 1)
-light_energy = 2.0
-omni_range = 6.0
+[node name="BoueeLanterne" parent="Monde" instance=ExtResource("bouee_quai")]
+position = Vector3(21, 0, 52.5)
 
 [node name="Ponton" parent="." unique_id=1907350259 instance=ExtResource("p_ponton")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 49)
+port_attache = true
+
+[node name="Barque" parent="." node_paths=PackedStringArray("maquette") instance=ExtResource("barque_du_quai")]
+position = Vector3(8.65, 0, 52.6)
+maquette = NodePath("../Maquette")
 
 [node name="Joueur" parent="." unique_id=1150888291 instance=ExtResource("p_joueur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.6, 44)
@@ -440,9 +344,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BrumeBatterie" type="Node" parent="." unique_id=269152818 node_paths=PackedStringArray("maquette")]
+[node name="BrumeBatterie" type="Node" parent="." unique_id=269152818 node_paths=PackedStringArray("maquette", "phare")]
 script = ExtResource("9_m8apa")
 maquette = NodePath("../Maquette")
+phare = NodePath("../ReseauMiroirs")
 vidage_leger = 0.0
 vidage_epais = 0.12
 rayon_plein = 6.0
@@ -465,3 +370,16 @@ reculer_brouillard = false
 script = ExtResource("16_q2ixi")
 maquette = NodePath("../Maquette")
 reperes_ignores = ""
+disponible_au_depart = true
+carte_archipel = ExtResource("carte_archipel")
+
+[node name="ReseauMiroirs" type="Node3D" parent="." node_paths=PackedStringArray("station_ouest", "optique", "epave", "maquette", "joueur", "carnet", "engrenages", "commande")]
+script = ExtResource("reseau_miroirs")
+station_ouest = NodePath("../Monde/CapOuest/StationMiroir")
+optique = NodePath("../Monde/Phare/Optique")
+epave = NodePath("../Monde/Epave")
+maquette = NodePath("../Maquette")
+joueur = NodePath("../Joueur")
+carnet = NodePath("../Carnet")
+engrenages = NodePath("../Monde/Phare/Engrenages")
+commande = NodePath("../Monde/Phare/CommandeLentille")

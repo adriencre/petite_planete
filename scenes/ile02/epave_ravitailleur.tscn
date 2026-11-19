@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/epave_ravitailleur.gd" id="1_epave"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/epave_ravitailleur.glb" id="2_coque"]
+[ext_resource type="Script" path="res://scripts/amarre_epave.gd" id="3_amarre"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/cle_salle_cartes.glb" id="4_cle"]
+
+[sub_resource type="BoxShape3D" id="pont"]
+size = Vector3(3.74, 0.19, 6.63)
+
+[sub_resource type="BoxShape3D" id="passerelle"]
+size = Vector3(2.90, 0.16, 1.36)
+
+[sub_resource type="BoxShape3D" id="mur_long"]
+size = Vector3(0.14, 2.30, 3.78)
+
+[sub_resource type="BoxShape3D" id="mur_poupe"]
+size = Vector3(3.43, 2.30, 0.17)
+
+[sub_resource type="BoxShape3D" id="cloison"]
+size = Vector3(0.99, 2.30, 0.22)
+
+[sub_resource type="BoxShape3D" id="bureau"]
+size = Vector3(1.04, 0.84, 1.70)
+
+[sub_resource type="BoxShape3D" id="lit"]
+size = Vector3(1.04, 0.72, 2.62)
+
+[node name="EpaveRavitailleur" type="Node3D"]
+script = ExtResource("1_epave")
+
+[node name="Modele" parent="." instance=ExtResource("2_coque")]
+
+[node name="Corps" type="StaticBody3D" parent="."]
+
+[node name="Pont" type="CollisionShape3D" parent="Corps"]
+position = Vector3(0, 0.267, 1.985)
+shape = SubResource("pont")
+
+[node name="Passerelle" type="CollisionShape3D" parent="Corps"]
+position = Vector3(3.035, 0.408, -0.10)
+rotation = Vector3(0, 0, 0.075)
+shape = SubResource("passerelle")
+
+[node name="Babord" type="CollisionShape3D" parent="Corps"]
+position = Vector3(-1.75, 1.51, 3.38)
+shape = SubResource("mur_long")
+
+[node name="Tribord" type="CollisionShape3D" parent="Corps"]
+position = Vector3(1.75, 1.51, 3.38)
+shape = SubResource("mur_long")
+
+[node name="Poupe" type="CollisionShape3D" parent="Corps"]
+position = Vector3(0, 1.51, 5.20)
+shape = SubResource("mur_poupe")
+
+[node name="CloisonBabord" type="CollisionShape3D" parent="Corps"]
+position = Vector3(-1.26, 1.51, 1.53)
+shape = SubResource("cloison")
+
+[node name="CloisonTribord" type="CollisionShape3D" parent="Corps"]
+position = Vector3(1.26, 1.51, 1.53)
+shape = SubResource("cloison")
+
+[node name="Bureau" type="CollisionShape3D" parent="Corps"]
+position = Vector3(-1.13, 0.78, 3.93)
+shape = SubResource("bureau")
+
+[node name="Couchette" type="CollisionShape3D" parent="Corps"]
+position = Vector3(1.11, 0.72, 3.82)
+shape = SubResource("lit")
+
+[node name="ClarteCabine" type="OmniLight3D" parent="."]
+position = Vector3(0.21, 2.33, 3.44)
+light_color = Color(0.91, 0.80, 0.63, 1)
+light_energy = 0.58
+omni_range = 3.4
+
+[node name="Cle" parent="." instance=ExtResource("4_cle")]
+position = Vector3(-1.00, 1.228, 4.02)
+rotation = Vector3(0, 0.52, 0)
+
+[node name="Touche" type="Label3D" parent="Cle"]
+position = Vector3(0.1, 0.40, 0)
+text = "E   Prendre la clé"
+visible = false
+billboard = 1
+font_size = 46
+outline_size = 7
+pixel_size = 0.004
+modulate = Color(1, 0.89, 0.66, 1)
+
+[node name="Accostage" type="Node3D" parent="."]
+script = ExtResource("3_amarre")
+
+[node name="Amarre" type="Marker3D" parent="Accostage"]
+position = Vector3(6.51, 0, -0.10)
+
+[node name="Debarquement" type="Marker3D" parent="Accostage"]
+position = Vector3(3.92, 0.565, -0.10)
+
+[node name="Bitte" type="Marker3D" parent="Accostage"]
+position = Vector3(4.22, 0.94, -0.64)
+
+[node name="Indication" type="Label3D" parent="Accostage"]
+position = Vector3(4.36, 1.52, -0.20)
+visible = false
+billboard = 1
+font_size = 52
+outline_size = 8
+pixel_size = 0.006
+modulate = Color(1, 0.89, 0.71, 1)

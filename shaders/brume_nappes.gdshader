@@ -24,6 +24,10 @@ uniform float douceur_contact = 0.9;
 uniform vec4 robot = vec4(0.0);
 // La bulle de la lanterne de proue de la barque (barque.gd : bulle_lanterne) : pareil.
 uniform vec4 barque = vec4(0.0);
+// Phare de l'île 2 : origine XZ et direction du balayage multipliée par sa puissance.
+uniform vec4 phare_passage = vec4(0.0);
+// Centre XZ de l'épave, rayon de la trouée, puissance de 0 à 1.
+uniform vec4 phare_epave = vec4(0.0);
 // Ce qui reste de brume dans une zone réveillée (0 = air clair).
 uniform float reste_eveil : hint_range(0.0, 1.0) = 0.0;
 
@@ -96,6 +100,18 @@ void fragment() {
 	float d_barque = distance(monde.xz, barque.xz) + (n - 0.5) * 0.6;
 	bord_bulle = max(bord_bulle, barque.w > 0.0 ? exp(-pow((d_barque - barque.w * 1.05) / 0.7, 2.0)) * 0.6 : 0.0);
 	fondu *= barque.w > 0.0 ? smoothstep(barque.w * 0.55, barque.w, d_barque) : 1.0;
+	float force_phare = length(phare_passage.zw);
+	if (force_phare > 0.001) {
+		vec2 vers = phare_passage.zw / force_phare;
+		vec2 ecart = monde.xz - phare_passage.xy;
+		float avant = dot(ecart, vers);
+		float travers = abs(ecart.x * vers.y - ecart.y * vers.x);
+		float largeur = 2.2 + 0.036 * max(avant, 0.0);
+		float passage = smoothstep(0.0, 4.0, avant) * (1.0 - smoothstep(105.0, 118.0, avant));
+		passage *= 1.0 - smoothstep(largeur * 0.75, largeur * 1.4, travers);
+		float epave = 1.0 - smoothstep(phare_epave.z * 0.75, phare_epave.z, distance(monde.xz, phare_epave.xy));
+		fondu *= 1.0 - max(passage * force_phare, epave * phare_epave.w);
+	}
 	n = min(n + bord_bulle, 1.0);
 	// les couches hautes sont plus légères (la brume s'amincit en montant)
 	// COLOR.a : force de la nappe (1 en général ; plus faible là où la brume épaisse déborde sur la mer)

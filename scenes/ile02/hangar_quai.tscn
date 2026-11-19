@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hangar_quai.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/hangar_quai.glb" id="2_modele"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/vantail_hangar.glb" id="3_porte"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/capteur_miroir.tscn" id="4_capteur"]
+
+[sub_resource type="BoxShape3D" id="interieur"]
+size = Vector3(9, 3.9, 8.8)
+
+[sub_resource type="BoxShape3D" id="socle"]
+size = Vector3(9.4, 0.3, 8.92)
+
+[sub_resource type="BoxShape3D" id="rampe"]
+size = Vector3(3.62, 0.12, 0.981)
+
+[sub_resource type="BoxShape3D" id="mur_lateral"]
+size = Vector3(0.28, 4.5, 8.9)
+
+[sub_resource type="BoxShape3D" id="mur_fond"]
+size = Vector3(9.1, 4.5, 0.26)
+
+[sub_resource type="BoxShape3D" id="facade"]
+size = Vector3(2.88, 4.5, 0.28)
+
+[sub_resource type="BoxShape3D" id="linteau"]
+size = Vector3(3.6, 0.9, 0.28)
+
+[sub_resource type="BoxShape3D" id="porte"]
+size = Vector3(1.81, 3.45, 0.16)
+
+[sub_resource type="BoxShape3D" id="coque_retournee"]
+size = Vector3(1.65, 1.1, 3.65)
+
+[sub_resource type="BoxShape3D" id="coque_etablie"]
+size = Vector3(1.68, 1.14, 3.95)
+
+[sub_resource type="BoxShape3D" id="etabli"]
+size = Vector3(3.03, 1.3, 1.12)
+
+[sub_resource type="BoxShape3D" id="caisses"]
+size = Vector3(1.44, 1.35, 0.86)
+
+[node name="Hangar" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Modele" parent="." instance=ExtResource("2_modele")]
+
+[node name="Interieur" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="Forme" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(0, 1.48, 0.04)
+shape = SubResource("interieur")
+
+[node name="Structure" type="StaticBody3D" parent="."]
+
+[node name="Sol" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, -0.106, 0)
+shape = SubResource("socle")
+
+[node name="RampeDuSeuil" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, -0.09, 4.934)
+rotation = Vector3(0.155, 0, 0)
+shape = SubResource("rampe")
+
+[node name="MurOuest" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-4.51, 2.25, 0)
+shape = SubResource("mur_lateral")
+
+[node name="MurEst" type="CollisionShape3D" parent="Structure"]
+position = Vector3(4.51, 2.25, 0)
+shape = SubResource("mur_lateral")
+
+[node name="MurNord" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, 2.25, -4.36)
+shape = SubResource("mur_fond")
+
+[node name="FaceOuest" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-3.28, 2.25, 4.36)
+shape = SubResource("facade")
+
+[node name="FaceEst" type="CollisionShape3D" parent="Structure"]
+position = Vector3(3.28, 2.25, 4.36)
+shape = SubResource("facade")
+
+[node name="Linteau" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, 3.98, 4.36)
+shape = SubResource("linteau")
+
+[node name="BerOuest" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-2.94, 0.55, 1.04)
+shape = SubResource("coque_retournee")
+
+[node name="BerEst" type="CollisionShape3D" parent="Structure"]
+position = Vector3(2.98, 0.57, -0.22)
+shape = SubResource("coque_etablie")
+
+[node name="Etabli" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-2.58, 0.65, -3.67)
+shape = SubResource("etabli")
+
+[node name="Caisses" type="CollisionShape3D" parent="Structure"]
+position = Vector3(3.29, 0.675, -3.77)
+shape = SubResource("caisses")
+
+[node name="VantailGauche" type="AnimatableBody3D" parent="."]
+position = Vector3(-0.91, 0, 4.53)
+sync_to_physics = false
+
+[node name="Modele" parent="VantailGauche" instance=ExtResource("3_porte")]
+
+[node name="Forme" type="CollisionShape3D" parent="VantailGauche"]
+position = Vector3(0, 1.74, 0)
+shape = SubResource("porte")
+
+[node name="VantailDroit" type="AnimatableBody3D" parent="."]
+position = Vector3(0.91, 0, 4.53)
+sync_to_physics = false
+
+[node name="Modele" parent="VantailDroit" instance=ExtResource("3_porte")]
+scale = Vector3(-1, 1, 1)
+
+[node name="Forme" type="CollisionShape3D" parent="VantailDroit"]
+position = Vector3(0, 1.74, 0)
+shape = SubResource("porte")
+
+[node name="Capteur" parent="." instance=ExtResource("4_capteur")]
+position = Vector3(4.83, 1.66, 2.59)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="JourDeLaBaie" type="OmniLight3D" parent="."]
+position = Vector3(-3.25, 2.65, 0.60)
+light_color = Color(0.76, 0.90, 1, 1)
+light_energy = 0.68
+omni_range = 5.8
+
+[node name="RebondDuQuai" type="OmniLight3D" parent="."]
+position = Vector3(1.3, 2.9, 2.5)
+light_color = Color(1, 0.87, 0.65, 1)
+light_energy = 0.55
+omni_range = 6.0

@@ -40,12 +40,12 @@ Le rocher du Phare au centre (niveau le plus haut) et trois bras : le cap Ouest 
 Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_iso.py ile_02`.
 
 ```
-                    CAP DU LARGE (1,5 m) — lanterne + miroir, ancien corps échoué
+                    CAP DU LARGE (1,5 m) — miroir, ancien corps échoué
                           ▲
                           ░ gué : 5 roches (marée basse seulement)
                           ░
    CAP OUEST (5 m) ═══ sentier dans la brume ═══ ROCHER DU PHARE (4 m) ── CAP EST (2,5 m)
-   lanterne + miroir                             plateau (5 m) + PHARE      lanterne + miroir
+   miroir                                        plateau (5 m) + PHARE      lanterne + miroir
                                                  banc, jardin mort          flaque + pierre-soleil
                                                  escalier taillé
                                                  entrée des grottes (estran)
@@ -63,7 +63,8 @@ Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_is
 - **Taille** : environ 1 190 cases de terre ferme (île 1 : 887), mais beaucoup plus **verticale** (rocher à 4 m, plateau à 5 m, tour d'environ 18 m).
 - **Échelle (DA v5)** : le Phare est bâti à la taille des Semeurs (2,50 à 3 m), donc **un peu trop grand pour le robot**, comme l'atelier de l'île 1 : marches un peu hautes, portes d'environ 3 m, table à hauteur de poitrine.
 - **Marée** : l'eau est à −0,6 m à marée basse et à +0,5 m à marée haute. Tout ce qui est à 0 m (chaussée, gué, estran, flaque, épave) n'existe qu'à marée basse.
-- **Palette** : pierre claire, falaises grises, phare blanc à bandes rouille délavée, varech, eau verte des flaques, brume froide.
+- **Palette** : roche claire à facettes, pierre ivoire, terre cuite délavée, cuivre patiné bleu ardoise et lentille ambrée. Varech, eau verte des flaques, brume froide.
+- **Silhouette du Phare (direction V2 retenue le 2026-11-19)** : tour à pans coupés. Le socle se prolonge en parvis et porte l'aile vitrée d'Iris, avec son toit bas et sa lucarne. Deux grandes nervures montent du socle jusqu'à la couronne ; une troisième la soutient à l'arrière. La couronne ajourée laisse lire la lentille depuis le port. Référence : `concept/phare_ile_02_v2/phare_ile_02_ensemble.png`.
 - **Style du terrain (validé le 2026-11-19)** : « blocs taillés à facettes, strates nettes » : falaises en strates de blocs qui avancent / reculent, fissures, escaliers creusés dans des encoches, éboulis et varech au pied, herbe rase + lichen doré dessus. Plus de damier de plateaux. Généré par `tools/blender/terrain_ile_02.py` depuis la carte du nœud Maquette → `assets/models/ile02/terrain_ile_02.glb` (branché par `terrain_modele` dans `scripts/maquette.gd`). Test d'origine : `concept/ile_02_falaise_test_v1.png`.
 - **Image cible d'ambiance (2026-11-19)** : `concept/ile_02_cible_v1.png` (Meshy, depuis la variante « croix »). Elle sert de référence pour **l'ambiance** (lumière dorée, brume en nappes, phare vieilli, détails) ; **pas** pour la forme (le port y est collé au rocher, la chaussée trop courte) : la forme reste celle du plan.
 
@@ -83,8 +84,8 @@ Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_is
 | 13 | **Le jardin mort** | Des bacs de terre sèche, un arrosoir, un **arbre rose mort**. |
 | 14 | **Le Cap Est** | Facile d'accès. Lanterne + station de miroir. |
 | 15 | **La flaque du Cap Est** | À marée basse : une **pierre-soleil** au fond. |
-| 16 | **Le Cap Ouest** | Au bout d'un sentier de falaise noyé de brume. Lanterne + station de miroir. |
-| 17 | **Le Cap du Large** | Au nord, au bout du gué. Lanterne + station de miroir. |
+| 16 | **Le Cap Ouest** | Au bout d'un sentier de falaise noyé de brume. Station de miroir. |
+| 17 | **Le Cap du Large** | Au nord, au bout du gué. Station de miroir. |
 | 18 | **L'ancien corps échoué** | Sur les rochers du Large : il s'est fait prendre par la marée. |
 | 19 | **L'épave du ravitailleur** | Au sud-ouest, couchée sur un banc de sable. Entourée de brume épaisse. |
 
@@ -96,13 +97,21 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 - **L'horloge de marée** au mur : une aiguille qui suit la vraie marée du jeu (HorlogeMonde).
 - **La couchette d'Aube** : une troisième couchette, à taille d'enfant, un dessin d'Aube sous l'oreiller. Aube venait ici avec Iris (lien avec la Colonie).
 
+### Le chantier du quai
+
+Hangar de réparation à l’échelle des Semeurs, en bardage bleu sur un socle de calcaire. Deux vantaux coulissent sur un rail visible. L’atelier conserve une allée de manutention sur rails, une coque retournée sur tréteaux, une barque en cours de réparation et un établi avec son étau, ses outils, du cordage et de la toile. La charpente, les ardoises et le haut des murs passent en coupe pendant la visite.
+
+Dans la maquette, la lanterne d’essai du quai alimente le miroir. Quand le faisceau atteint le capteur monté sur la façade est, les vantaux s’ouvrent pendant un court plan et l’ouverture se conserve. La bouée suit la marée, et le quai porte des traits peints aux niveaux de basse et haute mer. Depuis la barque, on approche par le côté quai. E arrête la barque, déplace la fiche de la proue vers la prise de la bouée et recharge la batterie. Le premier branchement allume le feu en gros plan. La bouée reste allumée et peut resservir après une traversée.
+
 ### Le Phare, de bas en haut
 | Niveau | Ce qu'on y trouve |
 |---|---|
-| **Rez** | **La salle des machines** : engrenages arrêtés, la chaîne de la lentille, le **schéma des engrenages** peint au mur. |
-| **1er** | **Le bureau d'Iris** : sa table, ses relevés, la **table des marées**, la **page 1**, le **plan des miroirs**, la note de la clé, la ligne de la pleine lune. Au fond, **sa chambre**, fermée **[à valider]**. |
-| **2e** | **La salle des cartes**, fermée à clé : le registre, les relèvements. |
+| **Rez** | **La salle des machines** : engrenages arrêtés, la chaîne de la lentille, le **schéma des engrenages** peint au mur. Des dalles guident vers une ouverture de plain-pied au sud-est, devant la première marche de l'escalier du bureau. |
+| **1er** | **Le bureau d'Iris** : sa table, ses relevés, la **table des marées**, la **page 1**, le **plan des miroirs**, la note de la clé, la ligne de la pleine lune. La porte fermée de **sa chambre** donne sur le palier. La chambre occupe une aile à côté de la cage d'escalier et se rejoint par le toit. |
+| **2e** | **La salle des cartes**, fermée à clé, avec sa porte marquée face à l'arrivée de l'escalier. À l'intérieur, le registre et les relèvements. |
 | **Sommet** | La **grande lentille**, intacte, sans lampe, avec une couronne graduée. La **galerie extérieure**, avec **la lunette d'Iris** **[à valider]** et l'**ancien corps de la galerie**. |
+
+En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènent. En entrant dans la salle des cartes, la volée vers la galerie s’efface pour dégager le registre et les relèvements. L'échelle et l'aile d'Iris apparaissent depuis la galerie et le toit. Dans la chambre, la coupe montre le mobilier et les documents de la pièce.
 
 ---
 
@@ -129,7 +138,8 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 - **La situation** : la grande lentille est intacte, mais il n'y a pas de lampe.
 - **Où on l'apprend** : la **page 1** ; le **plan des miroirs** à moitié effacé ; l'**ancien corps échoué** du Large ; le **miroir d'essai** du hangar.
 - **Le trajet de la lumière** : **Cap Est → Cap du Large → Cap Ouest → lentille**.
-- **Le mécanisme** : chaque cap a une **lanterne** et une **station de miroir** (`E`, par crans) ; un faisceau visible part de chaque miroir allumé ; **les trois caps doivent briller en même temps.**
+- **Le mécanisme** : le robot branche la seule lanterne du circuit, au cap Est. Son rayon frappe la vitre du premier miroir. Le robot pivote les trois miroirs par crans (`E`) pour réfléchir le même rayon jusqu'à la lentille. Un miroir qui ne reçoit pas le rayon reste sombre.
+- **Station de miroir** : bâti fixe en pierre ivoire, tête pivotante à cadre de cuivre patiné, manivelle et contrepoids apparents. La manivelle est à portée du robot et la tête pivote par crans au-dessus du bâti. Le cap Est sert de premier montage.
 - **Les contraintes** : la batterie, la marée (le gué), l'orientation, la brume du sentier Ouest.
 - **Ce que ça ouvre** (un grand moment, lent) : la lumière fait le tour du rocher et monte dans la lentille ; **le faisceau** s'allume et tourne ; **le carnet dessine la carte de l'archipel** ; le faisceau perce la brume du large autour de l'épave.
 
@@ -137,20 +147,22 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 - **La situation** : la salle des cartes est fermée à clé.
 - **Où on l'apprend** : la note du bureau (« J'ai laissé la clé dans la cabine, à bord du ravitailleur ») ; depuis la galerie, on **voit l'épave**.
 - **La chaîne** : le **Phare rallumé** (son faisceau perce la brume de l'épave) + la **marée basse** (l'épave affleure) + **la barque** ; la clé est dans la cabine du capitaine.
+- **À bord du ravitailleur** : on amarre la barque à une passerelle fixée au flanc éventré. Le pont reste ouvert jusqu’à la cabine. Le toit et la poupe s’effacent en coupe à l’entrée. La clé est posée sur le bureau, à côté du journal de quart, en face de la couchette.
 - **Ce que ça ouvre** : la salle des cartes, avec le **registre** et les **relèvements**.
 
 ### G4. « La salle des machines » (mécanisme) — *validé*
 - **La situation** : une fois le Phare rallumé, la lentille tourne, mais la couronne graduée est **bloquée** : on ne peut pas la viser.
 - **Où on l'apprend** : au rez, les engrenages sont démontés, et un **schéma** peint au mur (en partie couvert de suie) montre comment ils s'emboîtent.
 - **La solution** : remettre les engrenages en place (`E` pour déplacer et tourner chaque roue) en suivant le schéma. La partie effacée se devine en regardant **les marques d'usure au sol** sous chaque axe (observation).
+- **Dans la salle** : `E` devant la machine ouvre une grande vue de face. Le joueur choisit une roue dans le râtelier, puis un axe libre. Les commandes permettent de tourner la roue d’un cran ou de la retirer. La taille doit correspondre à l’empreinte et le repère en laiton doit rejoindre la clavette. Le chariot applique les déplacements dans la salle. Le dernier cran ferme la vue, tend la chaîne et libère la manivelle de la galerie.
 - **Ce que ça ouvre** : la **lentille orientable**. Avec les relèvements (G3), on peut la pointer vers chaque île.
 
 ### G5. « La chambre d'Iris » (lieux cachés) — *validé*
-- **La situation** : au fond du bureau, une porte fermée de l'intérieur, trop haute pour le robot.
+- **La situation** : à l'extrémité du palier du bureau, une porte fermée de l'intérieur.
 - **Où on l'apprend** :
   - un **dessin d'Aube** (le même style que ceux de la Colonie) est punaisé au-dessus de la porte : « Pour Iris. Ma cachette, c'est par le toit » ;
   - depuis la galerie, on voit une **lucarne** ouverte sur le toit du 1er étage.
-- **La solution** : sortir sur la galerie, descendre par l'échelle de service le long de la tour et entrer par la lucarne. Le robot est **assez petit pour y passer**, comme Aube.
+- **La solution** : sortir sur la galerie, saisir l'échelle de service avec `E` et descendre barreau par barreau jusqu'à la passerelle du toit. Elle mène à la lucarne de l'aile. Le robot est **assez petit pour y passer**, comme Aube. Il peut remonter par l'échelle avec le même geste.
 - **Ce que ça ouvre** : **la chambre d'Iris** (§7) : sa vie à elle, plus seulement ses relevés.
 
 ### G6. « La lunette d'Iris » (observation) — *validé*
@@ -158,6 +170,7 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 - **Ce qu'on voit** : chaque cran cadre un lieu lointain, en gros plan : le quai de la Colonie (des caisses de départ empilées), la ville haute couverte de lanternes, la Nef échouée au loin, la brume blanche de l'île blanche…
 - **Le cran sans nom** : il cadre **la mer vide**, au nord-ouest. Il n'y a rien, juste de l'eau. C'est la direction du banc d'Iris, celle de la **ligne sans nom du registre**, et celle où l'on verra l'île cachée à la pleine lune.
 - **Ce que ça donne** : des croquis de lieux lointains dans le carnet (sans flèche), et un **mystère** (pourquoi regarder la mer vide ?).
+- **Maquette jouable** : E sur la galerie, flèches pour tourner. Les cinq vues sont des illustrations en attendant les décors de l’archipel. Le cran gravé d’une maison reprend le cap 318° de la commande du Phare. Le quai et la ville haute partagent la direction de la Colonie avec deux cadrages rapprochés.
 
 ### Les petites
 - **Le miroir du port** : un miroir d'essai renvoie la lumière de la bouée sur la porte du hangar, qui s'ouvre. C'est le tutoriel muet des miroirs.
@@ -190,21 +203,23 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 
 ### La page 1 (au bureau) — *validée*
 > Tournée du Phare, jour 112.
-> Pour les nouveaux, puisque personne ne lit les consignes : le Phare ne fait pas de lumière. Il la rassemble. Les trois caps la lui renvoient, quand les miroirs sont bien tournés. Si un seul cap s'éteint, la lentille ne voit rien.
+> Pour les nouveaux, puisque personne ne lit les consignes : la lanterne du cap Est donne toute la lumière. Le premier miroir l'envoie vers le Large. Si une glace dévie, le rayon se perd avant d'atteindre le Phare.
 > J'ai nettoyé les vitres du Cap Est. Le miroir du Large a encore bougé avec la tempête. N'allez jamais au Large à marée montante : la mer ne prévient pas.
 > Rappel : on ne reprend pas la lumière devant les arbres roses. Ils ne le supportent pas.
 > — G.
 
-*(À remplacer dans le jeu : `assets/notebook/journal/page_01.tres` contient l'ancienne version.)*
+*Cette version est placée sur la table d'Iris dans `scenes/ile02/phare.tscn`.*
 
 ### Les notes du bureau
+- **Décor du bureau** : table en frêne miel, siège de veille à dossier en côtes de bois et coussin lavande, ciré ocre sur son porte-manteau, banquette, meuble à cartes roulées et étagère de dossiers. Sur la table, lampe articulée, tasse bleue, presse-papiers ambré et carnets. Références approuvées dans `concept/bureau_iris_decoration/`.
 - **La note de la clé** (validée) : « J'ai laissé la clé de la salle des cartes dans la cabine, à bord du ravitailleur. Je la reprendrai à la prochaine basse mer. Pas sans le Phare : la brume du large y est trop épaisse. »
 - **La ligne de la pleine lune** (dans la marge d'un relevé, d'une autre encre) : « Les nuits de pleine lune, le Phare chante, et je vois ma maison. »
 - **La table des marées** (validée pour les six tours) : un dessin de l'échelle du quai, avec « basse » et « haute », et dessous : « Basse mer : six tours du faisceau. Pas un de plus. » (validé) Plus bas, un troisième trait : « Pleine lune : plus bas que tout. Le vieux port respire. » (C'est un indice pour le vieux port de la Colonie.)
 - **Le plan des miroirs** : les trois caps et le Phare vus de dessus ; une partie effacée par l'eau (on voit la flèche Est → Large, le reste est illisible).
 
 ### La chambre d'Iris (G5)
-- Un lit à sa taille, une seule tasse, une lanterne **éteinte et débranchée** sur la table de nuit.- Au mur, **le dessin d'Aube** : des silhouettes de brume qui dansent autour d'une grande et d'une petite Semeuse. « Pour Iris. Nos amis du noir. » (validé le 2026-11-16)
+- Un lit à sa taille, une seule tasse, une lanterne **éteinte et débranchée** sur la table de nuit.
+- Au mur, **le dessin d'Aube** : des silhouettes de brume qui dansent autour d'une grande et d'une petite Semeuse. « Pour Iris. Nos amis du noir. » (validé le 2026-11-16)
 - Une lettre jamais envoyée, à Ysolde (**validée le 2026-11-16**, version mystérieuse) :
 > Ysolde,
 > Tu me demandes encore des lanternes pour l'île blanche. Je ne les poserai pas.
@@ -222,7 +237,7 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
   - « Nef : aucune, en attendant le départ. »
   - « Centrale : ne pas toucher. Tavin s'en occupe. »
   - **Une ligne sans nom**, avec seulement le dessin d'une petite maison, et aucune lanterne *(validé : comprise plus tard)*.
-- **Les relèvements** : sur le mur, une rose des vents gravée avec l'angle de chaque île (« Colonie », « Île blanche », « Nef », « Centrale »). Ils se recopient dans le carnet.
+- **Les relèvements** : sur le mur, une rose des vents note Colonie 129°, Île blanche 058°, Nef 009° et Centrale 287°. Ils se recopient dans le carnet et se lisent sur la graduation de la commande de la galerie.
 
 ### Ce qui s'inscrit dans le carnet (juste ce qu'on a vu, sans flèches)
 - **Carte** de l'île 2, puis **la carte de l'archipel** (G2).
@@ -251,7 +266,7 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 - **La pleine lune et l'île cachée** : « Les nuits de pleine lune, le Phare chante, et je vois ma maison. » À la pleine lune, la lentille pointée **au cran sans nom** et **éteinte** (le Phare « dort ») concentre le clair de lune et **montre l'île cachée**. C'est la seule chose impossible à la première visite.
   - **La clé de lecture (décidé le 2026-11-16)** : une **lettre d'Iris à Saule**, à la Quarantaine : « Le Phare ne chante que quand il dort. Une nuit de grosse lune, laisse-le dormir, tourné vers rien, et tu verras où je suis. »
   - **Le bonus des observateurs** : une nuit de pleine lune, si la lentille est éteinte (quelle que soit son orientation), un **reflet argenté** court sur la mer depuis le Phare. On le voit sans le comprendre.
-  - *Comment on fait, dans une même boucle* : rallumer le Phare (G2), réparer les engrenages (G4), tourner la lentille au cran sans nom, puis **reprendre la lumière d'un cap** : la lentille s'éteint mais garde son orientation.
+  - *Comment on fait, dans une même boucle* : rallumer le Phare (G2), réparer les engrenages (G4), tourner la lentille au cran sans nom, puis **reprendre la lumière de la lanterne du cap Est** : la lentille s'éteint mais garde son orientation.
 - **L'ancien lien avec le Marais** (« quand le grand œil nous regarde, la brume s'ouvre ») **est à remplacer**, puisque le Marais n'existe plus. Décidé : pointé vers **l'île blanche** (la Quarantaine), le faisceau ouvre **un couloir dans la brume de la mer** qui l'entoure. C'est une **deuxième route** pour y aller (la première : bien préparer la lanterne de la barque).
 
 ### Ce que l'île 2 donne ailleurs

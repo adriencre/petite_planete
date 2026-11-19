@@ -1,0 +1,250 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/engrenages_phare.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/roue_menante.glb" id="2_roue"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/roue_intermediaire.glb" id="3_roue"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/roue_menee.glb" id="4_roue"]
+[ext_resource type="Texture2D" path="res://assets/affiches/schema_engrenages.svg" id="5_schema"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/cric_carter.glb" id="6_cric"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/cric_manivelle.glb" id="7_cric"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/cric_sellette.glb" id="8_cric"]
+[ext_resource type="PackedScene" path="res://scenes/ui/interface_engrenages.tscn" id="9_interface"]
+
+[sub_resource type="StandardMaterial3D" id="materiau_acier"]
+albedo_color = Color(0.22, 0.31, 0.30, 1)
+metallic = 0.42
+roughness = 0.56
+
+[sub_resource type="StandardMaterial3D" id="materiau_laiton"]
+albedo_color = Color(0.88, 0.64, 0.34, 1)
+metallic = 0.25
+roughness = 0.54
+
+[sub_resource type="StandardMaterial3D" id="materiau_pierre"]
+albedo_color = Color(0.69, 0.57, 0.43, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="banc"]
+size = Vector3(3.32, 0.35, 0.42)
+material = SubResource("materiau_pierre")
+
+[sub_resource type="BoxMesh" id="rail"]
+size = Vector3(3.06, 0.13, 0.18)
+material = SubResource("materiau_acier")
+
+[sub_resource type="BoxMesh" id="support"]
+size = Vector3(0.15, 1, 0.16)
+material = SubResource("materiau_acier")
+
+[sub_resource type="CylinderMesh" id="moyeu"]
+top_radius = 0.105
+bottom_radius = 0.15
+height = 0.36
+radial_segments = 8
+rings = 0
+material = SubResource("materiau_acier")
+
+[sub_resource type="BoxMesh" id="repere"]
+size = Vector3(0.092, 0.043, 0.028)
+material = SubResource("materiau_laiton")
+
+[sub_resource type="TorusMesh" id="usure"]
+inner_radius = 0.9
+outer_radius = 1.0
+rings = 36
+ring_segments = 8
+material = SubResource("materiau_pierre")
+
+[sub_resource type="BoxMesh" id="cale"]
+size = Vector3(0.34, 0.22, 0.31)
+material = SubResource("materiau_acier")
+
+[sub_resource type="BoxMesh" id="chassis"]
+size = Vector3(0.48, 0.12, 0.47)
+material = SubResource("materiau_acier")
+
+[sub_resource type="CylinderMesh" id="rouleau"]
+top_radius = 0.074
+bottom_radius = 0.074
+height = 0.06
+radial_segments = 8
+rings = 0
+material = SubResource("materiau_laiton")
+
+[sub_resource type="CylinderMesh" id="vis_cric"]
+top_radius = 0.039
+bottom_radius = 0.039
+height = 1.0
+radial_segments = 8
+rings = 0
+material = SubResource("materiau_acier")
+
+[node name="Engrenages" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="SchemaPeint" type="Sprite3D" parent="."]
+position = Vector3(-0.68, 2.19, -2.9)
+pixel_size = 0.0033
+shaded = true
+texture = ExtResource("5_schema")
+
+[node name="Socle" type="MeshInstance3D" parent="."]
+position = Vector3(-1.0, 0.53, -1.64)
+mesh = SubResource("banc")
+
+[node name="TraverseBasse" type="MeshInstance3D" parent="."]
+position = Vector3(-1.0, 0.75, -1.63)
+mesh = SubResource("rail")
+
+[node name="TraverseHaute" type="MeshInstance3D" parent="."]
+position = Vector3(-1.0, 1.71, -1.73)
+mesh = SubResource("rail")
+
+[node name="Axes" type="Node3D" parent="."]
+
+[node name="Gauche" type="Marker3D" parent="Axes"]
+position = Vector3(-2.08, 1.01, -1.48)
+
+[node name="Support" type="MeshInstance3D" parent="Axes/Gauche"]
+position = Vector3(0, -0.18, -0.18)
+mesh = SubResource("support")
+
+[node name="Broche" type="MeshInstance3D" parent="Axes/Gauche"]
+position = Vector3(0, 0, -0.095)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("moyeu")
+
+[node name="Clavette" type="MeshInstance3D" parent="Axes/Gauche"]
+position = Vector3(0.5697, -0.0171, 0.14)
+rotation = Vector3(0, 0, -0.03)
+mesh = SubResource("repere")
+
+[node name="Usure" type="MeshInstance3D" parent="Axes/Gauche"]
+position = Vector3(0, -0.6470, 0.56)
+scale = Vector3(0.48, 0.08, 0.48)
+mesh = SubResource("usure")
+
+[node name="Centre" type="Marker3D" parent="Axes"]
+position = Vector3(-0.98, 1.27, -1.48)
+
+[node name="Support" type="MeshInstance3D" parent="Axes/Centre"]
+position = Vector3(0, -0.18, -0.18)
+mesh = SubResource("support")
+
+[node name="Broche" type="MeshInstance3D" parent="Axes/Centre"]
+position = Vector3(0, 0, -0.095)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("moyeu")
+
+[node name="Clavette" type="MeshInstance3D" parent="Axes/Centre"]
+position = Vector3(0.7104, 0.1678, 0.14)
+rotation = Vector3(0, 0, 0.232)
+mesh = SubResource("repere")
+
+[node name="Usure" type="MeshInstance3D" parent="Axes/Centre"]
+position = Vector3(0, -0.9070, 0.56)
+scale = Vector3(0.64, 0.08, 0.64)
+mesh = SubResource("usure")
+
+[node name="Droite" type="Marker3D" parent="Axes"]
+position = Vector3(0.04, 1.5, -1.48)
+
+[node name="Support" type="MeshInstance3D" parent="Axes/Droite"]
+position = Vector3(0, -0.18, -0.18)
+mesh = SubResource("support")
+
+[node name="Broche" type="MeshInstance3D" parent="Axes/Droite"]
+position = Vector3(0, 0, -0.095)
+rotation = Vector3(1.5707963, 0, 0)
+mesh = SubResource("moyeu")
+
+[node name="Clavette" type="MeshInstance3D" parent="Axes/Droite"]
+position = Vector3(0.4872, -0.0518, 0.14)
+rotation = Vector3(0, 0, -0.106)
+mesh = SubResource("repere")
+
+[node name="Usure" type="MeshInstance3D" parent="Axes/Droite"]
+position = Vector3(0, -1.1370, 0.56)
+scale = Vector3(0.4, 0.08, 0.4)
+mesh = SubResource("usure")
+
+[node name="Rangements" type="Node3D" parent="."]
+
+[node name="Menante" type="Marker3D" parent="Rangements"]
+position = Vector3(-2.23, 0.93, 0.31)
+
+[node name="Cale" type="MeshInstance3D" parent="Rangements/Menante"]
+position = Vector3(0, -0.4600, 0)
+mesh = SubResource("cale")
+
+[node name="Intermediaire" type="Marker3D" parent="Rangements"]
+position = Vector3(-2.46, 1.075, 1.38)
+
+[node name="Cale" type="MeshInstance3D" parent="Rangements/Intermediaire"]
+position = Vector3(0, -0.6050, 0)
+mesh = SubResource("cale")
+
+[node name="Menee" type="Marker3D" parent="Rangements"]
+position = Vector3(-1.26, 0.825, 1.61)
+
+[node name="Cale" type="MeshInstance3D" parent="Rangements/Menee"]
+position = Vector3(0, -0.3550, 0)
+mesh = SubResource("cale")
+
+[node name="Roues" type="Node3D" parent="."]
+
+[node name="Menante" parent="Roues" instance=ExtResource("2_roue")]
+position = Vector3(-2.23, 0.93, 0.31)
+
+[node name="Intermediaire" parent="Roues" instance=ExtResource("3_roue")]
+position = Vector3(-2.46, 1.075, 1.38)
+
+[node name="Menee" parent="Roues" instance=ExtResource("4_roue")]
+position = Vector3(-1.26, 0.825, 1.61)
+
+[node name="Chariot" type="Node3D" parent="."]
+position = Vector3(-2.32, 0.35, -0.43)
+
+[node name="Chassis" type="MeshInstance3D" parent="Chariot"]
+position = Vector3(0, 0.13, 0)
+mesh = SubResource("chassis")
+
+[node name="RouleauGauche" type="MeshInstance3D" parent="Chariot"]
+position = Vector3(-0.22, 0.08, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("rouleau")
+
+[node name="RouleauDroit" type="MeshInstance3D" parent="Chariot"]
+position = Vector3(0.22, 0.08, 0)
+rotation = Vector3(0, 0, 1.5707963)
+mesh = SubResource("rouleau")
+
+[node name="Cric" parent="Chariot" instance=ExtResource("6_cric")]
+position = Vector3(0, 0.19, 0)
+
+[node name="Manivelle" parent="Chariot" instance=ExtResource("7_cric")]
+position = Vector3(-0.138, 0.2268, 0.066)
+
+[node name="Vis" type="MeshInstance3D" parent="Chariot"]
+position = Vector3(0, 0.307, 0)
+scale = Vector3(1, 0.094, 1)
+mesh = SubResource("vis_cric")
+
+[node name="Sellette" parent="Chariot" instance=ExtResource("8_cric")]
+position = Vector3(0, 0.354, 0)
+
+[node name="Touche" type="Label3D" parent="."]
+position = Vector3(-0.95, 2.31, -1.26)
+visible = false
+billboard = 1
+modulate = Color(1, 0.86, 0.57, 1)
+outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
+pixel_size = 0.004
+font_size = 46
+outline_size = 6
+text = "E   Examiner le mécanisme"
+
+[node name="Inspection" type="Marker3D" parent="."]
+position = Vector3(-0.92, 0.35, 0.03)
+
+[node name="Interface" parent="." instance=ExtResource("9_interface")]

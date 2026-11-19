@@ -42,6 +42,8 @@ func _ready() -> void:
 			_anim.get_animation(nom).loop_mode = Animation.LOOP_LINEAR
 		else:
 			push_warning("robot_meshy_anim : animation « %s » absente." % nom)
+	if _anim.has_animation("echelle_cycle"):
+		_anim.get_animation("echelle_cycle").loop_mode = Animation.LOOP_LINEAR
 	for nom: String in EN_ALLER_RETOUR:
 		if _anim.has_animation(nom):
 			_anim.get_animation(nom).loop_mode = Animation.LOOP_PINGPONG
@@ -103,7 +105,7 @@ func jouer_action(nom: String, vitesse: float = 1.0, fondu_action: float = 0.3) 
 	_action = true
 	_actuelle = nom
 	_anim.speed_scale = 1.0
-	_anim.play(nom, fondu_action, vitesse)
+	_anim.play(nom, fondu_action, vitesse, vitesse < 0.0)
 
 
 ## Rend la main à la marche automatique.
