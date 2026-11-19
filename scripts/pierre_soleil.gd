@@ -154,14 +154,14 @@ func _recharger() -> void:
 		_joueur.set("cine_position", cible + cote * 2.8 + vers_robot * 0.8 + Vector3.UP * 0.7)
 		approche.tween_property(_joueur, "cine_melange", 1.0, 1.8)
 	await approche.finished
-	await get_tree().create_timer(0.6 if longue else 0.15).timeout
+	await get_tree().create_timer(0.6 if longue else 0.15, false).timeout
 	# il se penche vers le cristal, l'ampoule de l'antenne en avant, et reste penché
 	var robot: Node = _joueur.get("modele")
 	var geste: bool = robot != null and robot.has_method("figer") and bool(robot.call("a_animation", "recharger"))
 	var v: float = 1.0 if longue else 1.8
 	if geste:
 		robot.call("jouer_action", "recharger", v, 0.3)
-		await get_tree().create_timer(INSTANT_PENCHE / v).timeout
+		await get_tree().create_timer(INSTANT_PENCHE / v, false).timeout
 		robot.call("figer", true)
 
 	# 2) les pulsations dorées passent du cristal à l'ampoule ; la batterie remonte
@@ -174,7 +174,7 @@ func _recharger() -> void:
 	var nb: int = int(duree / 0.22)
 	for i in nb:
 		_pulsation(centre, 0.55 if longue else 0.35)
-		await get_tree().create_timer(duree / nb).timeout
+		await get_tree().create_timer(duree / nb, false).timeout
 	if charge.is_running():   # la charge a pu finir pendant les pulsations : on n'attend pas un signal déjà passé
 		await charge.finished
 
@@ -185,12 +185,12 @@ func _recharger() -> void:
 	calme.tween_property(_mat, "emission_energy_multiplier", eclat_repos, 1.0)
 	calme.tween_property(_lumiere, "light_energy", energie_lumiere, 1.0)
 	if longue:
-		await get_tree().create_timer(0.8).timeout
+		await get_tree().create_timer(0.8, false).timeout
 		var retour := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		retour.tween_property(_joueur, "cine_melange", 0.0, 2.0)
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.6, false).timeout
 	if geste:
-		await get_tree().create_timer((INSTANT_DEBOUT - INSTANT_PENCHE) / v).timeout
+		await get_tree().create_timer((INSTANT_DEBOUT - INSTANT_PENCHE) / v, false).timeout
 		robot.call("fin_action")
 	_joueur.set("cinematique", false)
 	_en_cours = false

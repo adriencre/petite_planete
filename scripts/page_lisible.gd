@@ -40,6 +40,7 @@ var _voile: ColorRect
 func _ready() -> void:
 	add_to_group("interactif")
 	add_to_group("pages_lisibles")
+	add_to_group("sauvegarde")
 	# la lueur : un voile crème lumineux juste au-dessus de la feuille
 	_lueur = MeshInstance3D.new()
 	var q := PlaneMesh.new()
@@ -58,6 +59,19 @@ func _ready() -> void:
 	_construire_papier()
 	await get_tree().process_frame
 	_joueur = get_tree().get_first_node_in_group("joueur") as CharacterBody3D
+	# « Continuer » : une feuille déjà lue et rangée dans le carnet n'est plus dans le décor
+	deja_lue = bool(Sauvegarde.donnees(cle_sauvegarde()).get("lue", false))
+	if deja_lue and ramasser:
+		queue_free()
+
+
+## Clé stable : ce qui est écrit (ou dessiné) sur la feuille.
+func cle_sauvegarde() -> String:
+	return "page:%d" % (signature + texte + (image.resource_path if image else "")).hash()
+
+
+func sauver() -> Dictionary:
+	return {"lue": deja_lue}
 
 
 ## Pour guidage.gd : 2 = E possible maintenant, 1 = à découvrir (pas encore lue), 0 = rien à signaler.
@@ -142,7 +156,7 @@ func _lire() -> void:
 		var t := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		t.tween_property(_joueur, "cine_melange", 1.0, 1.8)
 		await t.finished
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.6, false).timeout
 	# le papier apparaît ; le carnet en garde une copie
 	var carnet := get_tree().get_first_node_in_group("carnet")
 	if carnet:
@@ -196,6 +210,7 @@ func _fermer() -> void:
 ## (le carnet en a déjà gardé le dessin, voir _lire).
 func _ranger() -> void:
 	_en_cours = true
+	Sauvegarde.noter(cle_sauvegarde(), sauver())
 	remove_from_group("interactif")
 	remove_from_group("pages_lisibles")
 	SONS.jouer("page", global_position, -6.0, 1.2)

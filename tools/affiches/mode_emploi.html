@@ -35,6 +35,14 @@
   .signe .nom { font-family: 'Mrs Saint Delafield', cursive; font-size: 92px; line-height: 0.8; color: var(--encre); }
   .signe .titre { font-family: 'IM Fell English SC', serif; font-size: 22px; letter-spacing: 4px; color: var(--encre-pale); margin-top: 6px; }
   .mot { font-family: 'Caveat', cursive; font-size: 30px; color: var(--encre-pale); transform: rotate(-3deg); max-width: 420px; text-align: center; }
+
+  /* le temps a passé (ILE_01_REVEIL.md §13, 2026-11-18) : papier jauni, auréoles de taches, encre pâlie */
+  .age { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background:
+      radial-gradient(ellipse 22% 16% at 78% 22%, transparent 70%, rgba(150,105,50,.2) 76%, rgba(170,125,65,.12) 82%, transparent 88%),
+      radial-gradient(ellipse 14% 11% at 18% 70%, rgba(170,125,65,.16) 0%, transparent 70%, rgba(150,105,50,.18) 76%, transparent 84%),
+      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(160,115,55,.30) 100%),
+      linear-gradient(180deg, rgba(215,175,95,.22), rgba(200,155,80,.26)); }
 </style></head>
 <body>
 <div class="feuille">
@@ -217,7 +225,7 @@
         <g transform="translate(258 124) scale(.78)" filter="url(#crayon)"><use href="#robot"/></g>
         <g font-family="IM Fell English SC" font-size="18" fill="#8a6a4f"><text x="430" y="186">ouest →</text></g>
       </svg>
-      <div class="legende"><div class="num">7</div><p>Quand l'île brillera, la <b>barque</b> t'attendra au ponton de la crique, à l'ouest. Branche-toi dessus : ta lumière la pousse.</p></div>
+      <div class="legende"><div class="num">7</div><p>Quand l'île brillera, la <b>barque</b> t'attendra au ponton de la crique, à l'ouest. Va voir la <b>Gardienne du Phare</b> : c'est elle qui veille sur nous.</p></div>
     </div>
   </section>
 
@@ -239,5 +247,6 @@
       <text font-family="IM Fell English SC" font-size="17" letter-spacing="3" fill="#a8432f"><textPath href="#rond">ATELIER · DES · JARDINIERS · ÎLE · DU · RÉVEIL ·</textPath></text>
     </svg>
   </footer>
+  <div class="age"></div>
 </div>
 </body></html>

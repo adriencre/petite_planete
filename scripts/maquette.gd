@@ -35,6 +35,10 @@ const PIERRE_SCRIPT := preload("res://scripts/pierre_soleil.gd")  # recharge de 
 	set(v): etiquettes = v; _construire()
 @export var graine: int = 3:
 	set(v): graine = v; _construire()
+## Pose les objets propres à l'île 1 (lanternes, abri, atelier, barque…) selon les lettres des repères.
+## À décocher pour une autre île : les repères ne donnent alors que leur étiquette (et le carnet).
+@export var objets_ile_1: bool = true:
+	set(v): objets_ile_1 = v; _construire()
 @export_group("Nature")
 @export var herbe: int = 30000
 @export var fleurs: int = 2000
@@ -43,6 +47,11 @@ const PIERRE_SCRIPT := preload("res://scripts/pierre_soleil.gd")  # recharge de 
 @export_group("Détails")
 ## Suite de repères reliés par des dalles (le trajet du joueur), ex. "AP1G2RHNJES".
 @export var chemin: String = ""
+## Les pas de géants (ILE_01_REVEIL.md §13, 2026-11-18) : suite de repères, ex. "EW". De grandes dalles
+## moussues, espacées d'une enjambée de Semeur, en gué sur la rivière : le seul indice de l'atelier.
+@export var chemin_geants: String = ""
+## Enjambée d'un Semeur (2,5 à 3 m de haut), en m.
+@export var enjambee: float = 2.4
 @export var cailloux_par_case: int = 5
 
 const LANTERNES_ZONE := ["1", "2", "3", "G"]  # la zone endormie gère 4 lanternes au plus
@@ -94,6 +103,7 @@ func _construire() -> void:
 	_racines()
 	_details()
 	_vie()
+	_pas_de_geants()   # en dernier : le tirage au sort des autres détails ne change pas
 
 
 func _lire() -> void:
@@ -441,7 +451,9 @@ func _reperes() -> void:
 				if not noms.has(ch):
 					continue
 				var p: Vector3 = k.centre
-				if ch in LANTERNES_ZONE:
+				if not objets_ile_1:
+					pass
+				elif ch in LANTERNES_ZONE:
 					var modele_l: PackedScene = LANTERNE
 					if ch == "G" and ResourceLoader.exists(LANTERNE_GRANDE):
 						modele_l = load(LANTERNE_GRANDE) as PackedScene
@@ -924,6 +936,40 @@ func _details() -> void:
 	pierre.roughness = 1.0
 	_ajouter_mesh("Dalles", dalles, pierre)
 	_ajouter_mesh("Cailloux", cailloux, materiau_terrain)
+
+
+
+## Les pas de géants : une dalle par enjambée, à gauche puis à droite comme des pieds, posées
+## aussi dans la rivière (elles dépassent de l'eau). Pas sur les marches. Sans collision : le sol
+## est déjà marchable dessous.
+func _pas_de_geants() -> void:
+	if chemin_geants.length() < 2:
+		return
+	var pos := {}
+	for r in _grille.size():
+		for c in _grille[r].size():
+			for ch in str(_grille[r][c].suf):
+				pos[ch] = _grille[r][c].centre
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var pied := 0
+	for i in chemin_geants.length() - 1:
+		if not pos.has(chemin_geants[i]) or not pos.has(chemin_geants[i + 1]):
+			continue
+		var a: Vector3 = pos[chemin_geants[i]]
+		var b: Vector3 = pos[chemin_geants[i + 1]]
+		var plat := Vector3(b.x - a.x, 0, b.z - a.z)
+		var cote := plat.normalized().cross(Vector3.UP)
+		var n := maxi(1, roundi(plat.length() / enjambee))
+		for k in n + 1:
+			var p := a.lerp(b, float(k) / n) + cote * (0.35 if pied % 2 == 0 else -0.35)
+			pied += 1
+			var cel := _case_a(p)
+			if cel.niv < 0 or "^" in cel.suf or "v" in cel.suf or "<" in cel.suf or ">" in cel.suf:
+				continue
+			p.y = cel.centre.y - (0.0 if "w" in cel.suf else 0.06)
+			_polyedre(st, p, Vector3(_rng.randf_range(1.1, 1.4), 0.22, _rng.randf_range(0.85, 1.05)))
+	_ajouter_mesh("PasDeGeants", st, materiau_terrain)
 
 
 ## Case de la grille sous un point du monde.

@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ponton.tscn" id="16_3kbj5"]
 [ext_resource type="Script" uid="uid://c6qdtynw1ange" path="res://scripts/guidage.gd" id="17_o0wjb"]
 [ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud_batterie.tscn" id="hud_batterie"]
 [ext_resource type="Script" uid="uid://dnxu4hdr80jp5" path="res://scripts/ile_test.gd" id="sc_ile"]
 [ext_resource type="Script" uid="uid://cl10xpccufbht" path="res://scripts/maquette.gd" id="sc_maquette"]
 [ext_resource type="Script" uid="uid://b1728qdtebaac" path="res://scripts/zone_endormie.gd" id="sc_zone"]
@@ -19,6 +20,7 @@
 [ext_resource type="Shader" uid="uid://da3k48k6bfflr" path="res://shaders/zone_endormie.gdshader" id="s_zone"]
 
 [sub_resource type="ShaderMaterial" id="ciel_mat"]
+resource_local_to_scene = true
 shader = ExtResource("s_ciel")
 shader_parameter/couleur_haut = Color(0.6, 0.53, 0.84, 1)
 shader_parameter/couleur_milieu = Color(0.96, 0.68, 0.76, 1)
@@ -43,9 +45,11 @@ shader_parameter/planete_bandes = 11.0
 shader_parameter/planete_brume = 0.35
 
 [sub_resource type="Sky" id="ciel"]
+resource_local_to_scene = true
 sky_material = SubResource("ciel_mat")
 
 [sub_resource type="Environment" id="env"]
+resource_local_to_scene = true
 background_mode = 2
 sky = SubResource("ciel")
 ambient_light_source = 3
@@ -87,6 +91,7 @@ adjustment_contrast = 1.06
 adjustment_saturation = 1.25
 
 [sub_resource type="CameraAttributesPractical" id="flou_maquette"]
+resource_local_to_scene = true
 dof_blur_far_enabled = true
 dof_blur_far_distance = 11.0
 dof_blur_far_transition = 12.0
@@ -246,6 +251,7 @@ noms = {
 materiau_terrain = SubResource("facettes_mat")
 taille_case = 6.0
 chemin = "AP12RHNJEG"
+chemin_geants = "EW"
 
 [node name="Monde" type="Node3D" parent="." unique_id=573836142]
 
@@ -308,3 +314,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 24)
 
 [node name="Guidage" type="Node3D" parent="." unique_id=1590087198]
 script = ExtResource("17_o0wjb")
+
+[node name="HudBatterie" parent="." instance=ExtResource("hud_batterie")]

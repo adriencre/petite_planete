@@ -110,6 +110,12 @@ func _ready() -> void:
 ## même pendant les animations ; un halo doux toujours tourné vers la caméra, et la lumière part de là.
 var _lueur: Node3D
 var _halo_mat := StandardMaterial3D.new()
+var _coeur_mat := StandardMaterial3D.new()
+## Centre de l'ampoule dans le modèle (m, au repos), mesuré sur les sommets jaunes de robot_meshy.glb.
+@export var centre_ampoule: Vector3 = Vector3(0.028, 1.63, 0.26)
+## Rayon du cœur lumineux de l'ampoule (m) et sa force (> 1 : il déclenche le glow).
+@export var rayon_coeur: float = 0.07
+@export var eclat_coeur: float = 3.0
 
 
 func _preparer_lueur() -> void:
@@ -117,14 +123,44 @@ func _preparer_lueur() -> void:
 	if squelettes.is_empty():
 		return
 	var sk := squelettes[0] as Skeleton3D
-	if sk.find_bone("head_end") < 0:
+	# l'ampoule est portée par la tête : on s'accroche à l'os « Head » (celui qui déforme la tête)
+	var b := sk.find_bone("Head")
+	if b < 0:
 		return
 	var accroche := BoneAttachment3D.new()
-	accroche.bone_name = "head_end"
+	accroche.bone_name = "Head"
 	sk.add_child(accroche)
 	_lueur = Node3D.new()
-	_lueur.position = Vector3(0, 0.18, 0.05)
 	accroche.add_child(_lueur)
+	# Le squelette Meshy est à l'échelle 0,01 : sans compensation, le halo faisait 9 mm. On place la
+	# lueur sur l'ampoule : `centre_ampoule` est dans l'espace du maillage (pose de liaison du skin),
+	# ramené dans le repère de l'os par sa pose de liaison ; puis on rend l'échelle 1.
+	var bind := Transform3D.IDENTITY
+	var maillage := sk.find_children("*", "MeshInstance3D", true, false)
+	for mi in maillage:
+		var skin := (mi as MeshInstance3D).skin
+		if skin == null:
+			continue
+		for k in skin.get_bind_count():
+			if skin.get_bind_name(k) == &"Head" or skin.get_bind_bone(k) == b:
+				bind = skin.get_bind_pose(k)
+		break
+	_lueur.position = bind * centre_ampoule
+	_lueur.scale = Vector3.ONE / (sk.global_transform * sk.get_bone_global_pose(b)).basis.get_scale()
+	# le cœur de l'ampoule : une petite sphère additive, plus vive que le seuil du glow (> 1) : elle rayonne
+	var coeur := MeshInstance3D.new()
+	var sphere := SphereMesh.new()
+	sphere.radius = rayon_coeur
+	sphere.height = rayon_coeur * 2.0
+	sphere.radial_segments = 12
+	sphere.rings = 6
+	_coeur_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_coeur_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_coeur_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	sphere.material = _coeur_mat
+	coeur.mesh = sphere
+	coeur.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_lueur.add_child(coeur)
 	var q := QuadMesh.new()
 	q.size = Vector2(0.9, 0.9)
 	var degrade := Gradient.new()
@@ -159,9 +195,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventKey and event.pressed and not event.echo:
 		var k := event as InputEventKey
-		if k.physical_keycode == KEY_ESCAPE:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		elif k.physical_keycode == KEY_V:
+		if k.physical_keycode == KEY_V:   # (Échap : le menu pause, menu_pause.gd)
 			premiere_personne = not premiere_personne
 
 
@@ -377,6 +411,8 @@ func _gerer_batterie(delta: float) -> void:
 	lumiere.omni_range = 3.0 + 4.5 * batterie
 	if _lueur:
 		_halo_mat.albedo_color = Color(couleur_lumiere.r, couleur_lumiere.g, couleur_lumiere.b, 0.75 * niveau)
+		var c := couleur_lumiere.lerp(Color.WHITE, 0.35) * (eclat_coeur * niveau)
+		_coeur_mat.albedo_color = Color(c.r, c.g, c.b, clampf(niveau * 1.5, 0.0, 1.0))
 		if modele.visible:
 			lumiere.global_position = _lueur.global_position
 	_ampoule_mat.emission_energy_multiplier = 6.0 * niveau

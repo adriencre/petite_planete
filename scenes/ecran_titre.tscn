@@ -1,0 +1,251 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ecran_titre.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/theme_carnet.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/croquis/grande_lanterne.png" id="3_dessin"]
+[ext_resource type="PackedScene" path="res://scenes/ui/reglages.tscn" id="4_reglages"]
+[ext_resource type="AudioStream" path="res://assets/audio/musique_couche_1.wav" id="5_musique1"]
+[ext_resource type="AudioStream" path="res://assets/audio/musique_couche_3.wav" id="6_musique2"]
+
+[sub_resource type="Gradient" id="papier_degrade"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(0.97, 0.93, 0.84, 0.94, 0.97, 0.93, 0.84, 0.82, 0.97, 0.93, 0.84, 0)
+
+[sub_resource type="GradientTexture2D" id="papier"]
+gradient = SubResource("papier_degrade")
+width = 256
+height = 4
+
+[sub_resource type="Gradient" id="pollen_couleur"]
+offsets = PackedFloat32Array(0, 0.2, 0.75, 1)
+colors = PackedColorArray(1, 0.82, 0.45, 0, 1, 0.82, 0.45, 0.9, 1, 0.86, 0.55, 0.6, 1, 0.86, 0.55, 0)
+
+[sub_resource type="Curve" id="pollen_taille"]
+_data = [Vector2(0, 0.6), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.4), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="grain_degrade"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.6, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="grain"]
+gradient = SubResource("grain_degrade")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="EcranTitre" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="FondUni" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.97, 0.93, 0.84, 1)
+
+[node name="Fond" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_dessin")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Papier" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+anchor_right = 0.55
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("papier")
+expand_mode = 1
+
+[node name="Pollen" type="CPUParticles2D" parent="."]
+amount = 40
+lifetime = 14.0
+preprocess = 14.0
+texture = SubResource("grain")
+emission_shape = 3
+emission_rect_extents = Vector2(600, 10)
+direction = Vector2(0.15, -1)
+spread = 20.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 60.0
+angular_velocity_min = -20.0
+angular_velocity_max = 20.0
+scale_amount_min = 0.4
+scale_amount_max = 1.1
+scale_amount_curve = SubResource("pollen_taille")
+color_ramp = SubResource("pollen_couleur")
+
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 90.0
+offset_top = -250.0
+offset_right = 620.0
+offset_bottom = 250.0
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="Titre" type="Label" parent="Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 110
+text = "Petite Planète"
+
+[node name="SousTitre" type="Label" parent="Menu"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Une île endormie. Un petit robot qui se réveille."
+
+[node name="Espace" type="Control" parent="Menu"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Continuer" type="Button" parent="Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Continuer"
+
+[node name="NouvellePartie" type="Button" parent="Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Nouvelle partie"
+
+[node name="BoutonReglages" type="Button" parent="Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Réglages"
+
+[node name="BoutonDev" type="Button" parent="Menu"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Dev : aller sur une île"
+
+[node name="Quitter" type="Button" parent="Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Quitter"
+
+[node name="Confirmation" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -120.0
+offset_right = 300.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Colonne" type="VBoxContainer" parent="Confirmation"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Question" type="Label" parent="Confirmation/Colonne"]
+layout_mode = 2
+text = "Une partie est en cours.
+Tout recommencer depuis le début ?"
+horizontal_alignment = 1
+
+[node name="Choix" type="HBoxContainer" parent="Confirmation/Colonne"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 40
+
+[node name="Oui" type="Button" parent="Confirmation/Colonne/Choix"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Oui, recommencer"
+
+[node name="Non" type="Button" parent="Confirmation/Colonne/Choix"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Non"
+
+[node name="ChoixIle" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -200.0
+offset_right = 260.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Colonne" type="VBoxContainer" parent="ChoixIle"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Question" type="Label" parent="ChoixIle/Colonne"]
+layout_mode = 2
+text = "Aller sur quelle île ? (dev)"
+horizontal_alignment = 1
+
+[node name="ListeIles" type="VBoxContainer" parent="ChoixIle/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RetourDev" type="Button" parent="ChoixIle/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Retour"
+
+[node name="Reglages" parent="." instance=ExtResource("4_reglages")]
+visible = false
+layout_mode = 1
+
+[node name="Noir" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Musique1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_musique1")
+bus = &"Musique"
+
+[node name="Musique2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_musique2")
+bus = &"Musique"

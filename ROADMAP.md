@@ -42,6 +42,13 @@ Voir `ILE_01_REVEIL.md` §13.
 - [ ] L'ordre d'Ysolde sur un papier à côté du berceau ; l'atelier un peu trop grand pour le robot (décidé le 2026-11-16).
 - [ ] Le carnet : juste ce qu'on a vu (lieux, textes, dessins, cartes), sans flèches ni questions.
 
+## Pour les joueurs (fait le 2026-11-17)
+- [x] Écran titre (`scenes/ecran_titre.tscn`) : aquarelle de la grande lanterne, Continuer / Nouvelle partie / Réglages / Quitter.
+- [x] Menu pause (Échap, `scenes/ui/menu_pause.tscn`) : tout s'arrête, cinématiques comprises ; pause aussi quand la fenêtre perd le focus.
+- [x] Réglages (`scenes/ui/reglages.tscn`) : volume général, musique, vent et vagues, bruitages, plein écran (`user://reglages.cfg`).
+- [x] Sauvegarde automatique (`scripts/sauvegarde.gd`, `user://partie.json`) : lanternes, fin de l'île, carnet, pages lues, anciens corps, morts. « Continuer » = réveil court dans le berceau.
+- [ ] Sensibilité de la souris : à ajouter si la caméra redevient pilotable à la souris (vue de dessus fixe pour l'instant).
+
 ## Étape 3 — L'archipel et l'île 2
 Voir `ILE_02_PHARE.md` §11 (phases J et K).
 - Ordre : K1 (maquette grise) → J4 (`WorldClock`, marée) → K2 → K3 → K4 → J1–J3 (scène Archipel, barque pilotable, brume en mer) → K5 → K6 → K7.

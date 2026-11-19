@@ -54,6 +54,7 @@ var _zone
 func _ready() -> void:
 	add_to_group("lanternes")
 	add_to_group("interactif")
+	add_to_group("sauvegarde")
 	for n in find_children("Petale*", "Node3D", true, false):
 		_petales.append(n)
 		_bases.append((n as Node3D).basis)
@@ -99,6 +100,42 @@ func _ready() -> void:
 	if _zone:
 		_zone.definir_zone(index_zone, global_position, rayon_zone)
 		_zone.definir_eveil(index_zone, 0.0)
+	var sauve: Dictionary = Sauvegarde.donnees(cle_sauvegarde())
+	if not sauve.is_empty():
+		premiere_fois = bool(sauve.get("premiere_fois", premiere_fois))
+		if bool(sauve.get("allumee", false)):
+			allumer_tout_de_suite()
+
+
+# ---------------------------------------------------------------- sauvegarde (sauvegarde.gd)
+
+## Clé stable : la position au sol (les nœuds des lanternes ont des noms générés).
+func cle_sauvegarde() -> String:
+	return "lanterne:%d,%d" % [roundi(global_position.x), roundi(global_position.z)]
+
+
+func sauver() -> Dictionary:
+	return {"allumee": allumee, "premiere_fois": premiere_fois}
+
+
+## « Continuer » : la lanterne est déjà allumée (sans son, sans geste), sa zone déjà réveillée.
+func allumer_tout_de_suite() -> void:
+	if allumee:
+		return
+	allumee = true
+	premiere_fois = false
+	_coeur_mat.emission_energy_multiplier = 7.0
+	_coeur_mat.albedo_color = Color(1.0, 0.93, 0.75)
+	_lumiere.light_energy = energie_lumiere
+	_prise_mat.emission_energy_multiplier = 0.6
+	if _coeur:
+		_coeur.scale = Vector3.ONE * 1.5
+	_ouvrir(1.0)
+	_eveil(rayon_zone + 2.0)
+	_pollen.one_shot = false
+	_pollen.amount = 12
+	_pollen.explosiveness = 0.0
+	_pollen.emitting = true
 
 
 ## Le cœur dans le repère de la lanterne : la lumière et le pollen partent de là.
@@ -179,9 +216,27 @@ func _process(_delta: float) -> void:
 func etat_interaction() -> int:
 	if _joueur == null or _en_cours or allumee or not _prete():
 		return 0
-	if not bool(_joueur.get("cinematique")) and _proche_et_regarde(distance_activation):
+	if not bool(_joueur.get("cinematique")) and _proche_et_regarde(distance_activation) and _assez_de_lumiere():
 		return 2
 	return 1
+
+
+## Allumer coûte `cout_batterie` : avec moins que ça (l'antenne presque vide du premier réveil),
+## la lanterne refuse. Il faut d'abord aller à la pierre-soleil.
+func _assez_de_lumiere() -> bool:
+	return _joueur != null and float(_joueur.get("batterie")) >= cout_batterie
+
+
+## Pas assez de lumière : la prise clignote deux fois, faiblement, et grésille. Rien ne s'allume.
+func _refuser() -> void:
+	_en_cours = true
+	SONS.jouer("extinction", _prise_position(), -14.0, 1.5)
+	var t := create_tween()
+	for i in 2:
+		t.tween_property(_prise_mat, "emission_energy_multiplier", 0.5, 0.08)
+		t.tween_property(_prise_mat, "emission_energy_multiplier", 0.0, 0.25)
+	await t.finished
+	_en_cours = false
 
 
 func point_appel() -> Vector3:
@@ -222,7 +277,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if not allumee and _prete():
 			get_viewport().set_input_as_handled()
-			_allumer()
+			if _assez_de_lumiere():
+				_allumer()
+			else:
+				_refuser()
 		elif allumee:
 			get_viewport().set_input_as_handled()
 			_reprendre()
@@ -273,12 +331,12 @@ func _allumer_3e(robot: Node) -> void:
 	approche.tween_property(_joueur, "global_position", place, clampf(trajet / 1.3, 0.5, 3.5))
 	approche.tween_property(_joueur, "cine_melange", 1.0, 1.4 + 1.2 * k)
 	await approche.finished
-	await get_tree().create_timer(0.45).timeout  # le temps de se tourner vers la prise
+	await get_tree().create_timer(0.45, false).timeout  # le temps de se tourner vers la prise
 
 	# 2) il tire le câble de son poignet, pose un genou à terre et enfonce la fiche
 	robot.call("jouer_action", "brancher", v_geste)
 	var d_brancher: float = robot.call("duree", "brancher") / v_geste
-	await get_tree().create_timer(d_brancher * INSTANT_FICHE).timeout
+	await get_tree().create_timer(d_brancher * INSTANT_FICHE, false).timeout
 	# clic : la fiche est branchée, la prise s'allume
 	_fiche_posee = true
 	SONS.jouer("clic", _prise_position())
@@ -288,7 +346,7 @@ func _allumer_3e(robot: Node) -> void:
 	var clic := create_tween()
 	clic.tween_property(_prise_mat, "emission_energy_multiplier", 3.0, 0.08)
 	clic.tween_property(_prise_mat, "emission_energy_multiplier", 1.2, 0.4)
-	await get_tree().create_timer(d_brancher * (1.0 - INSTANT_FICHE) + 0.35 * k).timeout
+	await get_tree().create_timer(d_brancher * (1.0 - INSTANT_FICHE) + 0.35 * k, false).timeout
 
 	# 3) la lumière passe du robot à la lanterne ; il relève lentement la tête, la caméra suit
 	var d_charge := 3.2 * k
@@ -310,7 +368,7 @@ func _allumer_3e(robot: Node) -> void:
 		var t := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		t.tween_method(_ouvrir, cran / 3.0, (cran + 1) / 3.0, 0.45 * k)
 		await t.finished
-		await get_tree().create_timer(0.3 * k).timeout
+		await get_tree().create_timer(0.3 * k, false).timeout
 	_pollen.restart()
 	_pollen.emitting = true
 	var plein := create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
@@ -323,10 +381,10 @@ func _allumer_3e(robot: Node) -> void:
 	# 5) la zone se réveille ; il se relève, bras au ciel, encore branché : le câble se tend
 	var vague := create_tween()
 	vague.tween_method(_eveil, 0.01, rayon_zone + 2.0, 4.5 * maxf(k, 0.55)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await get_tree().create_timer(1.0 * k).timeout
+	await get_tree().create_timer(1.0 * k, false).timeout
 	robot.call("jouer_action", "debrancher", v_geste, 0.25)
 	var d_debrancher: float = robot.call("duree", "debrancher") / v_geste
-	await get_tree().create_timer(d_debrancher * INSTANT_BRAS_LEVES).timeout
+	await get_tree().create_timer(d_debrancher * INSTANT_BRAS_LEVES, false).timeout
 
 	# 6) la fiche saute et le câble file se rembobiner dans le poignet ; la caméra remonte
 	_fiche_posee = false
@@ -337,7 +395,7 @@ func _allumer_3e(robot: Node) -> void:
 	rembobine.tween_callback(_ranger_cable)
 	var retour := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	retour.tween_property(_joueur, "cine_melange", 0.0, 2.6 * maxf(k, 0.6))
-	await get_tree().create_timer(d_debrancher * (1.0 - INSTANT_BRAS_LEVES)).timeout
+	await get_tree().create_timer(d_debrancher * (1.0 - INSTANT_BRAS_LEVES), false).timeout
 	robot.call("fin_action")
 	_joueur.cinematique = false
 	await vague.finished
@@ -402,7 +460,7 @@ func _allumer_1re() -> void:
 	_cable.materiau.set_shader_parameter("flux", 0.0)
 	await _joueur.lever_mains(true, 0.8 * k).finished
 	await _poser_index_vers(prise + normale * 0.22, 0.9 * k)
-	await get_tree().create_timer(0.25 * k).timeout
+	await get_tree().create_timer(0.25 * k, false).timeout
 	await _poser_index_vers(prise + normale * 0.02, 0.35 * k)
 	# clic : la fiche est branchée, la prise s'allume
 	_fiche_posee = true
@@ -411,7 +469,7 @@ func _allumer_1re() -> void:
 	var clic := create_tween()
 	clic.tween_property(_prise_mat, "emission_energy_multiplier", 3.0, 0.08)
 	clic.tween_property(_prise_mat, "emission_energy_multiplier", 1.2, 0.4)
-	await get_tree().create_timer(0.35 * k).timeout
+	await get_tree().create_timer(0.35 * k, false).timeout
 	_joueur.poser_index(null)
 	_joueur.lever_mains(true, 0.6 * k)
 
@@ -430,7 +488,7 @@ func _allumer_1re() -> void:
 		var t := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		t.tween_method(_ouvrir, cran / 3.0, (cran + 1) / 3.0, 0.45 * k)
 		await t.finished
-		await get_tree().create_timer(0.3 * k).timeout
+		await get_tree().create_timer(0.3 * k, false).timeout
 	_pollen.restart()
 	_pollen.emitting = true
 	var plein := create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
@@ -443,7 +501,7 @@ func _allumer_1re() -> void:
 	# 5) la zone se réveille
 	var vague := create_tween()
 	vague.tween_method(_eveil, 0.01, rayon_zone + 2.0, 4.5 * maxf(k, 0.55)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await get_tree().create_timer(1.6 * k).timeout
+	await get_tree().create_timer(1.6 * k, false).timeout
 
 	# 6) il débranche, le câble s'enroule dans le poignet, il se relève
 	await _poser_index_vers(prise + normale * 0.02, 0.5 * k)
@@ -497,7 +555,7 @@ func _reprendre() -> void:
 		_joueur.cine_position = _plan_de_cote(cible, normale, ech)
 		approche.tween_property(_joueur, "cine_melange", 1.0, 2.0)
 	await approche.finished
-	await get_tree().create_timer(0.8 * k).timeout
+	await get_tree().create_timer(0.8 * k, false).timeout
 
 	# il se penche vers le cœur, l'antenne tendue (le geste « recharger » de la pierre-soleil), et reste penché
 	var robot: Node = _joueur.modele
@@ -505,7 +563,7 @@ func _reprendre() -> void:
 	var v_geste := 1.0 if longue else 1.6
 	if geste:
 		robot.call("jouer_action", "recharger", v_geste, 0.3)
-		await get_tree().create_timer(INSTANT_PENCHE / v_geste).timeout
+		await get_tree().create_timer(INSTANT_PENCHE / v_geste, false).timeout
 		robot.call("figer", true)
 
 	# 2) la lumière descend en spirale dans l'antenne ; le cœur pâlit, la batterie remonte
@@ -522,7 +580,7 @@ func _reprendre() -> void:
 	var nb := int(duree / 0.12)
 	for i in nb:
 		_spirale(coeur, i * 0.9, 1.1 if longue else 0.7)
-		await get_tree().create_timer(duree / nb).timeout
+		await get_tree().create_timer(duree / nb, false).timeout
 	if vide.is_running():
 		await vide.finished
 	# rechargé, il se redresse (la fin du geste se joue pendant que la fleur se referme)
@@ -538,19 +596,19 @@ func _reprendre() -> void:
 		var t := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		t.tween_method(_ouvrir, 1.0 - cran / 3.0, 1.0 - (cran + 1) / 3.0, 0.45 * k)
 		await t.finished
-		await get_tree().create_timer(0.3 * k).timeout
+		await get_tree().create_timer(0.3 * k, false).timeout
 
 	if geste:
 		var reste := fin_geste - Time.get_ticks_msec() / 1000.0
 		if reste > 0.0:
-			await get_tree().create_timer(reste).timeout
+			await get_tree().create_timer(reste, false).timeout
 		robot.call("fin_action")
 
 	# 4) la caméra remonte, on rend la main
 	if _joueur.cine_melange > 0.0:
 		var retour := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		retour.tween_property(_joueur, "cine_melange", 0.0, 2.2)
-		await get_tree().create_timer(0.8).timeout
+		await get_tree().create_timer(0.8, false).timeout
 	_joueur.cinematique = false
 	allumee = false
 	if sommeil.is_running():

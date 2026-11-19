@@ -10,3 +10,5 @@ __pycache__/
 *.blend2
 # graphify
 graphify-out/
+# Réglages locaux des agents (peuvent contenir des secrets)
+.claude/settings.local.json

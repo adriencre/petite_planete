@@ -53,13 +53,13 @@ Schéma : `concept/ile_01_formes.png` (variante A), dessiné par `tools/carte_is
 ### Les lieux
 | Lieu | Ce qu'on y trouve |
 |---|---|
-| **L'abri** | Le berceau (lumière qui s'allume à chaque réveil), **un papier posé à côté du berceau : l'ordre d'Ysolde** (§7), **sur le tapis, le mode d'emploi du petit jardinier, signé Tavin** (ce qu'il faut faire sur l'île, décidé le 2026-11-17), l'horloge arrêtée, le carnet, un coin sombre où quelque chose scintille, la veilleuse au-dessus de la porte. L'abri est **à la taille du robot**. |
+| **L'abri** | **Tout y a vieilli, sauf le berceau** (décidé le 2026-11-18) : plantes qui ont débordé de leurs pots, une liane qui grimpe au mur, sac de graines renversé où des pousses ont levé, livres pâlis, toiles d'araignée, poussière dans la lumière de la porte, ordre d'Ysolde jauni et déchiré. Le berceau, lui, brille, propre. Le berceau (lumière qui s'allume à chaque réveil), **un papier posé à côté du berceau : l'ordre d'Ysolde** (§7), **sur le tapis, le mode d'emploi du petit jardinier, signé Tavin** (ce qu'il faut faire sur l'île, décidé le 2026-11-17), l'horloge arrêtée, le carnet, un coin sombre où quelque chose scintille, la veilleuse au-dessus de la porte. L'abri est **à la taille du robot**. |
 | **La pierre-soleil** | Juste à la sortie de l'abri : l'antenne vide s'y recharge. Premier geste du jeu. |
 | **Les lanternes 1, 2, 3** | Le chemin vers le centre de l'île. Chacune réveille sa zone. |
 | **La grande lanterne** | Au sommet, visible de partout. Elle ne s'allume qu'une fois les trois petites allumées (racines lumineuses qui montent jusqu'à elle). L'allumer, c'est la fin de l'île. |
 | **L'escalier** | Un simple escalier de pierre monte au plateau, ouvert dès le début. Rien à planter ni à faire pousser (décidé le 2026-11-17). |
 | **Le plateau et le sommet** | Le jardin mort, la charrette, le banc. Au sommet, la **grande lanterne** : l'île entière s'éveille. |
-| **La cascade** | Derrière l'eau, un rebord caché → une grotte → **l'atelier des robots**. |
+| **La cascade** | Derrière l'eau, un rebord caché → une grotte → **l'atelier des robots**. **Les pas de géants** (décidé le 2026-11-18) : de grandes dalles moussues, espacées d'une enjambée de Semeur (~2,4 m), partent de la montée, traversent la rivière comme un gué et mènent au rebord. Indice muet : quelqu'un de très grand passait souvent par là. |
 | **L'atelier des robots** | Le moule, les pièces détachées, l'établi, la lanterne de l'atelier, la **page 7**. **Un peu trop grand pour le robot** (Semeurs de 2,50 à 3 m) : établi à hauteur de poitrine, portes d'environ 3 m, marches un peu hautes. |
 | **La crique ouest** | Noyée de **brume épaisse**. Le **premier ancien corps**, couvert de mousse. La **barque**, cachée sous les racines. La **pierre-soleil cachée**. |
 | **Au loin** | La silhouette sombre du Phare, et la petite lueur de la bouée de son port. |
@@ -122,6 +122,7 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 
 ## 7. Le récit (ce que le joueur comprend sur l'île 1)
 - Je suis un petit robot jardinier. Le monde est gris, la brume me vide, la lumière me fait du bien.
+- **Ceux qui m'ont laissé ici sont partis il y a très, très longtemps** (l'abri a vieilli tout autour du berceau intact, le papier d'Ysolde a jauni). « Jusqu'à notre retour »… mais quand ? C'est ainsi que naît la question « Où sont les Semeurs ? ».
 - D'autres robots sont venus avant moi (les anciens corps). *(Faux : c'est lui.)*
 - Quand je meurs, je reviens dans l'abri.
 - Quelqu'un, de très grand, fabriquait des robots comme moi (l'atelier), et **m'a laissé une consigne**.
@@ -201,7 +202,7 @@ Ils vaquent (routines), rentrent chez eux s'ils ont peur, et ressortent si le ro
 ## 11. Les liens avec les autres îles
 | Sens | Lien |
 |---|---|
-| île 1 → île 2 (Phare) | On voit le Phare au loin. Le Guetteur parle de ceux du Phare. |
+| île 1 → île 2 (Phare) | On voit le Phare au loin. Le mode d'emploi de Tavin (point 7) : « Va voir la Gardienne du Phare : c'est elle qui veille sur nous. » Vu du sommet, le Phare est éteint : la Gardienne ne veille plus. |
 | île 1 → île 3 (Colonie) | L'ordre d'Ysolde, sur le papier à côté du berceau (« jusqu'à notre retour »). |
 | île 1 → île 7 (île cachée) | L'Ancienne : Celle-qui-a-soufflé est partie **vers le nord**. La page 7 : « suis-les, elles connaissent le chemin de chez moi ». |
 | île 1 → île 6 (Centrale) | Le berceau a sa propre ligne d'énergie : c'est elle qu'on coupera à la fin. |
@@ -231,3 +232,8 @@ Ils vaquent (routines), rentrent chez eux s'ils ont peur, et ressortent si le ro
 4. Ajouter **l'ordre d'Ysolde** sur un papier posé à côté du berceau (pas une énigme).
 5. L'atelier est **un peu trop grand** pour le robot (Semeurs de 2,50 à 3 m) : établi à hauteur de poitrine, portes d'environ 3 m.
 6. **Pas de marée** sur l'île 1.
+
+**Décidé le 2026-11-18** (pour que l'histoire se comprenne dès l'île 1)
+7. **Le temps passé** : l'abri a vieilli pendant des siècles, **sauf le berceau** (sa propre ligne d'énergie). Pas de squelette ni de désordre violent (fausse piste « ils sont partis ») : la nature a repris doucement. L'ordre d'Ysolde et le mode d'emploi sont jaunis ; celui d'Ysolde est taché et déchiré.
+8. **Les pas de géants** vers l'atelier : de grandes dalles moussues espacées d'une enjambée de Semeur, de la montée jusqu'au rebord, en gué sur la rivière (`chemin_geants` dans la maquette). C'est le seul indice de l'atelier.
+9. **Tavin envoie au Phare** : point 7 du mode d'emploi, « Va voir la Gardienne du Phare : c'est elle qui veille sur nous. » Pas de fin de démo : l'île 2 sera développée.

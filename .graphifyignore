@@ -1,5 +1,7 @@
 # graphify : ce qui ne fait pas partie du jeu lui-même
 .claude/
+.agents/skills/
+.codex/
 .godot/
 addons/
 assets/

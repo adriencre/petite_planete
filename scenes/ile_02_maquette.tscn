@@ -1,0 +1,510 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" uid="uid://dnxu4hdr80jp5" path="res://scripts/ile_test.gd" id="sc_ile"]
+[ext_resource type="Script" uid="uid://cl10xpccufbht" path="res://scripts/maquette.gd" id="sc_maquette"]
+[ext_resource type="Shader" uid="uid://cljsnd7ner40e" path="res://shaders/ciel_pastel.gdshader" id="s_ciel"]
+[ext_resource type="Shader" uid="uid://7qouqxephsnd" path="res://shaders/terrain_facettes.gdshader" id="s_facettes"]
+[ext_resource type="Shader" uid="uid://bu0ebrb5bkj3b" path="res://shaders/vision.gdshader" id="s_vision"]
+[ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
+[ext_resource type="PackedScene" path="res://scenes/ponton.tscn" id="p_ponton"]
+
+[sub_resource type="ShaderMaterial" id="ciel_mat"]
+resource_local_to_scene = true
+shader = ExtResource("s_ciel")
+shader_parameter/couleur_haut = Color(0.6, 0.53, 0.84, 1)
+shader_parameter/couleur_milieu = Color(0.96, 0.68, 0.76, 1)
+shader_parameter/couleur_horizon = Color(1, 0.83, 0.64, 1)
+shader_parameter/couleur_bas = Color(0.8, 0.78, 0.88, 1)
+shader_parameter/hauteur_milieu = 0.14
+shader_parameter/hauteur_haut = 0.6
+shader_parameter/taille_soleil = 0.9993
+shader_parameter/halo_soleil = 0.6
+shader_parameter/nuage_lumiere = Color(1, 0.88, 0.8, 1)
+shader_parameter/nuage_ombre = Color(0.8, 0.62, 0.82, 1)
+shader_parameter/nuage_couverture = 0.48
+shader_parameter/nuage_douceur = 0.18
+shader_parameter/nuage_echelle = 1.6
+shader_parameter/nuage_vitesse = 0.01
+shader_parameter/etoiles = 0.0
+shader_parameter/planete_direction = Vector3(-0.5, 0.3, -0.8)
+shader_parameter/planete_taille = 0.17
+shader_parameter/planete_couleur_a = Color(0.86, 0.62, 0.82, 1)
+shader_parameter/planete_couleur_b = Color(0.68, 0.58, 0.88, 1)
+shader_parameter/planete_bandes = 11.0
+shader_parameter/planete_brume = 0.35
+
+[sub_resource type="Sky" id="ciel"]
+resource_local_to_scene = true
+sky_material = SubResource("ciel_mat")
+
+[sub_resource type="Environment" id="env"]
+resource_local_to_scene = true
+background_mode = 2
+sky = SubResource("ciel")
+ambient_light_source = 3
+ambient_light_color = Color(0.95, 0.82, 0.9, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.45
+tonemap_mode = 2
+tonemap_exposure = 0.9
+tonemap_white = 4.0
+ssao_enabled = true
+ssao_radius = 1.6
+ssao_intensity = 2.5
+ssao_light_affect = 0.15
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.03
+glow_hdr_threshold = 1.2
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.76, 0.74, 0.86, 1)
+fog_sun_scatter = 0.06
+fog_density = 0.97
+fog_sky_affect = 0.7
+fog_height = 1.0
+fog_height_density = 0.05
+fog_depth_curve = 1.3
+fog_depth_begin = 18.0
+fog_depth_end = 38.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(0.88, 0.86, 0.92, 1)
+volumetric_fog_emission = Color(0.5, 0.48, 0.58, 1)
+volumetric_fog_emission_energy = 0.2
+volumetric_fog_length = 40.0
+adjustment_enabled = true
+adjustment_contrast = 1.06
+adjustment_saturation = 1.15
+
+[sub_resource type="ShaderMaterial" id="facettes_mat"]
+render_priority = 0
+shader = ExtResource("s_facettes")
+shader_parameter/herbe_a = Color(0.62, 0.82, 0.42, 1)
+shader_parameter/herbe_b = Color(0.54, 0.77, 0.4, 1)
+shader_parameter/herbe_c = Color(0.7, 0.85, 0.46, 1)
+shader_parameter/sable_a = Color(0.93, 0.84, 0.7, 1)
+shader_parameter/sable_b = Color(0.89, 0.79, 0.66, 1)
+shader_parameter/roche_a = Color(0.88, 0.6, 0.56, 1)
+shader_parameter/roche_b = Color(0.94, 0.74, 0.6, 1)
+shader_parameter/roche_c = Color(0.96, 0.86, 0.76, 1)
+shader_parameter/mousse = Color(0.47, 0.66, 0.4, 1)
+shader_parameter/taille_case = 7.0
+shader_parameter/hauteur_niveau = 2.5
+shader_parameter/hauteur_sable = 1.0
+shader_parameter/epaisseur_mousse = 0.3
+
+[sub_resource type="ShaderMaterial" id="vision_mat"]
+shader = ExtResource("s_vision")
+shader_parameter/trouble = 0.0
+shader_parameter/paupiere = 0.0
+shader_parameter/teinte_trouble = Color(0.62, 0.72, 0.95, 1)
+shader_parameter/vignette = 0.25
+
+[sub_resource type="StandardMaterial3D" id="m_blanc"]
+albedo_color = Color(0.94, 0.92, 0.88, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="m_rouille"]
+albedo_color = Color(0.74, 0.44, 0.34, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="m_gris"]
+albedo_color = Color(0.62, 0.62, 0.68, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="m_bois"]
+albedo_color = Color(0.58, 0.44, 0.33, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="m_sombre"]
+albedo_color = Color(0.12, 0.11, 0.15, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="m_miroir"]
+albedo_color = Color(0.82, 0.86, 0.92, 1)
+metallic = 0.9
+roughness = 0.15
+
+[sub_resource type="StandardMaterial3D" id="m_verre"]
+albedo_color = Color(0.7, 0.8, 0.85, 1)
+metallic = 0.4
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="m_lueur"]
+albedo_color = Color(1, 0.8, 0.45, 1)
+emission_enabled = true
+emission = Color(1, 0.75, 0.4, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="m_flaque"]
+albedo_color = Color(0.28, 0.58, 0.5, 1)
+metallic = 0.3
+roughness = 0.1
+
+[sub_resource type="StandardMaterial3D" id="m_mort"]
+albedo_color = Color(0.62, 0.5, 0.52, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="tour"]
+material = SubResource("m_blanc")
+top_radius = 2.4
+bottom_radius = 3.0
+height = 18.0
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="bande"]
+material = SubResource("m_rouille")
+top_radius = 2.86
+bottom_radius = 2.9
+height = 1.6
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="lanterne_phare"]
+material = SubResource("m_verre")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 2.6
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="toit_phare"]
+material = SubResource("m_rouille")
+top_radius = 0.0
+bottom_radius = 2.6
+height = 1.6
+radial_segments = 12
+
+[sub_resource type="BoxMesh" id="porte_semeur"]
+material = SubResource("m_sombre")
+size = Vector3(1.6, 3, 0.6)
+
+[sub_resource type="BoxMesh" id="maison"]
+material = SubResource("m_blanc")
+size = Vector3(6, 4.5, 6)
+
+[sub_resource type="PrismMesh" id="toit_maison"]
+material = SubResource("m_rouille")
+size = Vector3(6.6, 2, 6.6)
+
+[sub_resource type="BoxMesh" id="hangar"]
+material = SubResource("m_bois")
+size = Vector3(6.5, 5, 6)
+
+[sub_resource type="CylinderMesh" id="poteau"]
+material = SubResource("m_gris")
+top_radius = 0.18
+bottom_radius = 0.22
+height = 2.8
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="tete_lanterne"]
+material = SubResource("m_gris")
+size = Vector3(0.8, 0.9, 0.8)
+
+[sub_resource type="BoxMesh" id="miroir"]
+material = SubResource("m_miroir")
+size = Vector3(2, 2.5, 0.15)
+
+[sub_resource type="BoxMesh" id="ancien_corps"]
+material = SubResource("m_gris")
+size = Vector3(0.8, 0.5, 1.9)
+
+[sub_resource type="BoxMesh" id="epave"]
+material = SubResource("m_bois")
+size = Vector3(3, 1.6, 9)
+
+[sub_resource type="CylinderMesh" id="bouee"]
+material = SubResource("m_rouille")
+top_radius = 0.5
+bottom_radius = 0.9
+height = 1.6
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="feu"]
+material = SubResource("m_lueur")
+radius = 0.3
+height = 0.6
+
+[sub_resource type="CylinderMesh" id="flaque"]
+material = SubResource("m_flaque")
+top_radius = 2.2
+bottom_radius = 2.2
+height = 0.05
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="pierre_soleil"]
+material = SubResource("m_gris")
+size = Vector3(0.9, 0.7, 0.9)
+
+[sub_resource type="BoxMesh" id="grotte"]
+material = SubResource("m_sombre")
+size = Vector3(3, 3.2, 0.6)
+
+[sub_resource type="BoxMesh" id="banc"]
+material = SubResource("m_bois")
+size = Vector3(3, 0.6, 1.1)
+
+[sub_resource type="CylinderMesh" id="arbre_mort"]
+material = SubResource("m_mort")
+top_radius = 0.08
+bottom_radius = 0.25
+height = 3.2
+radial_segments = 5
+
+[sub_resource type="CylinderMesh" id="balise"]
+material = SubResource("m_gris")
+top_radius = 0.14
+bottom_radius = 0.2
+height = 2.6
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="echelle_maree"]
+material = SubResource("m_blanc")
+size = Vector3(0.3, 4.5, 0.12)
+
+[node name="Ile02Maquette" type="Node3D"]
+script = ExtResource("sc_ile")
+seuil_trouble = 0.1
+
+[node name="Environnement" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.86603, 0.30783, -0.39401, 0, 0.78801, 0.61566, 0.5, -0.53318, 0.68244, 0, 50, 0)
+light_color = Color(1, 0.88, 0.76, 1)
+light_energy = 2.0
+shadow_enabled = true
+shadow_blur = 1.5
+directional_shadow_max_distance = 80.0
+
+[node name="Maquette" type="Node3D" parent="."]
+script = ExtResource("sc_maquette")
+carte = ". . . . . . . . . . . . . . .
+. . . . . . . 1X 1N . . . . . .
+. . . . . . . . _^ . . . . . .
+. . . . . . . . _ . . . . . .
+. . . . . . . . _v . . . . . .
+. . . . . . . . 1v . . . . . .
+. . . . . . 2 2 2 2 . . . . .
+. 2O 2 2b 2b 2 2 3F 3 2 1< 1E _< . .
+. 2 2 . . 2 2 3J 3 2 1 1 _S . .
+. . . . . 2 2 2 2^ 2 . . . . .
+. . . . . _G 1^ . . . . . . . .
+. . . . . _ _b^ . . . . . . . .
+. . . . . . _b . . . . . . . .
+. . . . . . _bY . . . . . . . .
+. . . . . 0 0Q 0H 0 . . . . . .
+. . . . . 0 0 0 0P . . . . . .
+. . _W . . . . . . . .B . . . .
+. . . . . . . . . . . . . . ."
+noms = {
+"B": "Bouée-lanterne",
+"E": "Cap Est",
+"F": "Le Phare",
+"G": "Entrée des grottes",
+"H": "Hangar",
+"J": "Banc d'Iris",
+"N": "Cap du Large",
+"O": "Cap Ouest",
+"P": "Ponton",
+"Q": "Maison du quai",
+"S": "Flaque",
+"W": "Épave",
+"X": "Ancien corps (cap du Large)",
+"Y": "Ancien corps (chaussée)"
+}
+materiau_terrain = SubResource("facettes_mat")
+taille_case = 7.0
+etiquettes = true
+objets_ile_1 = false
+chemin = "PQYGFJ"
+
+[node name="Monde" type="Node3D" parent="."]
+
+[node name="Phare" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -10.5)
+
+[node name="Tour" type="MeshInstance3D" parent="Monde/Phare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
+mesh = SubResource("tour")
+
+[node name="Bande1" type="MeshInstance3D" parent="Monde/Phare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+mesh = SubResource("bande")
+
+[node name="Bande2" type="MeshInstance3D" parent="Monde/Phare"]
+transform = Transform3D(0.94, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, 12.5, 0)
+mesh = SubResource("bande")
+
+[node name="Lanterne" type="MeshInstance3D" parent="Monde/Phare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.3, 0)
+mesh = SubResource("lanterne_phare")
+
+[node name="Toit" type="MeshInstance3D" parent="Monde/Phare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.4, 0)
+mesh = SubResource("toit_phare")
+
+[node name="Porte" type="MeshInstance3D" parent="Monde/Phare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.85)
+mesh = SubResource("porte_semeur")
+
+[node name="BancIris" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -3.5)
+
+[node name="Banc" type="MeshInstance3D" parent="Monde/BancIris"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.3, 1.2)
+mesh = SubResource("banc")
+
+[node name="ArbreRoseMort" type="MeshInstance3D" parent="Monde/BancIris"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.6, -0.5)
+mesh = SubResource("arbre_mort")
+
+[node name="CapOuest" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 5.6, -10.5)
+
+[node name="Poteau" type="MeshInstance3D" parent="Monde/CapOuest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1.4, 0)
+mesh = SubResource("poteau")
+
+[node name="Tete" type="MeshInstance3D" parent="Monde/CapOuest/Poteau"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+mesh = SubResource("tete_lanterne")
+
+[node name="Miroir" type="MeshInstance3D" parent="Monde/CapOuest"]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 1.5, 1.25, 0)
+mesh = SubResource("miroir")
+
+[node name="CapEst" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 3.1, -10.5)
+
+[node name="Poteau" type="MeshInstance3D" parent="Monde/CapEst"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.4, 0)
+mesh = SubResource("poteau")
+
+[node name="Tete" type="MeshInstance3D" parent="Monde/CapEst/Poteau"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+mesh = SubResource("tete_lanterne")
+
+[node name="Miroir" type="MeshInstance3D" parent="Monde/CapEst"]
+transform = Transform3D(0.7071, 0, -0.7071, 0, 1, 0, 0.7071, 0, 0.7071, -1.5, 1.25, 0)
+mesh = SubResource("miroir")
+
+[node name="CapDuLarge" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3.1, -52.5)
+
+[node name="Poteau" type="MeshInstance3D" parent="Monde/CapDuLarge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.4, -1.5)
+mesh = SubResource("poteau")
+
+[node name="Tete" type="MeshInstance3D" parent="Monde/CapDuLarge/Poteau"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+mesh = SubResource("tete_lanterne")
+
+[node name="Miroir" type="MeshInstance3D" parent="Monde/CapDuLarge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.25, 1.5)
+mesh = SubResource("miroir")
+
+[node name="AncienCorpsLarge" type="MeshInstance3D" parent="Monde"]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 0, 3.35, -52.5)
+mesh = SubResource("ancien_corps")
+
+[node name="Flaque" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.6, -3.5)
+
+[node name="Eau" type="MeshInstance3D" parent="Monde/Flaque"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+mesh = SubResource("flaque")
+
+[node name="PierreSoleil" type="MeshInstance3D" parent="Monde/Flaque"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.2, 0.4)
+mesh = SubResource("pierre_soleil")
+
+[node name="EntreeGrottes" type="MeshInstance3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 2.2, 7.3)
+mesh = SubResource("grotte")
+
+[node name="Chaussee" type="Node3D" parent="Monde"]
+
+[node name="Balise1" type="MeshInstance3D" parent="Monde/Chaussee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 1.9, 18)
+mesh = SubResource("balise")
+
+[node name="Balise2" type="MeshInstance3D" parent="Monde/Chaussee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 1.9, 25)
+mesh = SubResource("balise")
+
+[node name="Balise3" type="MeshInstance3D" parent="Monde/Chaussee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 1.9, 32)
+mesh = SubResource("balise")
+
+[node name="AncienCorpsChaussee" type="MeshInstance3D" parent="Monde/Chaussee"]
+transform = Transform3D(0.5, 0, -0.866, 0, 1, 0, 0.866, 0, 0.5, -6, 0.85, 30.5)
+mesh = SubResource("ancien_corps")
+
+[node name="Port" type="Node3D" parent="Monde"]
+
+[node name="MaisonDuQuai" type="MeshInstance3D" parent="Monde/Port"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.85, 38.5)
+mesh = SubResource("maison")
+
+[node name="Toit" type="MeshInstance3D" parent="Monde/Port/MaisonDuQuai"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.25, 0)
+mesh = SubResource("toit_maison")
+
+[node name="Porte" type="MeshInstance3D" parent="Monde/Port/MaisonDuQuai"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 3)
+mesh = SubResource("porte_semeur")
+
+[node name="Hangar" type="MeshInstance3D" parent="Monde/Port"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 3.1, 38.5)
+mesh = SubResource("hangar")
+
+[node name="Porte" type="MeshInstance3D" parent="Monde/Port/Hangar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 3)
+mesh = SubResource("porte_semeur")
+
+[node name="EchelleDeMaree" type="MeshInstance3D" parent="Monde/Port"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.6, 0.75, 43)
+mesh = SubResource("echelle_maree")
+
+[node name="Epave" type="MeshInstance3D" parent="Monde"]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, -35, 0.9, 52.5)
+mesh = SubResource("epave")
+
+[node name="BoueeLanterne" type="Node3D" parent="Monde"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, 52.5)
+
+[node name="Corps" type="MeshInstance3D" parent="Monde/BoueeLanterne"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("bouee")
+
+[node name="Feu" type="MeshInstance3D" parent="Monde/BoueeLanterne"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+mesh = SubResource("feu")
+
+[node name="Lueur" type="OmniLight3D" parent="Monde/BoueeLanterne"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+light_color = Color(1, 0.78, 0.45, 1)
+light_energy = 2.0
+omni_range = 6.0
+
+[node name="Ponton" parent="." instance=ExtResource("p_ponton")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 49)
+
+[node name="Joueur" parent="." instance=ExtResource("p_joueur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.6, 44)
+vue_dessus = true
+distance_dessus = 9.0
+angle_dessus = 40.0
+orientation_dessus = 0.0
+
+[node name="Vision" type="CanvasLayer" parent="."]
+
+[node name="Ecran" type="ColorRect" parent="Vision"]
+material = SubResource("vision_mat")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

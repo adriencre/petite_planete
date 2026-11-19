@@ -37,6 +37,7 @@ var _eclat: float = 0.0        # 0 = éteinte, 1 = allumée
 
 
 func _ready() -> void:
+	add_to_group("sauvegarde")
 	_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_mat.albedo_color = couleur
 	var boule := SphereMesh.new()
@@ -79,6 +80,18 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_joueur = get_tree().get_first_node_in_group("joueur") as CharacterBody3D
+	# « Continuer » : elle a déjà guidé le robot jusqu'à la lanterne 1, elle ne revient pas
+	if int(Sauvegarde.donnees(cle_sauvegarde()).get("etape", -1)) >= 2:
+		_etape = 2
+		visible = false
+
+
+func cle_sauvegarde() -> String:
+	return "luciole"
+
+
+func sauver() -> Dictionary:
+	return {"etape": _etape}
 
 
 func _preparer_trainee() -> void:
@@ -298,6 +311,7 @@ func _verifier_etape() -> void:
 func _partir() -> void:
 	_effacer_touche()
 	_etape = 2
+	Sauvegarde.noter(cle_sauvegarde(), sauver())
 	var t := create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
 	t.tween_property(self, "global_position", global_position + Vector3(0.6, 4.0, -0.4), 4.0)
 	t.tween_property(self, "_eclat", 0.0, 4.0).set_delay(1.0)

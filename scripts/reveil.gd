@@ -28,6 +28,8 @@ const DECALAGE_SE_LEVER := 0.44
 const CENTRE_COUCHE := -0.17
 
 var morts: int = 0
+## Le premier réveil a été vu jusqu'au bout (ou passé) : « Continuer » fera un réveil court.
+var _premier_fini: bool = false
 var _en_cours: bool = false
 ## Réveil en cours : "long", "court" ou "" ; `_seq` change quand on le passe (les étapes en attente s'arrêtent).
 var _reveil: String = ""
@@ -43,6 +45,7 @@ var _lueur: OmniLight3D
 
 
 func _ready() -> void:
+	add_to_group("sauvegarde")
 	var calque := CanvasLayer.new()
 	calque.layer = 20
 	add_child(calque)
@@ -74,10 +77,32 @@ func _ready() -> void:
 		push_warning("reveil.gd : repères du berceau introuvables")
 		_noir.visible = false
 		return
+	# « Continuer » : on se réveille dans le berceau (réveil court) ; les anciens corps sont là où ils sont tombés
+	var sauve: Dictionary = Sauvegarde.donnees(cle_sauvegarde())
+	if not sauve.is_empty():
+		premier_reveil = not bool(sauve.get("premier_reveil_vu", false))
+		morts = int(sauve.get("morts", 0))
+		var n := 0
+		for xf in sauve.get("corps", []):
+			n += 1
+			_poser_corps(Sauvegarde.en_transfo(xf), n)
 	if premier_reveil:
 		_reveil_long()
 	else:
 		_reveil_court()
+
+
+# ---------------------------------------------------------------- sauvegarde (sauvegarde.gd)
+
+func cle_sauvegarde() -> String:
+	return "reveil"
+
+
+func sauver() -> Dictionary:
+	var corps: Array = []
+	for c in get_tree().get_nodes_in_group("anciens_corps"):
+		corps.append(Sauvegarde.transfo((c as Node3D).global_transform))
+	return {"premier_reveil_vu": not premier_reveil or _premier_fini, "morts": morts, "corps": corps}
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -137,7 +162,7 @@ func _tw() -> Tween:
 
 
 func _attendre(s: float) -> void:
-	await get_tree().create_timer(s).timeout
+	await get_tree().create_timer(s, false).timeout
 
 
 func _fondu_noir(alpha: float, duree: float) -> void:
@@ -245,6 +270,7 @@ func _reveil_long() -> void:
 
 ## Fin du premier réveil (normale ou passée) : on rend la main, l'antenne se vide.
 func _finir_long() -> void:
+	_premier_fini = true
 	_robot.call("fin_action")
 	joueur.set("cinematique", false)
 	_en_cours = false
@@ -359,14 +385,18 @@ func _mourir() -> void:
 
 
 func _laisser_corps() -> void:
+	_poser_corps(_robot.global_transform, morts)
+
+
+func _poser_corps(xf: Transform3D, numero: int) -> void:
 	var scene := load(_robot.scene_file_path) as PackedScene
 	if scene == null:
 		return
 	var corps: Node3D = scene.instantiate()
-	corps.name = "AncienCorps%d" % morts
+	corps.name = "AncienCorps%d" % numero
 	corps.add_to_group("anciens_corps")
 	get_tree().current_scene.add_child(corps)
-	corps.global_transform = _robot.global_transform
+	corps.global_transform = xf
 	var anim := corps.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	if anim and anim.has_animation("effondrement"):
 		anim.play("effondrement")

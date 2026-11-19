@@ -1,0 +1,108 @@
+[gd_resource type="Theme" load_steps=12 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/Caveat.ttf" id="1_police"]
+
+[sub_resource type="StyleBoxEmpty" id="vide"]
+
+[sub_resource type="StyleBoxFlat" id="survol"]
+content_margin_left = 14.0
+content_margin_right = 14.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.85, 0.66, 0.36, 0.18)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="bouton"]
+content_margin_left = 14.0
+content_margin_right = 14.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxFlat" id="papier"]
+content_margin_left = 48.0
+content_margin_top = 36.0
+content_margin_right = 48.0
+content_margin_bottom = 36.0
+bg_color = Color(0.97, 0.93, 0.84, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.33, 0.24, 0.17, 0.25)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.1, 0.07, 0.05, 0.3)
+shadow_size = 18
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="trait"]
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.33, 0.24, 0.17, 0.35)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="trait_plein"]
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.78, 0.55, 0.22, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="Gradient" id="point_degrade"]
+offsets = PackedFloat32Array(0, 0.55, 0.7)
+colors = PackedColorArray(0.78, 0.55, 0.22, 1, 0.78, 0.55, 0.22, 1, 0.78, 0.55, 0.22, 0)
+
+[sub_resource type="GradientTexture2D" id="point"]
+gradient = SubResource("point_degrade")
+width = 22
+height = 22
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="point_degrade_survol"]
+offsets = PackedFloat32Array(0, 0.6, 0.75)
+colors = PackedColorArray(0.92, 0.68, 0.3, 1, 0.92, 0.68, 0.3, 1, 0.92, 0.68, 0.3, 0)
+
+[sub_resource type="GradientTexture2D" id="point_survol"]
+gradient = SubResource("point_degrade_survol")
+width = 26
+height = 26
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[resource]
+default_font = ExtResource("1_police")
+default_font_size = 34
+Button/colors/font_color = Color(0.33, 0.24, 0.17, 1)
+Button/colors/font_hover_color = Color(0.62, 0.38, 0.12, 1)
+Button/colors/font_focus_color = Color(0.62, 0.38, 0.12, 1)
+Button/colors/font_pressed_color = Color(0.78, 0.55, 0.22, 1)
+Button/colors/font_hover_pressed_color = Color(0.62, 0.38, 0.12, 1)
+Button/colors/font_disabled_color = Color(0.33, 0.24, 0.17, 0.35)
+Button/font_sizes/font_size = 40
+Button/styles/disabled = SubResource("bouton")
+Button/styles/focus = SubResource("vide")
+Button/styles/hover = SubResource("survol")
+Button/styles/hover_pressed = SubResource("survol")
+Button/styles/normal = SubResource("bouton")
+Button/styles/pressed = SubResource("bouton")
+HSlider/icons/grabber = SubResource("point")
+HSlider/icons/grabber_highlight = SubResource("point_survol")
+HSlider/styles/grabber_area = SubResource("trait_plein")
+HSlider/styles/grabber_area_highlight = SubResource("trait_plein")
+HSlider/styles/slider = SubResource("trait")
+Label/colors/font_color = Color(0.33, 0.24, 0.17, 1)
+PanelContainer/styles/panel = SubResource("papier")

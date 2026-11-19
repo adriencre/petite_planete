@@ -33,6 +33,7 @@ var _halo_tex: GradientTexture2D
 
 func _ready() -> void:
 	add_to_group("guidage")
+	add_to_group("sauvegarde")
 	var degrade := Gradient.new()
 	degrade.set_color(0, Color(1, 1, 1, 1))
 	degrade.set_color(1, Color(1, 1, 1, 0))
@@ -45,6 +46,15 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_joueur = get_tree().get_first_node_in_group("joueur") as CharacterBody3D
+	_utilisations = int(Sauvegarde.donnees(cle_sauvegarde()).get("utilisations", 0))
+
+
+func cle_sauvegarde() -> String:
+	return "guidage"
+
+
+func sauver() -> Dictionary:
+	return {"utilisations": _utilisations}
 
 
 ## Pour la luciole : elle ne dessine pas sa touche si la nôtre est déjà là.

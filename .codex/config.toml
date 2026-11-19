@@ -1,0 +1,16 @@
+# Généré par tools/agents/sync.py depuis .agents/mcp/serveurs.json : ne pas modifier à la main.
+
+
+[mcp_servers."blender"]
+command = "uvx"
+args = ["mcp-for-blender"]
+env = { "DISABLE_TELEMETRY" = "true" }
+
+[mcp_servers."godot-ai"]
+command = "uvx"
+args = ["--link-mode", "copy", "--from", "godot-ai==4.4.1", "godot-ai", "attach", "--port", "8000", "--ws-port", "9500"]
+
+[mcp_servers."meshy"]
+command = "cmd"
+args = ["/c", "npx", "-y", "@meshy-ai/meshy-mcp-server"]
+env_vars = ["MESHY_API_KEY"]

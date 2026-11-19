@@ -28,6 +28,7 @@ static func jouer(nom: String, ou = null, volume_db: float = 0.0, hauteur: float
 		l3.pitch_scale = hauteur
 		l3.unit_size = 6.0
 		l3.max_distance = 40.0
+		l3.bus = &"Effets"
 		arbre.current_scene.add_child(l3)
 		l3.global_position = ou
 		l3.play()
@@ -37,6 +38,7 @@ static func jouer(nom: String, ou = null, volume_db: float = 0.0, hauteur: float
 		l.stream = s
 		l.volume_db = volume_db
 		l.pitch_scale = hauteur
+		l.bus = &"Effets"
 		arbre.current_scene.add_child(l)
 		l.play()
 		l.finished.connect(l.queue_free)

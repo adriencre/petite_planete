@@ -1,0 +1,93 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/reglages_panneau.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/theme_carnet.tres" id="2_theme"]
+
+[node name="Reglages" type="PanelContainer"]
+custom_minimum_size = Vector2(640, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -250.0
+offset_right = 320.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Colonne" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titre" type="Label" parent="Colonne"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 54
+text = "Réglages"
+horizontal_alignment = 1
+
+[node name="Grille" type="GridContainer" parent="Colonne"]
+layout_mode = 2
+theme_override_constants/h_separation = 28
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="TexteGeneral" type="Label" parent="Colonne/Grille"]
+layout_mode = 2
+text = "Volume général"
+
+[node name="General" type="HSlider" parent="Colonne/Grille"]
+custom_minimum_size = Vector2(260, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+metadata/bus = "Master"
+
+[node name="TexteMusique" type="Label" parent="Colonne/Grille"]
+layout_mode = 2
+text = "Musique"
+
+[node name="Musique" type="HSlider" parent="Colonne/Grille"]
+custom_minimum_size = Vector2(260, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+metadata/bus = "Musique"
+
+[node name="TexteAmbiance" type="Label" parent="Colonne/Grille"]
+layout_mode = 2
+text = "Vent et vagues"
+
+[node name="Ambiance" type="HSlider" parent="Colonne/Grille"]
+custom_minimum_size = Vector2(260, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+metadata/bus = "Ambiance"
+
+[node name="TexteEffets" type="Label" parent="Colonne/Grille"]
+layout_mode = 2
+text = "Bruitages"
+
+[node name="Effets" type="HSlider" parent="Colonne/Grille"]
+custom_minimum_size = Vector2(260, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+metadata/bus = "Effets"
+
+[node name="PleinEcran" type="Button" parent="Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 34
+text = "Plein écran : non"
+
+[node name="Retour" type="Button" parent="Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Retour"

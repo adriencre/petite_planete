@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/jauge_batterie.gd" id="1_jauge"]
+
+[node name="HudBatterie" type="CanvasLayer"]
+layer = 10
+
+[node name="Jauge" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 238.0
+offset_bottom = 54.0
+mouse_filter = 2
+script = ExtResource("1_jauge")

@@ -11,12 +11,22 @@ config_version=5
 [application]
 
 config/name="Petite Planète"
-run/main_scene="res://scenes/ile_01_maquette.tscn"
+run/main_scene="res://scenes/ecran_titre.tscn"
 config/features=PackedStringArray("4.7")
 
 [autoload]
 
+Reglages="*res://scripts/reglages.gd"
+Sauvegarde="*res://scripts/sauvegarde.gd"
+MenuPause="*res://scenes/ui/menu_pause.tscn"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [editor_plugins]
 

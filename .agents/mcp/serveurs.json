@@ -1,0 +1,26 @@
+{
+  "_lisez_moi": "Liste canonique des serveurs MCP du projet. Ne jamais écrire de secret ici : une variable d'env se met dans env_depuis_systeme. Après une modif : python tools/agents/sync.py",
+  "serveurs": {
+    "blender": {
+      "description": "Pilote le Blender ouvert (5.3). Il faut cliquer « Start MCP Server » dans le panneau N > MCP.",
+      "command": "uvx",
+      "args": ["mcp-for-blender"],
+      "env": { "DISABLE_TELEMETRY": "true" },
+      "env_depuis_systeme": []
+    },
+    "godot-ai": {
+      "description": "Pilote l'éditeur Godot ouvert (plugin addons/godot_ai v4.4.1). Sans éditeur ouvert : timeout, c'est normal.",
+      "command": "uvx",
+      "args": ["--link-mode", "copy", "--from", "godot-ai==4.4.1", "godot-ai", "attach", "--port", "8000", "--ws-port", "9500"],
+      "env": {},
+      "env_depuis_systeme": []
+    },
+    "meshy": {
+      "description": "Génération de modèles 3D (payant en crédits : toujours demander avant). Clé dans la variable d'env MESHY_API_KEY.",
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@meshy-ai/meshy-mcp-server"],
+      "env": {},
+      "env_depuis_systeme": ["MESHY_API_KEY"]
+    }
+  }
+}

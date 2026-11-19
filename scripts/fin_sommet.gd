@@ -39,6 +39,7 @@ var _flou_initial := 11.0
 
 
 func _ready() -> void:
+	add_to_group("sauvegarde")
 	_batir_phare()
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -47,13 +48,17 @@ func _ready() -> void:
 	for l in get_tree().get_nodes_in_group("lanternes"):
 		if _sommet == null or int(l.get("rang")) > int(_sommet.get("rang")):
 			_sommet = l
+	# « Continuer » après la fin : l'île est restée au coucher du soleil, la fin ne se rejoue pas
+	if bool(Sauvegarde.donnees(cle_sauvegarde()).get("fait", false)):
+		_fait = true
+		_eveiller_ile(create_tween().set_parallel(), 0.01, 0.01)
 	if tester_au_demarrage and _sommet and _joueur:
 		while bool(_joueur.get("cinematique")):
 			await get_tree().process_frame
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.5, false).timeout
 		var s: Vector3 = (_sommet as Node3D).global_position
 		_joueur.global_position = s + Vector3(2.5, 0.3, 0.5)
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0, false).timeout
 		_fait = true
 		_fin()
 
@@ -67,6 +72,16 @@ func _process(delta: float) -> void:
 	if not _fait and _sommet and bool(_sommet.get("allumee")) and _joueur and not bool(_joueur.get("cinematique")):
 		_fait = true
 		_fin()
+
+
+# ---------------------------------------------------------------- sauvegarde (sauvegarde.gd)
+
+func cle_sauvegarde() -> String:
+	return "fin_ile_1"
+
+
+func sauver() -> Dictionary:
+	return {"fait": _fait}
 
 
 # ---------------------------------------------------------------- la cinématique de fin
@@ -88,39 +103,12 @@ func _fin() -> void:
 			eteintes.append(l)
 	eteintes.sort_custom(func(a, b): return sommet.distance_to(a.global_position) < sommet.distance_to(b.global_position))
 	for i in eteintes.size():
-		get_tree().create_timer(0.8 + i * cascade).timeout.connect(eteintes[i].allumer_seule.bind(1.8))
+		get_tree().create_timer(0.8 + i * cascade, false).timeout.connect(eteintes[i].allumer_seule.bind(1.8))
 
 	# l'île entière s'éveille : la brume recule loin, ce qui en reste s'éclaircit, le soleil se couche
 	var t := create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	var zone := get_tree().get_first_node_in_group("zone_endormie")
-	if zone:
-		var depart: float = zone.get("recul_max")
-		t.tween_method(func(v: float) -> void:
-			zone.set("recul_max", v)
-			zone.call("_reculer_brouillard"), depart, recul_final, duree_montee + 2.0)
-	for v in get_tree().get_nodes_in_group("brume_ile"):
-		var m: Material = (v as FogVolume).material if v is FogVolume else (v as GeometryInstance3D).material_override
-		if m is ShaderMaterial:
-			var nom := "densite" if v is FogVolume else "opacite"
-			var avant = (m as ShaderMaterial).get_shader_parameter(nom)
-			if avant == null:
-				avant = 0.2 if v is FogVolume else 0.7
-			t.tween_method(func(x: float) -> void: (m as ShaderMaterial).set_shader_parameter(nom, x), float(avant), float(avant) * 0.2, duree_montee + 2.0)
-	var d_soleil := duree_montee + duree_barque + 4.0
-	if soleil:
-		var vise := Basis.looking_at(Vector3(-dir.x, -0.09, -dir.z).normalized())   # bas sur l'horizon, côté Phare
-		t.tween_property(soleil, "quaternion", vise.get_rotation_quaternion(), d_soleil)
-		t.tween_property(soleil, "light_color", couleur_soleil, d_soleil)
-		t.tween_property(soleil, "light_energy", 1.7, d_soleil)
-	if environnement and environnement.environment:
-		var env := environnement.environment
-		t.tween_property(env, "fog_light_color", couleur_brume, d_soleil)
-		t.tween_property(env, "ambient_light_color", couleur_ambiance, d_soleil)
-		var ciel := env.sky.sky_material as ShaderMaterial if env.sky else null
-		if ciel:
-			_teinte_ciel(t, ciel, "couleur_horizon", Color(1.0, 0.6, 0.42), d_soleil)
-			_teinte_ciel(t, ciel, "couleur_milieu", Color(0.96, 0.56, 0.62), d_soleil)
-			_teinte_ciel(t, ciel, "couleur_haut", Color(0.46, 0.4, 0.74), d_soleil)
+	_eveiller_ile(t, duree_montee + 2.0, duree_montee + duree_barque + 4.0)
+	if environnement:
 		# le flou de lointain empêcherait les grands plans : on l'écarte pendant la cinématique
 		var attr := environnement.camera_attributes as CameraAttributesPractical
 		if attr:
@@ -144,7 +132,7 @@ func _fin() -> void:
 	monte.tween_interval(1.2)
 	monte.tween_property(_joueur, "cine_melange", 1.0, duree_montee)
 	await monte.finished
-	await get_tree().create_timer(2.5).timeout
+	await get_tree().create_timer(2.5, false).timeout
 
 	# --- 3) elle glisse vers la crique : la barque attend
 	var barque := get_tree().get_first_node_in_group("barque_qui_flotte") as Node3D
@@ -155,7 +143,7 @@ func _fin() -> void:
 		vers_b.tween_property(_joueur, "cine_position", b + depuis_ile * 9.0 + Vector3.UP * 7.0 + depuis_ile.cross(Vector3.UP) * 5.0, duree_barque)
 		vers_b.tween_property(_joueur, "cine_cible", b + Vector3.UP * 0.5, duree_barque)
 		await vers_b.finished
-		await get_tree().create_timer(3.0).timeout
+		await get_tree().create_timer(3.0, false).timeout
 
 	# --- 4) retour au sommet : derrière le robot, au bord, tourné vers le Phare
 	var p: Vector3 = _joueur.global_position
@@ -167,7 +155,7 @@ func _fin() -> void:
 	var carnet := get_tree().get_first_node_in_group("carnet")
 	if carnet:
 		carnet.call("noter_dessin", "Le Phare, vu du sommet")
-	await get_tree().create_timer(duree_plan).timeout
+	await get_tree().create_timer(duree_plan, false).timeout
 
 	# --- 5) la caméra revient ; on reprend la main, au coucher du soleil
 	var retour := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -176,6 +164,40 @@ func _fin() -> void:
 		retour.parallel().tween_property(environnement.camera_attributes, "dof_blur_far_distance", _flou_initial, 3.5)
 	await retour.finished
 	_joueur.set("cinematique", false)
+
+
+## L'île réveillée par la fin : brume repoussée et éclaircie, coucher de soleil, ciel rosé.
+## Dans la cinématique (durées longues) ou d'un coup en reprenant une partie (durées ~0).
+func _eveiller_ile(t: Tween, d_brume: float, d_soleil: float) -> void:
+	var dir := Vector3(direction_phare.x, 0, direction_phare.z).normalized()
+	var zone := get_tree().get_first_node_in_group("zone_endormie")
+	if zone:
+		var depart: float = zone.get("recul_max")
+		t.tween_method(func(v: float) -> void:
+			zone.set("recul_max", v)
+			zone.call("_reculer_brouillard"), depart, recul_final, d_brume)
+	for v in get_tree().get_nodes_in_group("brume_ile"):
+		var m: Material = (v as FogVolume).material if v is FogVolume else (v as GeometryInstance3D).material_override
+		if m is ShaderMaterial:
+			var nom := "densite" if v is FogVolume else "opacite"
+			var avant = (m as ShaderMaterial).get_shader_parameter(nom)
+			if avant == null:
+				avant = 0.2 if v is FogVolume else 0.7
+			t.tween_method(func(x: float) -> void: (m as ShaderMaterial).set_shader_parameter(nom, x), float(avant), float(avant) * 0.2, d_brume)
+	if soleil:
+		var vise := Basis.looking_at(Vector3(-dir.x, -0.09, -dir.z).normalized())   # bas sur l'horizon, côté Phare
+		t.tween_property(soleil, "quaternion", vise.get_rotation_quaternion(), d_soleil)
+		t.tween_property(soleil, "light_color", couleur_soleil, d_soleil)
+		t.tween_property(soleil, "light_energy", 1.7, d_soleil)
+	if environnement and environnement.environment:
+		var env := environnement.environment
+		t.tween_property(env, "fog_light_color", couleur_brume, d_soleil)
+		t.tween_property(env, "ambient_light_color", couleur_ambiance, d_soleil)
+		var ciel := env.sky.sky_material as ShaderMaterial if env.sky else null
+		if ciel:
+			_teinte_ciel(t, ciel, "couleur_horizon", Color(1.0, 0.6, 0.42), d_soleil)
+			_teinte_ciel(t, ciel, "couleur_milieu", Color(0.96, 0.56, 0.62), d_soleil)
+			_teinte_ciel(t, ciel, "couleur_haut", Color(0.46, 0.4, 0.74), d_soleil)
 
 
 ## Le centre de l'île : la moyenne des lanternes (on ne vise pas la mer).

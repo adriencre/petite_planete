@@ -65,6 +65,7 @@ var _signe_tween: Tween
 
 func _ready() -> void:
 	add_to_group("carnet")
+	add_to_group("sauvegarde")
 	layer = 18
 	_construire()
 	await get_tree().process_frame
@@ -73,6 +74,7 @@ func _ready() -> void:
 	if maquette:
 		_reperes = maquette.call("reperes_carnet")
 		_grille = maquette.call("carte_carnet")
+	_charger(Sauvegarde.donnees(cle_sauvegarde()))
 	if exporter_photos:
 		_exporter_photos()
 	# pour guidage.gd : le carnet posé sur l'étagère appelle (lueur, touche E) tant qu'on ne l'a pas pris
@@ -87,6 +89,55 @@ func _etat_objet(o: Node3D) -> int:
 	if not bool(_joueur.get("cinematique")) and _objet_proche() == o:
 		return 2
 	return 1
+
+
+# ---------------------------------------------------------------- sauvegarde (sauvegarde.gd)
+
+func cle_sauvegarde() -> String:
+	return "carnet"
+
+
+## Les croquis photographiés (pas un dessin du projet) sont gardés en PNG à côté de la sauvegarde.
+func sauver() -> Dictionary:
+	var l: Array = []
+	for x in lieux:
+		l.append({"ch": x.ch, "croquis": Sauvegarde.garder_image(x.croquis, "lieu_" + str(x.ch).to_lower()), "dessine": x.dessine})
+	var t: Array = []
+	for x in textes:
+		var img: Texture2D = x.image
+		t.append({"texte": x.texte, "signature": x.signature, "image": img.resource_path if img else ""})
+	var d: Array = []
+	for i in dessins.size():
+		var x: Dictionary = dessins[i]
+		d.append({"titre": x.titre, "image": Sauvegarde.garder_image(x.image, "dessin_%d" % i), "dessine": x.dessine})
+	var vu: Array = []
+	for v in _vu:
+		vu.append([v.x, v.y])
+	return {"debloque": debloque, "lieux": l, "textes": t, "dessins": d, "vu": vu}
+
+
+func _charger(d: Dictionary) -> void:
+	if d.is_empty():
+		return
+	debloque = bool(d.get("debloque", false))
+	if debloque:
+		for o in get_tree().get_nodes_in_group("carnet_objet"):
+			(o as Node3D).visible = false
+	for x in d.get("lieux", []):
+		for rep in _reperes:
+			if rep.ch == str(x.get("ch", "")):
+				var croquis: Texture2D = Sauvegarde.charger_image(str(x.get("croquis", "")))
+				lieux.append({"ch": rep.ch, "nom": rep.nom, "pos": rep.pos, "croquis": croquis, "dessine": bool(x.get("dessine", false))})
+				break
+	for x in d.get("textes", []):
+		textes.append({"texte": str(x.get("texte", "")), "signature": str(x.get("signature", "")), "image": Sauvegarde.charger_image(str(x.get("image", "")))})
+	for x in d.get("dessins", []):
+		var img: Texture2D = Sauvegarde.charger_image(str(x.get("image", "")))
+		if img:
+			dessins.append({"titre": str(x.get("titre", "")), "image": img, "dessine": bool(x.get("dessine", false))})
+	for v in d.get("vu", []):
+		if v is Array and v.size() == 2:
+			_vu[Vector2i(int(v[0]), int(v[1]))] = true
 
 
 # ---------------------------------------------------------------- ce qu'on voit
@@ -348,7 +399,7 @@ func _prendre(objet: Node3D) -> void:
 	t.tween_property(objet, "scale", Vector3.ONE * 0.01, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	await t.finished
 	objet.visible = false
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.6, false).timeout
 	_joueur.set("cinematique", false)
 	ouvrir()
 

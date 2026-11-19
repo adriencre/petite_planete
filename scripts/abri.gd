@@ -122,7 +122,7 @@ const NOTICE := "[center][b]Mode d'emploi du petit jardinier[/b][/center]
 
 [b]6.[/b] Si ta lumière s'éteint tout à fait, n'aie pas peur : ton berceau te réveillera.
 
-[b]7.[/b] Quand l'île brillera, la [b]barque[/b] t'attendra au ponton de la crique, à l'ouest."
+[b]7.[/b] Quand l'île brillera, la [b]barque[/b] t'attendra au ponton de la crique, à l'ouest. Va voir la [b]Gardienne du Phare[/b] : c'est elle qui veille sur nous."
 @export var position_notice: Vector3 = Vector3(-0.3, 0.0, 0.05)
 
 
@@ -178,11 +178,21 @@ func _mobilier(jeu: Node3D, sol: float) -> void:
 	var lavande := _mat(Color(0.74, 0.7, 0.86))
 	var terre := _mat(Color(0.86, 0.6, 0.5))
 	var feuille := _mat(Color(0.47, 0.66, 0.42))
+	# le temps a passé (ILE_01_REVEIL.md §13, 2026-11-18) : couleurs pâlies, fentes sombres
+	var rose_passe := _mat(Color(0.88, 0.8, 0.78))
+	var lavande_passee := _mat(Color(0.8, 0.78, 0.84))
+	var sauge_passee := _mat(Color(0.72, 0.76, 0.68))
+	var sombre := _mat(Color(0.34, 0.26, 0.21))
+	var liane := _mat(Color(0.42, 0.56, 0.36))
+	var alea := RandomNumberGenerator.new()
+	alea.seed = 7   # toujours la même liane, les mêmes pousses
 	var collisions: Array = []   # [taille, position, angle]
 
 	# le tapis rond, devant le berceau
-	_cyl(m, rose, 1.15, 1.15, 0.02, Vector3(0, sol + 0.01, 0.35), 8)
-	_cyl(m, lavande, 0.8, 0.8, 0.025, Vector3(0, sol + 0.012, 0.35), 8)
+	_cyl(m, rose_passe, 1.15, 1.15, 0.02, Vector3(0, sol + 0.01, 0.35), 8)
+	_cyl(m, lavande_passee, 0.8, 0.8, 0.025, Vector3(0, sol + 0.012, 0.35), 8)
+	# le passage du robot, du berceau à la porte : là, la poussière n'a jamais tenu
+	_boite(m, lavande, Vector3(0.42, 0.004, 1.5), Vector3(0, sol + 0.026, 0.35))
 
 	# la table de chevet : plateau, pied central, le carnet posé dessus
 	var c := position_chevet + Vector3.UP * sol
@@ -213,8 +223,9 @@ func _mobilier(jeu: Node3D, sol: float) -> void:
 	carnet.name = "CarnetObjet"
 	carnet.add_to_group("carnet_objet")
 	_boite(carnet, creme, Vector3(0.17, 0.02, 0.24), Vector3(0.012, 0.0, 0.0))   # la tranche des pages
-	_boite(et, sauge, Vector3(0.08, 0.26, 0.2), Vector3(-0.2, 1.6, 0), 0.0)   # des livres
-	_boite(et, rose, Vector3(0.08, 0.24, 0.2), Vector3(-0.1, 1.59, 0), 0.0)
+	_boite(et, sauge_passee, Vector3(0.08, 0.26, 0.2), Vector3(-0.2, 1.6, 0), 0.0)   # des livres, pâlis
+	_boite(et, rose_passe, Vector3(0.24, 0.07, 0.19), Vector3(0.0, 1.505, 0.0), 0.35)   # l'un est tombé à plat
+	_toile(et, Vector3(-0.32, 1.22, -0.05), 0.0, 0.42)   # une toile dans le coin, sous la planche du haut
 	collisions.append([Vector3(1.15, 1.5, 0.34), p_et + Vector3.UP * 0.75, a_et])
 
 	# l'horloge arrêtée, au mur au fond à droite
@@ -230,19 +241,84 @@ func _mobilier(jeu: Node3D, sol: float) -> void:
 	bord.rotation.x = PI * 0.5
 	_boite(h, bois, Vector3(0.025, 0.16, 0.01), Vector3(0, 0.06, -0.03))            # les aiguilles, figées
 	_boite(h, bois, Vector3(0.11, 0.022, 0.01), Vector3(0.05, 0, -0.03), 0.0)
+	for fente in [[Vector3(-0.09, 0.07, -0.028), 0.18, 0.7], [Vector3(-0.14, -0.02, -0.028), 0.12, -0.5]]:   # une fêlure
+		var fl := _boite(h, sombre, Vector3(fente[1], 0.006, 0.004), fente[0])
+		fl.rotation.z = fente[2]
+	_toile(m, p_h + Vector3(0.25, 0.55, 0.0).rotated(Vector3.UP, a_h), a_h, 0.5)   # une toile au-dessus
 
-	# deux plantes en pot, de part et d'autre
-	for a in [1.85, -1.75]:
+	# deux plantes en pot, de part et d'autre : livrées à elles-mêmes, elles ont tout envahi
+	for i in 2:
+		var a: float = [1.85, -1.75][i]
 		var p := Vector3(sin(a), 0, cos(a)) * (rayon_murs - 0.55) + Vector3.UP * sol
-		_cyl(m, terre, 0.2, 0.15, 0.32, p + Vector3.UP * 0.16, 6)
-		_cone(m, feuille, 0.3, 0.55, p + Vector3.UP * 0.58)
-		_cone(m, feuille, 0.2, 0.4, p + Vector3(0.08, 0.85, 0.05))
-		collisions.append([Vector3(0.4, 0.6, 0.4), p + Vector3.UP * 0.3, 0.0])
+		var pot := _cyl(m, terre, 0.2, 0.15, 0.32, p + Vector3.UP * 0.16, 6)
+		_cone(m, feuille, 0.42, 0.85, p + Vector3.UP * 0.72)
+		_cone(m, feuille, 0.3, 0.65, p + Vector3(0.12, 1.1, 0.06))
+		_cone(m, feuille, 0.26, 0.55, p + Vector3(-0.14, 0.95, -0.08))
+		for k in 6:   # des feuilles qui retombent par-dessus le bord du pot
+			var pivot := Node3D.new()
+			pivot.position = p + Vector3.UP * 0.36
+			pivot.rotation.y = TAU * k / 6.0 + 0.3 * i
+			m.add_child(pivot)
+			var f := _boite(pivot, feuille, Vector3(0.12, 0.015, 0.42), Vector3(0, -0.06, 0.24))
+			f.rotation.x = 0.55 + 0.15 * (k % 2)
+		if i == 1:
+			# ce pot-là s'est fendu : ses racines sont sorties et sont entrées dans le plancher
+			pot.rotation.z = 0.1
+			var vers_centre := Vector3(-p.x, 0, -p.z).normalized()
+			var lat := vers_centre.cross(Vector3.UP)
+			_boite(m, sombre, Vector3(0.02, 0.24, 0.02), p + Vector3.UP * 0.17 + vers_centre * 0.19)
+			_boite(m, sombre, Vector3(0.04, 0.008, 0.8), p + Vector3.UP * 0.003 + vers_centre * 0.55, atan2(vers_centre.x, vers_centre.z))
+			for r in 3:
+				var depart := p + Vector3.UP * 0.06 + vers_centre * 0.16 + lat * (r - 1) * 0.07
+				var arrivee := p + Vector3.UP * 0.01 + vers_centre * (0.45 + 0.12 * r) + lat * (r - 1) * 0.04
+				_tige(m, bois, depart, arrivee, 0.018)
+			_liane(m, liane, feuille, p, alea, sol)
+		collisions.append([Vector3(0.5, 0.6, 0.5), p + Vector3.UP * 0.3, 0.0])
 
-	# le sac de graines, à côté de la table de chevet
+	# le sac de graines, à côté de la table de chevet : renversé depuis longtemps ; des graines tombées
+	# au sol ont levé toutes seules (décor : il n'y a rien à planter, ILE_01_REVEIL.md)
 	var p_sac := position_chevet + Vector3(0.25, sol, -0.75)
-	_cyl(m, creme, 0.2, 0.24, 0.38, p_sac + Vector3.UP * 0.19, 6)
-	_cyl(m, bois_clair, 0.1, 0.16, 0.08, p_sac + Vector3.UP * 0.42, 6)
+	var sac := _cyl(m, creme, 0.19, 0.24, 0.38, p_sac + Vector3(-0.12, 0.2, 0.0), 6)
+	sac.rotation.z = 1.35
+	var col_sac := _cyl(m, bois_clair, 0.1, 0.16, 0.08, p_sac + Vector3(-0.36, 0.17, 0.0), 6)
+	col_sac.rotation.z = 1.35
+	for k in 9:
+		var g := p_sac + Vector3(-0.5 - alea.randf() * 0.45, 0.012, alea.randf_range(-0.3, 0.3))
+		if k < 5:
+			var haut := alea.randf_range(0.08, 0.16)
+			_cone(m, feuille, 0.035, haut, g + Vector3.UP * haut * 0.5)
+		else:
+			_boite(m, bois, Vector3(0.03, 0.02, 0.025), g, alea.randf() * TAU)
+
+	# la poussière : des grains qui flottent lentement dans la lumière qui entre par la porte
+	var poussiere := CPUParticles3D.new()
+	poussiere.name = "Poussiere"
+	poussiere.position = Vector3(0, sol + 1.3, 0.6)
+	poussiere.amount = 70
+	poussiere.lifetime = 14.0
+	poussiere.preprocess = 14.0
+	poussiere.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	poussiere.emission_box_extents = Vector3(1.8, 1.0, 1.6)
+	poussiere.direction = Vector3.UP
+	poussiere.spread = 180.0
+	poussiere.gravity = Vector3(0, -0.004, 0)
+	poussiere.initial_velocity_min = 0.005
+	poussiere.initial_velocity_max = 0.03
+	var grain := QuadMesh.new()
+	grain.size = Vector2(0.012, 0.012)
+	var mg := StandardMaterial3D.new()
+	mg.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mg.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	mg.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mg.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	mg.vertex_color_use_as_albedo = true
+	grain.material = mg
+	poussiere.mesh = grain
+	var teinte := Gradient.new()
+	teinte.offsets = PackedFloat32Array([0.0, 0.3, 0.7, 1.0])
+	teinte.colors = PackedColorArray([Color(1, 0.92, 0.75, 0), Color(1, 0.92, 0.75, 0.5), Color(1, 0.92, 0.75, 0.5), Color(1, 0.92, 0.75, 0)])
+	poussiere.color_ramp = teinte
+	m.add_child(poussiere)
 
 	if Engine.is_editor_hint():
 		return
@@ -253,6 +329,70 @@ func _mobilier(jeu: Node3D, sol: float) -> void:
 		var b := BoxShape3D.new()
 		b.size = col[0]
 		_forme(corps, b, col[1], col[2])
+
+
+## Une tige (cylindre fin) de `a` à `b`.
+func _tige(parent: Node3D, mat: Material, a: Vector3, b: Vector3, rayon: float) -> MeshInstance3D:
+	var d := b - a
+	var mi := _cyl(parent, mat, rayon, rayon, maxf(d.length(), 0.001), (a + b) * 0.5, 5)
+	var y := d.normalized()
+	var ref := Vector3.FORWARD if absf(y.dot(Vector3.FORWARD)) < 0.9 else Vector3.RIGHT
+	var x := ref.cross(y).normalized()
+	mi.basis = Basis(x, y, x.cross(y))
+	return mi
+
+
+## La liane : elle sort du pot fendu, gagne le mur et y grimpe en zigzag jusque sous le toit.
+func _liane(parent: Node3D, mat: Material, mat_feuille: Material, pot: Vector3, alea: RandomNumberGenerator, sol: float) -> void:
+	var a_mur := atan2(pot.x, pot.z) + 0.22
+	var mur := Vector3(sin(a_mur), 0, cos(a_mur)) * (rayon_murs - 0.14)
+	var pts: Array[Vector3] = [pot + Vector3.UP * 0.5, mur + Vector3.UP * (sol + 0.75)]
+	var lat := Vector3(cos(a_mur), 0, -sin(a_mur))   # le long du mur
+	for k in 6:
+		pts.append(mur + lat * (0.16 if k % 2 == 0 else -0.12) + Vector3.UP * (sol + 1.05 + k * 0.27))
+	for k in pts.size() - 1:
+		_tige(parent, mat, pts[k], pts[k + 1], maxf(0.022 - k * 0.002, 0.008))
+		for j in 2:   # deux feuilles par segment
+			var f := _boite(parent, mat_feuille, Vector3(0.11, 0.012, 0.07), pts[k].lerp(pts[k + 1], 0.3 + 0.4 * j), alea.randf() * TAU)
+			f.rotation.x = alea.randf_range(-0.6, 0.6)
+
+
+## Une toile d'araignée : un quad avec des fils dessinés (rayons et arcs), presque transparent.
+static var _tex_toile: ImageTexture
+
+
+func _toile(parent: Node3D, pos: Vector3, angle_y: float, taille: float) -> void:
+	if _tex_toile == null:
+		var n := 128
+		var img := Image.create(n, n, false, Image.FORMAT_RGBA8)
+		img.fill(Color(1, 1, 1, 0))
+		for r in 7:   # les rayons, depuis le coin
+			var dir := Vector2.from_angle(PI * 0.5 * r / 6.0)
+			for t in range(0, n * 14 / 10):
+				var p := dir * t
+				if p.x < n and p.y < n:
+					img.set_pixel(int(p.x), int(p.y), Color(1, 1, 1, 0.55))
+		for k in range(1, 7):   # les arcs, d'un rayon à l'autre
+			var rr := k * 18.0
+			for t in 120:
+				var p := Vector2.from_angle(PI * 0.5 * t / 119.0) * (rr + 4.0 * sin(t * 0.5))
+				if p.x >= 0 and p.y >= 0 and p.x < n and p.y < n:
+					img.set_pixel(int(p.x), int(p.y), Color(1, 1, 1, 0.4))
+		_tex_toile = ImageTexture.create_from_image(img)
+	var q := QuadMesh.new()
+	q.size = Vector2(taille, taille)
+	var mt := StandardMaterial3D.new()
+	mt.albedo_texture = _tex_toile
+	mt.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mt.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mt.cull_mode = BaseMaterial3D.CULL_DISABLED
+	q.material = mt
+	var mi := MeshInstance3D.new()
+	mi.mesh = q
+	mi.position = pos
+	mi.rotation.y = angle_y
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	parent.add_child(mi)
 
 
 func _mat(couleur: Color) -> StandardMaterial3D:

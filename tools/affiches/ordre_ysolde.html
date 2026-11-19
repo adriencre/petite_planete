@@ -24,6 +24,17 @@
   .signe .titre { font-family: 'IM Fell English SC', serif; font-size: 23px; letter-spacing: 4px; color: var(--encre-pale); margin-top: 34px; }
   .cachet { position: absolute; right: 70px; bottom: 70px; width: 170px; height: 170px; }
   .ruban { position: absolute; right: 120px; bottom: 30px; width: 90px; height: 120px; }
+
+  /* le temps a passé (ILE_01_REVEIL.md §13, 2026-11-18) : papier jauni, auréoles de taches, encre pâlie */
+  .age { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background:
+      radial-gradient(ellipse 22% 16% at 78% 22%, transparent 70%, rgba(150,105,50,.32) 76%, rgba(170,125,65,.12) 82%, transparent 88%),
+      radial-gradient(ellipse 14% 11% at 18% 70%, rgba(170,125,65,.16) 0%, transparent 70%, rgba(150,105,50,.28) 76%, transparent 84%),
+      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(160,115,55,.30) 100%),
+      linear-gradient(180deg, rgba(215,175,95,.22), rgba(200,155,80,.26)); }
+  /* un coin arraché, en haut à gauche ; l'encre a pâli */
+  .feuille { clip-path: polygon(9% 0, 100% 0, 100% 100%, 0 100%, 0 15%, 2.5% 12.5%, 1.5% 9%, 4.5% 7%, 4% 3.5%, 7.5% 2.5%); }
+  .message, .signe .nom { opacity: .74; }
 </style></head>
 <body>
 <div class="feuille">
@@ -64,5 +75,6 @@
     <g transform="scale(1.1)"><use href="#semeurs" stroke="#6e2419" stroke-width="3.4"/></g>
     <ellipse cx="-22" cy="-30" rx="16" ry="8" fill="#fff" opacity=".18" transform="rotate(-30)"/>
   </svg>
+  <div class="age"></div>
 </div>
 </body></html>

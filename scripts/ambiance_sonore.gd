@@ -27,10 +27,12 @@ var _prochain_oiseau := 4.0
 
 
 func _ready() -> void:
-	_vent = _boucle("vent")
-	_vagues = _boucle("vagues")
+	# la musique et le vent continuent, doucement, quand le jeu est en pause
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_vent = _boucle("vent", &"Ambiance")
+	_vagues = _boucle("vagues", &"Ambiance")
 	for k in 4:
-		_couches.append(_boucle("musique_couche_%d" % (k + 1)))
+		_couches.append(_boucle("musique_couche_%d" % (k + 1), &"Musique"))
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_joueur = get_tree().get_first_node_in_group("joueur") as CharacterBody3D
@@ -44,9 +46,10 @@ func _ready() -> void:
 
 
 ## Un lecteur qui tourne en boucle, muet au départ.
-func _boucle(nom: String) -> AudioStreamPlayer:
+func _boucle(nom: String, bus: StringName) -> AudioStreamPlayer:
 	var p := AudioStreamPlayer.new()
 	p.name = nom
+	p.bus = bus
 	var s: AudioStream = SONS.flux(nom)
 	if s is AudioStreamWAV:
 		s = (s as AudioStreamWAV).duplicate()

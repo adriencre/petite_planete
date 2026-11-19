@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "blender": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-for-blender"
+      ],
+      "env": {
+        "DISABLE_TELEMETRY": "true"
+      }
+    },
+    "godot-ai": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--link-mode",
+        "copy",
+        "--from",
+        "godot-ai==4.4.1",
+        "godot-ai",
+        "attach",
+        "--port",
+        "8000",
+        "--ws-port",
+        "9500"
+      ],
+      "env": {}
+    },
+    "meshy": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@meshy-ai/meshy-mcp-server"
+      ],
+      "env": {
+        "MESHY_API_KEY": "${MESHY_API_KEY}"
+      }
+    }
+  }
+}

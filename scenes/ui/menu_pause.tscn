@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menu_pause.gd" id="1_script"]
+[ext_resource type="Theme" path="res://assets/ui/theme_carnet.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/reglages.tscn" id="3_reglages"]
+
+[node name="MenuPause" type="CanvasLayer"]
+process_mode = 3
+layer = 30
+script = ExtResource("1_script")
+
+[node name="Voile" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.06, 0.1, 0.5)
+
+[node name="Feuille" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(460, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -230.0
+offset_right = 230.0
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Colonne" type="VBoxContainer" parent="Feuille"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titre" type="Label" parent="Feuille/Colonne"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 58
+text = "Pause"
+horizontal_alignment = 1
+
+[node name="Reprendre" type="Button" parent="Feuille/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Reprendre"
+
+[node name="BoutonReglages" type="Button" parent="Feuille/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Réglages"
+
+[node name="RetourTitre" type="Button" parent="Feuille/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Retour à l'écran titre"
+
+[node name="Quitter" type="Button" parent="Feuille/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quitter"
+
+[node name="Note" type="Label" parent="Feuille/Colonne"]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "La partie se sauvegarde toute seule."
+horizontal_alignment = 1
+
+[node name="Reglages" parent="." instance=ExtResource("3_reglages")]
+visible = false

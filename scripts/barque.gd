@@ -500,7 +500,7 @@ func _embarquer() -> void:
 	_roulis += 0.05
 	if _robot:
 		_robot.call("jouer_action", "assis", 1.0, 0.4)
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.5, false).timeout
 	# il sort la fiche de son poignet et la branche : clic, la lanterne de proue s'éveille
 	_cable.materiau.set_shader_parameter("flux", 0.0)
 	_cable.visible = true
@@ -564,7 +564,7 @@ func _amarrer(p: Node3D) -> void:
 	var noue := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	noue.tween_property(self, "_noue", 1.0, 0.8)
 	await noue.finished
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.3, false).timeout
 	# il se débranche : le câble se rembobine, la lanterne s'assoupit
 	pilotee = false
 	_sillage.emitting = false
@@ -577,7 +577,7 @@ func _amarrer(p: Node3D) -> void:
 	_cable.visible = false
 	if _robot:
 		_robot.call("fin_action")
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.4, false).timeout
 	# il se lève et saute sur le ponton ; la caméra revient au-dessus de l'île
 	_tenir = false
 	var bascule := _basculer_camera(0.0)
