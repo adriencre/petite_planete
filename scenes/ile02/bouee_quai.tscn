@@ -47,6 +47,9 @@ omni_range = 4.3
 [node name="Prise" type="Marker3D" parent="Flotteur"]
 position = Vector3(-0.50, 0.74, 0)
 
+[node name="SortieOptique" type="Marker3D" parent="Flotteur"]
+position = Vector3(-0.27, 1.17, -0.23)
+
 [node name="Boitier" type="MeshInstance3D" parent="Flotteur/Prise"]
 position = Vector3(0.064, 0, 0)
 rotation = Vector3(0, 0, 1.5707963)

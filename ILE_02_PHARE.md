@@ -96,13 +96,13 @@ Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (port
 - **La lanterne** de la maison : à rallumer avec le câble ; c'est le point de recharge avant la traversée (G1).
 - **Le cahier des passages** sur la table : les traversées notées par les gardiens (« Parti au début de la basse mer, arrivé sec »…), la dernière ligne inachevée (l'ancien corps de la chaussée). Indice muet du piège de G1 : partir au **début** de la basse mer.
 - **L'horloge de marée** au mur : une aiguille qui suit la vraie marée du jeu (HorlogeMonde).
-- **La couchette d'Aube** : une troisième couchette, à taille d'enfant, un dessin d'Aube sous l'oreiller. Aube venait ici avec Iris (lien avec la Colonie).
+- **La couchette d'Aube** : une troisième couchette, à taille d'enfant, un dessin d’Aube dépasse de l’oreiller. Avec E, on voit Iris et Aube à la fenêtre du quai, face à la marée montante. Le carnet en garde une copie. Le dessin fait écho au jour 22 du cahier des passages.
 
 ### Le chantier du quai
 
 Hangar de réparation à l’échelle des Semeurs, en bardage bleu sur un socle de calcaire. Deux vantaux coulissent sur un rail visible. L’atelier conserve une allée de manutention sur rails, une coque retournée sur tréteaux, une barque en cours de réparation et un établi avec son étau, ses outils, du cordage et de la toile. La charpente, les ardoises et le haut des murs passent en coupe pendant la visite.
 
-Dans la maquette, la lanterne d’essai du quai alimente le miroir. Quand le faisceau atteint le capteur monté sur la façade est, les vantaux s’ouvrent pendant un court plan et l’ouverture se conserve. La bouée suit la marée, et le quai porte des traits peints aux niveaux de basse et haute mer. Depuis la barque, on approche par le côté quai. E arrête la barque, déplace la fiche de la proue vers la prise de la bouée et recharge la batterie. Le premier branchement allume le feu en gros plan. La bouée reste allumée et peut resservir après une traversée.
+Une plaque de service sur le ponton montre une fiche et une bouée. La bouée suit la marée et le quai porte des traits peints aux niveaux de basse et haute mer. Depuis la barque, on approche par le côté quai. L’invite « E · Brancher la bouée » indique le premier geste. E arrête la barque et déplace la fiche de la proue vers la prise. Au premier allumage, la caméra suit le rayon de la bouée jusqu’au miroir. La lumière renvoyée forme une tache sur le bardage à côté de la cellule. Au miroir, « E · Tourner le miroir » fait avancer la tache par crans. Quand le rayon atteint la cellule, le voyant s’allume et les deux vantaux coulissent pendant un court plan. L’ouverture se conserve. La bouée reste allumée et sert aussi de point de recharge.
 
 ### Le Phare, de bas en haut
 | Niveau | Ce qu'on y trouve |
@@ -148,7 +148,7 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 - **La situation** : la salle des cartes est fermée à clé.
 - **Où on l'apprend** : la note du bureau (« J'ai laissé la clé dans la cabine, à bord du ravitailleur ») ; depuis la galerie, on **voit l'épave**.
 - **La chaîne** : le **Phare rallumé** (son faisceau perce la brume de l'épave) + la **marée basse** (l'épave affleure) + **la barque** ; la clé est dans la cabine du capitaine.
-- **À bord du ravitailleur** : on amarre la barque à une passerelle fixée au flanc éventré. Le pont reste ouvert jusqu’à la cabine. Le toit et la poupe s’effacent en coupe à l’entrée. La clé est posée sur le bureau, à côté du journal de quart, en face de la couchette.
+- **À bord du ravitailleur** : on amarre la barque à une passerelle fixée au flanc éventré. Le pont reste ouvert jusqu’à la cabine. Le toit et la poupe s’effacent en coupe à l’entrée. La clé est posée sur le bureau, à côté du journal de quart, en face de la couchette. Le journal est consultable et se copie dans le carnet : « Iris est repassée pour les relèvements. Elle a laissé la clé sur le bureau. Je la lui rendrai à la prochaine basse mer. »
 - **Ce que ça ouvre** : la salle des cartes, avec le **registre** et les **relèvements**.
 
 ### G4. « La salle des machines » (mécanisme) — *validé*
@@ -156,7 +156,7 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 - **Où on l'apprend** : au rez, les engrenages sont démontés, et un **schéma** peint au mur (en partie couvert de suie) montre comment ils s'emboîtent.
 - **La solution** : remettre les engrenages en place (`E` pour déplacer et tourner chaque roue) en suivant le schéma. La partie effacée se devine en regardant **les marques d'usure au sol** sous chaque axe (observation).
 - **Dans la salle** : `E` devant la machine ouvre une grande vue de face. Le joueur choisit une roue dans le râtelier, puis un axe libre. Les commandes permettent de tourner la roue d’un cran ou de la retirer. La taille doit correspondre à l’empreinte et le repère en laiton doit rejoindre la clavette. Le chariot applique les déplacements dans la salle. Le dernier cran ferme la vue, tend la chaîne et libère la manivelle de la galerie.
-- **Ce que ça ouvre** : la **lentille orientable**. Avec les relèvements (G3), on peut la pointer vers chaque île.
+- **Ce que ça ouvre** : la **lentille orientable**. Sur les trois côtés accessibles de la galerie, l’invite « E · Orienter la lentille » permet de tourner la manivelle depuis sa position. Auprès de la lunette d’Iris, l’instrument le plus proche prend la touche E. Avec les relèvements (G3), on peut la pointer vers chaque île.
 
 ### G5. « La chambre d'Iris » (lieux cachés) — *validé*
 - **La situation** : à l'extrémité du palier du bureau, une porte fermée de l'intérieur.
@@ -303,7 +303,7 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 
 **Grottes et crypte** : la maquette de l'île instancie les quatre modules de `scenes/ile02/grottes_crypte.tscn` à côté de l'escalier de l'estran. L'entrée maçonnée s'appuie sur le calcaire. Les fanaux balisent la galerie dallée. Dans la crypte, une bride étanche fixe la ligne du berceau à la roche. Le câble plonge vers le large sous une grille de visite, près du treuil et de la plaque lettrée. Le robot peut lire la plaque avec E et retrouver son texte dans le carnet. La couverture de la falaise s'efface quand le robot entre et les collisions du plateau restent actives autour du puits.
 
-**Chaussée et anciens corps** : des dalles de calcaire chanfreinées et une pente raccordent le quai à l'estran. Les trois balises ont chacune un cercle de pierres. À mi-chaussée, le robot effondré repose sur le côté, avec du varech accroché au poignet, à la coque et aux pieds. Sur la galerie, un autre corps reprend la pose assise du robot jardinier et regarde le large, au nord-ouest. Les deux corps sont du décor à ce stade.
+**Chaussée et anciens corps** : des dalles de calcaire chanfreinées et une pente raccordent le quai à l'estran. Les trois balises ont chacune un cercle de pierres. À mi-chaussée, le robot effondré repose sur le côté, avec du varech accroché au poignet, à la coque et aux pieds. Au Large, le corps est tourné vers le chemin du retour, une main au rocher et du varech accroché à la coque. Sur la galerie, un autre corps reprend la pose assise du robot jardinier et regarde la mer au cap 318°, comme depuis le banc d’Iris. Les trois corps racontent leur histoire par la pose et le lieu.
 
 **Jardin et banc d’Iris** : le jardin occupe le rebord nord-ouest du plateau, entre le Phare et le départ vers le cap Ouest. Trois bacs de bois contiennent de la terre craquelée. L’arrosoir en cuivre verdi est resté auprès de l’arbre rose mort, aux racines apparentes. Depuis le sentier devant le banc, E fait asseoir le robot. La caméra se pose au cap 318°, comme le cran sans nom de la lunette. La première transition prend plus de temps. E ou Échap rend la marche au robot.
 > Le dev ne reprend qu'une fois tous les documents des îles terminés.

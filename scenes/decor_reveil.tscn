@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://cl10xpccufbht" path="res://scripts/maquette.gd" id="sc_maquette"]
+[ext_resource type="Shader" uid="uid://7qouqxephsnd" path="res://shaders/terrain_facettes.gdshader" id="s_facettes"]
+
+[sub_resource type="ShaderMaterial" id="facettes_mat"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("s_facettes")
+shader_parameter/herbe_a = Color(0.62, 0.82, 0.42, 1)
+shader_parameter/herbe_b = Color(0.54, 0.77, 0.4, 1)
+shader_parameter/herbe_c = Color(0.7, 0.85, 0.46, 1)
+shader_parameter/sable_a = Color(0.93, 0.84, 0.7, 1)
+shader_parameter/sable_b = Color(0.89, 0.79, 0.66, 1)
+shader_parameter/roche_a = Color(0.88, 0.6, 0.56, 1)
+shader_parameter/roche_b = Color(0.94, 0.74, 0.6, 1)
+shader_parameter/roche_c = Color(0.96, 0.86, 0.76, 1)
+shader_parameter/mousse = Color(0.47, 0.66, 0.4, 1)
+shader_parameter/taille_case = 6.0
+shader_parameter/hauteur_niveau = 2.5
+shader_parameter/hauteur_sable = 1.0
+shader_parameter/epaisseur_mousse = 0.3
+
+[node name="Maquette" type="Node3D"]
+script = ExtResource("sc_maquette")
+carte = ". . . . . . . . . . . .
+. . . . 3 3G 3 3w 2X . . .
+. 2 2 2J 2 2^E 2 2wC 2W . . .
+. 2t 2N 2H 2R 2 2 2w 2 2t . .
+. 2 0bQ 12 1^ 1 1 1w 1 1 . .
+. 0bB 0bM 1 1 1F 1 1w 13 . . .
+. 0bK 0b 0 0^ 0 0 0w 0 . . .
+. . 0 0 0 0 0 0w 01 1h 1hA .
+. . . 0 0 0 . . 0P 0^ . .
+. . . . . . . . . . . ."
+noms = {
+"1": "Lanterne 1",
+"2": "Lanterne 2",
+"3": "Lanterne 3",
+"A": "Abri",
+"B": "Barque",
+"C": "Cascade",
+"E": "Montée",
+"F": "La place",
+"G": "Grande lanterne (sommet)",
+"H": "Charrette",
+"J": "Jardin mort",
+"K": "Crique",
+"M": "Ancien corps",
+"N": "Banc",
+"P": "Pierre-soleil",
+"Q": "Pierre-soleil cachée",
+"R": "Escalier",
+"W": "Rebord caché",
+"X": "Atelier"
+}
+materiau_terrain = SubResource("facettes_mat")
+taille_case = 6.0
+chemin = "AP12RHNJEG"
+chemin_geants = "EW"

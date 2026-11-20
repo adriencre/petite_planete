@@ -8,6 +8,8 @@ const ANGLE_DU_MODELE := 210.17
 @export var orientations: PackedFloat32Array
 @export var vues: Array[Texture2D]
 
+var commande_lentille_prioritaire: Callable
+
 @onready var _touche: Label3D = $Touche
 @onready var _pivot: Marker3D = $Pivot
 @onready var _oculaire: CanvasLayer = $Oculaire
@@ -44,9 +46,15 @@ func _process(_delta: float) -> void:
 
 
 func _a_portee() -> bool:
-	if not is_instance_valid(_robot) or _ouvert or bool(_robot.get("cinematique")):
+	return a_portee(_robot) and (
+		not commande_lentille_prioritaire.is_valid() or not bool(commande_lentille_prioritaire.call())
+	)
+
+
+func a_portee(robot: CharacterBody3D) -> bool:
+	if not is_instance_valid(robot) or _ouvert or bool(robot.get("cinematique")):
 		return false
-	var ecart := _robot.global_position - global_position
+	var ecart := robot.global_position - global_position
 	return absf(ecart.y) < 0.65 and Vector2(ecart.x, ecart.z).length() < 1.05
 
 

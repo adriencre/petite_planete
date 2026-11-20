@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/reglages_panneau.gd" id="1_script"]
-[ext_resource type="Theme" path="res://assets/ui/theme_carnet.tres" id="2_theme"]
+[ext_resource type="Theme" path="res://assets/ui/theme_menu.tres" id="2_theme"]
 
 [node name="Reglages" type="PanelContainer"]
 custom_minimum_size = Vector2(640, 0)
@@ -25,7 +25,7 @@ theme_override_constants/separation = 14
 
 [node name="Titre" type="Label" parent="Colonne"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 54
+theme_override_font_sizes/font_size = 38
 text = "Réglages"
 horizontal_alignment = 1
 

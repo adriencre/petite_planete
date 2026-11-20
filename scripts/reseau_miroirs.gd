@@ -3,6 +3,7 @@ extends Node3D
 
 const MIROIR := preload("res://scripts/miroir_cap.gd")
 const SONS := preload("res://scripts/sons.gd")
+const LUNETTE := preload("res://scripts/lunette_iris.gd")
 const RAYON_EPAVE := 13.0
 const PORTEE := 118.0
 const PERIODE := 40.0
@@ -17,6 +18,8 @@ const CRANS_LENTILLE := [-129.0, -58.0, -9.0, 42.0, 73.0]
 @export var carnet: CanvasLayer
 @export var engrenages: Node3D
 @export var commande: Node3D
+@export var lunette: LUNETTE
+@export var rayon_galerie := 3.85
 
 @onready var _axe: Node3D = optique.get_node("AxeFaisceau")
 @onready var _inclinaison: Node3D = _axe.get_node("Inclinaison")
@@ -44,6 +47,8 @@ var _manivelle_occupee := false
 
 func _ready() -> void:
 	add_to_group("sauvegarde")
+	if lunette:
+		lunette.commande_lentille_prioritaire = _commande_accessible
 	var etat := Sauvegarde.donnees(cle_sauvegarde(), self)
 	_deja_vu = bool(etat.get("deja_vu", false))
 	_cran_lentille = clampi(int(etat.get("cran_lentille", -1)), -1, CRANS_LENTILLE.size() - 1)
@@ -94,7 +99,13 @@ func _commande_accessible() -> bool:
 	if _manivelle_occupee or not bool(engrenages.get("repare")) or bool(joueur.get("cinematique")):
 		return false
 	var ecart := joueur.global_position - commande.global_position
-	return absf(ecart.y) < 1.0 and Vector2(ecart.x, ecart.z).length() < 1.12
+	var depuis_axe := joueur.global_position - optique.global_position
+	if absf(ecart.y) >= 1.0 or Vector2(depuis_axe.x, depuis_axe.z).length() > rayon_galerie:
+		return false
+	if not lunette or not lunette.a_portee(joueur):
+		return true
+	var depuis_lunette := joueur.global_position - lunette.global_position
+	return Vector2(ecart.x, ecart.z).length_squared() <= Vector2(depuis_lunette.x, depuis_lunette.z).length_squared()
 
 
 func _unhandled_input(event: InputEvent) -> void:

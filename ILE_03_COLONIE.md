@@ -44,6 +44,24 @@ La ville des Semeurs, vide, haute et trop grande pour le petit robot : des valis
 La baie devient un **bassin presque clos** au cœur de la ville : le vieux port englouti au centre, la ville en anneau autour (ville basse au niveau 1, ville haute au niveau 2, serres et jardin du haut sur la crête au niveau 3). Une **seule passe étroite** relie le lagon à la mer, au sud, avec l'écluse. **À revoir** : le trajet du canal de l'écluse jusqu'au jardin du haut (dans le schéma, l'écluse est à la passe).
 Schéma : `concept/ile_03_formes.png` (variante C), dessiné par `tools/carte_iso.py ile_03`.
 
+### Implantation retenue le 20 novembre
+
+La reconstruction repart de zéro dans Blender. Le robot arrive au ras du quai sud, entre les malles et le carillon. La ville basse occupe la rive ouest, la ville haute la rive est et les verrières dominent le bassin depuis le nord. Les sept adresses à visiter se répartissent entre quatre foyers en bas et trois en haut. L’école et la maison commune ont leur propre silhouette. Le vieux port doit rester perceptible à travers l’eau. La ville est inhabitée depuis longtemps. L’herbe gagne les rues par les joints et s’accumule contre les murs, avec des pavés usés encore visibles. Les talus et les anciens vergers sont plus denses. Le milieu des promenades reste praticable.
+
+### Le quai et sa maison
+
+La première maison visitable est au débouché du ponton, côté lagon, porte tournée vers le point d’arrivée du robot. Une passerelle relie le ponton à son seuil. Le carillon est suspendu à un portique et l’échelle de marée porte un trait isolé et un rond plein au niveau de la pleine lune. Un toit cintré en cuivre patiné, un oculus et un porche sur consoles signalent la maison depuis le ponton. La porte de la maison est entrouverte et son passage mesure environ 2,1 m de large sur 3 m de haut. La table atteint 1,59 m. Une carte côtière et son compas sont restés sur la table. Sous le plateau, le cordage est lové près des flotteurs. Une chaise, un poêle en fonte avec sa marmite, un vaisselier ouvert et la couchette composent le foyer. Une valise fermée, étiquetée « Nef », attend près de la porte. Le toit et le haut des murs s’effacent quand le robot entre.
+
+### La maison des couturières
+
+La grande baie de l’atelier est abritée par une toile rayée et rapiécée. Une claire-voie sépare les deux versants de sa toiture en terre cuite. Deux couturières raccommodaient les vêtements de la ville basse. Sur la table sous la fenêtre, une veste vert sauge porte une pièce corail au coude, avec une couture commencée sur un seul bord. Le même tissu répare une sangle de leur valise « Nef ». Un mannequin sur pied, des ciseaux ouverts, un tambour à broder, un coussin à épingles et des rouleaux de tissu entourent la table. Les deux couchettes occupent le fond de l’atelier.
+
+### Les habitations
+
+La Colonie est la ville la plus détaillée du jeu. Elle compte **sept habitations visitables**, dont la maison d’Aube, et de **nombreuses autres habitations fermées** qui forment le tissu des quartiers autour du lagon.
+
+Les sept intérieurs sont conçus pièce par pièce. Le mobilier, les objets personnels et les traces du départ racontent la vie de chaque foyer. Dans les rues, les façades, portes, balcons et cours donnent aux habitations fermées une présence dans la ville. Toutes les habitations de décor de la Colonie reprennent quatre modèles Blender avec des portes pleines et des façades en aplats pastel. Les maisons basses ont un toit à pignon ou une terrasse. Les maisons hautes se distinguent par leurs contreforts ou leur balcon. L’école, la maison commune et les serres s’ajoutent aux sept habitations.
+
 ### Les zones
 | Zone | Ce qu'on y trouve |
 |---|---|

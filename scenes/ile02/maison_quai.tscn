@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/batiment_coupe.gd" id="1_coupe"]
 [ext_resource type="PackedScene" path="res://assets/models/ile02/maison_quai.glb" id="2_modele"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/lanterne_fleur.gd" id="5_lanterne_script"]
 [ext_resource type="Script" path="res://scripts/page_lisible.gd" id="6_page"]
 [ext_resource type="Texture2D" path="res://assets/affiches/cahier_passages.png" id="7_cahier"]
+[ext_resource type="Texture2D" path="res://assets/affiches/dessin_aube_fenetre.png" id="8_dessin"]
 
 [sub_resource type="BoxShape3D" id="zone_interieur"]
 size = Vector3(7, 3, 9)
@@ -61,3 +62,13 @@ distance_lecture = 2.8
 taille_feuille = Vector2(0.84, 0.6)
 ramasser = false
 image = ExtResource("7_cahier")
+
+[node name="DessinAube" type="Node3D" parent="."]
+position = Vector3(-0.58, 0.68, -4.025)
+script = ExtResource("6_page")
+texte = "Dessin d’Aube : Iris et Aube regardent la marée monter par la fenêtre du quai."
+distance_lecture = 1.0
+hauteur_lecture = 1.2
+taille_feuille = Vector2(0.38, 0.273)
+image = ExtResource("8_dessin")
+ramasser = false

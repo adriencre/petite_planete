@@ -54,10 +54,19 @@ var _joueur
 var _zone
 
 
+var decor_seul := false
+var ouverture_decor := false
+
+
 func _ready() -> void:
-	add_to_group("lanternes")
-	add_to_group("interactif")
-	add_to_group("sauvegarde")
+	if decor_seul:
+		set_process(false)
+		set_physics_process(false)
+		set_process_unhandled_input(false)
+	else:
+		add_to_group("lanternes")
+		add_to_group("interactif")
+		add_to_group("sauvegarde")
 	for n in find_children("Petale*", "Node3D", true, false):
 		_petales.append(n)
 		_bases.append((n as Node3D).basis)
@@ -92,6 +101,10 @@ func _ready() -> void:
 	_lumiere.position = _pos_coeur()
 	add_child(_lumiere)
 	_preparer_pollen()
+	if decor_seul:
+		if ouverture_decor:
+			allumer_tout_de_suite()
+		return
 	_cable = CABLE.new()
 	_cable.visible = false
 	add_child(_cable)

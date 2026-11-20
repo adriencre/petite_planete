@@ -27,7 +27,7 @@ BALISES = ((-9.8, 18.0), (-4.2, 25.0), (-9.8, 32.0))
 CORPS_TOMBE = (-4.87, 0.205, 31.70)
 ANGLE_TOMBE = 3.27  # rotations Godot, autour de Y
 CORPS_ASSIS = (-2.12, 13.62, -2.13)
-ANGLE_ASSIS = -2.35
+ANGLE_ASSIS = -2.408554  # cap 318°, comme le banc d’Iris
 
 rng = Random(271)
 bpy.ops.wm.read_factory_settings(use_empty=True)

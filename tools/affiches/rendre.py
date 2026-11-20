@@ -38,6 +38,8 @@ DOCUMENTS = {
     "relevements_cartes": (1100, 720),
     "lettre_iris_ysolde": (1000, 1190),
     "dessin_aube_brume": (960, 750),
+    "dessin_aube_fenetre": (960, 690),
+    "journal_quart": (960, 790),
 }
 
 

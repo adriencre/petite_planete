@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Environment" path="res://assets/ambiances/ile_02.tres" id="ambiance"]
+[ext_resource type="PackedScene" path="res://assets/models/ile03/colonie_du_lagon.glb" id="colonie"]
+[ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="joueur"]
+
+[ext_resource type="Script" path="res://scripts/coupe_maison.gd" id="coupe_maison"]
+
+[sub_resource type="StandardMaterial3D" id="Eau"]
+transparency = 1
+albedo_color = Color(0.18, 0.72, 0.72, 0.68)
+roughness = 0.35
+
+[sub_resource type="PlaneMesh" id="Surface"]
+size = Vector2(900, 900)
+material = SubResource("Eau")
+
+[sub_resource type="BoxShape3D" id="Interieur_quai"]
+size = Vector3(6.08, 3.0, 5.14)
+
+[node name="Ile03Maquette" type="Node3D"]
+
+[node name="Environnement" type="WorldEnvironment" parent="."]
+environment = ExtResource("ambiance")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -34, 0)
+light_color = Color(1, 0.93, 0.82, 1)
+light_energy = 1.45
+shadow_enabled = true
+directional_shadow_max_distance = 110.0
+
+[node name="Colonie" parent="." instance=ExtResource("colonie")]
+
+[node name="InterieurMaisonDuQuai" type="Area3D" parent="." node_paths=PackedStringArray("toit", "murs_hauts")]
+position = Vector3(-8, 2.45, 23.4)
+collision_layer = 0
+monitorable = false
+script = ExtResource("coupe_maison")
+toit = NodePath("../Colonie/Toit_maison_du_quai")
+murs_hauts = NodePath("../Colonie/Murs_hauts_maison_du_quai")
+
+[node name="Volume" type="CollisionShape3D" parent="InterieurMaisonDuQuai"]
+shape = SubResource("Interieur_quai")
+
+[node name="InterieurCouturieres" type="Area3D" parent="." node_paths=PackedStringArray("toit", "murs_hauts")]
+position = Vector3(-43.566644, 4.40, 9.464364)
+rotation = Vector3(0, 1.7847114, 0)
+collision_layer = 0
+monitorable = false
+script = ExtResource("coupe_maison")
+toit = NodePath("../Colonie/Toit_des_couturieres")
+murs_hauts = NodePath("../Colonie/Murs_hauts_des_couturieres")
+
+[node name="Volume" type="CollisionShape3D" parent="InterieurCouturieres"]
+shape = SubResource("Interieur_quai")
+
+[node name="Mer" type="MeshInstance3D" parent="."]
+mesh = SubResource("Surface")
+
+[node name="Joueur" parent="." instance=ExtResource("joueur")]
+position = Vector3(-8, 1.35, 39)
+vue_dessus = true
+distance_dessus = 9.0
+angle_dessus = 40.0
+orientation_dessus = 0.0
+
+[connection signal="body_entered" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_entre"]
+[connection signal="body_exited" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_sort"]
+
+[connection signal="body_entered" from="InterieurCouturieres" to="InterieurCouturieres" method="_robot_entre"]
+[connection signal="body_exited" from="InterieurCouturieres" to="InterieurCouturieres" method="_robot_sort"]

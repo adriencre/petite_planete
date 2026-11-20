@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var _reprendre: Button = %Reprendre
 
 var ouvert := false
+var _transition_en_cours := false
 var _souris_avant: Input.MouseMode = Input.MOUSE_MODE_CAPTURED
 
 
@@ -18,17 +19,16 @@ func _ready() -> void:
 	_reglages.visible = false
 	_reprendre.pressed.connect(fermer)
 	%BoutonReglages.pressed.connect(_montrer_reglages)
-	%RetourTitre.pressed.connect(func() -> void:
-		_cacher()
-		Sauvegarde.retour_au_titre())
+	%RetourTitre.pressed.connect(_retour_titre)
 	%Quitter.pressed.connect(Sauvegarde.quitter)
 	_reglages.ferme.connect(_cacher_reglages)
+	get_tree().scene_changed.connect(_sur_changement_scene)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not (event is InputEventKey) or not event.pressed or event.echo:
+	if _transition_en_cours or _reglages.is_visible_in_tree() or not Sauvegarde.en_partie():
 		return
-	if (event as InputEventKey).physical_keycode != KEY_ESCAPE or not Sauvegarde.en_partie():
+	if not event.is_action_pressed("ui_cancel"):
 		return
 	get_viewport().set_input_as_handled()
 	if ouvert:
@@ -38,7 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not ouvert and Sauvegarde.en_partie():
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not ouvert and not _transition_en_cours and Sauvegarde.en_partie():
 		ouvrir()
 
 
@@ -51,6 +51,7 @@ func ouvrir() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	visible = true
 	_feuille.visible = true
+	%ErreurRetour.hide()
 	_reglages.visible = false
 	_voile.color.a = 0.0
 	_feuille.modulate.a = 0.0
@@ -74,10 +75,18 @@ func fermer() -> void:
 		get_tree().paused = false
 
 
-## Sans fondu (on quitte l'île).
-func _cacher() -> void:
-	ouvert = false
-	visible = false
+func _retour_titre() -> void:
+	if _transition_en_cours:
+		return
+	_transition_en_cours = true
+	%ErreurRetour.hide()
+	if await Sauvegarde.retour_au_titre():
+		ouvert = false
+		visible = false
+	else:
+		%ErreurRetour.show()
+		%RetourTitre.grab_focus()
+	_transition_en_cours = false
 
 
 func _montrer_reglages() -> void:
@@ -89,3 +98,10 @@ func _cacher_reglages() -> void:
 	_reglages.visible = false
 	_feuille.visible = true
 	%BoutonReglages.grab_focus()
+
+
+
+func _sur_changement_scene() -> void:
+	if _transition_en_cours:
+		ouvert = false
+		visible = false

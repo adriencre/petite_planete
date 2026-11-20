@@ -1,0 +1,51 @@
+[gd_resource type="Theme" format=3]
+
+[sub_resource type="StyleBoxFlat" id="normal"]
+bg_color = Color(0.99, 0.95, 0.86, 0.10)
+content_margin_left = 17.0
+content_margin_right = 17.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="survol"]
+bg_color = Color(0.99, 0.95, 0.86, 0.75)
+content_margin_left = 17.0
+content_margin_right = 17.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+border_width_left = 3
+border_color = Color(0.69, 0.40, 0.17, 1)
+
+[sub_resource type="StyleBoxFlat" id="appui"]
+bg_color = Color(0.94, 0.81, 0.60, 0.85)
+content_margin_left = 17.0
+content_margin_right = 17.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+border_width_left = 3
+border_color = Color(0.69, 0.40, 0.17, 1)
+
+[sub_resource type="StyleBoxFlat" id="papier"]
+bg_color = Color(0.98, 0.95, 0.88, 1)
+content_margin_left = 30.0
+content_margin_right = 30.0
+content_margin_top = 30.0
+content_margin_bottom = 30.0
+shadow_color = Color(0.04, 0.13, 0.15, 0.24)
+shadow_size = 18
+shadow_offset = Vector2(0, 8)
+
+[resource]
+default_font_size = 21
+Button/colors/font_color = Color(0.095, 0.19, 0.20, 1)
+Button/colors/font_focus_color = Color(0.095, 0.19, 0.20, 1)
+Button/colors/font_hover_color = Color(0.095, 0.19, 0.20, 1)
+Button/colors/font_pressed_color = Color(0.095, 0.19, 0.20, 1)
+Button/colors/font_hover_pressed_color = Color(0.095, 0.19, 0.20, 1)
+Button/styles/normal = SubResource("normal")
+Button/styles/hover = SubResource("survol")
+Button/styles/pressed = SubResource("appui")
+Button/styles/hover_pressed = SubResource("appui")
+Button/styles/focus = SubResource("survol")
+Label/colors/font_color = Color(0.095, 0.19, 0.20, 1)
+PanelContainer/styles/panel = SubResource("papier")

@@ -27,12 +27,12 @@ func _ready() -> void:
 		_ecrire_plein_ecran())
 	_retour.pressed.connect(fermer)
 	visibility_changed.connect(func() -> void:
-		if visible and _curseurs.size() > 0:
+		if is_visible_in_tree() and _curseurs.size() > 0:
 			(_curseurs[0] as Control).grab_focus())
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if visible and event.is_action_pressed("ui_cancel"):
+	if is_visible_in_tree() and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		fermer()
 

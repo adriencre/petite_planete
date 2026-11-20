@@ -1,25 +1,16 @@
 extends Control
-## L'écran titre (scenes/ecran_titre.tscn) : l'aquarelle de la grande lanterne, qui respire doucement,
-## du pollen doré qui monte, le piano de l'île. Tout se règle dans l'éditeur (textes, couleurs, dessin).
-## - Continuer : seulement s'il y a une partie sauvegardée (on se réveille dans le berceau).
-## - Nouvelle partie : si une partie existe, on demande avant de l'effacer.
-## On entre et on sort lentement, par le noir (pas d'action instantanée).
+## Accueil au-dessus du Réveil. Les changements de scène passent par Sauvegarde.
 
-## Durée du fondu d'entrée et de sortie (s).
-@export var duree_fondu: float = 1.6
-## Agrandissement lent du dessin (respiration), et sa période (s).
-@export var respiration: float = 0.035
-@export var periode_respiration: float = 24.0
+@export var duree_fondu: float = 1.2
 ## Volume de la musique de l'écran titre (dB, avant le réglage « Musique »).
 @export var volume_musique: float = -6.0
 ## Dev seulement (bouton caché dans le jeu exporté) : nom affiché -> scène de l'île.
 ## L'île 1 reprend la partie sauvegardée, sans l'effacer.
 @export var iles_dev: Dictionary = {
 	"Île 1 — Le Réveil": "res://scenes/ile_01_maquette.tscn",
-	"Île 2 — Le Phare (maquette grise)": "res://scenes/ile_02_maquette.tscn",
+	"Île 2 — Le Phare": "res://scenes/ile_02_maquette.tscn",
 }
 
-@onready var _fond: TextureRect = $Fond
 @onready var _pollen: CPUParticles2D = $Pollen
 @onready var _menu: Control = $Menu
 @onready var _confirmation: Control = $Confirmation
@@ -29,7 +20,8 @@ extends Control
 @onready var _nouvelle: Button = %NouvellePartie
 
 var _part := false
-var _t := 0.0
+var _clic_actif := false
+var _fondu_musique: Tween
 
 
 func _ready() -> void:
@@ -46,6 +38,14 @@ func _ready() -> void:
 	%Non.pressed.connect(_cacher_confirmation)
 	_reglages.ferme.connect(_cacher_reglages)
 	_preparer_dev()
+	%FermerEchec.pressed.connect(_cacher_echec)
+	Sauvegarde.chargement_echoue.connect(_montrer_echec)
+	for noeud in find_children("*", "Button", true, false):
+		var bouton := noeud as Button
+		bouton.focus_entered.connect(_jouer_clic)
+		bouton.mouse_entered.connect(func() -> void:
+			if not bouton.has_focus():
+				_jouer_clic())
 	resized.connect(_placer)
 	_placer()
 	for p in [$Musique1, $Musique2]:
@@ -58,18 +58,26 @@ func _ready() -> void:
 			lecteur.stream = s
 		lecteur.volume_db = -60.0
 		lecteur.play()
-		create_tween().tween_property(lecteur, "volume_db", volume_musique, duree_fondu * 2.5)
+	_fondre_musique(volume_musique, duree_fondu * 2.5)
 	(_continuer if _continuer.visible else _nouvelle).grab_focus()
 	_noir.color.a = 1.0
 	create_tween().set_trans(Tween.TRANS_SINE).tween_property(_noir, "color:a", 0.0, duree_fondu)
 
+	_clic_actif = true
 
-func _process(delta: float) -> void:
-	_t += delta
-	_fond.scale = Vector2.ONE * (1.0 + respiration * (0.5 - 0.5 * cos(_t * TAU / periode_respiration)))
+
+func _jouer_clic() -> void:
+	if _clic_actif and not _part:
+		$Clic.play()
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _part:
+		return
+	if $Echec.visible and event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_cacher_echec()
+		return
 	if _confirmation.visible and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_cacher_confirmation()
@@ -111,12 +119,12 @@ func _aller_dev(scene: String) -> void:
 	if _part:
 		return
 	_part = true
-	await _sortir()
+	$ChoixIle.hide()
+	_fondre_musique(-60.0, 0.65)
 	Sauvegarde.aller_dev(scene)
 
 
 func _placer() -> void:
-	_fond.pivot_offset = _fond.size * 0.5
 	_pollen.position = Vector2(size.x * 0.5, size.y)
 	_pollen.emission_rect_extents = Vector2(size.x * 0.5, 10.0)
 
@@ -147,30 +155,47 @@ func _cacher_reglages() -> void:
 	%BoutonReglages.grab_focus()
 
 
-## Fondu au noir, la musique s'éteint, puis on part sur l'île.
 func _lancer(nouvelle: bool) -> void:
 	if _part:
 		return
 	_part = true
-	await _sortir()
+	_menu.hide()
+	_confirmation.hide()
+	_fondre_musique(-60.0, 0.65)
 	if nouvelle:
 		Sauvegarde.nouvelle_partie()
 	else:
 		Sauvegarde.continuer()
 
 
+func _montrer_echec() -> void:
+	_part = false
+	_fondre_musique(volume_musique, 0.65)
+	$Echec.show()
+	%FermerEchec.grab_focus()
+
+
+func _cacher_echec() -> void:
+	$Echec.hide()
+	_menu.show()
+	(_continuer if _continuer.visible else _nouvelle).grab_focus()
+
+
 func _quitter() -> void:
 	if _part:
 		return
 	_part = true
-	await _sortir()
+	_menu.hide()
+	_fondre_musique(-60.0, duree_fondu)
+	var tween := create_tween().set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_noir, "color:a", 1.0, duree_fondu)
+	await tween.finished
 	get_tree().quit()
 
 
-func _sortir() -> void:
-	_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var t := create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
-	t.tween_property(_noir, "color:a", 1.0, duree_fondu)
-	for p in [$Musique1, $Musique2]:
-		t.tween_property(p, "volume_db", -60.0, duree_fondu)
-	await t.finished
+func _fondre_musique(volume: float, duree: float) -> void:
+	if _fondu_musique and _fondu_musique.is_valid():
+		_fondu_musique.kill()
+	_fondu_musique = create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
+	for lecteur in [$Musique1, $Musique2]:
+		_fondu_musique.tween_property(lecteur, "volume_db", volume, duree)

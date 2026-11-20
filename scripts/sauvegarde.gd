@@ -13,6 +13,10 @@ extends Node
 ## Sauvegarde automatique : toutes les `intervalle` secondes hors cinématique, en revenant au titre,
 ## en quittant, et quand la fenêtre se ferme.
 
+signal chargement_echoue
+
+const TRANSITION := preload("res://scenes/ui/transition_scene.tscn")
+
 const CHEMIN := "user://partie.json"
 const VERSION := 1
 const SCENE_ILE := "res://scenes/ile_01_maquette.tscn"
@@ -31,12 +35,15 @@ const LANTERNE := "res://scripts/lanterne_fleur.gd"
 var _charge: Dictionary = {}
 var _charge_ile_02: Dictionary = {}
 var _minuterie: float = 0.0
+var _transition: CanvasLayer
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().set_auto_accept_quit(false)
 	_charge_ile_02 = _lire_fichier(CHEMIN_ILE_02)
+	_transition = TRANSITION.instantiate()
+	add_child(_transition)
 
 
 func _notification(what: int) -> void:
@@ -92,34 +99,45 @@ func donnees(cle: String, source: Node = null) -> Dictionary:
 
 
 func nouvelle_partie() -> void:
+	_charger_ile(SCENE_ILE, _reinitialiser_partie, "Chargement du Réveil")
+
+
+func _reinitialiser_partie() -> void:
 	if existe():
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(CHEMIN))
 	_effacer_images()
 	_charge = {}
 	_statiques({})
 	_minuterie = 0.0
-	get_tree().change_scene_to_file(SCENE_ILE)
 
 
 func continuer() -> void:
+	_charger_ile(SCENE_ILE, _restaurer_partie, "Reprise de la partie")
+
+
+## Dev : aller directement sur une île en conservant la sauvegarde.
+func aller_dev(scene: String) -> void:
+	_charger_ile(scene, _restaurer_partie, "Chargement de l’île")
+
+
+func _charger_ile(scene: String, preparer: Callable, message: String) -> void:
+	if not await _transition.changer(scene, preparer, message):
+		chargement_echoue.emit()
+
+
+func _restaurer_partie() -> void:
 	_charge = lire()
 	_statiques(_charge.get("_statiques", {}))
 	_minuterie = 0.0
-	get_tree().change_scene_to_file(SCENE_ILE)
 
 
-## Dev : aller directement sur une île. Reprend la partie sauvegardée s'il y en a une (sans l'effacer).
-func aller_dev(scene: String) -> void:
-	_charge = lire() if existe() else {}
-	_statiques(_charge.get("_statiques", {}))
-	_minuterie = 0.0
-	get_tree().change_scene_to_file(scene)
-
-
-func retour_au_titre() -> void:
+func retour_au_titre() -> bool:
 	ecrire()
+	return await _transition.changer(SCENE_TITRE, _sortir_de_pause, "Retour à l’écran titre")
+
+
+func _sortir_de_pause() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file(SCENE_TITRE)
 
 
 func quitter() -> void:

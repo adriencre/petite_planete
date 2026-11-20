@@ -2,11 +2,13 @@ extends Node3D
 ## La cabine s'ouvre en coupe lorsque le robot monte à bord. La clé reste dans sa sauvegarde.
 
 const SONS := preload("res://scripts/sons.gd")
+const PAGE := preload("res://scripts/page_lisible.gd")
 
 @export var reseau: Node3D
 
 @onready var _cle: Node3D = $Cle
 @onready var _touche: Label3D = $Cle/Touche
+@onready var _journal: PAGE = $JournalDeQuart
 
 var cle_recuperee := false
 var _robot: CharacterBody3D
@@ -21,6 +23,7 @@ func _ready() -> void:
 	add_to_group("a_ramasser")
 	cle_recuperee = bool(Sauvegarde.donnees(cle_sauvegarde(), self).get("cle_recuperee", false))
 	_cle.visible = not cle_recuperee
+	_journal.lecture_autorisee = _peut_lire_journal
 	var toiture := $Modele.find_child("CoupeCabine", true, false)
 	if toiture:
 		for maillage in toiture.find_children("*", "GeometryInstance3D", true, false):
@@ -64,10 +67,25 @@ func _dans_cabine() -> bool:
 
 
 func _cle_a_portee() -> bool:
+	return _cle_a_portee_brute() and not _journal._a_portee()
+
+
+func _cle_a_portee_brute() -> bool:
 	if cle_recuperee or _robot == null or bool(_robot.get("cinematique")) or not _dans_cabine() or not condition_acces().is_empty():
 		return false
 	var ecart := _robot.global_position - _cle.global_position
 	return absf(ecart.y) < 1.45 and Vector2(ecart.x, ecart.z).length() < 0.93
+
+
+func _peut_lire_journal() -> bool:
+	if _robot == null or not _dans_cabine() or not condition_acces().is_empty():
+		return false
+	if not _cle_a_portee_brute():
+		return true
+	var pied := Vector2(_robot.global_position.x, _robot.global_position.z)
+	var cle := Vector2(_cle.global_position.x, _cle.global_position.z)
+	var journal := Vector2(_journal.global_position.x, _journal.global_position.z)
+	return pied.distance_squared_to(journal) < pied.distance_squared_to(cle)
 
 
 func etat_interaction() -> int:

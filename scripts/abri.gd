@@ -20,8 +20,12 @@ var _fondu: Tween
 var _dedans: int = 0
 
 
+var decor_seul := false
+
+
 func _ready() -> void:
-	add_to_group("abri")
+	if not decor_seul:
+		add_to_group("abri")
 	_toit = find_child("Toit", true, false) as Node3D
 	var n_centre := find_child("Centre", true, false) as Node3D
 	var n_porte := find_child("Porte", true, false) as Node3D
@@ -50,7 +54,7 @@ func _ready() -> void:
 	lampe.omni_range = 4.0
 	lampe.position = Vector3(0, sol + 2.7, z_porte + 0.3)
 	jeu.add_child(lampe)
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() or decor_seul:
 		return
 	_collisions(jeu, sol, z_porte)
 	_collision_berceau(berceau)

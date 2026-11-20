@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/ciel_pastel.gdshader" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/decor_reveil.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/ui/diorama_titre.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ponton.tscn" id="4"]
+
+[sub_resource type="ShaderMaterial" id="ciel"]
+shader = ExtResource("1")
+shader_parameter/couleur_milieu = Color(0.93, 0.65, 0.75, 1)
+shader_parameter/couleur_horizon = Color(1, 0.86, 0.73, 1)
+shader_parameter/planete_direction = Vector3(-0.20, 0.07, -1)
+shader_parameter/planete_taille = 0.135
+shader_parameter/planete_brume = 0.24
+
+[sub_resource type="Sky" id="aube"]
+sky_material = SubResource("ciel")
+
+[sub_resource type="Environment" id="ambiance"]
+background_mode = 2
+sky = SubResource("aube")
+ambient_light_source = 3
+ambient_light_color = Color(0.87, 0.78, 0.9, 1)
+ambient_light_energy = 0.65
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.0
+tonemap_white = 3.0
+ssao_enabled = true
+ssao_radius = 1.3
+ssao_intensity = 1.2
+glow_enabled = true
+glow_bloom = 0.035
+fog_enabled = true
+fog_light_color = Color(1, 0.86, 0.73, 1)
+fog_density = 0.0028
+fog_sky_affect = 0.3
+
+[node name="DioramaTitre" type="Node3D"]
+script = ExtResource("3")
+derive = Vector3(1.7, 0.7, 1.2)
+
+[node name="Ambiance" type="WorldEnvironment" parent="."]
+environment = SubResource("ambiance")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-26, -31, 0)
+light_color = Color(1, 0.86, 0.72, 1)
+light_energy = 1.5
+shadow_enabled = true
+shadow_blur = 1.5
+directional_shadow_max_distance = 112.0
+
+[node name="Maquette" parent="." instance=ExtResource("2")]
+decor_seul = true
+taille_mer = 1400.0
+cases_mer = 300
+
+[node name="PontonCrique" parent="." instance=ExtResource("4")]
+position = Vector3(-30, 0, 3)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="PontonPlage" parent="." instance=ExtResource("4")]
+position = Vector3(17, 0, 24)
+
+[node name="Camera" type="Camera3D" parent="."]
+position = Vector3(22, 24, 43)
+rotation_degrees = Vector3(-20.8, 41, 0)
+current = true
+fov = 56.0
+far = 1450.0

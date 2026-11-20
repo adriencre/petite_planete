@@ -1,0 +1,197 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile03/maisons_fermees/maison_angle.glb" id="MaisonModele_angle"]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile03/maisons_fermees/maison_quai.glb" id="MaisonModele_quai"]
+
+[sub_resource type="StandardMaterial3D" id="Creme"]
+albedo_color = Color(0.85, 0.71, 0.53, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Peche"]
+albedo_color = Color(0.78, 0.54, 0.42, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Ocre"]
+albedo_color = Color(0.73, 0.57, 0.36, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Toit"]
+albedo_color = Color(0.55, 0.32, 0.26, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Bois"]
+albedo_color = Color(0.35, 0.27, 0.22, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Bleu"]
+albedo_color = Color(0.28, 0.47, 0.46, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Dalles"]
+albedo_color = Color(0.76, 0.67, 0.52, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="MaisonDuPontonObstacle"]
+size = Vector3(3.3, 3.25, 2.55)
+
+[sub_resource type="BoxShape3D" id="MaisonDesCaissesObstacle"]
+size = Vector3(3.55, 3.52, 2.55)
+
+[sub_resource type="BoxShape3D" id="MaisonDeLaRuelleObstacle"]
+size = Vector3(3.6, 3.5, 4.5)
+
+[sub_resource type="BoxShape3D" id="MaisonDuCoinObstacle"]
+size = Vector3(3.85, 3.75, 4.6)
+
+[sub_resource type="BoxShape3D" id="EcoleObstacle"]
+size = Vector3(5.0, 4.35, 5.1)
+
+[sub_resource type="BoxMesh" id="EcoleMurs"]
+size = Vector3(5.0, 4.35, 5.1)
+material = SubResource("Creme")
+
+[sub_resource type="PrismMesh" id="EcoleToit"]
+size = Vector3(5.22, 1.1, 5.319999999999999)
+material = SubResource("Toit")
+
+[sub_resource type="BoxMesh" id="EcolePorte"]
+size = Vector3(1.18, 2.72, 0.12)
+material = SubResource("Bleu")
+
+[sub_resource type="BoxMesh" id="EcoleVolet"]
+size = Vector3(0.68, 0.78, 0.1)
+material = SubResource("Bleu")
+
+[sub_resource type="BoxShape3D" id="MaisonAubeObstacle"]
+size = Vector3(4.4, 3.8, 4.8)
+
+[sub_resource type="BoxMesh" id="MaisonAubeMurs"]
+size = Vector3(4.4, 3.8, 4.8)
+material = SubResource("Peche")
+
+[sub_resource type="PrismMesh" id="MaisonAubeToit"]
+size = Vector3(4.62, 1.1, 5.02)
+material = SubResource("Toit")
+
+[sub_resource type="BoxMesh" id="MaisonAubePorte"]
+size = Vector3(1.18, 2.72, 0.12)
+material = SubResource("Bleu")
+
+[sub_resource type="BoxMesh" id="MaisonAubeVolet"]
+size = Vector3(0.68, 0.78, 0.1)
+material = SubResource("Bleu")
+
+[sub_resource type="BoxMesh" id="CourEntreLesMaisonsSol"]
+size = Vector3(5.65, 0.1, 1.92)
+material = SubResource("Dalles")
+
+[node name="QuartierDuQuai" type="Node3D"]
+
+[node name="MaisonsFermees" type="Node3D" parent="."]
+
+
+[node name="MaisonDuPonton" type="StaticBody3D" parent="MaisonsFermees"]
+position = Vector3(-23.4, 0.55, 29.65)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="MaisonsFermees/MaisonDuPonton"]
+position = Vector3(0, 1.625, 0)
+shape = SubResource("MaisonDuPontonObstacle")
+
+[node name="Exterieur" parent="MaisonsFermees/MaisonDuPonton" instance=ExtResource("MaisonModele_quai")]
+scale = Vector3(3.3, 4.3, 2.55)
+
+[node name="MaisonDesCaisses" type="StaticBody3D" parent="MaisonsFermees"]
+position = Vector3(-19.7, 0.55, 29.65)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="MaisonsFermees/MaisonDesCaisses"]
+position = Vector3(0, 1.76, 0)
+shape = SubResource("MaisonDesCaissesObstacle")
+
+[node name="Exterieur" parent="MaisonsFermees/MaisonDesCaisses" instance=ExtResource("MaisonModele_quai")]
+scale = Vector3(3.55, 4.57, 2.55)
+
+[node name="MaisonDeLaRuelle" type="StaticBody3D" parent="MaisonsFermees"]
+position = Vector3(-35.2, 3.05, 1.8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="MaisonsFermees/MaisonDeLaRuelle"]
+position = Vector3(0, 1.75, 0)
+shape = SubResource("MaisonDeLaRuelleObstacle")
+
+[node name="Exterieur" parent="MaisonsFermees/MaisonDeLaRuelle" instance=ExtResource("MaisonModele_angle")]
+scale = Vector3(3.6, 4.8, 4.5)
+
+[node name="MaisonDuCoin" type="StaticBody3D" parent="MaisonsFermees"]
+position = Vector3(-11, 0.55, 28.7)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="MaisonsFermees/MaisonDuCoin"]
+position = Vector3(0, 1.875, 0)
+shape = SubResource("MaisonDuCoinObstacle")
+
+[node name="Exterieur" parent="MaisonsFermees/MaisonDuCoin" instance=ExtResource("MaisonModele_quai")]
+scale = Vector3(3.85, 4.8, 4.6)
+
+[node name="Ecole" type="StaticBody3D" parent="."]
+position = Vector3(-35.1, 3.05, 7.25)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Ecole"]
+position = Vector3(0, 2.175, 0)
+shape = SubResource("EcoleObstacle")
+
+[node name="Murs" type="MeshInstance3D" parent="Ecole"]
+position = Vector3(0, 2.175, 0)
+mesh = SubResource("EcoleMurs")
+
+[node name="Toit" type="MeshInstance3D" parent="Ecole"]
+position = Vector3(0, 4.89, 0)
+mesh = SubResource("EcoleToit")
+
+[node name="Porte" type="MeshInstance3D" parent="Ecole"]
+position = Vector3(0, 1.36, 2.55)
+mesh = SubResource("EcolePorte")
+
+[node name="Volet" type="MeshInstance3D" parent="Ecole"]
+position = Vector3(1.6, 2.46, 2.55)
+mesh = SubResource("EcoleVolet")
+
+[node name="MaisonAube" type="StaticBody3D" parent="."]
+position = Vector3(-35.2, 3.05, 14)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="MaisonAube"]
+position = Vector3(0, 1.9, 0)
+shape = SubResource("MaisonAubeObstacle")
+
+[node name="Murs" type="MeshInstance3D" parent="MaisonAube"]
+position = Vector3(0, 1.9, 0)
+mesh = SubResource("MaisonAubeMurs")
+
+[node name="Toit" type="MeshInstance3D" parent="MaisonAube"]
+position = Vector3(0, 4.34, 0)
+mesh = SubResource("MaisonAubeToit")
+
+[node name="Porte" type="MeshInstance3D" parent="MaisonAube"]
+position = Vector3(0, 1.36, 2.4)
+mesh = SubResource("MaisonAubePorte")
+
+[node name="Volet" type="MeshInstance3D" parent="MaisonAube"]
+position = Vector3(1.41, 2.46, 2.4)
+mesh = SubResource("MaisonAubeVolet")
+
+[node name="Passage" type="Marker3D" parent="MaisonAube"]
+position = Vector3(-1.75, 0.35, 2.52)
+
+[node name="CourEntreLesMaisons" type="Node3D" parent="."]
+position = Vector3(-34.9, 3.16, 10.8)
+
+[node name="Sol" type="MeshInstance3D" parent="CourEntreLesMaisons"]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("CourEntreLesMaisonsSol")
+
+[node name="VueSurLePort" type="Marker3D" parent="."]
+position = Vector3(-25.9, 3.1, 9.25)

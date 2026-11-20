@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/affiches/plaque_bouee.svg" id="1_plaque"]
+
+[sub_resource type="StandardMaterial3D" id="bois"]
+albedo_color = Color(0.46, 0.34, 0.24, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="poteau"]
+material = SubResource("bois")
+size = Vector3(0.11, 0.79, 0.11)
+
+[sub_resource type="BoxMesh" id="dos"]
+material = SubResource("bois")
+size = Vector3(0.81, 0.42, 0.048)
+
+[node name="PlaqueBouee" type="Node3D"]
+
+[node name="Poteau" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.395, 0)
+mesh = SubResource("poteau")
+
+[node name="Support" type="Node3D" parent="."]
+position = Vector3(0, 0.79, 0)
+rotation = Vector3(-0.7, 0, 0)
+
+[node name="Dos" type="MeshInstance3D" parent="Support"]
+mesh = SubResource("dos")
+
+[node name="Pictogramme" type="Sprite3D" parent="Support"]
+position = Vector3(0, 0, 0.026)
+pixel_size = 0.002
+texture = ExtResource("1_plaque")

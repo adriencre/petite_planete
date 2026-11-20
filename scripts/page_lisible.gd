@@ -29,6 +29,7 @@ const SONS := preload("res://scripts/sons.gd")  # les effets sonores (assets/aud
 @export var ramasser: bool = true
 @export var largeur_papier: float = 560.0
 
+var lecture_autorisee: Callable
 var deja_lue: bool = false
 var _joueur: CharacterBody3D
 var _lueur: MeshInstance3D
@@ -117,6 +118,8 @@ func point_appel() -> Vector3:
 
 func _distance() -> float:
 	if _joueur == null or not is_visible_in_tree():
+		return INF
+	if lecture_autorisee.is_valid() and not lecture_autorisee.call():
 		return INF
 	var a := _joueur.global_position
 	if hauteur_lecture > 0.0 and absf(a.y - global_position.y) > hauteur_lecture:

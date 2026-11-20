@@ -1,0 +1,1331 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile03/maisons_fermees/maison_angle.glb" id="MaisonModele_angle"]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile03/maisons_fermees/maison_mitoyenne.glb" id="MaisonModele_mitoyenne"]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile03/maisons_fermees/maison_ville_haute.glb" id="MaisonModele_ville_haute"]
+
+[sub_resource type="StandardMaterial3D" id="Creme"]
+albedo_color = Color(0.85, 0.71, 0.53, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Peche"]
+albedo_color = Color(0.78, 0.54, 0.42, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Ocre"]
+albedo_color = Color(0.73, 0.57, 0.36, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="TerreCuite"]
+albedo_color = Color(0.55, 0.32, 0.26, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="ToitRose"]
+albedo_color = Color(0.68, 0.43, 0.35, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Bois"]
+albedo_color = Color(0.35, 0.27, 0.22, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="BleuPasse"]
+albedo_color = Color(0.28, 0.47, 0.46, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Verre"]
+transparency = 1
+albedo_color = Color(0.68, 0.84, 0.76, 0.34)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Ossature"]
+albedo_color = Color(0.59, 0.46, 0.28, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Vestiges"]
+albedo_color = Color(0.34, 0.47, 0.40, 1)
+roughness = 0.87
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai1_Murs"]
+material = SubResource("Creme")
+size = Vector3(3.75, 3.25, 2.7)
+
+[sub_resource type="BoxShape3D" id="QuaiEst_MaisonDuQuai1_Collision"]
+size = Vector3(3.75, 3.25, 2.7)
+
+[sub_resource type="PrismMesh" id="QuaiEst_MaisonDuQuai1_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.01, 1.04, 2.95)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai1_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai1_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai1_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai2_Murs"]
+material = SubResource("Peche")
+size = Vector3(3.75, 3.6, 2.7)
+
+[sub_resource type="BoxShape3D" id="QuaiEst_MaisonDuQuai2_Collision"]
+size = Vector3(3.75, 3.6, 2.7)
+
+[sub_resource type="PrismMesh" id="QuaiEst_MaisonDuQuai2_Toit"]
+material = SubResource("ToitRose")
+size = Vector3(4.01, 1.04, 2.95)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai2_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai2_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai2_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai3_Murs"]
+material = SubResource("Ocre")
+size = Vector3(3.75, 3.25, 2.7)
+
+[sub_resource type="BoxShape3D" id="QuaiEst_MaisonDuQuai3_Collision"]
+size = Vector3(3.75, 3.25, 2.7)
+
+[sub_resource type="PrismMesh" id="QuaiEst_MaisonDuQuai3_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.01, 1.04, 2.95)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai3_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai3_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai3_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai4_Murs"]
+material = SubResource("Creme")
+size = Vector3(3.75, 3.6, 2.7)
+
+[sub_resource type="BoxShape3D" id="QuaiEst_MaisonDuQuai4_Collision"]
+size = Vector3(3.75, 3.6, 2.7)
+
+[sub_resource type="PrismMesh" id="QuaiEst_MaisonDuQuai4_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.01, 1.04, 2.95)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai4_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai4_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="QuaiEst_MaisonDuQuai4_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaRive_Murs"]
+material = SubResource("Creme")
+size = Vector3(3.8, 4.1, 3.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_HabitationsVisitables_MaisonDeLaRive_Collision"]
+size = Vector3(3.8, 4.1, 3.75)
+
+[sub_resource type="PrismMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaRive_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.06, 1.04, 4)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaRive_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaRive_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaRive_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaCour_Murs"]
+material = SubResource("Peche")
+size = Vector3(3.8, 4.1, 3.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_HabitationsVisitables_MaisonDeLaCour_Collision"]
+size = Vector3(3.8, 4.1, 3.75)
+
+[sub_resource type="PrismMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaCour_Toit"]
+material = SubResource("ToitRose")
+size = Vector3(4.06, 1.04, 4)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaCour_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaCour_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDeLaCour_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDuRetour_Murs"]
+material = SubResource("Ocre")
+size = Vector3(3.8, 4.1, 3.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_HabitationsVisitables_MaisonDuRetour_Collision"]
+size = Vector3(3.8, 4.1, 3.75)
+
+[sub_resource type="PrismMesh" id="VilleBasse_HabitationsVisitables_MaisonDuRetour_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.06, 1.04, 4)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDuRetour_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDuRetour_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleBasse_HabitationsVisitables_MaisonDuRetour_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon1_Collision"]
+size = Vector3(3.8, 3.15, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon2_Collision"]
+size = Vector3(3.8, 3.47, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon3_Collision"]
+size = Vector3(3.8, 3.79, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon4_Collision"]
+size = Vector3(3.8, 3.15, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon5_Collision"]
+size = Vector3(3.8, 3.47, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon6_Collision"]
+size = Vector3(3.8, 3.79, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon7_Collision"]
+size = Vector3(3.8, 3.15, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon8_Collision"]
+size = Vector3(3.8, 3.47, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon9_Collision"]
+size = Vector3(3.8, 3.79, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuLagon10_Collision"]
+size = Vector3(3.8, 3.15, 2.75)
+
+[sub_resource type="BoxShape3D" id="VilleBasse_MaisonsFermees_MaisonDuPassage_Collision"]
+size = Vector3(2.35, 3.48, 2.9)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesLanternes_Murs"]
+material = SubResource("Peche")
+size = Vector3(4.45, 4.75, 3.15)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_HabitationsVisitables_MaisonDesLanternes_Collision"]
+size = Vector3(4.45, 4.75, 3.15)
+
+[sub_resource type="PrismMesh" id="VilleHaute_HabitationsVisitables_MaisonDesLanternes_Toit"]
+material = SubResource("ToitRose")
+size = Vector3(4.71, 1.04, 3.4)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesLanternes_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesLanternes_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesLanternes_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesVolets_Murs"]
+material = SubResource("Creme")
+size = Vector3(4.45, 4.75, 3.15)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_HabitationsVisitables_MaisonDesVolets_Collision"]
+size = Vector3(4.45, 4.75, 3.15)
+
+[sub_resource type="PrismMesh" id="VilleHaute_HabitationsVisitables_MaisonDesVolets_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.71, 1.04, 3.4)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesVolets_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesVolets_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesVolets_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Murs"]
+material = SubResource("Ocre")
+size = Vector3(4.45, 4.75, 3.15)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Collision"]
+size = Vector3(4.45, 4.75, 3.15)
+
+[sub_resource type="PrismMesh" id="VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(4.71, 1.04, 3.4)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.16, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard1_Collision"]
+size = Vector3(3.55, 3.7, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard2_Collision"]
+size = Vector3(3.55, 4.05, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard3_Collision"]
+size = Vector3(3.55, 4.4, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard4_Collision"]
+size = Vector3(3.55, 3.7, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard5_Collision"]
+size = Vector3(3.55, 4.05, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard6_Collision"]
+size = Vector3(3.55, 4.4, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard7_Collision"]
+size = Vector3(3.55, 3.7, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard8_Collision"]
+size = Vector3(3.55, 4.05, 2.95)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDuBoulevard9_Collision"]
+size = Vector3(3.55, 4.4, 2.95)
+
+[sub_resource type="BoxMesh" id="VilleHaute_MaisonCommune_Murs"]
+material = SubResource("Creme")
+size = Vector3(5.4, 5.35, 3.55)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonCommune_Collision"]
+size = Vector3(5.4, 5.35, 3.55)
+
+[sub_resource type="PrismMesh" id="VilleHaute_MaisonCommune_Toit"]
+material = SubResource("TerreCuite")
+size = Vector3(5.66, 1.65, 3.8)
+
+[sub_resource type="BoxMesh" id="VilleHaute_MaisonCommune_Porte"]
+material = SubResource("BleuPasse")
+size = Vector3(1.8, 2.76, 0.13)
+
+[sub_resource type="BoxMesh" id="VilleHaute_MaisonCommune_VoletGauche"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxMesh" id="VilleHaute_MaisonCommune_VoletDroite"]
+material = SubResource("Bois")
+size = Vector3(0.66, 0.76, 0.12)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDeLaTerrasse1_Collision"]
+size = Vector3(3.2, 3.85, 4)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDeLaTerrasse2_Collision"]
+size = Vector3(3.2, 3.85, 4)
+
+[sub_resource type="BoxShape3D" id="VilleHaute_MaisonsFermees_MaisonDeLaTerrasse3_Collision"]
+size = Vector3(3.2, 3.85, 4)
+
+[sub_resource type="PrismMesh" id="Crete_SerreOuest_Verriere"]
+material = SubResource("Verre")
+size = Vector3(6.05, 1.45, 4.9)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_ParoiArriere"]
+material = SubResource("Verre")
+size = Vector3(5.8, 3.1, 0.13)
+
+[sub_resource type="BoxShape3D" id="Crete_SerreOuest_CollisionArriere"]
+size = Vector3(5.8, 3.1, 0.13)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_VitreGauche"]
+material = SubResource("Verre")
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxShape3D" id="Crete_SerreOuest_CollisionGauche"]
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_TraverseGauche"]
+material = SubResource("Ossature")
+size = Vector3(0.16, 0.16, 4.92)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantGauche1"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantGauche2"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantGauche3"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantGauche4"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_VitreDroite"]
+material = SubResource("Verre")
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxShape3D" id="Crete_SerreOuest_CollisionDroite"]
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_TraverseDroite"]
+material = SubResource("Ossature")
+size = Vector3(0.16, 0.16, 4.92)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantDroite1"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantDroite2"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantDroite3"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_MontantDroite4"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreOuest_Linteau"]
+material = SubResource("Ossature")
+size = Vector3(5.83, 0.18, 0.18)
+
+[sub_resource type="PrismMesh" id="Crete_SerreEst_Verriere"]
+material = SubResource("Verre")
+size = Vector3(6.05, 1.45, 4.9)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_ParoiArriere"]
+material = SubResource("Verre")
+size = Vector3(5.8, 3.1, 0.13)
+
+[sub_resource type="BoxShape3D" id="Crete_SerreEst_CollisionArriere"]
+size = Vector3(5.8, 3.1, 0.13)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_VitreGauche"]
+material = SubResource("Verre")
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxShape3D" id="Crete_SerreEst_CollisionGauche"]
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_TraverseGauche"]
+material = SubResource("Ossature")
+size = Vector3(0.16, 0.16, 4.92)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantGauche1"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantGauche2"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantGauche3"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantGauche4"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_VitreDroite"]
+material = SubResource("Verre")
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxShape3D" id="Crete_SerreEst_CollisionDroite"]
+size = Vector3(0.12, 3.1, 4.74)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_TraverseDroite"]
+material = SubResource("Ossature")
+size = Vector3(0.16, 0.16, 4.92)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantDroite1"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantDroite2"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantDroite3"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_MontantDroite4"]
+material = SubResource("Ossature")
+size = Vector3(0.17, 3.12, 0.17)
+
+[sub_resource type="BoxMesh" id="Crete_SerreEst_Linteau"]
+material = SubResource("Ossature")
+size = Vector3(5.83, 0.18, 0.18)
+
+[sub_resource type="BoxMesh" id="Crete_AbriDuJardin_MurDeFond"]
+material = SubResource("Ocre")
+size = Vector3(3.8, 2.9, 0.25)
+
+[sub_resource type="BoxShape3D" id="Crete_AbriDuJardin_CollisionDuMur"]
+size = Vector3(3.8, 2.9, 0.25)
+
+[sub_resource type="BoxMesh" id="Crete_AbriDuJardin_Auvent"]
+material = SubResource("ToitRose")
+size = Vector3(4.1, 0.2, 2.4)
+
+[sub_resource type="BoxMesh" id="VieuxPort_AbriEnglouti1_Arase"]
+material = SubResource("Vestiges")
+size = Vector3(2.5, 0.56, 0.38)
+
+[sub_resource type="BoxMesh" id="VieuxPort_AbriEnglouti1_Retour"]
+material = SubResource("Vestiges")
+size = Vector3(0.38, 0.44, 1.35)
+
+[sub_resource type="BoxMesh" id="VieuxPort_AbriEnglouti2_Arase"]
+material = SubResource("Vestiges")
+size = Vector3(2.2, 0.56, 0.38)
+
+[sub_resource type="BoxMesh" id="VieuxPort_AbriEnglouti2_Retour"]
+material = SubResource("Vestiges")
+size = Vector3(0.38, 0.44, 1.35)
+
+[sub_resource type="BoxMesh" id="VieuxPort_AbriEnglouti3_Arase"]
+material = SubResource("Vestiges")
+size = Vector3(2.3, 0.56, 0.38)
+
+[sub_resource type="BoxMesh" id="VieuxPort_AbriEnglouti3_Retour"]
+material = SubResource("Vestiges")
+size = Vector3(0.38, 0.44, 1.35)
+
+[node name="BatimentsColonie" type="Node3D"]
+
+[node name="QuaiEst" type="Node3D" parent="."]
+
+
+[node name="MaisonDuQuai1" type="StaticBody3D" parent="QuaiEst"]
+position = Vector3(8, 0.55, 29.55)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai1"]
+position = Vector3(0, 1.625, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai1_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="QuaiEst/MaisonDuQuai1"]
+position = Vector3(0, 1.625, 0)
+shape = SubResource("QuaiEst_MaisonDuQuai1_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai1"]
+position = Vector3(0, 3.745, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai1_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai1"]
+position = Vector3(0, 1.38, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai1_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai1"]
+position = Vector3(-1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai1_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai1"]
+position = Vector3(1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai1_VoletDroite")
+
+[node name="MaisonDuQuai2" type="StaticBody3D" parent="QuaiEst"]
+position = Vector3(12.4, 0.55, 29.55)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai2"]
+position = Vector3(0, 1.8, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai2_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="QuaiEst/MaisonDuQuai2"]
+position = Vector3(0, 1.8, 0)
+shape = SubResource("QuaiEst_MaisonDuQuai2_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai2"]
+position = Vector3(0, 4.095, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai2_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai2"]
+position = Vector3(0, 1.38, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai2_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai2"]
+position = Vector3(-1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai2_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai2"]
+position = Vector3(1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai2_VoletDroite")
+
+[node name="MaisonDuQuai3" type="StaticBody3D" parent="QuaiEst"]
+position = Vector3(16.8, 0.55, 29.55)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai3"]
+position = Vector3(0, 1.625, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai3_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="QuaiEst/MaisonDuQuai3"]
+position = Vector3(0, 1.625, 0)
+shape = SubResource("QuaiEst_MaisonDuQuai3_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai3"]
+position = Vector3(0, 3.745, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai3_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai3"]
+position = Vector3(0, 1.38, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai3_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai3"]
+position = Vector3(-1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai3_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai3"]
+position = Vector3(1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai3_VoletDroite")
+
+[node name="MaisonDuQuai4" type="StaticBody3D" parent="QuaiEst"]
+position = Vector3(21.2, 0.55, 29.55)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai4"]
+position = Vector3(0, 1.8, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai4_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="QuaiEst/MaisonDuQuai4"]
+position = Vector3(0, 1.8, 0)
+shape = SubResource("QuaiEst_MaisonDuQuai4_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai4"]
+position = Vector3(0, 4.095, 0)
+mesh = SubResource("QuaiEst_MaisonDuQuai4_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai4"]
+position = Vector3(0, 1.38, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai4_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai4"]
+position = Vector3(-1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai4_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="QuaiEst/MaisonDuQuai4"]
+position = Vector3(1.2, 2.54, 1.35)
+mesh = SubResource("QuaiEst_MaisonDuQuai4_VoletDroite")
+
+[node name="VilleBasse" type="Node3D" parent="."]
+
+
+[node name="HabitationsVisitables" type="Node3D" parent="VilleBasse"]
+
+
+[node name="MaisonsFermees" type="Node3D" parent="VilleBasse"]
+
+
+[node name="MaisonDeLaRive" type="StaticBody3D" parent="VilleBasse/HabitationsVisitables"]
+position = Vector3(24.9, 3.05, -0.4)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaRive"]
+position = Vector3(0, 2.05, 0)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaRive_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaRive"]
+position = Vector3(0, 2.05, 0)
+shape = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaRive_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaRive"]
+position = Vector3(0, 4.595, 0)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaRive_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaRive"]
+position = Vector3(0, 1.38, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaRive_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaRive"]
+position = Vector3(-1.216, 2.54, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaRive_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaRive"]
+position = Vector3(1.216, 2.54, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaRive_VoletDroite")
+
+[node name="MaisonDeLaCour" type="StaticBody3D" parent="VilleBasse/HabitationsVisitables"]
+position = Vector3(24.9, 3.05, 4.6)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaCour"]
+position = Vector3(0, 2.05, 0)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaCour_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaCour"]
+position = Vector3(0, 2.05, 0)
+shape = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaCour_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaCour"]
+position = Vector3(0, 4.595, 0)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaCour_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaCour"]
+position = Vector3(0, 1.38, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaCour_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaCour"]
+position = Vector3(-1.216, 2.54, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaCour_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDeLaCour"]
+position = Vector3(1.216, 2.54, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDeLaCour_VoletDroite")
+
+[node name="MaisonDuRetour" type="StaticBody3D" parent="VilleBasse/HabitationsVisitables"]
+position = Vector3(22.35, 3.05, 9)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDuRetour"]
+position = Vector3(0, 2.05, 0)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDuRetour_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/HabitationsVisitables/MaisonDuRetour"]
+position = Vector3(0, 2.05, 0)
+shape = SubResource("VilleBasse_HabitationsVisitables_MaisonDuRetour_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDuRetour"]
+position = Vector3(0, 4.595, 0)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDuRetour_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDuRetour"]
+position = Vector3(0, 1.38, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDuRetour_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDuRetour"]
+position = Vector3(-1.216, 2.54, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDuRetour_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleBasse/HabitationsVisitables/MaisonDuRetour"]
+position = Vector3(1.216, 2.54, 1.875)
+mesh = SubResource("VilleBasse_HabitationsVisitables_MaisonDuRetour_VoletDroite")
+
+[node name="MaisonDuLagon1" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(-20, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon1" instance=ExtResource("MaisonModele_angle")]
+scale = Vector3(3.8, 4.45, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon1"]
+position = Vector3(0, 1.575, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon1_Collision")
+
+[node name="MaisonDuLagon2" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(-15.6, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon2" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.52, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon2"]
+position = Vector3(0, 1.735, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon2_Collision")
+
+[node name="MaisonDuLagon3" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(-11.2, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon3" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.84, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon3"]
+position = Vector3(0, 1.895, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon3_Collision")
+
+[node name="MaisonDuLagon4" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(-6.8, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon4" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.2, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon4"]
+position = Vector3(0, 1.575, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon4_Collision")
+
+[node name="MaisonDuLagon5" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(-2.4, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon5" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.52, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon5"]
+position = Vector3(0, 1.735, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon5_Collision")
+
+[node name="MaisonDuLagon6" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(2, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon6" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.84, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon6"]
+position = Vector3(0, 1.895, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon6_Collision")
+
+[node name="MaisonDuLagon7" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(6.4, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon7" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.2, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon7"]
+position = Vector3(0, 1.575, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon7_Collision")
+
+[node name="MaisonDuLagon8" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(10.8, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon8" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.52, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon8"]
+position = Vector3(0, 1.735, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon8_Collision")
+
+[node name="MaisonDuLagon9" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(15.2, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon9" instance=ExtResource("MaisonModele_mitoyenne")]
+scale = Vector3(3.8, 4.84, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon9"]
+position = Vector3(0, 1.895, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon9_Collision")
+
+[node name="MaisonDuLagon10" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(19.6, 3.05, -6.75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuLagon10" instance=ExtResource("MaisonModele_angle")]
+scale = Vector3(3.8, 4.45, 2.75)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuLagon10"]
+position = Vector3(0, 1.575, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuLagon10_Collision")
+
+[node name="MaisonDuPassage" type="StaticBody3D" parent="VilleBasse/MaisonsFermees"]
+position = Vector3(29.35, 3.05, 7.65)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Exterieur" parent="VilleBasse/MaisonsFermees/MaisonDuPassage" instance=ExtResource("MaisonModele_angle")]
+scale = Vector3(2.35, 4.78, 2.9)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleBasse/MaisonsFermees/MaisonDuPassage"]
+position = Vector3(0, 1.74, 0)
+shape = SubResource("VilleBasse_MaisonsFermees_MaisonDuPassage_Collision")
+
+[node name="VilleHaute" type="Node3D" parent="."]
+
+
+[node name="HabitationsVisitables" type="Node3D" parent="VilleHaute"]
+
+
+[node name="MaisonsFermees" type="Node3D" parent="VilleHaute"]
+
+
+[node name="MaisonDesLanternes" type="StaticBody3D" parent="VilleHaute/HabitationsVisitables"]
+position = Vector3(-22.9, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesLanternes"]
+position = Vector3(0, 2.375, 0)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesLanternes_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/HabitationsVisitables/MaisonDesLanternes"]
+position = Vector3(0, 2.375, 0)
+shape = SubResource("VilleHaute_HabitationsVisitables_MaisonDesLanternes_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesLanternes"]
+position = Vector3(0, 5.245, 0)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesLanternes_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesLanternes"]
+position = Vector3(0, 1.38, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesLanternes_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesLanternes"]
+position = Vector3(-1.424, 2.54, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesLanternes_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesLanternes"]
+position = Vector3(1.424, 2.54, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesLanternes_VoletDroite")
+
+[node name="MaisonDesVolets" type="StaticBody3D" parent="VilleHaute/HabitationsVisitables"]
+position = Vector3(4.5, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesVolets"]
+position = Vector3(0, 2.375, 0)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesVolets_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/HabitationsVisitables/MaisonDesVolets"]
+position = Vector3(0, 2.375, 0)
+shape = SubResource("VilleHaute_HabitationsVisitables_MaisonDesVolets_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesVolets"]
+position = Vector3(0, 5.245, 0)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesVolets_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesVolets"]
+position = Vector3(0, 1.38, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesVolets_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesVolets"]
+position = Vector3(-1.424, 2.54, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesVolets_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesVolets"]
+position = Vector3(1.424, 2.54, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesVolets_VoletDroite")
+
+[node name="MaisonDesProjecteurs" type="StaticBody3D" parent="VilleHaute/HabitationsVisitables"]
+position = Vector3(16.5, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesProjecteurs"]
+position = Vector3(0, 2.375, 0)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/HabitationsVisitables/MaisonDesProjecteurs"]
+position = Vector3(0, 2.375, 0)
+shape = SubResource("VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesProjecteurs"]
+position = Vector3(0, 5.245, 0)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesProjecteurs"]
+position = Vector3(0, 1.38, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesProjecteurs"]
+position = Vector3(-1.424, 2.54, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleHaute/HabitationsVisitables/MaisonDesProjecteurs"]
+position = Vector3(1.424, 2.54, 1.575)
+mesh = SubResource("VilleHaute_HabitationsVisitables_MaisonDesProjecteurs_VoletDroite")
+
+[node name="MaisonDuBoulevard1" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(-34, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard1" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard1"]
+position = Vector3(0, 1.85, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard1_Collision")
+
+[node name="MaisonDuBoulevard2" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(-29.1, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard2" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5.35, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard2"]
+position = Vector3(0, 2.025, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard2_Collision")
+
+[node name="MaisonDuBoulevard3" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(-17.9, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard3" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5.7, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard3"]
+position = Vector3(0, 2.2, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard3_Collision")
+
+[node name="MaisonDuBoulevard4" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(0.1, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard4" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard4"]
+position = Vector3(0, 1.85, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard4_Collision")
+
+[node name="MaisonDuBoulevard5" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(8.95, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard5" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5.35, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard5"]
+position = Vector3(0, 2.025, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard5_Collision")
+
+[node name="MaisonDuBoulevard6" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(12.7, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard6" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5.7, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard6"]
+position = Vector3(0, 2.2, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard6_Collision")
+
+[node name="MaisonDuBoulevard7" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(21.1, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard7" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard7"]
+position = Vector3(0, 1.85, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard7_Collision")
+
+[node name="MaisonDuBoulevard8" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(25.35, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard8" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5.35, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard8"]
+position = Vector3(0, 2.025, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard8_Collision")
+
+[node name="MaisonDuBoulevard9" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(29.4, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard9" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.55, 5.7, 2.95)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDuBoulevard9"]
+position = Vector3(0, 2.2, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDuBoulevard9_Collision")
+
+[node name="MaisonCommune" type="StaticBody3D" parent="VilleHaute"]
+position = Vector3(-11.95, 5.55, -14.4)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Murs" type="MeshInstance3D" parent="VilleHaute/MaisonCommune"]
+position = Vector3(0, 2.675, 0)
+mesh = SubResource("VilleHaute_MaisonCommune_Murs")
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonCommune"]
+position = Vector3(0, 2.675, 0)
+shape = SubResource("VilleHaute_MaisonCommune_Collision")
+
+[node name="Toit" type="MeshInstance3D" parent="VilleHaute/MaisonCommune"]
+position = Vector3(0, 6.15, 0)
+mesh = SubResource("VilleHaute_MaisonCommune_Toit")
+
+[node name="Porte" type="MeshInstance3D" parent="VilleHaute/MaisonCommune"]
+position = Vector3(0, 1.38, 1.775)
+mesh = SubResource("VilleHaute_MaisonCommune_Porte")
+
+[node name="VoletGauche" type="MeshInstance3D" parent="VilleHaute/MaisonCommune"]
+position = Vector3(-1.728, 2.54, 1.775)
+mesh = SubResource("VilleHaute_MaisonCommune_VoletGauche")
+
+[node name="VoletDroite" type="MeshInstance3D" parent="VilleHaute/MaisonCommune"]
+position = Vector3(1.728, 2.54, 1.775)
+mesh = SubResource("VilleHaute_MaisonCommune_VoletDroite")
+
+[node name="MaisonDeLaTerrasse1" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(-36, 5.55, -7)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDeLaTerrasse1" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.2, 5.15, 4)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDeLaTerrasse1"]
+position = Vector3(0, 1.925, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDeLaTerrasse1_Collision")
+
+[node name="MaisonDeLaTerrasse2" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(-31.8, 5.55, -7)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDeLaTerrasse2" instance=ExtResource("MaisonModele_angle")]
+scale = Vector3(3.2, 5.15, 4)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDeLaTerrasse2"]
+position = Vector3(0, 1.925, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDeLaTerrasse2_Collision")
+
+[node name="MaisonDeLaTerrasse3" type="StaticBody3D" parent="VilleHaute/MaisonsFermees"]
+position = Vector3(27.9, 5.55, -7)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Exterieur" parent="VilleHaute/MaisonsFermees/MaisonDeLaTerrasse3" instance=ExtResource("MaisonModele_ville_haute")]
+scale = Vector3(3.2, 5.15, 4)
+
+[node name="Collision" type="CollisionShape3D" parent="VilleHaute/MaisonsFermees/MaisonDeLaTerrasse3"]
+position = Vector3(0, 1.925, 0)
+shape = SubResource("VilleHaute_MaisonsFermees_MaisonDeLaTerrasse3_Collision")
+
+[node name="Crete" type="Node3D" parent="."]
+
+
+[node name="SerreOuest" type="StaticBody3D" parent="Crete"]
+position = Vector3(-14, 8.05, -27.65)
+
+[node name="Verriere" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(0, 3.81, 0)
+mesh = SubResource("Crete_SerreOuest_Verriere")
+
+[node name="ParoiArriere" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(0, 1.55, -2.37)
+mesh = SubResource("Crete_SerreOuest_ParoiArriere")
+
+[node name="CollisionArriere" type="CollisionShape3D" parent="Crete/SerreOuest"]
+position = Vector3(0, 1.55, -2.37)
+shape = SubResource("Crete_SerreOuest_CollisionArriere")
+
+[node name="VitreGauche" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.89, 1.55, 0)
+mesh = SubResource("Crete_SerreOuest_VitreGauche")
+
+[node name="CollisionGauche" type="CollisionShape3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.89, 1.55, 0)
+shape = SubResource("Crete_SerreOuest_CollisionGauche")
+
+[node name="TraverseGauche" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.88, 3.1, 0)
+mesh = SubResource("Crete_SerreOuest_TraverseGauche")
+
+[node name="MontantGauche1" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.89, 1.55, -2.4)
+mesh = SubResource("Crete_SerreOuest_MontantGauche1")
+
+[node name="MontantGauche2" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.89, 1.55, -0.8)
+mesh = SubResource("Crete_SerreOuest_MontantGauche2")
+
+[node name="MontantGauche3" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.89, 1.55, 0.8)
+mesh = SubResource("Crete_SerreOuest_MontantGauche3")
+
+[node name="MontantGauche4" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(-2.89, 1.55, 2.4)
+mesh = SubResource("Crete_SerreOuest_MontantGauche4")
+
+[node name="VitreDroite" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(2.89, 1.55, 0)
+mesh = SubResource("Crete_SerreOuest_VitreDroite")
+
+[node name="CollisionDroite" type="CollisionShape3D" parent="Crete/SerreOuest"]
+position = Vector3(2.89, 1.55, 0)
+shape = SubResource("Crete_SerreOuest_CollisionDroite")
+
+[node name="TraverseDroite" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(2.88, 3.1, 0)
+mesh = SubResource("Crete_SerreOuest_TraverseDroite")
+
+[node name="MontantDroite1" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(2.89, 1.55, -2.4)
+mesh = SubResource("Crete_SerreOuest_MontantDroite1")
+
+[node name="MontantDroite2" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(2.89, 1.55, -0.8)
+mesh = SubResource("Crete_SerreOuest_MontantDroite2")
+
+[node name="MontantDroite3" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(2.89, 1.55, 0.8)
+mesh = SubResource("Crete_SerreOuest_MontantDroite3")
+
+[node name="MontantDroite4" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(2.89, 1.55, 2.4)
+mesh = SubResource("Crete_SerreOuest_MontantDroite4")
+
+[node name="Linteau" type="MeshInstance3D" parent="Crete/SerreOuest"]
+position = Vector3(0, 3.1, 2.41)
+mesh = SubResource("Crete_SerreOuest_Linteau")
+
+[node name="SerreEst" type="StaticBody3D" parent="Crete"]
+position = Vector3(0, 8.05, -27.65)
+
+[node name="Verriere" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(0, 3.81, 0)
+mesh = SubResource("Crete_SerreEst_Verriere")
+
+[node name="ParoiArriere" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(0, 1.55, -2.37)
+mesh = SubResource("Crete_SerreEst_ParoiArriere")
+
+[node name="CollisionArriere" type="CollisionShape3D" parent="Crete/SerreEst"]
+position = Vector3(0, 1.55, -2.37)
+shape = SubResource("Crete_SerreEst_CollisionArriere")
+
+[node name="VitreGauche" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(-2.89, 1.55, 0)
+mesh = SubResource("Crete_SerreEst_VitreGauche")
+
+[node name="CollisionGauche" type="CollisionShape3D" parent="Crete/SerreEst"]
+position = Vector3(-2.89, 1.55, 0)
+shape = SubResource("Crete_SerreEst_CollisionGauche")
+
+[node name="TraverseGauche" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(-2.88, 3.1, 0)
+mesh = SubResource("Crete_SerreEst_TraverseGauche")
+
+[node name="MontantGauche1" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(-2.89, 1.55, -2.4)
+mesh = SubResource("Crete_SerreEst_MontantGauche1")
+
+[node name="MontantGauche2" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(-2.89, 1.55, -0.8)
+mesh = SubResource("Crete_SerreEst_MontantGauche2")
+
+[node name="MontantGauche3" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(-2.89, 1.55, 0.8)
+mesh = SubResource("Crete_SerreEst_MontantGauche3")
+
+[node name="MontantGauche4" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(-2.89, 1.55, 2.4)
+mesh = SubResource("Crete_SerreEst_MontantGauche4")
+
+[node name="VitreDroite" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(2.89, 1.55, 0)
+mesh = SubResource("Crete_SerreEst_VitreDroite")
+
+[node name="CollisionDroite" type="CollisionShape3D" parent="Crete/SerreEst"]
+position = Vector3(2.89, 1.55, 0)
+shape = SubResource("Crete_SerreEst_CollisionDroite")
+
+[node name="TraverseDroite" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(2.88, 3.1, 0)
+mesh = SubResource("Crete_SerreEst_TraverseDroite")
+
+[node name="MontantDroite1" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(2.89, 1.55, -2.4)
+mesh = SubResource("Crete_SerreEst_MontantDroite1")
+
+[node name="MontantDroite2" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(2.89, 1.55, -0.8)
+mesh = SubResource("Crete_SerreEst_MontantDroite2")
+
+[node name="MontantDroite3" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(2.89, 1.55, 0.8)
+mesh = SubResource("Crete_SerreEst_MontantDroite3")
+
+[node name="MontantDroite4" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(2.89, 1.55, 2.4)
+mesh = SubResource("Crete_SerreEst_MontantDroite4")
+
+[node name="Linteau" type="MeshInstance3D" parent="Crete/SerreEst"]
+position = Vector3(0, 3.1, 2.41)
+mesh = SubResource("Crete_SerreEst_Linteau")
+
+[node name="AbriDuJardin" type="StaticBody3D" parent="Crete"]
+position = Vector3(15, 8.05, -29)
+
+[node name="MurDeFond" type="MeshInstance3D" parent="Crete/AbriDuJardin"]
+position = Vector3(0, 1.45, -0.9)
+mesh = SubResource("Crete_AbriDuJardin_MurDeFond")
+
+[node name="CollisionDuMur" type="CollisionShape3D" parent="Crete/AbriDuJardin"]
+position = Vector3(0, 1.45, -0.9)
+shape = SubResource("Crete_AbriDuJardin_CollisionDuMur")
+
+[node name="Auvent" type="MeshInstance3D" parent="Crete/AbriDuJardin"]
+position = Vector3(0, 2.96, 0)
+mesh = SubResource("Crete_AbriDuJardin_Auvent")
+
+[node name="VieuxPort" type="Node3D" parent="."]
+
+
+[node name="AbriEnglouti1" type="Node3D" parent="VieuxPort"]
+position = Vector3(-9, -1.5, 5.4)
+
+[node name="Arase" type="MeshInstance3D" parent="VieuxPort/AbriEnglouti1"]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("VieuxPort_AbriEnglouti1_Arase")
+
+[node name="Retour" type="MeshInstance3D" parent="VieuxPort/AbriEnglouti1"]
+position = Vector3(1.06, 0.22, 0.66)
+mesh = SubResource("VieuxPort_AbriEnglouti1_Retour")
+
+[node name="AbriEnglouti2" type="Node3D" parent="VieuxPort"]
+position = Vector3(-5.3, -1.5, 8.9)
+
+[node name="Arase" type="MeshInstance3D" parent="VieuxPort/AbriEnglouti2"]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("VieuxPort_AbriEnglouti2_Arase")
+
+[node name="Retour" type="MeshInstance3D" parent="VieuxPort/AbriEnglouti2"]
+position = Vector3(0.91, 0.22, 0.66)
+mesh = SubResource("VieuxPort_AbriEnglouti2_Retour")
+
+[node name="AbriEnglouti3" type="Node3D" parent="VieuxPort"]
+position = Vector3(7.35, -1.5, 10.4)
+
+[node name="Arase" type="MeshInstance3D" parent="VieuxPort/AbriEnglouti3"]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("VieuxPort_AbriEnglouti3_Arase")
+
+[node name="Retour" type="MeshInstance3D" parent="VieuxPort/AbriEnglouti3"]
+position = Vector3(0.96, 0.22, 0.66)
+mesh = SubResource("VieuxPort_AbriEnglouti3_Retour")

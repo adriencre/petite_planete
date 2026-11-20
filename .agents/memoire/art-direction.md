@@ -19,3 +19,9 @@ Processus que l'utilisateur aime : débattre en texte d'abord (il teste parfois 
 
 **Why:** la DA a changé plusieurs fois en peu de temps ; l'ancienne mémoire disait encore « 1re personne validée ».
 **How to apply:** suivre DA.md ; si un point visuel n'y est pas, poser la question avec des propositions. Voir [[game-vision]], [[editor-visible-scenes]].
+
+**Écran titre (2026-11-20)** : la maquette décorative simplifiée a été rejetée. L’accueil doit montrer le décor développé de l’île jouable. Le cadrage et la lumière peuvent être propres au menu.
+
+**Habitations fermées de la Colonie (2026-11-20)** : l’utilisateur a rejeté le rendu Meshy pour ces maisons et demandé de les refaire dans Blender. Source éditable et variantes architecturales documentées dans ILE_03_COLONIE.md.
+
+**Végétation de la Colonie (2026-11-20)** : ville abandonnée depuis longtemps. L’utilisateur veut une végétation sauvage qui gagne les rues. Voir ILE_03_COLONIE.md pour la répartition.

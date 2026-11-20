@@ -29,6 +29,7 @@
 [ext_resource type="Script" uid="uid://b1qiswqy8wq58" path="res://scripts/carnet.gd" id="16_q2ixi"]
 [ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
 [ext_resource type="PackedScene" path="res://scenes/ponton.tscn" id="p_ponton"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/plaque_bouee.tscn" id="plaque_bouee"]
 [ext_resource type="Script" uid="uid://dnxu4hdr80jp5" path="res://scripts/ile_test.gd" id="sc_ile"]
 [ext_resource type="Script" uid="uid://cl10xpccufbht" path="res://scripts/maquette.gd" id="sc_maquette"]
 [ext_resource type="Shader" uid="uid://7qouqxephsnd" path="res://shaders/terrain_facettes.gdshader" id="s_facettes"]
@@ -66,6 +67,17 @@ top_radius = 2.2
 bottom_radius = 2.2
 height = 0.05
 radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="pierre_appui_large"]
+albedo_color = Color(0.59, 0.55, 0.48, 1)
+roughness = 0.91
+
+[sub_resource type="SphereMesh" id="rocher_appui_large"]
+material = SubResource("pierre_appui_large")
+radius = 0.15
+height = 0.25
+radial_segments = 5
+rings = 2
 
 [sub_resource type="ShaderMaterial" id="vision_mat"]
 shader = ExtResource("s_vision")
@@ -130,7 +142,6 @@ taille_case = 7.0
 brume_partout = false
 epaisse_opacite = 0.5
 densite_bancs = 0.0
-etiquettes = true
 objets_ile_1 = false
 herbe = 12000
 fleurs = 0
@@ -198,9 +209,18 @@ reception = NodePath("../../CapOuest/StationMiroir/PivotMiroir")
 cran_initial = 2
 filmer_premier_alignement = false
 
-[node name="AncienCorpsLarge" parent="Monde" instance=ExtResource("modele_corps")]
-position = Vector3(0, 3.13, -52.5)
-rotation = Vector3(0, -0.52, 0)
+[node name="AncienCorpsLarge" type="Node3D" parent="Monde"]
+position = Vector3(0.1, 3.15, -50.65)
+rotation = Vector3(0, 0.6, 0)
+
+[node name="Corps" parent="Monde/AncienCorpsLarge" instance=ExtResource("modele_corps")]
+
+[node name="RocherAppui" type="MeshInstance3D" parent="Monde/AncienCorpsLarge"]
+position = Vector3(-0.59, 0.035, 1.43)
+rotation = Vector3(0, 0.45, 0)
+mesh = SubResource("rocher_appui_large")
+
+[node name="Varech" parent="Monde/AncienCorpsLarge" instance=ExtResource("varech_corps")]
 
 [node name="Flaque" type="Node3D" parent="Monde" unique_id=1707593172]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.1, -3.5)
@@ -269,38 +289,35 @@ position = Vector3(-17.15, 0, 49.45)
 [node name="MaisonDuQuai" parent="Monde/Port" unique_id=185742127 instance=ExtResource("6_53bsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6, 0.6, 41)
 
-[node name="MiroirEssai" parent="Monde/Port" node_paths=PackedStringArray("lanterne", "reception", "voyant_reception") instance=ExtResource("miroir_cap")]
+[node name="MiroirEssai" parent="Monde/Port" node_paths=PackedStringArray("lanterne", "sortie_lanterne", "reception", "voyant_reception") instance=ExtResource("miroir_cap")]
 position = Vector3(8.6, 0.6, 40)
 rotation = Vector3(0, 2.9816795, 0)
 identifiant = "essai"
-lanterne = NodePath("../LanterneEssai")
+lanterne = NodePath("../../BoueeLanterne")
+sortie_lanterne = NodePath("../../BoueeLanterne/Flotteur/SortieOptique")
 reception = NodePath("../Hangar/Capteur")
 voyant_reception = NodePath("../Hangar/Capteur/Voyant")
 filmer_premier_alignement = false
-
-[node name="LanterneEssai" parent="Monde/Port" instance=ExtResource("6_0v5bu")]
-position = Vector3(5.6, 0.73, 41.9)
-script = ExtResource("7_q2ixi")
-index_zone = -1
-rayon_zone = 4.0
-gain_reprise = 0.2
-distance_activation = 1.5
-hauteur_recherche_sol = 1.0
-
-[node name="SortieOptique" type="Marker3D" parent="Monde/Port/LanterneEssai"]
-position = Vector3(-0.004, 1.507, 0.008)
+angles_crans = Vector3(-6, 0, 2)
+texte_commande = "E · Tourner le miroir"
+montrer_impact = true
+tourner_sans_lumiere = false
 
 [node name="Epave" parent="Monde" node_paths=PackedStringArray("reseau") instance=ExtResource("modele_epave")]
 position = Vector3(-35, 0.03, 52.5)
 rotation = Vector3(0, 0.523599, 0)
 reseau = NodePath("../../ReseauMiroirs")
 
-[node name="BoueeLanterne" parent="Monde" instance=ExtResource("bouee_quai")]
+[node name="BoueeLanterne" parent="Monde" node_paths=PackedStringArray("miroir_quai") instance=ExtResource("bouee_quai")]
 position = Vector3(21, 0, 52.5)
+miroir_quai = NodePath("../Port/MiroirEssai")
 
 [node name="Ponton" parent="." unique_id=1907350259 instance=ExtResource("p_ponton")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 49)
 port_attache = true
+
+[node name="PlaqueBouee" parent="Ponton" instance=ExtResource("plaque_bouee")]
+position = Vector3(-0.62, 0.7, 1.44)
 
 [node name="Barque" parent="." node_paths=PackedStringArray("maquette") instance=ExtResource("barque_du_quai")]
 position = Vector3(8.65, 0, 52.6)
@@ -356,7 +373,7 @@ reperes_ignores = ""
 disponible_au_depart = true
 carte_archipel = ExtResource("carte_archipel")
 
-[node name="ReseauMiroirs" type="Node3D" parent="." node_paths=PackedStringArray("station_ouest", "optique", "epave", "maquette", "joueur", "carnet", "engrenages", "commande")]
+[node name="ReseauMiroirs" type="Node3D" parent="." node_paths=PackedStringArray("station_ouest", "optique", "epave", "maquette", "joueur", "carnet", "engrenages", "commande", "lunette")]
 script = ExtResource("reseau_miroirs")
 station_ouest = NodePath("../Monde/CapOuest/StationMiroir")
 optique = NodePath("../Monde/Phare/Optique")
@@ -366,3 +383,4 @@ joueur = NodePath("../Joueur")
 carnet = NodePath("../Carnet")
 engrenages = NodePath("../Monde/Phare/Engrenages")
 commande = NodePath("../Monde/Phare/CommandeLentille")
+lunette = NodePath("../Monde/Phare/LunetteIris")

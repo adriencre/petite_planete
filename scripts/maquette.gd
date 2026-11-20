@@ -72,6 +72,9 @@ const PIERRE_SCRIPT := preload("res://scripts/pierre_soleil.gd")  # recharge de 
 ## À décocher pour une autre île : les repères ne donnent alors que leur étiquette (et le carnet).
 @export var objets_ile_1: bool = true:
 	set(v): objets_ile_1 = v; _construire()
+## Le titre réutilise les décors de l’île en laissant ses interactions et sa sauvegarde de côté.
+@export var decor_seul: bool = false:
+	set(v): decor_seul = v; _construire()
 @export_group("Nature")
 @export var herbe: int = 30000
 @export var fleurs: int = 2000
@@ -128,7 +131,8 @@ func _construire() -> void:
 	var terrain := _terrain()
 	_mer()
 	_eau()
-	_brume()
+	if not decor_seul:
+		_brume()
 	var exclus := _nature()
 	_vegetation(terrain, exclus)
 	_lanternes_ch.clear()
@@ -578,6 +582,8 @@ func _reperes() -> void:
 						modele_l = load(LANTERNE_GRANDE) as PackedScene
 					var l: Node3D = modele_l.instantiate()
 					l.set_script(LANTERNE_SCRIPT)
+					l.decor_seul = decor_seul
+					l.ouverture_decor = decor_seul and ch == "G"
 					l.premiere_fois = ch == "1"
 					l.index_zone = LANTERNES_ZONE.find(ch)
 					l.rayon_zone = taille_case * 1.6
@@ -587,7 +593,7 @@ func _reperes() -> void:
 						l.scale = Vector3.ONE * 1.6
 						l.rang = 1
 					add_child(l)
-					if ch == "G":
+					if ch == "G" and not decor_seul:
 						_collision_grande_lanterne(l)
 				elif ch == "S":
 					_lanterne_sommet(p)
@@ -598,7 +604,8 @@ func _reperes() -> void:
 				elif ch == "A":
 					var abri: Node3D = ABRI.instantiate()
 					abri.name = "Abri"
-					abri.set_script(ABRI_SCRIPT)  # collisions, marches, toit qui s'efface
+					abri.set_script(ABRI_SCRIPT)
+					abri.decor_seul = decor_seul
 					abri.position = p
 					abri.rotation.y = deg_to_rad(-90)  # la porte (+Z du modèle) regarde l'ouest
 					add_child(abri)
@@ -685,7 +692,7 @@ func _racines() -> void:
 		var mat := ShaderMaterial.new()
 		mat.shader = RACINE
 		mi.material_override = mat
-		if not Engine.is_editor_hint():
+		if not Engine.is_editor_hint() and not decor_seul:
 			mi.set_script(RACINE_SCRIPT)
 			mi.set("lanterne", petite)
 		add_child(mi)
@@ -777,7 +784,8 @@ func _cristal(p: Vector3) -> void:
 		return
 	var pierre: Node3D = modele.instantiate()
 	pierre.name = "PierreSoleil"
-	pierre.set_script(PIERRE_SCRIPT)
+	if not decor_seul:
+		pierre.set_script(PIERRE_SCRIPT)
 	pierre.position = p
 	pierre.rotation.y = _rng.randf() * TAU
 	add_child(pierre)
@@ -837,6 +845,7 @@ func _lanterne_sommet(p: Vector3) -> void:
 	var l: Node3D = (load(LANTERNE_SOMMET_MESHY) as PackedScene).instantiate()
 	l.name = "LanterneSommet"
 	l.set_script(LANTERNE_SCRIPT)
+	l.decor_seul = decor_seul
 	l.premiere_fois = false
 	l.index_zone = -1
 	l.rang = 2
@@ -844,7 +853,8 @@ func _lanterne_sommet(p: Vector3) -> void:
 	l.scale = Vector3.ONE * 1.6
 	add_child(l)
 	# socle : 1,4 m de rayon, 0,8 m de haut en jeu (la prise, à ~1,4 m de l'axe, reste accessible)
-	_collision_cylindres(l, "CollisionLanterneSommet", [Vector3(1.4, 0.8, 0.0)])
+	if not decor_seul:
+		_collision_cylindres(l, "CollisionLanterneSommet", [Vector3(1.4, 0.8, 0.0)])
 
 
 ## La place des Semeurs, au centre du niveau 1 (repère « F ») : un dallage octogonal, une fontaine à sec
@@ -924,7 +934,8 @@ func _atelier(p: Vector3) -> void:
 		return
 	var a: Node3D = (load(ATELIER) as PackedScene).instantiate()
 	a.name = "Atelier"
-	a.set_script(ATELIER_SCRIPT)
+	if not decor_seul:
+		a.set_script(ATELIER_SCRIPT)
 	a.position = p
 	add_child(a)
 
@@ -962,15 +973,17 @@ func _barque(p: Vector3) -> void:
 			break
 	var b: Node3D = (load(BARQUE) as PackedScene).instantiate()
 	b.name = "Barque"
-	b.set_script(BARQUE_SCRIPT)
-	b.set("maquette", self)
+	if not decor_seul:
+		b.set_script(BARQUE_SCRIPT)
+		b.set("maquette", self)
 	var pos := p + vers_mer * (taille_case * 0.5 + 1.0)
 	pos.y = 0.0   # niveau de la mer : l'origine du modèle est sur sa ligne de flottaison
 	b.position = pos
 	if vers_mer != Vector3.ZERO:
 		var long := vers_mer.cross(Vector3.UP)   # parallèle au rivage
 		b.rotation.y = atan2(long.x, long.z)
-	b.add_to_group("barque_qui_flotte")
+	if not decor_seul:
+		b.add_to_group("barque_qui_flotte")
 	b.set_meta("origine", pos)
 	if not Engine.is_editor_hint():
 		var corps := StaticBody3D.new()

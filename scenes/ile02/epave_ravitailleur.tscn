@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" path="res://assets/models/ile02/epave_ravitailleur.glb" id="2_coque"]
 [ext_resource type="Script" path="res://scripts/amarre_epave.gd" id="3_amarre"]
 [ext_resource type="PackedScene" path="res://assets/models/ile02/cle_salle_cartes.glb" id="4_cle"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="5_page"]
+[ext_resource type="Texture2D" path="res://assets/affiches/journal_quart.png" id="6_journal"]
 
 [sub_resource type="BoxShape3D" id="pont"]
 size = Vector3(3.74, 0.19, 6.63)
@@ -90,6 +92,17 @@ font_size = 46
 outline_size = 7
 pixel_size = 0.004
 modulate = Color(1, 0.89, 0.66, 1)
+
+[node name="JournalDeQuart" type="Node3D" parent="."]
+position = Vector3(-1.17, 1.25, 3.41)
+rotation = Vector3(0, -0.12, 0)
+script = ExtResource("5_page")
+texte = "Journal de quart\n\nIris est repassée pour les relèvements. Elle a laissé la clé sur le bureau. Je la lui rendrai à la prochaine basse mer."
+distance_lecture = 1.18
+hauteur_lecture = 1.45
+taille_feuille = Vector2(0.57, 0.47)
+image = ExtResource("6_journal")
+ramasser = false
 
 [node name="Accostage" type="Node3D" parent="."]
 script = ExtResource("3_amarre")

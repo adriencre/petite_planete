@@ -53,6 +53,12 @@ texture = SubResource("eclat_texture")
 
 [node name="FaisceauIncident" parent="." instance=ExtResource("5_faisceau")]
 
+[node name="Impact" type="Sprite3D" parent="."]
+visible = false
+pixel_size = 0.012
+modulate = Color(2.4, 1.45, 0.66, 1)
+texture = SubResource("eclat_texture")
+
 [node name="Touche" type="Label3D" parent="."]
 position = Vector3(0.369, 1.29, 0.7)
 visible = false

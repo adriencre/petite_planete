@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="192" viewBox="0 0 384 192">
+  <!-- Pictogramme original dessiné pour Petite Planète. -->
+  <rect x="3" y="3" width="378" height="186" rx="15" fill="#346c70"/>
+  <rect x="12" y="12" width="360" height="168" rx="9" fill="none" stroke="#d2a974" stroke-width="5"/>
+  <g fill="#d2a974">
+    <circle cx="27" cy="26" r="4"/><circle cx="357" cy="26" r="4"/>
+    <circle cx="27" cy="166" r="4"/><circle cx="357" cy="166" r="4"/>
+  </g>
+  <g fill="#faf1d4">
+    <path d="M45 145h28c21 0 38-16 38-37v-4H90V82h21V63h14v19h18V63h14v19h21v22h-22v12c0 26-21 47-47 47H45zm76-41v6c0 16-9 29-22 37h10c18 0 33-15 33-33v-10z"/>
+    <path d="m189 96 34 0-11-11 8-8 24 24-24 24-8-8 11-11h-34z"/>
+    <path d="m262 124 14-17h65l14 17-14 14h-65zm24-51h45v26h-45zm-8-9 29-23 31 23z"/>
+  </g>
+  <path d="M264 153q11-8 22 0t22 0t22 0t22 0" fill="none" stroke="#a5d4cb" stroke-width="6" stroke-linecap="round"/>
+</svg>

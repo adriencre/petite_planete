@@ -85,6 +85,7 @@ scale = Vector3(0.68, 0.68, 0.68)
 position = Vector3(0, 1.29, 0.17)
 visible = false
 billboard = 1
+no_depth_test = true
 modulate = Color(1, 0.86, 0.57, 1)
 outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
 pixel_size = 0.004
@@ -96,6 +97,7 @@ text = "E   Orienter la lentille"
 position = Vector3(0, 0.96, 0.12)
 visible = false
 billboard = 1
+no_depth_test = true
 modulate = Color(1, 0.91, 0.68, 1)
 outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
 pixel_size = 0.0035
@@ -301,7 +303,7 @@ position = Vector3(-1.26, 13.62, 1.87)
 
 [node name="AncienCorpsGalerie" type="StaticBody3D" parent="."]
 position = Vector3(-2.12, 13.62, -2.13)
-rotation = Vector3(0, -2.35, 0)
+rotation = Vector3(0, -2.408554, 0)
 
 [node name="CorpsEtAssise" parent="AncienCorpsGalerie" instance=ExtResource("corps_galerie")]
 
