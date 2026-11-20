@@ -26,7 +26,9 @@ extends "res://scripts/batiment_coupe.gd"
 @onready var _pied_montee_cartes: Marker3D = $ReperePiedMonteeCartes
 @onready var _palier_cartes: Marker3D = $ReperePalierCartes
 @onready var _seuil_galerie: Marker3D = $RepereSeuilGalerie
-var _joueur_du_phare: Node3D
+var _joueur_du_phare: CharacterBody3D
+var _maillages_exterieurs: Array[GeometryInstance3D] = []
+var _fondu_exterieur := 0.0
 var _maillages_montee_cartes: Array[GeometryInstance3D] = []
 var _transparence_montee_cartes := 0.0
 var _maillages_montee_galerie: Array[GeometryInstance3D] = []
@@ -37,6 +39,7 @@ func _ready() -> void:
 	super._ready()
 	_maillages_montee_cartes = _maillages_de(_montee_cartes)
 	_maillages_montee_galerie = _maillages_de(_montee_galerie)
+	_maillages_exterieurs = _maillages_de(_modele)
 
 
 func _maillages_de(racine: Node3D) -> Array[GeometryInstance3D]:
@@ -49,7 +52,7 @@ func _maillages_de(racine: Node3D) -> Array[GeometryInstance3D]:
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_joueur_du_phare):
-		_joueur_du_phare = get_tree().get_first_node_in_group("joueur") as Node3D
+		_joueur_du_phare = get_tree().get_first_node_in_group("joueur") as CharacterBody3D
 	if _bureau == null or _joueur_du_phare == null:
 		return
 	var position := _joueur_du_phare.global_position
@@ -72,6 +75,7 @@ func _physics_process(delta: float) -> void:
 	var exterieur := _dedans == 0 and not dans_annexe
 	var dans_tour := _dedans > 0 and not dans_annexe
 	var sur_galerie := dans_tour and hauteur_galerie >= -0.04
+	_actualiser_fondu_exterieur(exterieur, delta)
 
 	_montrer_noeud(_chambre, exterieur or sur_galerie or dans_annexe)
 	_montrer_noeud(_acces_chambre, exterieur or sur_galerie or sur_toit or sur_echelle)
@@ -112,6 +116,36 @@ func _physics_process(delta: float) -> void:
 	_actualiser_fondu_montee_cartes(visite_bureau, delta)
 	_transparence_montee_galerie = _fondre_maillages(_maillages_montee_galerie,
 		_transparence_montee_galerie, coupe_cartes, delta)
+
+
+func _actualiser_fondu_exterieur(exterieur: bool, delta: float) -> void:
+	var cible := 0.92 if exterieur and _masque_le_robot() else 0.0
+	var fondu := move_toward(_fondu_exterieur, cible, delta * 5.0) if exterieur else 0.0
+	if fondu == _fondu_exterieur:
+		return
+	_fondu_exterieur = fondu
+	for maillage in _maillages_exterieurs:
+		maillage.transparency = fondu
+
+
+func _masque_le_robot() -> bool:
+	if bool(_joueur_du_phare.get("cinematique")) or not bool(_joueur_du_phare.get("vue_dessus")):
+		return false
+	var camera := get_viewport().get_camera_3d()
+	if camera == null or camera.global_position.distance_squared_to(global_position) > 900.0:
+		return false
+	var espace := get_world_3d().direct_space_state
+	for hauteur: float in [0.65, 1.5]:
+		var cible := _joueur_du_phare.global_position + Vector3.UP * hauteur
+		var rayon := PhysicsRayQueryParameters3D.create(camera.global_position, cible)
+		rayon.exclude = [_joueur_du_phare.get_rid()]
+		rayon.hit_back_faces = true
+		rayon.hit_from_inside = true
+		var touche := espace.intersect_ray(rayon)
+		var obstacle := touche.get("collider") as Node
+		if obstacle and is_ancestor_of(obstacle):
+			return true
+	return false
 
 
 func _montrer_noeud(noeud: Node3D, montrer: bool) -> void:

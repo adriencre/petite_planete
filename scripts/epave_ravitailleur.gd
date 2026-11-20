@@ -17,6 +17,8 @@ var _transparence := 0.0
 func _ready() -> void:
 	add_to_group("sauvegarde")
 	add_to_group("epave_ravitailleur")
+	add_to_group("interactif")
+	add_to_group("a_ramasser")
 	cle_recuperee = bool(Sauvegarde.donnees(cle_sauvegarde(), self).get("cle_recuperee", false))
 	_cle.visible = not cle_recuperee
 	var toiture := $Modele.find_child("CoupeCabine", true, false)
@@ -66,6 +68,16 @@ func _cle_a_portee() -> bool:
 		return false
 	var ecart := _robot.global_position - _cle.global_position
 	return absf(ecart.y) < 1.45 and Vector2(ecart.x, ecart.z).length() < 0.93
+
+
+func etat_interaction() -> int:
+	if cle_recuperee or _robot == null or not _dans_cabine() or not condition_acces().is_empty():
+		return 0
+	return 2 if _cle_a_portee() else 1
+
+
+func point_appel() -> Vector3:
+	return _cle.global_position
 
 
 func _unhandled_input(event: InputEvent) -> void:

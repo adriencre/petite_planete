@@ -1,0 +1,393 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile02/entree_grottes.glb" id="1_entree"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/galerie_grottes.glb" id="2_galerie"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/crypte_berceau.glb" id="3_crypte"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/voutes_crypte.glb" id="4_voutes"]
+[ext_resource type="Script" path="res://scripts/batiment_coupe.gd" id="5_coupe"]
+
+[ext_resource type="Script" path="res://scripts/amarre_grottes.gd" id="6_amarre"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="7_plaque"]
+[ext_resource type="Script" path="res://scripts/echelle_iris.gd" id="8_echelle"]
+
+[sub_resource type="StandardMaterial3D" id="fonte"]
+albedo_color = Color(0.17, 0.29, 0.29, 1)
+metallic = 0.35
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="calcaire"]
+albedo_color = Color(0.76, 0.62, 0.52, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="barreau"]
+material = SubResource("fonte")
+size = Vector3(0.10, 0.055, 0.78)
+
+[sub_resource type="BoxShape3D" id="zone_puits"]
+size = Vector3(2.2, 4.95, 2.3)
+
+[sub_resource type="BoxShape3D" id="collision_0"]
+size = Vector3(9.62, 0.13, 4.56)
+
+[sub_resource type="BoxShape3D" id="collision_1"]
+size = Vector3(6, 0.152, 9.65)
+
+[sub_resource type="BoxShape3D" id="collision_2"]
+size = Vector3(8.29, 0.164, 8.56)
+
+[sub_resource type="BoxShape3D" id="collision_3"]
+size = Vector3(3.24, 2.9, 0.78)
+
+[sub_resource type="BoxShape3D" id="collision_4"]
+size = Vector3(3.24, 2.9, 0.78)
+
+[sub_resource type="BoxShape3D" id="collision_5"]
+size = Vector3(0.38, 3.08, 1.63)
+
+[sub_resource type="BoxShape3D" id="collision_6"]
+size = Vector3(0.38, 3.08, 1.63)
+
+[sub_resource type="BoxShape3D" id="collision_7"]
+size = Vector3(0.43, 3.04, 6.84)
+
+[sub_resource type="BoxShape3D" id="collision_8"]
+size = Vector3(0.4, 3.04, 6.84)
+
+[sub_resource type="BoxShape3D" id="collision_9"]
+size = Vector3(1.46, 3.15, 0.59)
+
+[sub_resource type="BoxShape3D" id="collision_10"]
+size = Vector3(3.87, 3.15, 0.59)
+
+[sub_resource type="BoxShape3D" id="collision_11"]
+size = Vector3(0.47, 3.3, 8.82)
+
+[sub_resource type="BoxShape3D" id="collision_12"]
+size = Vector3(0.48, 3.3, 8.82)
+
+[sub_resource type="BoxShape3D" id="collision_13"]
+size = Vector3(8.41, 3.3, 0.61)
+
+[sub_resource type="BoxShape3D" id="collision_14"]
+size = Vector3(0.53, 1.38, 2.26)
+
+[sub_resource type="BoxShape3D" id="collision_15"]
+size = Vector3(2.48, 1.34, 0.26)
+
+[sub_resource type="BoxShape3D" id="collision_16"]
+size = Vector3(1.47, 0.9, 1)
+
+[sub_resource type="BoxShape3D" id="zone_interieure"]
+size = Vector3(10.06, 1.6, 16.85)
+
+[node name="GrottesCrypte" type="Node3D"]
+script = ExtResource("5_coupe")
+a_effacer = PackedStringArray("VoutesEtParoisDeCoupe")
+
+[node name="Entree" parent="." instance=ExtResource("1_entree")]
+
+[node name="Galerie" parent="." instance=ExtResource("2_galerie")]
+
+[node name="Crypte" parent="." instance=ExtResource("3_crypte")]
+
+[node name="VoutesEtParoisDeCoupe" parent="." instance=ExtResource("4_voutes")]
+
+[node name="Interieur" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="Volume" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(2.71, 0.82, -8.4)
+shape = SubResource("zone_interieure")
+
+[node name="VolumePuits" type="CollisionShape3D" parent="Interieur"]
+position = Vector3(5.85, 2.8, -12.8)
+shape = SubResource("zone_puits")
+
+[node name="Collisions" type="StaticBody3D" parent="."]
+
+[node name="SolApproche" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(0, -0.126, 3.67)
+rotation = Vector3(0.029, 0, 0)
+shape = SubResource("collision_0")
+
+[node name="SolGalerie" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(0.91, -0.071, -3.395)
+shape = SubResource("collision_1")
+
+[node name="SolCrypte" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(3.05, -0.065, -12.34)
+shape = SubResource("collision_2")
+
+[node name="PiédroitGauche" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(-3.31, 1.45, 0)
+shape = SubResource("collision_3")
+
+[node name="PiédroitDroit" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(3.31, 1.45, 0)
+shape = SubResource("collision_4")
+
+[node name="ParoiOuestAuSeuil" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(-1.96, 1.53, -0.78)
+shape = SubResource("collision_5")
+
+[node name="ParoiEstAuSeuil" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(1.96, 1.53, -0.78)
+shape = SubResource("collision_6")
+
+[node name="ParoiOuestGalerie" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(-1, 1.52, -4.82)
+rotation = Vector3(0, -0.2914568, 0)
+shape = SubResource("collision_7")
+
+[node name="ParoiEstGalerie" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(2.86, 1.52, -4.82)
+rotation = Vector3(0, -0.2914568, 0)
+shape = SubResource("collision_8")
+
+[node name="ÉpaulementOuest" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(-0.72, 1.57, -8.38)
+shape = SubResource("collision_9")
+
+[node name="ÉpaulementEst" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(5.535, 1.57, -8.38)
+shape = SubResource("collision_10")
+
+[node name="MurOuestCrypte" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(-1.1, 1.64, -12.69)
+shape = SubResource("collision_11")
+
+[node name="MurEstCrypte" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(7.12, 1.64, -12.69)
+shape = SubResource("collision_12")
+
+[node name="MurDuFond" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(3.05, 1.64, -16.94)
+shape = SubResource("collision_13")
+
+[node name="LigneDuBerceau" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(3.05, 0.69, -15.56)
+shape = SubResource("collision_14")
+
+[node name="PlaqueDeLaLigne" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(1.38, 0.67, -14.54)
+shape = SubResource("collision_15")
+
+[node name="TreuilDeService" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(5.71, 0.45, -15.21)
+shape = SubResource("collision_16")
+
+[node name="EclairageDeService" type="Node3D" parent="."]
+
+[node name="FanalDuSeuil" type="OmniLight3D" parent="EclairageDeService"]
+position = Vector3(-2.42, 2.16, 0.93)
+light_color = Color(1, 0.73, 0.48, 1)
+light_energy = 0.8
+omni_range = 4.5
+
+[node name="FanalGalerieAmont" type="OmniLight3D" parent="EclairageDeService"]
+position = Vector3(-1.36, 1.98, -2.61)
+light_color = Color(1, 0.73, 0.48, 1)
+light_energy = 0.75
+omni_range = 4.5
+
+[node name="FanalGalerieAval" type="OmniLight3D" parent="EclairageDeService"]
+position = Vector3(-0.355, 1.98, -5.96)
+light_color = Color(1, 0.73, 0.48, 1)
+light_energy = 0.75
+omni_range = 4.5
+
+[node name="FanalCrypte" type="OmniLight3D" parent="EclairageDeService"]
+position = Vector3(-0.43, 2.25, -13.26)
+light_color = Color(1, 0.73, 0.48, 1)
+light_energy = 1.1
+omni_range = 6.0
+
+[node name="FanalPlaque" type="OmniLight3D" parent="EclairageDeService"]
+position = Vector3(-0.43, 2.25, -15.86)
+light_color = Color(1, 0.73, 0.48, 1)
+light_energy = 0.85
+omni_range = 5.0
+
+[node name="AmarrageEstran" type="Node3D" parent="."]
+position = Vector3(-6.34, 0, 3.9)
+rotation = Vector3(0, -1.5707963, 0)
+script = ExtResource("6_amarre")
+
+[node name="Amarre" type="Marker3D" parent="AmarrageEstran"]
+
+[node name="Debarquement" type="Marker3D" parent="AmarrageEstran"]
+position = Vector3(0, -0.065, -2.35)
+
+[node name="Bitte" type="Marker3D" parent="AmarrageEstran"]
+position = Vector3(0, 0.26, -1.69)
+
+[node name="Indication" type="Label3D" parent="AmarrageEstran"]
+visible = false
+position = Vector3(0, 1.75, -2.35)
+billboard = 1
+text = "Grottes · accès à marée basse"
+font_size = 36
+outline_size = 8
+
+[node name="LectureLigneDuBerceau" type="Node3D" parent="."]
+position = Vector3(1.38, 1.30, -14.44)
+rotation = Vector3(1.5707963, 0, 0)
+script = ExtResource("7_plaque")
+texte = "Ligne du berceau. Prioritaire. Ne jamais couper."
+signature = "Crypte des Semeurs"
+distance_lecture = 2.1
+hauteur_lecture = 2.0
+taille_feuille = Vector2(2.1, 0.57)
+ramasser = false
+
+[node name="PuitsDeService" type="Node3D" parent="."]
+position = Vector3(6.78, 0, -12.8)
+rotation = Vector3(0, 3.1415927, 0)
+script = ExtResource("8_echelle")
+
+[node name="Galerie" type="Marker3D" parent="PuitsDeService"]
+position = Vector3(-0.83, 5.485, 0)
+
+[node name="Toit" type="Marker3D" parent="PuitsDeService"]
+position = Vector3(1.12, 0.017, 0)
+
+[node name="Barreaux" type="Marker3D" parent="PuitsDeService"]
+
+[node name="Barreau01" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 0.27, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau02" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 0.58, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau03" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 0.89, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau04" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 1.20, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau05" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 1.51, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau06" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 1.82, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau07" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 2.13, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau08" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 2.44, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau09" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 2.75, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau10" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 3.06, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau11" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 3.37, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau12" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 3.68, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau13" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 3.99, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau14" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 4.30, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau15" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 4.61, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau16" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 4.92, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau17" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 5.23, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau18" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 5.54, 0)
+mesh = SubResource("barreau")
+
+[node name="Barreau19" type="MeshInstance3D" parent="PuitsDeService"]
+position = Vector3(0, 5.85, 0)
+mesh = SubResource("barreau")
+
+[node name="MontantSud" type="CSGBox3D" parent="."]
+position = Vector3(6.78, 3.06, -12.36)
+size = Vector3(0.12, 6.05, 0.1)
+material = SubResource("fonte")
+
+[node name="MontantNord" type="CSGBox3D" parent="."]
+position = Vector3(6.78, 3.06, -13.24)
+size = Vector3(0.12, 6.05, 0.1)
+material = SubResource("fonte")
+
+[node name="MargelleSud" type="CSGBox3D" parent="."]
+position = Vector3(5.83, 5.53, -11.7)
+size = Vector3(2.19, 0.34, 0.23)
+material = SubResource("calcaire")
+use_collision = true
+
+[node name="MargelleNord" type="CSGBox3D" parent="."]
+position = Vector3(5.83, 5.53, -13.9)
+size = Vector3(2.19, 0.34, 0.23)
+material = SubResource("calcaire")
+use_collision = true
+
+[node name="MargelleOuest" type="CSGBox3D" parent="."]
+position = Vector3(4.76, 5.53, -12.8)
+size = Vector3(0.22, 0.34, 2.33)
+material = SubResource("calcaire")
+use_collision = true
+
+[node name="AppuiSortie" type="CSGBox3D" parent="."]
+position = Vector3(7.31, 5.395, -12.8)
+size = Vector3(0.8, 0.17, 1.52)
+material = SubResource("calcaire")
+use_collision = true
+
+[node name="BorneEstran" type="CSGBox3D" parent="."]
+position = Vector3(-4.65, 0.04, 3.9)
+size = Vector3(0.23, 0.48, 0.23)
+material = SubResource("fonte")
+use_collision = true
+
+[node name="ParoiPuitsEst" type="CSGBox3D" parent="."]
+position = Vector3(7.04, 3.98, -12.8)
+size = Vector3(0.22, 2.9, 2.3)
+material = SubResource("calcaire")
+
+[node name="ParoiPuitsOuest" type="CSGBox3D" parent="."]
+position = Vector3(4.68, 3.98, -12.8)
+size = Vector3(0.22, 2.9, 2.3)
+material = SubResource("calcaire")
+
+[node name="ParoiPuitsNord" type="CSGBox3D" parent="."]
+position = Vector3(5.85, 3.98, -13.97)
+size = Vector3(2.2, 2.9, 0.22)
+material = SubResource("calcaire")
+
+[node name="ParoiPuitsSud" type="CSGBox3D" parent="."]
+position = Vector3(5.85, 3.98, -11.63)
+size = Vector3(2.2, 2.9, 0.22)
+material = SubResource("calcaire")
+

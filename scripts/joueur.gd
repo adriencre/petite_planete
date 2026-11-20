@@ -44,6 +44,8 @@ extends CharacterBody3D
 var cinematique := false
 ## Sur l’échelle, la scène place le robot au rythme des barreaux.
 var sur_echelle := false
+## Le banc place le corps et oriente le modèle pendant l’assise.
+var sur_banc := false
 var regard_cible := Vector3.ZERO
 ## Caméra de mise en scène quand on voit le robot (vue de dessus, 3e personne) :
 ## 0 = caméra de jeu, 1 = plan imposé depuis `cine_position` vers `cine_cible`.
@@ -204,6 +206,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if embarque:
 		velocity = Vector3.ZERO
+		_gerer_batterie(delta)
+		return
+	if sur_banc:
+		velocity = Vector3.ZERO
+		_pos_prec = global_position
+		_placer_camera(delta)
+		_appliquer_cine()
 		_gerer_batterie(delta)
 		return
 	if sur_echelle:

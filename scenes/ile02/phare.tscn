@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" path="res://assets/affiches/dessin_aube_brume.png" id="dessin_brume"]
 
 [ext_resource type="PackedScene" path="res://scenes/ile02/lunette_iris.tscn" id="lunette_iris"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/ancien_corps_galerie.glb" id="corps_galerie"]
 
 [sub_resource type="BoxShape3D" id="zone_tour"]
 size = Vector3(6.3, 13.65, 6.9)
@@ -34,6 +35,9 @@ size = Vector3(3.20, 2.15, 3.76)
 [sub_resource type="CylinderShape3D" id="zone_galerie"]
 height = 2.5
 radius = 3.79
+
+[sub_resource type="BoxShape3D" id="collision_corps_galerie"]
+size = Vector3(0.72, 0.72, 0.66)
 
 [sub_resource type="BoxShape3D" id="porte_cartes"]
 size = Vector3(1.17, 2.39, 0.2)
@@ -294,3 +298,13 @@ ramasser = false
 
 [node name="LunetteIris" parent="." instance=ExtResource("lunette_iris")]
 position = Vector3(-1.26, 13.62, 1.87)
+
+[node name="AncienCorpsGalerie" type="StaticBody3D" parent="."]
+position = Vector3(-2.12, 13.62, -2.13)
+rotation = Vector3(0, -2.35, 0)
+
+[node name="CorpsEtAssise" parent="AncienCorpsGalerie" instance=ExtResource("corps_galerie")]
+
+[node name="Collision" type="CollisionShape3D" parent="AncienCorpsGalerie"]
+position = Vector3(0, 0.36, -0.02)
+shape = SubResource("collision_corps_galerie")

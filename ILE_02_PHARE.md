@@ -92,6 +92,7 @@ Schéma : `concept/ile_02_formes.png` (variante A), dessiné par `tools/carte_is
 ### La maison du quai (décidé le 2026-11-19)
 Une halte de gardiens, rangée puis abandonnée, à l'échelle des Semeurs (portes ~3 m, plafond haut). Le toit s'efface quand le robot entre (comme l'abri de l'île 1). Fabrication : structure et intérieur dans Blender, meubles « héros » par Meshy.
 - **Le décor** : un grand poêle en fonte froid (la bouilloire dessus), deux lits géants superposés aux couvertures pliées, des cirés jaunes et des bottes immenses près de la porte, une table et des tasses, une carte marine au mur, une grande fenêtre tournée vers la chaussée et le Phare.
+- **La façade** porte le médaillon bleu émaillé des gardiens sur le pignon sud. Un auvent abrite le seuil à l’est. Le poêle, les cirés et les bottes sont sculptés avec Meshy puis mis à l’échelle et colorés dans Blender.
 - **La lanterne** de la maison : à rallumer avec le câble ; c'est le point de recharge avant la traversée (G1).
 - **Le cahier des passages** sur la table : les traversées notées par les gardiens (« Parti au début de la basse mer, arrivé sec »…), la dernière ligne inachevée (l'ancien corps de la chaussée). Indice muet du piège de G1 : partir au **début** de la basse mer.
 - **L'horloge de marée** au mur : une aiguille qui suit la vraie marée du jeu (HorlogeMonde).
@@ -111,7 +112,7 @@ Dans la maquette, la lanterne d’essai du quai alimente le miroir. Quand le fai
 | **2e** | **La salle des cartes**, fermée à clé, avec sa porte marquée face à l'arrivée de l'escalier. À l'intérieur, le registre et les relèvements. |
 | **Sommet** | La **grande lentille**, intacte, sans lampe, avec une couronne graduée. La **galerie extérieure**, avec **la lunette d'Iris** **[à valider]** et l'**ancien corps de la galerie**. |
 
-En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènent. En entrant dans la salle des cartes, la volée vers la galerie s’efface pour dégager le registre et les relèvements. L'échelle et l'aile d'Iris apparaissent depuis la galerie et le toit. Dans la chambre, la coupe montre le mobilier et les documents de la pièce.
+En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènent. À l’extérieur, le Phare devient translucide s’il masque le robot. En entrant dans la salle des cartes, la volée vers la galerie s’efface pour dégager le registre et les relèvements. L'échelle et l'aile d'Iris apparaissent depuis la galerie et le toit. Dans la chambre, la coupe montre le mobilier et les documents de la pièce.
 
 ---
 
@@ -175,7 +176,7 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 ### Les petites
 - **Le miroir du port** : un miroir d'essai renvoie la lumière de la bouée sur la porte du hangar, qui s'ouvre. C'est le tutoriel muet des miroirs.
 - **La bouée du port** : la rallumer (depuis la barque) donne un point de recharge.
-- **Le raccourci des grottes** : à marée basse, en barque, on entre par les grottes jusqu'au pied du phare.
+- **Le raccourci des grottes** : quand la mer découvre le seuil, le robot amarre la barque à la borne de l'estran et gagne la galerie à pied. La galerie et la crypte restent abritées de la marée. Une échelle de service dans un puits rejoint le plateau au pied du Phare dans les deux sens. Si la mer remonte pendant la visite, le robot peut donc repartir par le plateau.
 
 ---
 
@@ -297,6 +298,14 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 ---
 
 ## 11. Feuille de route de l'île 2
+
+**Ordre de production décidé le 2026-11-19** : terminer les bâtiments, les décors et les accessoires de l'île avant la passe de raccordement des interactions. Les nouveaux décors sont préparés à l'échelle du jeu dans Blender.
+
+**Grottes et crypte** : la maquette de l'île instancie les quatre modules de `scenes/ile02/grottes_crypte.tscn` à côté de l'escalier de l'estran. L'entrée maçonnée s'appuie sur le calcaire. Les fanaux balisent la galerie dallée. Dans la crypte, une bride étanche fixe la ligne du berceau à la roche. Le câble plonge vers le large sous une grille de visite, près du treuil et de la plaque lettrée. Le robot peut lire la plaque avec E et retrouver son texte dans le carnet. La couverture de la falaise s'efface quand le robot entre et les collisions du plateau restent actives autour du puits.
+
+**Chaussée et anciens corps** : des dalles de calcaire chanfreinées et une pente raccordent le quai à l'estran. Les trois balises ont chacune un cercle de pierres. À mi-chaussée, le robot effondré repose sur le côté, avec du varech accroché au poignet, à la coque et aux pieds. Sur la galerie, un autre corps reprend la pose assise du robot jardinier et regarde le large, au nord-ouest. Les deux corps sont du décor à ce stade.
+
+**Jardin et banc d’Iris** : le jardin occupe le rebord nord-ouest du plateau, entre le Phare et le départ vers le cap Ouest. Trois bacs de bois contiennent de la terre craquelée. L’arrosoir en cuivre verdi est resté auprès de l’arbre rose mort, aux racines apparentes. Depuis le sentier devant le banc, E fait asseoir le robot. La caméra se pose au cap 318°, comme le cran sans nom de la lunette. La première transition prend plus de temps. E ou Échap rend la marche au robot.
 > Le dev ne reprend qu'une fois tous les documents des îles terminés.
 
 **Phase J : l'archipel (commun à toutes les îles)**

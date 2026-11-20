@@ -1,7 +1,7 @@
 """Île 2 — la maison du quai (ILE_02_PHARE.md §3 « La maison du quai », décidé le 2026-11-19).
 
 Une seule pièce de gardiens, à l'échelle des Semeurs (2,5-3 m) : le robot (1,90 m) y est petit.
-Lancer dans Blender :  exec(open(r"...\\tools\\blender\\maison_quai.py", encoding="utf-8").read())
+Lancer dans Blender :  import runpy; runpy.run_path(r"...\\tools\\blender\\maison_quai.py")
 Crée la scène « ILE02_maison_quai » et exporte assets/models/ile02/maison_quai.glb.
 
 Repère : origine = centre du sol intérieur, au niveau du terrain du port. Z vers le haut.
@@ -12,15 +12,14 @@ Objets exportés (suffixe « -col » = collision créée à l'import par Godot) 
   murs-col, socle-col, mobilier-col, Decor, Cadres, Toit (+ pignons, charpente, cheminée),
   Coupe (le haut du mur sud, côté caméra : s'efface avec le toit, vue en coupe), AiguilleMaree,
   et des repères (Empties) : Centre, Porte, RepereLanterne, RepereCahier, RepereDessin, RepereHorloge.
-Les objets « héros » (poêle, lanterne, horloge, cirés, cahier) seront remplacés par Meshy : ici, ce sont
-des versions simples à la bonne place et à la bonne taille.
 """
 import bpy, bmesh, math, random, os
 from math import cos, sin, tau, pi
-from mathutils import Vector
+from mathutils import Matrix, Vector
 
-RACINE = r"C:\Users\adrie\OneDrive\Bureau\petite-planete-v5"
+RACINE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SORTIE = os.path.join(RACINE, "assets", "models", "ile02", "maison_quai.glb")
+SOURCES = os.path.join(RACINE, "tools", "blender", "sources", "maison_quai")
 NOM_SCENE = "ILE02_maison_quai"
 rng = random.Random(11)
 
@@ -91,6 +90,10 @@ CADRAN_BAS = mat("mq_cadran_basse", "#7FC0C8")
 CADRAN_HAUT = mat("mq_cadran_haute", "#3E7FA6")
 AIGUILLE = mat("mq_aiguille", "#3B3436", 0.5)
 DESSIN = [mat("mq_crayon_rose", "#E88FA8"), mat("mq_crayon_bleu", "#5FA8D3"), mat("mq_crayon_jaune", "#F0C24B")]
+BLEU = mat("mq_peinture_bleu_gris", "#668B91")
+SEL = mat("mq_peinture_passee", "#ADC5BE")
+EMAIL = mat("mq_email_petrole", "#365860", 0.38)
+FOYER = mat("mq_foyer_froid", "#30292B")
 
 
 class Piece:
@@ -167,6 +170,45 @@ def repere(nom, x, y, z):
     o.location = (x, y, z)
     sc.collection.objects.link(o)
     return o
+
+
+def barre(p, a, b, rayon, m, n=8):
+    """Profil facetté entre deux points, pour les ferrures et cordages."""
+    a, b = Vector(a), Vector(b)
+    rotation = (b - a).to_track_quat("Z", "Y")
+    profil = [rotation @ Vector((rayon * cos(tau * k / n), rayon * sin(tau * k / n), 0)) for k in range(n)]
+    anneaux = [[p.bm.verts.new(point + v) for v in profil] for point in (a, b)]
+    bas, haut = anneaux
+    indice = p.idx(m)
+    for k in range(n):
+        j = (k + 1) % n
+        p.bm.faces.new((bas[k], bas[j], haut[j], haut[k])).material_index = indice
+    p.bm.faces.new(bas[::-1]).material_index = indice
+    p.bm.faces.new(haut).material_index = indice
+
+
+def accessoire(p, nom, centre_sol, dimensions, orientation, teinte):
+    """Ajuste un maillage source à sa place et applique les aplats du décor."""
+    avant = set(sc.objects)
+    bpy.ops.import_scene.gltf(filepath=os.path.join(SOURCES, nom + ".glb"))
+    importes = set(sc.objects) - avant
+    rotation = Matrix.Rotation(orientation, 3, "Z")
+    maillages = [(o, [rotation @ (o.matrix_world @ v.co) for v in o.data.vertices])
+                 for o in sorted(importes, key=lambda objet: objet.name) if o.type == "MESH"]
+    points = [v for _, sommets in maillages for v in sommets]
+    bas = Vector(tuple(min(v[i] for v in points) for i in range(3)))
+    haut = Vector(tuple(max(v[i] for v in points) for i in range(3)))
+    taille = haut - bas
+    origine = Vector(centre_sol)
+    for objet, sommets in maillages:
+        normalises = [Vector(tuple((v[i] - bas[i]) / taille[i] for i in range(3))) for v in sommets]
+        verts = [p.bm.verts.new(origine + Vector(((v.x - 0.5) * dimensions[0], (v.y - 0.5) * dimensions[1],
+                                                  v.z * dimensions[2]))) for v in normalises]
+        for face in objet.data.polygons:
+            centre = sum((normalises[i] for i in face.vertices), Vector()) / len(face.vertices)
+            p.bm.faces.new([verts[i] for i in face.vertices]).material_index = p.idx(teinte(centre))
+    for o in importes:
+        bpy.data.objects.remove(o, do_unlink=True)
 
 
 murs = Piece("murs-col")
@@ -390,11 +432,57 @@ for sy in (-1, 1):
         boite(toit, x + 0.01, x + l - 0.01, min(y0, y1), max(y0, y1), zt - 0.05, zt + hz, BOIS if k % 2 else BOIS_F)
         x += l
         k += 1
+for s in (-1, 1):
+    barre(toit, (s * xe, -ye, zt + 0.04), (0, -ye, zt + FAITAGE + 0.06), 0.16, BOIS_F, 4)
+# Médaillon des gardiens, en émail et laiton, au centre du pignon du port.
+cylindre(toit, 0, -IY - EP - 0.01, zt + 1.13, 0.62, 0.095, EMAIL, 12, "y")
+cylindre(toit, 0, -IY - EP - 0.09, zt + 1.13, 0.51, 0.035, LAITON, 12, "y")
+cylindre(toit, 0, -IY - EP - 0.12, zt + 1.13, 0.44, 0.026, BLEU, 12, "y")
+for k in range(4):
+    a = k * pi / 2
+    x, z = cos(a), sin(a)
+    barre(toit, (0, -IY - EP - 0.154, zt + 1.13),
+          (0.34 * x, -IY - EP - 0.154, zt + 1.13 + 0.34 * z), 0.049, SEL if k != 1 else LAITON, 4)
+
 # cheminée en pierre, au-dessus du poêle (coin sud-ouest)
 CHEM = (-2.6, -3.5)
 for k in range(6):
     boite_c(toit, CHEM[0], CHEM[1], zt + 0.6 + k * 0.45, 0.95, 0.95, 0.43, rng.choice(PIERRES))
 boite_c(toit, CHEM[0], CHEM[1], zt + 0.6 + 6 * 0.45, 1.1, 1.1, 0.12, SOCLE)
+dessus_cheminee = zt + 3.42
+for dx in (-0.33, 0.33):
+    for dy in (-0.33, 0.33):
+        boite_c(toit, CHEM[0] + dx, CHEM[1] + dy, dessus_cheminee, 0.13, 0.13, 0.25, FONTE)
+boite_c(toit, *CHEM, dessus_cheminee + 0.25, 1.03, 1.03, 0.12, EMAIL)
+
+# Marquise du seuil et enseigne émaillée au-dessus du passage.
+# La marquise suit le toit pendant la coupe.
+XF = IX + EP
+for y in (pc - 1.14, pc + 1.14):
+    barre(toit, (XF, y, 2.84), (XF + 0.87, y, 3.42), 0.065, BOIS_F, 4)
+    barre(toit, (XF, y, 3.84), (XF + 1.05, y, 3.43), 0.085, BOIS_F, 4)
+for k in range(8):
+    y = pc - 1.22 + 0.35 * k
+    barre(toit, (XF - 0.04, y, 3.86), (XF + 1.08, y, 3.44), 0.18, BLEU if k % 3 else SEL, 4)
+boite_c(toit, XF + 1.08, pc, 3.27, 0.16, 2.84, 0.19, EMAIL)
+boite_c(cadres, XF + 0.09, pc, 3.2, 0.1, 0.68, 0.42, EMAIL)
+for k, longueur in enumerate((0.37, 0.49, 0.37)):
+    z = 3.31 + 0.09 * k
+    barre(cadres, (XF + 0.15, pc - longueur / 2, z), (XF + 0.15, pc + longueur / 2, z), 0.018, LAITON)
+
+# Volets à lames et ferrures lisibles depuis le chemin et le large.
+cx, larg, bas, haut = FENETRE_N[1:]
+for s in (-1, 1):
+    bord = cx + s * (larg / 2 + 0.1)
+    for k in range(6):
+        x = bord + s * (k + 0.5) * larg / 12
+        boite_c(cadres, x, IY + EP + 0.103, bas + 0.04, larg / 12 - 0.02, 0.035, haut - bas - 0.08,
+                BLEU if k in (0, 5) else VOLET)
+    for z in (bas + 0.26, haut - 0.34):
+        boite_c(cadres, bord + s * larg / 4, IY + EP + 0.131, z, larg / 2, 0.045, 0.09, EMAIL)
+for dx in (-0.9, 0.9):
+    barre(cadres, (cx + dx, IY + EP + 0.12, bas - 0.12), (cx + dx, IY + EP + 0.48, bas - 0.28), 0.065, BOIS_F, 4)
+boite_c(cadres, cx, IY + EP + 0.34, bas - 0.18, larg + 0.25, 0.36, 0.095, BOIS)
 
 # ---------------------------------------------------------------- le mobilier (à l'échelle des Semeurs)
 # la table, à hauteur de poitrine du robot (1,40 m), et ses deux bancs
@@ -441,14 +529,16 @@ for x in (AX0, AX1 - 0.12):   # montants
     boite(decor, x, x + 0.12, AY0, AY0 + 0.12, SOL, 0.95, BOIS_F)
 # le poêle en fonte (coin sud-ouest), sa bouilloire et son tuyau jusqu'à la cheminée
 SX, SY = CHEM
-boite_c(mobilier, SX, SY, SOL, 1.5, 1.1, 0.25, FONTE)
-boite_c(mobilier, SX, SY, SOL + 0.25, 1.4, 1.0, 1.05, FONTE)
-boite_c(decor, SX, SY, SOL + 1.3, 1.55, 1.15, 0.08, FONTE)
-boite_c(decor, SX + 0.71, SY, SOL + 0.45, 0.02, 0.6, 0.5, LAITON)   # porte du foyer
-cylindre(decor, SX - 0.2, SY + 0.2, SOL + 1.38, 0.16, H - SOL - 1.38 + 0.1, FONTE, 8)
-cylindre(decor, SX + 0.35, SY - 0.15, SOL + 1.38, 0.22, 0.32, CUIVRE, 8)                           # bouilloire
-cylindre(decor, SX + 0.35, SY - 0.15, SOL + 1.7, 0.08, 0.1, CUIVRE, 6)
-boite(decor, SX - 0.6, SX + 0.4, SY + 0.7, SY + 1.0, SOL, 0.5, BOIS_F)                             # bûches
+boite_c(decor, SX + 0.12, SY, SOL, 1.72, 1.34, 0.06, SOCLE)
+accessoire(mobilier, "poele", (SX, SY, SOL + 0.05), (1.49, 1.12, 1.82), pi / 2,
+           lambda v: CUIVRE if v.z > 0.80 else FONTE if v.z < 0.19 else EMAIL)
+cylindre(decor, SX - 0.46, SY + 0.23, SOL + 1.38, 0.13, 1.86, FONTE, 10)
+barre(decor, (SX - 0.46, SY + 0.23, SOL + 3.20), (SX, SY, SOL + 3.72), 0.13, FONTE, 10)
+cylindre(decor, SX, SY, SOL + 3.68, 0.13, H - SOL - 3.58, FONTE, 10)
+for k in range(6):
+    y = SY + 0.74 + (k % 3) * 0.13
+    z = SOL + 0.085 + (k // 3) * 0.14
+    barre(decor, (SX - 0.47, y, z), (SX + 0.34 + (k % 2) * 0.10, y, z), 0.078, BOIS_F, 6)
 # étagères (mur est, au nord : le mur sud s'efface en vue de coupe) : bocaux, pots
 for z in (1.7, 2.6):
     boite(decor, IX - 0.45, IX - 0.02, 2.3, 4.4, z, z + 0.07, BOIS)
@@ -464,22 +554,12 @@ boite_c(mobilier, 3.0, -3.95, SOL, 1.0, 1.0, 0.9, BOIS, BOIS_F)
 boite_c(mobilier, 3.05, -3.9, SOL + 0.9, 0.75, 0.75, 0.6, BOIS_F, BOIS)
 # patères, cirés jaunes et bottes géantes (mur est, au nord de la porte)
 boite(decor, IX - 0.12, IX - 0.02, -0.7, 2.0, 2.85, 3.0, BOIS_F)
-for k, y in enumerate((-0.3, 0.6, 1.5)):
+for y in (-0.30, 0.65, 1.5):
     boite(decor, IX - 0.3, IX - 0.05, y - 0.04, y + 0.04, 2.9, 2.96, BOIS_F)
-    if k < 2:   # deux cirés pendus (un manteau long, en prisme)
-        bm = decor.bm
-        pts = [(IX - 0.1, y - 0.45, 1.0), (IX - 0.1, y + 0.45, 1.0), (IX - 0.55, y + 0.4, 1.0), (IX - 0.55, y - 0.4, 1.0)]
-        top = [(IX - 0.1, y - 0.2, 2.9), (IX - 0.1, y + 0.2, 2.9), (IX - 0.32, y + 0.2, 2.9), (IX - 0.32, y - 0.2, 2.9)]
-        vb = [bm.verts.new(c) for c in pts]
-        vt = [bm.verts.new(c) for c in top]
-        i = decor.idx(CIRE)
-        for j in range(4):
-            bm.faces.new((vb[j], vb[(j + 1) % 4], vt[(j + 1) % 4], vt[j])).material_index = i
-        bm.faces.new(list(reversed(vb))).material_index = i
-        bm.faces.new(vt).material_index = i
-for k, y in enumerate((-0.2, 0.45)):
-    boite(mobilier, IX - 0.85, IX - 0.25, y - 0.22, y + 0.22, SOL, 0.75, BOTTE)
-    boite(decor, IX - 1.05, IX - 0.25, y - 0.22, y + 0.22, SOL, 0.22, BOTTE)
+accessoire(decor, "cires", (IX - 0.32, 0.16, 0.97), (0.51, 1.65, 1.98), -pi / 2,
+           lambda v: CIRE)
+accessoire(mobilier, "bottes", (IX - 0.62, 0.10, SOL), (0.78, 0.99, 0.79), -pi / 2,
+           lambda v: FOYER if v.z < 0.13 else BOTTE)
 # le tapis sous la table, la carte marine (mur ouest, au sud de la fenêtre), le cahier, les tasses
 boite(decor, TX - 1.9, TX + 1.9, TY - 2.2, TY + 2.2, SOL, SOL + 0.015, TAPIS)
 boite(decor, -IX + 0.01, -IX + 0.03, -3.6, -2.2, 1.7, 2.8, CARTE)
@@ -518,10 +598,20 @@ LAX, LAY = 2.5, 3.4
 cylindre(mobilier, LAX, LAY, SOL, 0.45, 0.25, SOCLE, 8)
 # (la prise est celle du modèle de lanterne, posé dans Godot)
 
-# ---------------------------------------------------------------- dehors : un banc, une bouée, des casiers
-boite_c(mobilier, IX + EP + 0.9, 1.6, 0.0, 0.6, 2.6, 0.7, BOIS, BOIS)
-boite_c(mobilier, IX + EP + 0.8, -4.2, 0.0, 1.1, 0.9, 0.7, BOIS_F, BOIS)   # casier
-boite_c(decor, IX + EP + 0.75, -4.15, 0.7, 0.9, 0.8, 0.5, BOIS, BOIS_F)
+# ---------------------------------------------------------------- dehors : banc et caisses des gardiens
+for y in (0.60, 2.60):
+    boite_c(mobilier, XF + 0.9, y, 0.0, 0.49, 0.23, 0.59, SOCLE)
+for k in range(3):
+    boite_c(mobilier, XF + 0.69 + k * 0.21, 1.6, 0.59, 0.18, 2.6, 0.11, BOIS)
+for x, y, z, sx, sy, sz, teinte in (
+    (XF + 0.8, -4.2, 0.0, 1.1, 0.9, 0.7, BOIS_F),
+    (XF + 0.75, -4.15, 0.7, 0.9, 0.8, 0.5, BOIS),
+):
+    boite_c(mobilier if z == 0.0 else decor, x, y, z, sx, sy, sz, teinte)
+    for dy in (-0.34 * sy, 0.34 * sy):
+        boite_c(decor, x + sx / 2 + 0.013, y + dy, z + 0.03, 0.04, 0.11, sz - 0.06, BOIS)
+    for dz in (0.14, 0.31):
+        boite_c(decor, x + sx / 2 + 0.001, y, z + dz, 0.005, sy - 0.05, 0.018, BOIS_F)
 
 # ---------------------------------------------------------------- objets, repères, export
 objets = []

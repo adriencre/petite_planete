@@ -13,8 +13,12 @@
 [ext_resource type="PackedScene" path="res://assets/models/pierre_soleil_meshy.glb" id="modele_pierre"]
 [ext_resource type="Script" path="res://scripts/pierre_soleil.gd" id="script_pierre"]
 [ext_resource type="PackedScene" path="res://assets/models/ancien_corps.glb" id="modele_corps"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/chaussee_estran.glb" id="dalles_estran"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/varech_ancien_corps.glb" id="varech_corps"]
 [ext_resource type="Texture2D" path="res://assets/affiches/carte_archipel.svg" id="carte_archipel"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/epave_ravitailleur.tscn" id="modele_epave"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/grottes_crypte.tscn" id="grottes_crypte"]
+[ext_resource type="PackedScene" path="res://scenes/ile02/jardin_iris.tscn" id="jardin_iris"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/barque_du_quai.tscn" id="barque_du_quai"]
 [ext_resource type="Script" uid="uid://du5i4605732ws" path="res://scripts/lanterne_fleur.gd" id="7_q2ixi"]
 [ext_resource type="Script" uid="uid://c7hrsv5akempp" path="res://scripts/brume_batterie.gd" id="9_m8apa"]
@@ -29,6 +33,7 @@
 [ext_resource type="Script" uid="uid://cl10xpccufbht" path="res://scripts/maquette.gd" id="sc_maquette"]
 [ext_resource type="Shader" uid="uid://7qouqxephsnd" path="res://shaders/terrain_facettes.gdshader" id="s_facettes"]
 [ext_resource type="Shader" uid="uid://bu0ebrb5bkj3b" path="res://shaders/vision.gdshader" id="s_vision"]
+[ext_resource type="Script" path="res://scripts/guidage.gd" id="guidage"]
 
 [sub_resource type="ShaderMaterial" id="facettes_mat"]
 render_priority = 0
@@ -47,33 +52,8 @@ shader_parameter/hauteur_niveau = 2.5
 shader_parameter/hauteur_sable = 1.0
 shader_parameter/epaisseur_mousse = 0.3
 
-[sub_resource type="StandardMaterial3D" id="m_sombre"]
-albedo_color = Color(0.12, 0.11, 0.15, 1)
-
-[sub_resource type="StandardMaterial3D" id="m_bois"]
-albedo_color = Color(0.58, 0.44, 0.33, 1)
-
-[sub_resource type="BoxMesh" id="banc"]
-material = SubResource("m_bois")
-size = Vector3(3, 0.6, 1.1)
-
-[sub_resource type="StandardMaterial3D" id="m_mort"]
-albedo_color = Color(0.62, 0.5, 0.52, 1)
-
-[sub_resource type="CylinderMesh" id="arbre_mort"]
-material = SubResource("m_mort")
-top_radius = 0.08
-bottom_radius = 0.25
-height = 3.2
-radial_segments = 5
-
-[sub_resource type="StandardMaterial3D" id="m_gris"]
-albedo_color = Color(0.62, 0.62, 0.68, 1)
-roughness = 0.9
-
-[sub_resource type="BoxMesh" id="ancien_corps"]
-material = SubResource("m_gris")
-size = Vector3(0.8, 0.5, 1.9)
+[sub_resource type="BoxShape3D" id="collision_corps_chaussee"]
+size = Vector3(0.76, 0.37, 1.12)
 
 [sub_resource type="StandardMaterial3D" id="m_flaque"]
 albedo_color = Color(0.28, 0.58, 0.5, 1)
@@ -86,10 +66,6 @@ top_radius = 2.2
 bottom_radius = 2.2
 height = 0.05
 radial_segments = 10
-
-[sub_resource type="BoxMesh" id="grotte"]
-material = SubResource("m_sombre")
-size = Vector3(3, 3.2, 0.6)
 
 [sub_resource type="ShaderMaterial" id="vision_mat"]
 shader = ExtResource("s_vision")
@@ -121,8 +97,8 @@ carte = ". . . . . . . . . . . . . . .
 . . . . . . . . _v . . . . . .
 . . . . . . . . 1v . . . . . .
 . . . . . . 2 2 2 2 . . . . .
-. 2O 2 2b 2b 2 2 3F 3 2 1< 1E _< . .
-. 2 2 . . 2 2 3J 3 2 1 1 _S . .
+. 2O 2 2b 2b 2J 2 3F 3 2 1< 1E _< . .
+. 2 2 . . 2 2 3 3 2 1 1 _S . .
 . . . . . 2 2 2 2^ 2 . . . . .
 . . . . . _G 1^ . . . . . . . .
 . . . . . _ _b^ . . . . . . . .
@@ -163,22 +139,15 @@ proba_rocher = 0.0
 chemin = "PQYGFJ"
 cailloux_par_case = 0
 suit_la_maree = true
+abri_maree = Rect2(-16.24, -9.45, 9.72, 15.37)
 
 [node name="Monde" type="Node3D" parent="." unique_id=994186121]
 
 [node name="Phare" parent="Monde" unique_id=1804327501 instance=ExtResource("phare_ile_02")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -10.5)
 
-[node name="BancIris" type="Node3D" parent="Monde" unique_id=1580987435]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -3.5)
-
-[node name="Banc" type="MeshInstance3D" parent="Monde/BancIris" unique_id=2106906249]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.3, 1.2)
-mesh = SubResource("banc")
-
-[node name="ArbreRoseMort" type="MeshInstance3D" parent="Monde/BancIris" unique_id=977993216]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.6, -0.5)
-mesh = SubResource("arbre_mort")
+[node name="JardinIris" parent="Monde" unique_id=1580987435 instance=ExtResource("jardin_iris")]
+position = Vector3(-12, 5.58, -10.5)
 
 [node name="CapOuest" type="Node3D" parent="Monde" unique_id=852744214]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 5.6, -10.5)
@@ -246,15 +215,26 @@ script = ExtResource("script_pierre")
 distance_activation = 2.4
 hauteur_rayon = 2.6
 
-[node name="EntreeGrottes" type="MeshInstance3D" parent="Monde" unique_id=2094456805]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1.7, 7.3)
-mesh = SubResource("grotte")
+[node name="EntreeGrottes" parent="Monde" unique_id=2094456805 instance=ExtResource("grottes_crypte")]
+position = Vector3(-14, 0.24, 7.3)
+racine_coupe_exterieure = NodePath("../../Maquette")
+motif_coupe_exterieure = "CouvertureGrottes_*"
 
 [node name="Chaussee" type="Node3D" parent="Monde" unique_id=512618882]
 
-[node name="AncienCorpsChaussee" type="MeshInstance3D" parent="Monde/Chaussee" unique_id=135714011]
-transform = Transform3D(0.5, 0, -0.866, 0, 1, 0, 0.866, 0, 0.5, -6, 0.35, 30.5)
-mesh = SubResource("ancien_corps")
+[node name="DallesEstran" parent="Monde/Chaussee" instance=ExtResource("dalles_estran")]
+
+[node name="AncienCorpsChaussee" type="StaticBody3D" parent="Monde/Chaussee" unique_id=135714011]
+position = Vector3(-4.87, 0.205, 31.7)
+rotation = Vector3(0, 3.27, 0)
+
+[node name="Corps" parent="Monde/Chaussee/AncienCorpsChaussee" instance=ExtResource("modele_corps")]
+
+[node name="Varech" parent="Monde/Chaussee/AncienCorpsChaussee" instance=ExtResource("varech_corps")]
+
+[node name="Collision" type="CollisionShape3D" parent="Monde/Chaussee/AncienCorpsChaussee"]
+position = Vector3(-0.42, 0.075, 0.82)
+shape = SubResource("collision_corps_chaussee")
 
 [node name="Balise1" parent="Monde/Chaussee" unique_id=533549256 instance=ExtResource("6_0v5bu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 0.1, 18)
@@ -360,6 +340,9 @@ maquette = NodePath("../Maquette")
 [node name="EffetsMaree" parent="MareeEstran" unique_id=461463197 instance=ExtResource("14_l73cm")]
 
 [node name="HudBatterie" parent="." unique_id=877037945 instance=ExtResource("11_urcin")]
+
+[node name="Guidage" type="Node3D" parent="."]
+script = ExtResource("guidage")
 
 [node name="ZonesLumiere" type="MeshInstance3D" parent="." unique_id=792522991]
 visible = false

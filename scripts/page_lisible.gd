@@ -45,6 +45,8 @@ var _voile: ColorRect
 
 func _ready() -> void:
 	add_to_group("interactif")
+	if ramasser:
+		add_to_group("a_ramasser")
 	add_to_group("pages_lisibles")
 	add_to_group("sauvegarde")
 	if garder_cle_sans_image and image:

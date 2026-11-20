@@ -12,6 +12,7 @@ uniform sampler2D profondeur : hint_depth_texture, filter_linear;
 uniform sampler2D cote : filter_linear, repeat_disable;
 // xy = coin de la carte (x, z), zw = sa taille (m).
 uniform vec4 cote_rect = vec4(-60.0, -54.0, 120.0, 108.0);
+uniform vec4 abri_maree = vec4(0.0);
 
 uniform vec3 eau_profonde : source_color = vec3(0.30, 0.66, 0.79);
 uniform vec3 eau_claire : source_color = vec3(0.58, 0.90, 0.86);
@@ -28,6 +29,7 @@ uniform float vitesse_cote = 0.35;
 
 varying vec3 monde;
 varying float pres_cote;
+varying vec2 plan_local;
 
 float onde(vec3 w, float t) {
 	return sin(w.x * 0.35 + t) * 0.5 + sin(w.z * 0.42 + t * 1.3) * 0.35 + sin((w.x + w.z) * 0.8 - t * 1.7) * 0.15;
@@ -40,6 +42,7 @@ float lire_cote(vec2 xz) {
 }
 
 void vertex() {
+	plan_local = VERTEX.xz;
 	vec3 w = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	pres_cote = lire_cote(w.xz);
 	// la houle s'apaise près du rivage
@@ -48,6 +51,9 @@ void vertex() {
 }
 
 void fragment() {
+	if (all(greaterThanEqual(plan_local, abri_maree.xy)) && all(lessThan(plan_local, abri_maree.zw))) {
+		discard;
+	}
 	// facettes : une normale plate par triangle
 	NORMAL = normalize(cross(dFdx(VERTEX), dFdy(VERTEX)));
 

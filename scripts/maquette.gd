@@ -190,6 +190,8 @@ func _terrain() -> MeshInstance3D:
 @export_group("Mer")
 ## Île 2 : en jeu, la mer monte et descend avec la marée de l'autoload HorlogeMonde.
 @export var suit_la_maree: bool = false
+## Rectangle local X/Z abrité derrière le seuil maçonné des grottes.
+@export var abri_maree := Rect2()
 @export var taille_mer: float = 520.0
 @export var cases_mer: int = 208
 ## Marge de mer (en cases) autour de la grille, dans la carte des côtes.
@@ -212,6 +214,8 @@ func _mer() -> void:
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var mat := ShaderMaterial.new()
 	mat.shader = MER
+	mat.set_shader_parameter("abri_maree", Vector4(abri_maree.position.x, abri_maree.position.y,
+			abri_maree.end.x, abri_maree.end.y))
 	# la carte des côtes
 	var w := (colonnes + marge_cote * 2) * finesse_cote
 	var h := (lignes + marge_cote * 2) * finesse_cote
@@ -229,6 +233,11 @@ func _mer() -> void:
 	mat.set_shader_parameter("cote_rect", Vector4(-(colonnes * 0.5 + marge_cote) * t, -(lignes * 0.5 + marge_cote) * t, (colonnes + marge_cote * 2) * t, (lignes + marge_cote * 2) * t))
 	mi.material_override = mat
 	add_child(mi)
+
+
+func est_abrite_maree(point: Vector3) -> bool:
+	var local := to_local(point)
+	return abri_maree.has_point(Vector2(local.x, local.z))
 
 
 ## Flou en deux passes (horizontal puis vertical) : la carte des côtes devient un halo doux.

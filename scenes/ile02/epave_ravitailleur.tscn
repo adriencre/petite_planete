@@ -28,6 +28,7 @@ size = Vector3(1.04, 0.72, 2.62)
 
 [node name="EpaveRavitailleur" type="Node3D"]
 script = ExtResource("1_epave")
+metadata/invite_locale = true
 
 [node name="Modele" parent="." instance=ExtResource("2_coque")]
 

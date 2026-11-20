@@ -6,6 +6,9 @@ extends Node3D
 ## Noms des nœuds à effacer (cherchés dans tout le bâtiment, ex. le .glb importé).
 @export var a_effacer: PackedStringArray = ["Toit", "Coupe"]
 @export var duree_fondu: float = 0.6
+## Pièces de terrain importées hors du bâtiment, s'il est creusé dans la falaise.
+@export var racine_coupe_exterieure: NodePath
+@export var motif_coupe_exterieure: String
 
 var _pieces: Array[GeometryInstance3D] = []
 var _fondu: Tween
@@ -19,6 +22,11 @@ func _ready() -> void:
 			_pieces.append(n as GeometryInstance3D)
 		elif n:
 			for g in n.find_children("*", "GeometryInstance3D", true, false):
+				_pieces.append(g as GeometryInstance3D)
+	if not racine_coupe_exterieure.is_empty() and not motif_coupe_exterieure.is_empty():
+		var racine := get_node_or_null(racine_coupe_exterieure)
+		if racine:
+			for g in racine.find_children(motif_coupe_exterieure, "GeometryInstance3D", true, false):
 				_pieces.append(g as GeometryInstance3D)
 	var zone := get_node_or_null("Interieur") as Area3D
 	if zone:

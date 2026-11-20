@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/ile02/jardin_iris.glb" id="1_modele"]
+[ext_resource type="Script" path="res://scripts/banc_iris.gd" id="2_banc"]
+
+[sub_resource type="BoxShape3D" id="banc"]
+size = Vector3(2.38, 0.81, 0.87)
+
+[sub_resource type="CylinderShape3D" id="tronc"]
+height = 1.45
+radius = 0.34
+
+[sub_resource type="BoxShape3D" id="bac"]
+size = Vector3(2.14, 0.55, 1.4)
+
+[node name="JardinIris" type="Node3D"]
+script = ExtResource("2_banc")
+
+[node name="Modele" parent="." instance=ExtResource("1_modele")]
+
+[node name="Assise" type="Marker3D" parent="."]
+position = Vector3(-1.02, 0.855, -1.72)
+rotation = Vector3(0, 0.7330383, 0)
+
+[node name="VueDuBanc" type="Marker3D" parent="."]
+position = Vector3(-1.02, 1.50, -1.72)
+rotation = Vector3(0, 0.7330383, 0)
+
+[node name="AppuiDebout" type="Marker3D" parent="."]
+position = Vector3(-1.77, 0.035, -2.55)
+
+[node name="Collisions" type="StaticBody3D" parent="."]
+
+[node name="Banc" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(-1.02, 0.515, -1.72)
+rotation = Vector3(0, -2.408554, 0)
+shape = SubResource("banc")
+
+[node name="Tronc" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(3.12, 0.77, -1.83)
+shape = SubResource("tronc")
+
+[node name="BacOuest" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(1.70, 0.34, -0.06)
+rotation = Vector3(0, 0.12, 0)
+shape = SubResource("bac")
+
+[node name="BacEst" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(4.36, 0.34, 0.05)
+rotation = Vector3(0, -0.14, 0)
+shape = SubResource("bac")
+
+[node name="BacDuFond" type="CollisionShape3D" parent="Collisions"]
+position = Vector3(4.91, 0.34, -1.83)
+rotation = Vector3(0, 0.22, 0)
+shape = SubResource("bac")

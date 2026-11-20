@@ -99,13 +99,16 @@ func _process(delta: float) -> void:
 		var p := _point(o)
 		var d := Vector2(p.x - moi.x, p.z - moi.z).length()
 		var cible := 0.0
+		var a_ramasser := o.is_in_group("a_ramasser")
 		if etat == 2:
 			cible = 1.0
-			if d < d_meilleur:
+			if d < d_meilleur and not o.has_meta("invite_locale"):
 				d_meilleur = d
 				meilleur = o
 		elif etat == 1:
-			cible = 0.4 * clampf(inverse_lerp(distance_appel, distance_appel * 0.4, d), 0.0, 1.0)
+			var portee := minf(distance_appel, 5.5) if a_ramasser else distance_appel
+			if not a_ramasser or absf(p.y - moi.y) < 2.1:
+				cible = (0.75 if a_ramasser else 0.4) * clampf(inverse_lerp(portee, portee * 0.4, d), 0.0, 1.0)
 		_lueur(o, p, cible, delta)
 	# les objets disparus
 	for o in _effets.keys():
@@ -129,9 +132,12 @@ func _lueur(o: Node3D, p: Vector3, cible: float, delta: float) -> void:
 	e.force = f
 	var racine := e.racine as Node3D
 	racine.global_position = p
-	var souffle := 0.7 + 0.3 * sin(_t * 2.4 + float(o.get_instance_id() % 7))
-	(e.mat as StandardMaterial3D).albedo_color = Color(couleur.r, couleur.g, couleur.b, 0.5 * f * souffle)
-	(e.halo as Node3D).scale = Vector3.ONE * (0.8 + 0.4 * f)
+	var a_ramasser := o.is_in_group("a_ramasser")
+	var souffle := 0.78 + 0.22 * sin(_t * 2.4 + float(o.get_instance_id() % 7))
+	var intensite := 1.7 if a_ramasser else 1.0
+	(e.mat as StandardMaterial3D).albedo_color = Color(couleur.r * intensite, couleur.g * intensite,
+		couleur.b * intensite, (0.78 if a_ramasser else 0.5) * f * souffle)
+	(e.halo as Node3D).scale = Vector3.ONE * (0.8 + 0.4 * f) * (1.30 if a_ramasser else 1.0)
 	var grains := e.grains as CPUParticles3D
 	grains.emitting = f > 0.08
 	(e.grains_mat as StandardMaterial3D).albedo_color = Color(1, 1, 1, clampf(f * 1.3, 0.2, 1.0))
@@ -191,7 +197,7 @@ func _creer_lueur() -> Dictionary:
 func _placer_touche(cible: Node3D, delta: float) -> void:
 	var appris := _utilisations >= utilisations_pour_apprendre
 	var montrer := cible != null
-	if montrer and appris:
+	if montrer and appris and not cible.is_in_group("a_ramasser"):
 		var immobile := Vector2(_joueur.velocity.x, _joueur.velocity.z).length() < 0.2
 		_attente = _attente + delta if immobile else 0.0
 		montrer = _attente >= delai_rappel

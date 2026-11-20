@@ -58,7 +58,7 @@ func _physics_process(delta: float) -> void:
 		return
 	var p := _joueur.global_position
 	var mer: float = _horloge.call("niveau_mer")
-	var eau := mer - p.y
+	var eau := -1.0 if maquette.call("est_abrite_maree", p) else mer - p.y
 	var k: Dictionary = maquette.call("_case_a", p)
 	# mémoriser le dernier endroit sûr : au sol, sur une case de terre, et au sec MÊME à marée haute
 	# (sinon un point « sec à marée basse » devient un piège quand la mer remonte : boucle sans fin)

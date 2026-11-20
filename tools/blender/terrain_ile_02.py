@@ -2,7 +2,7 @@
 sur tools/blender/falaise_test_ile_02.py).
 
 Source unique : la carte texte du nœud Maquette de scenes/ile_02_maquette.tscn (même grille que Godot).
-Lancer dans Blender :  exec(open(r"...\\tools\\blender\\terrain_ile_02.py", encoding="utf-8").read())
+Lancer depuis le projet : blender -b --python tools/blender/terrain_ile_02.py
 Crée la scène « ILE02_terrain » et exporte assets/models/ile02/terrain_ile_02.glb.
 
 Ce qui est construit :
@@ -15,12 +15,15 @@ Ce qui est construit :
 Coordonnées : Blender X = Godot X, Blender Y = -Godot Z (l'export glTF fait la conversion).
 Objets exportés (suffixe « -col » = collision concave créée à l'import par Godot) :
   roche-col, plateaux-col, port-col, estran-col, eboulis-col, decor, escaliers, joues-col, rampes-colonly
+Le volume des grottes est creusé avant export et sa couverture de terrain sort en pièces séparées.
 """
 import bpy, bmesh, math, random, re, os
 from math import cos, sin, tau
+from pathlib import Path
 from mathutils import Vector
+from mathutils.bvhtree import BVHTree
 
-RACINE = r"C:\Users\adrie\OneDrive\Bureau\petite-planete-v5"
+RACINE = Path(__file__).resolve().parents[2]
 SCENE_GODOT = os.path.join(RACINE, "scenes", "ile_02_maquette.tscn")
 SORTIE = os.path.join(RACINE, "assets", "models", "ile02", "terrain_ile_02.glb")
 NOM_SCENE = "ILE02_terrain"
@@ -658,6 +661,160 @@ for (r, c), k in GRILLE.items():
                 caillou(decor, (*p, z - 0.05), rng.uniform(0.12, 0.3), rng.choice([BLOC, MOUILLEE, BLOC_CLAIR]), 0.6)
 
 objets = [p.objet() for p in (roche, plateaux, port, estran, eboulis, decor, escaliers, joues, rampes)]
+
+# Coordonnées Blender, communes à l'instance EntreeGrottes dans la maquette.
+# Les deux volumes suivent le couloir puis l'élargissement de la crypte.
+VIDES_GROTTES = [
+    ((-16.24, -9.00, 0.15), (-10.05, 1.27, 3.96)),
+    ((-15.55, 0.74, 0.15), (-6.52, 10.05, 5.48)),
+]
+CANIVEAU_GROTTES = ((-11.79, 3.42, -0.66), (-10.11, 9.76, 0.3))
+PUITS_GROTTES = ((-9.25, 4.35, 2.70), (-7.05, 6.65, 8.3))
+APPROCHE_GROTTES = ((-16.05, -11.35, -1.3), (-11.96, -6.22, 1.85))
+COUVERTURE_GROTTES = ((-17.48, -9.00, 1.85), (-3.18, 10.65, 9.0))
+
+
+def partager_polygone(points, axe, limite, signe):
+    """Découpe un polygone convexe par un plan, en conservant son orientation."""
+    dedans, dehors = [], []
+    a = points[-1]
+    da = signe * (a[axe] - limite)
+    for b in points:
+        db = signe * (b[axe] - limite)
+        if (da >= 0) != (db >= 0):
+            coupe = a.lerp(b, da / (da - db))
+            dedans.append(coupe)
+            dehors.append(coupe)
+        (dedans if db >= 0 else dehors).append(b)
+        a, da = b, db
+    return dedans, dehors
+
+
+def partager_boite(points, boite):
+    """Renvoie la partie contenue et les morceaux restés à l'extérieur."""
+    bas, haut = boite
+    if any(max(p[i] for p in points) < bas[i] or min(p[i] for p in points) > haut[i] for i in range(3)):
+        return [], [points]
+    restes = []
+    for i in range(3):
+        for limite, signe in ((bas[i], 1), (haut[i], -1)):
+            points, bord = partager_polygone(points, i, limite, signe)
+            if len(bord) >= 3:
+                restes.append(bord)
+            if len(points) < 3:
+                return [], restes
+    return points, restes
+
+
+def maillage_decoupe(nom, polygones, materiaux):
+    sommets, faces, indices, references = [], [], [], {}
+    for points, matiere in polygones:
+        face = []
+        for p in points:
+            cle = tuple(round(c, 6) for c in p)
+            if cle not in references:
+                references[cle] = len(sommets)
+                sommets.append(tuple(p))
+            indice = references[cle]
+            if indice not in face:
+                face.append(indice)
+        for a, b in zip(face[1:], face[2:]):
+            origine = Vector(sommets[face[0]])
+            u = Vector(sommets[a]) - origine
+            v = Vector(sommets[b]) - origine
+            if u.cross(v).length_squared > 1.0e-12:
+                faces.append((face[0], a, b))
+                indices.append(matiere)
+    mesh = bpy.data.meshes.new(nom)
+    mesh.from_pydata(sommets, [], faces)
+    for matiere in materiaux:
+        mesh.materials.append(matiere)
+    for face, indice in zip(mesh.polygons, indices):
+        face.material_index = indice
+    return mesh
+
+
+def creuser_grottes(objet, vides, detacher_couverture=True):
+    mesh = objet.data
+    mesh.calc_loop_triangles()
+    exterieur, couverture = [], []
+    for tri in mesh.loop_triangles:
+        pans = [[mesh.vertices[i].co.copy() for i in tri.vertices]]
+        for boite in vides:
+            pans = [reste for pan in pans for reste in partager_boite(pan, boite)[1]]
+        for pan in pans:
+            dessus, restes = partager_boite(pan, COUVERTURE_GROTTES) if detacher_couverture else ([], [pan])
+            exterieur.extend((reste, tri.material_index) for reste in restes)
+            if dessus:
+                couverture.append((dessus, tri.material_index))
+    materiaux = list(mesh.materials)
+    objet.data = maillage_decoupe(objet.name, exterieur, materiaux)
+    bpy.data.meshes.remove(mesh)
+    if couverture:
+        nom = "CouvertureGrottes_" + objet.name
+        couvert = bpy.data.objects.new(nom, maillage_decoupe(nom, couverture, materiaux))
+        sc.collection.objects.link(couvert)
+        return couvert
+    return None
+
+
+for objet in objets[:]:
+    nature = objet.name.split("-")[0]
+    if nature == "estran":
+        creuser_grottes(objet, [CANIVEAU_GROTTES], detacher_couverture=False)
+    elif nature in ("roche", "plateaux", "port", "eboulis", "decor"):
+        vides = VIDES_GROTTES + [CANIVEAU_GROTTES, PUITS_GROTTES]
+        if nature in ("eboulis", "decor"):
+            vides = vides + [APPROCHE_GROTTES]
+        couvert = creuser_grottes(objet, vides)
+        if couvert is not None:
+            objets.append(couvert)
+
+
+def habiller_bords_coupe():
+    """Ferme les tranches du terrain, visibles lorsque le plateau s'efface."""
+    mailles = [o.data for o in objets if o.name.startswith(("plateaux-", "roche-"))]
+    sommets, faces = [], []
+    for mesh in mailles:
+        faces.extend(tuple(i + len(sommets) for i in p.vertices) for p in mesh.polygons)
+        sommets.extend(v.co.copy() for v in mesh.vertices)
+    terrain = BVHTree.FromPolygons(sommets, faces)
+    bas, haut = COUVERTURE_GROTTES
+    parois = []
+    matieres = [MOUILLEE, STRATES[0], STRATES[1], STRATES[2]]
+    for axe in (0, 1):
+        autre = 1 - axe
+        for limite, sens in ((bas[axe], -1), (haut[axe], 1)):
+            longueur = haut[autre] - bas[autre]
+            portions = math.ceil(longueur / 0.38)
+            profil = []
+            for j in range(portions + 1):
+                co = Vector((0, 0, haut[2] + 0.1))
+                co[axe] = limite + sens * 0.028
+                co[autre] = bas[autre] + longueur * j / portions
+                sol, _, _, _ = terrain.ray_cast(co, (0, 0, -1), 10)
+                co[axe] = limite + sens * 0.012
+                co.z = max(0.20, sol.z - 0.013) if sol else 0.20
+                profil.append(co)
+            for a, b in zip(profil, profil[1:]):
+                if max(a.z, b.z) < 0.65:
+                    continue
+                for k, (plancher, plafond) in enumerate(((0.03, 0.65), (0.65, 2.05), (2.05, 3.8), (3.8, 9.0))):
+                    if max(a.z, b.z) <= plancher:
+                        break
+                    points = [Vector((p.x, p.y, min(p.z, h))) for p, h in
+                              ((a, plancher), (b, plancher), (b, plafond), (a, plafond))]
+                    if (axe == 0 and sens > 0) or (axe == 1 and sens < 0):
+                        points.reverse()
+                    parois.append((points, k))
+    nom = "TranchesGrottes"
+    tranche = bpy.data.objects.new(nom, maillage_decoupe(nom, parois, matieres))
+    sc.collection.objects.link(tranche)
+    return tranche
+
+
+objets.append(habiller_bords_coupe())
+
 for o in objets:
     if o.name.startswith("rampes"):
         o.hide_render = True
