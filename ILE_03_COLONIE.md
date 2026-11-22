@@ -54,7 +54,32 @@ La première maison visitable est au débouché du ponton, côté lagon, porte t
 
 ### La maison des couturières
 
-La grande baie de l’atelier est abritée par une toile rayée et rapiécée. Une claire-voie sépare les deux versants de sa toiture en terre cuite. Deux couturières raccommodaient les vêtements de la ville basse. Sur la table sous la fenêtre, une veste vert sauge porte une pièce corail au coude, avec une couture commencée sur un seul bord. Le même tissu répare une sangle de leur valise « Nef ». Un mannequin sur pied, des ciseaux ouverts, un tambour à broder, un coussin à épingles et des rouleaux de tissu entourent la table. Les deux couchettes occupent le fond de l’atelier.
+C’est une **boutique**, pas un logement (décidé le 2026-11-20). Deux couturières y raccommodaient les vêtements de la ville basse. Elles vivaient ailleurs, dans une maison fermée. La façade est faite de deux grandes vitrines à petits carreaux, de part et d’autre de la porte. Un store rayé corail et crème, rapiécé, court sur toute la largeur. Une enseigne pend à une potence : une bobine de fil géante avec une aiguille piquée dedans. Une claire-voie sépare les deux versants de sa toiture en terre cuite.
+
+Derrière la vitrine de gauche, sur la table de coupe, une veste vert sauge porte une pièce corail au coude, avec une couture commencée sur un seul bord. Le même tissu répare une sangle de leur valise « Nef ». Des ciseaux ouverts, un tambour à broder et un coussin à épingles entourent la table. Le mannequin sur pied est exposé dans la vitrine de droite. Au fond, un comptoir porte un mètre ruban, des coupons pliés et une boîte à boutons, sous des étagères de bobines. Une cabine d’essayage à rideau rayé, à demi tiré, occupe le coin gauche avec son miroir. Les rouleaux de tissu attendent sur le rayonnage de droite.
+
+### L’école
+
+C’est une école de village (décidé le 2026-11-20). Un long bâtiment bas, enduit pêche, sous un toit d’ardoise. Un clocheton à cloche de cuivre se dresse sur le faîte. De hautes fenêtres cintrées s’ouvrent sur la façade, de part et d’autre d’une grande porte aux deux vantaux grands ouverts. Un perron de pierre précède la porte. Au sud, un préau de bois en appentis abrite un long banc et trois cartables oubliés. Une marelle est peinte à la craie dans la cour, devant le perron.
+
+À l’intérieur, une seule grande classe. Le tableau est accroché au mur nord, sur une estrade avec le bureau du maître. La comptine y est écrite en quatre lignes de craie, avec quatre ronds de couleur : rose, bleu, or, et un rond « noir » seulement tracé à la craie. Une frise de dessins d’enfants est punaisée au-dessus du tableau. Six pupitres doubles à hauteur de Semeur, avec leurs bancs, font face au tableau. Des manteaux et des cartables pendent encore aux patères du mur ouest. Les murs nord et ouest restent debout quand le robot entre ; seuls ceux côté rue et côté caméra s’effacent.
+
+La classe a été quittée en pleine journée (décidé le 2026-11-22). Des ardoises, des craies et des cahiers ouverts traînent sur les pupitres et un banc est renversé. Sur le bureau du maître, on trouve une cloche à main et une pile de cahiers. Des feuilles mortes et de la poussière sont entrées par la porte ouverte. Le tableau est **lisible tout de suite**, à la lumière des fenêtres : on s’en approche, on lit la comptine et elle est copiée au carnet.
+
+**La place d’Aube** est le dernier pupitre, près de la fenêtre. Le bois est gravé au canif et son ardoise est couverte de petits bonshommes, ses amis cachés. Sur le pupitre, un dessin d’Aube, « ma cachette sous l’escalier », oriente vers la maison voisine (décidé le 2026-11-22).
+
+L’ancien corps du robot est assis sur un petit banc d’écolier, sur le perron, à gauche de la porte, couvert de mousse. Il tient entre ses mains **le dessin d’Aube à la fenêtre, déjà trouvé dans la maison du quai du Phare** (décidé le 2026-11-20). La première approche déclenche une **petite cinématique** : la caméra se rapproche, un temps de pause, on reconnaît le dessin, puis le carnet s’ouvre de lui-même sur la page du même dessin, copié au Phare. Aucun texte (les pensées du robot sont retirées) : le joueur fait le lien, « il a fait exactement ce que je fais » (décidé le 2026-11-22). La cloche du clocheton n’est qu’un décor.
+
+### La maison d’Aube
+
+Voisine nord de l’école (décidé le 2026-11-20). Une maison étroite et haute, enduit bleu ardoise, sous un toit raide vert sauge, pignon sur rue. En bas, une cave en pierre à hauteur du sol, sans porte. Au-dessus, un étage aux volets clos. On y monte par un escalier extérieur de pierre, côté sud, jusqu’à une porte barrée de l’intérieur. Une lucarne côté sud éclaire la chambre d’Aube, et des dessins sont collés à sa vitre. Derrière, une cour close par des murets que le robot ne peut pas sauter.
+
+**Le chemin d’Aube, en trois cachettes** :
+1. **Sous l’escalier** : on se glisse sous la volée de pierre. Une petite porte d’enfant s’ouvre dans le palier, et un passage le traverse jusqu’à la cour.
+2. **Le tuyau** : le gros tuyau des câbles de lanternes traverse la cour et bouche le soupirail de la cave. Un tronçon cassé gît dans l’herbe et laisse une ouverture à hauteur d’Aube. On remonte le tuyau jusqu’au soupirail.
+3. **La cave** : la grille du soupirail, dévissée par Aube, est posée contre le mur. Caisses, tonneaux et réserve de lanternes neuves. Un escalier de bois monte par une trémie jusqu’à l’étage.
+
+**L’étage** : côté cour, la pièce commune, avec une grande table, deux chaises de Semeurs, les deux grandes valises « Nef » des parents et dix lanternes pendues au mur. Une cloison sépare la chambre d’Aube, côté rue. Dans la chambre, un lit d’enfant, sa lanterne de chevet recouverte d’un tissu pour faire le noir, et sa petite valise « Nef » fermée près de la porte. Ses dessins sont punaisés partout. Sur le bureau, son carnet ouvert, ses crayons et la boîte à musique. La boîte à musique a une petite prise : le robot y branche son câble et elle joue le thème d’Aube (gameplay à faire).
 
 ### Les habitations
 

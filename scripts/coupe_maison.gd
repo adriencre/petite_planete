@@ -3,6 +3,8 @@ extends Area3D
 
 @export var toit: GeometryInstance3D
 @export var murs_hauts: GeometryInstance3D
+## Pièces supplémentaires à effacer (étage du dessus, plancher, couvercle d'un tuyau…).
+@export var autres: Array[NodePath] = []
 
 var _fondu: Tween
 
@@ -17,11 +19,25 @@ func _robot_sort(corps: Node3D) -> void:
 		_devoiler(false)
 
 
+func _pieces() -> Array[GeometryInstance3D]:
+	var pieces: Array[GeometryInstance3D] = []
+	for piece: GeometryInstance3D in [toit, murs_hauts]:
+		if piece:
+			pieces.append(piece)
+	for chemin in autres:
+		var piece := get_node_or_null(chemin) as GeometryInstance3D
+		if piece:
+			pieces.append(piece)
+	return pieces
+
+
 func _devoiler(interieur_visible: bool) -> void:
+	var pieces := _pieces()
+	if pieces.is_empty():
+		return
 	if _fondu:
 		_fondu.kill()
 	_fondu = create_tween().set_parallel()
-	var pieces: Array[GeometryInstance3D] = [toit, murs_hauts]
 	for piece in pieces:
 		piece.cast_shadow = (
 			GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if interieur_visible

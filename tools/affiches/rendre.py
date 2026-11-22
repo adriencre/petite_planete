@@ -40,6 +40,8 @@ DOCUMENTS = {
     "dessin_aube_brume": (960, 750),
     "dessin_aube_fenetre": (960, 690),
     "journal_quart": (960, 790),
+    "dessin_aube_escalier": (960, 690),
+    "tableau_comptine": (1320, 630),
 }
 
 

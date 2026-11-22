@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>La comptine au tableau</title>
+<link rel="stylesheet" href="commun.css">
+<style>
+/* L'ardoise de l'école (ILE_03_COLONIE.md) : toute l'image, posée sur le tableau du décor. */
+.ardoise {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 22% 30%, #ffffff16, transparent 34%),
+    radial-gradient(ellipse at 74% 64%, #ffffff12, transparent 30%),
+    radial-gradient(ellipse at 50% 50%, #47656c 40%, #3a555d 100%);
+  color: #f4f0e2;
+  font: 500 66px/1.32 'Dancing Script', cursive;
+  padding: 58px 96px;
+  overflow: hidden;
+}
+/* traces de chiffon : de grands gestes pâles */
+.chiffon { position: absolute; inset: 0; width: 100%; height: 100%; }
+.titre { font: 600 46px/1 Caveat, cursive; color: #e9dfc4; opacity: .85; margin-bottom: 18px; }
+.ligne { position: relative; white-space: nowrap; }
+.craie { filter: url(#craie); }
+.ronds { position: absolute; right: 120px; bottom: 74px; display: flex; gap: 34px; }
+.rond { width: 74px; height: 74px; border-radius: 50%; filter: url(#craie); }
+.rose { background: #f2aebb; }
+.bleu { background: #a3d4e0; }
+.or { background: #ffcf72; }
+/* le « noir » : seulement le contour, à la craie, sur l'ardoise */
+.noir { border: 6px solid #f4f0e2cc; }
+</style>
+</head>
+<body>
+<main class="ardoise">
+<svg class="chiffon" viewBox="0 0 1320 630" preserveAspectRatio="none" aria-hidden="true">
+<defs>
+<filter id="craie" x="-5%" y="-5%" width="110%" height="110%">
+<feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="7" result="bruit"/>
+<feColorMatrix in="bruit" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.6 1.25" result="trous"/>
+<feComposite in="SourceGraphic" in2="trous" operator="in"/>
+</filter>
+</defs>
+<path d="M80 520q260-60 520 10t560-30M120 140q300 40 620-10t480 30" fill="none" stroke="#ffffff" stroke-opacity=".022" stroke-width="70" stroke-linecap="round"/>
+<!-- petit soleil et petite lune dessinés à la craie, dans le coin -->
+<g fill="none" stroke="#f4f0e2" stroke-opacity=".75" stroke-width="5" stroke-linecap="round" class="craie">
+<circle cx="1110" cy="80" r="22"/>
+<path d="M1110 46v-14m0 96v-14m34-34h14m-96 0h14m58-24 10-10m-68 68 10-10m48 10 10 10m-68-68 10 10"/>
+<path d="M1262 112a24 24 0 1 1-22-34 20 20 0 0 0 22 34z"/>
+</g>
+</svg>
+<div class="titre craie">La comptine du ciel</div>
+<div class="ligne craie">Le ciel de chez nous est rose au matin,</div>
+<div class="ligne craie">bleu à midi, couleur d’or le soir,</div>
+<div class="ligne craie">et noir quand on dort.</div>
+<div class="ronds">
+<div class="rond rose"></div>
+<div class="rond bleu"></div>
+<div class="rond or"></div>
+<div class="rond noir"></div>
+</div>
+</main>
+</body>
+</html>

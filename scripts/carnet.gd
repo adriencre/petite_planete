@@ -456,6 +456,24 @@ func ouvrir() -> void:
 	t.tween_property(_livre, "modulate:a", 1.0, 0.35)
 
 
+## Ouvre le carnet sur la double page qui porte ce document dessiné (l'ancien corps de l'école :
+## on retrouve le dessin d'Aube déjà copié au Phare). Faux si le carnet ne l'a pas.
+func ouvrir_sur_image(image: Texture2D) -> bool:
+	if image == null or not debloque:
+		return false
+	var pages := _toutes_les_pages()
+	for i in pages.size():
+		var page: Dictionary = pages[i]
+		if page.type != "texte":
+			continue
+		var tex: Texture2D = page.item.get("image")
+		if tex and (tex == image or tex.resource_path == image.resource_path):
+			_double = i / 2
+			ouvrir()
+			return true
+	return false
+
+
 func fermer() -> void:
 	if not ouvert:
 		return

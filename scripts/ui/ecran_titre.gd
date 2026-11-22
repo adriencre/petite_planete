@@ -9,6 +9,7 @@ extends Control
 @export var iles_dev: Dictionary = {
 	"Île 1 — Le Réveil": "res://scenes/ile_01_maquette.tscn",
 	"Île 2 — Le Phare": "res://scenes/ile_02_maquette.tscn",
+	"Île 3 — La Colonie": "res://scenes/ile_03_maquette.tscn",
 }
 
 @onready var _pollen: CPUParticles2D = $Pollen

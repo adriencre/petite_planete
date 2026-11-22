@@ -28,6 +28,8 @@ const SONS := preload("res://scripts/sons.gd")  # les effets sonores (assets/aud
 ## Après la lecture, le robot la range dans son carnet : elle disparaît du décor.
 @export var ramasser: bool = true
 @export var largeur_papier: float = 560.0
+## Force de la lueur dorée. Une grande surface (le tableau de l'école) brille moins fort qu'une feuille.
+@export_range(0.0, 1.0) var intensite_lueur: float = 1.0
 
 var lecture_autorisee: Callable
 var deja_lue: bool = false
@@ -134,7 +136,7 @@ func _process(_delta: float) -> void:
 	var force: float = 0.18 if deja_lue else 0.3
 	if _distance() < distance_lecture:
 		force = 0.55
-	_lueur_mat.albedo_color.a = force * (0.6 + 0.4 * onde) * (0.0 if _ouverte else 1.0)
+	_lueur_mat.albedo_color.a = force * intensite_lueur * (0.6 + 0.4 * onde) * (0.0 if _ouverte else 1.0)
 
 
 func _unhandled_input(event: InputEvent) -> void:

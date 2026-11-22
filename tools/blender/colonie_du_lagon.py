@@ -35,6 +35,15 @@ for nom, hexa in palette.items():
     surface.inputs["Roughness"].default_value = .78
     materiaux[nom] = mat
 
+# Verre des vitrines : translucide pour laisser voir l'étalage depuis la rue.
+vitrine_verre = materiaux["verre"].copy()
+vitrine_verre.name = "vitrine"
+surface = next(n for n in vitrine_verre.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+surface.inputs["Alpha"].default_value = .28
+surface.inputs["Roughness"].default_value = .15
+vitrine_verre.surface_render_method = "BLENDED"
+materiaux["vitrine"] = vitrine_verre
+
 # Un maillage par élément architectural ou portion de rue, avec matériaux par face.
 def commencer(nom):
     global sommets, faces, teintes, origine, angle, element
@@ -51,7 +60,8 @@ def morceau(points, polygones, couleur):
         teintes.append(couleur)
 
 def terminer(collision=False):
-    nom = element + ("-col" if collision else "")
+    # True : maillage + collision ; "-colonly" : collision seule (rampes sous les marches).
+    nom = element + (collision if isinstance(collision, str) else "-col" if collision else "")
     mesh = bpy.data.meshes.new(nom)
     mesh.from_pydata(sommets, [], faces)
     obj = bpy.data.objects.new(nom, mesh)
@@ -302,17 +312,45 @@ def couverture_des_couturieres():
     for y in (-2.89,-1.45,0,1.45,2.89):
         boite(-1.045,y,4.74,.09,.09,1.01,"creme")
     boite(-1.045,0,5.23,.09,5.84,.075,"creme")
-    # La toile porte une pièce corail cousue près de la rive.
-    for i,ton in enumerate(("corail","creme","corail","creme","corail")):
-        x=-3.35+i*.51
-        base=[(x,-4.07,2.41),(x+.51,-4.07,2.41),(x+.51,-2.85,3.03),(x,-2.85,3.03)]
+    # Le store de boutique couvre toute la façade ; la toile porte une pièce cousue.
+    for i in range(13):
+        ton="corail" if i%2==0 else "creme"
+        x=-3.32+i*.51
+        # Store haut et court : la vitrine reste visible depuis la caméra plongeante.
+        base=[(x,-3.77,2.81),(x+.51,-3.77,2.81),(x+.51,-2.85,3.43),(x,-2.85,3.43)]
         prisme(base,[(a,b,c+.045) for a,b,c in base],ton)
-        extrusion_facade([(x,2.43),(x+.035,2.24),(x+.255,2.14),(x+.475,2.24),(x+.51,2.43)],
-                         -4.10,-4.04,ton)
-    morceau([(-2.72,-3.93,2.537),(-2.40,-3.93,2.537),(-2.40,-3.68,2.664),(-2.72,-3.68,2.664)],
+        extrusion_facade([(x,2.83),(x+.035,2.64),(x+.255,2.54),(x+.475,2.64),(x+.51,2.83)],
+                         -3.80,-3.74,ton)
+    morceau([(-2.72,-3.62,2.967),(-2.40,-3.62,2.967),(-2.40,-3.38,3.129),(-2.72,-3.38,3.129)],
             [(0,1,2,3)],"saumon")
-    for x in (-3.27,-.89):
-        boite(x,-4.06,.12,.12,.13,2.29,"bois")
+    for x in (-3.27,3.27):
+        boite(x,-3.76,-.6,.12,.13,3.41,"bois")
+    # Enseigne : une bobine de fil géante pendue à une potence, aiguille piquée dedans.
+    boite(3.3,-3.02,3.2,.16,.08,.8,"ombre")
+    tige((3.3,-3.02,3.85),(3.3,-4.58,3.85),.035,"ombre")
+    tige((3.3,-3.02,3.3),(3.3,-3.8,3.85),.025,"ombre")
+    pilier(3.3,-4.58,3.81,.05,.08,"ombre")
+    y,z=-4.35,3.12
+    for dx in (-.03,.03):
+        tige((3.3+dx*4,y,3.85),(3.3+dx*4,y,z+.3),.016,"ombre")
+    for signe in (-1,1):
+        tige((3.3+signe*.20,y,z),(3.3+signe*.25,y,z),.40,"chene")
+    tige((3.08,y,z),(3.52,y,z),.13,"bois")
+    tige((3.11,y,z),(3.49,y,z),.24,"corail")
+    tige((3.3,y-.27,z+.36),(3.3,y+.24,z-.33),.022,"ardoise")
+    boucle(3.3,y-.27,z+.40,.03,.03,.012,"ardoise")
+
+def vitrine(cx):
+    # Grande baie à petits carreaux entre le montant de porte et le poteau d'angle.
+    boite(cx,-2.66,1.15,1.88,.06,2.0,"vitrine")
+    boite(cx,-2.78,1.06,2.06,.5,.12,"creme")
+    boite(cx,-2.74,3.06,2.0,.34,.13,"chene")
+    for signe in (-1,1):
+        boite(cx+signe*.95,-2.74,1.15,.12,.34,1.98,"chene")
+    for x in (cx-.31,cx+.31):
+        boite(x,-2.71,1.15,.06,.1,1.95,"creme")
+    for z in (1.82,2.48):
+        boite(cx,-2.71,z,1.86,.1,.06,"creme")
 
 def tige(debut, fin, rayon, ton):
     # Section hexagonale pour les poignées, les outils et les cordages.
@@ -378,8 +416,8 @@ def accessoires_du_port():
         pilier(2.46,.18,1.045+i*.038,.22,.034,"verre",.25)
 
 def accessoires_de_couture():
-    # Mannequin sur pied avec housse ajustée à la taille, aux épaules et au cou.
-    x,y=1.86,.13
+    # Mannequin sur pied, exposé dans la vitrine de droite.
+    x,y=2.25,-1.95
     for dx,dy in ((-.33,-.23),(.33,-.23),(0,.34)):
         tige((x,y,.35),(x+dx,y+dy,.16),.048,"chene")
     pilier(x,y,.28,.064,.92,"cuivre")
@@ -413,11 +451,32 @@ def accessoires_de_couture():
     for i in range(5):
         x=2.565+.038*(i%2)
         boite(x,.37+i*.078,.38,.043,.085,.92,"corail" if i in (0,4) else "creme")
-    for x in (-2.48,2.48):
-        boite(x,1.75,.71,.43,.83,.16,"creme")
-    for x in (-1.55,1.55):
-        for dx in (-.51,-.43):
-            boite(x+dx,1.75,.794,.038,1.08,.015,"creme")
+    # Sur le comptoir : mètre ruban enroulé, coupons pliés, boîte à boutons.
+    boucle(.15,1.78,1.56,.16,.16,.02,"corail")
+    tige((.31,1.78,1.56),(.62,1.62,1.555),.012,"corail")
+    for i,ton in enumerate(("sauge","peche","creme")):
+        boite(1.35,1.85,1.555+i*.075,.62,.48,.07,ton)
+    boite(2.0,1.8,1.555,.36,.28,.14,"cuivre")
+    boite(2.0,1.8,1.7,.38,.30,.03,"chene")
+    # Bobines rangées sur les étagères derrière le comptoir.
+    for z in (2.06,2.66):
+        for i in range(8):
+            x=-.35+i*.36
+            ton=("corail","sauge","or","creme","saumon","ardoise","peche","rose")[(i+int(z*3))%8]
+            pilier(x,2.36,z+.06,.1,.05,"bois")
+            pilier(x,2.36,z+.11,.075,.25,ton)
+            pilier(x,2.36,z+.36,.1,.05,"bois")
+    # Cabine d'essayage : rideau rayé, à demi tiré, et miroir au mur.
+    tige((-3.06,.9,3.0),(-1.5,.9,3.0),.03,"cuivre")
+    tige((-1.5,.9,3.0),(-1.5,2.48,3.0),.03,"cuivre")
+    for i in range(3):
+        x=-3.0+i*.3
+        boite(x,.9+(i%2)*.07,.4,.29,.05,2.58,"corail" if i%2==0 else "creme")
+    for i in range(5):
+        y=1.05+i*.3
+        boite(-1.5+(i%2)*.07,y,.4,.05,.29,2.58,"corail" if i%2==0 else "creme")
+    boite(-3.03,1.7,.9,.05,.66,1.5,"chene")
+    boite(-3.0,1.7,.98,.04,.52,1.34,"verre")
 
 def foyer_visitable(centre, rotation, atelier=False):
     global angle
@@ -434,10 +493,14 @@ def foyer_visitable(centre, rotation, atelier=False):
         prisme(bas, [(x,y,-.19 if y < -4 else .12) for x,y,_ in bas], "sable")
     terminer(True)
 
-    def murs(z, hauteur):
+    def murs(z, hauteur, vitrines=False):
         for cote in (-1,1):
             boite(cote*3.24,0,z,.36,5,hauteur,"craie")
-            boite(cote*2.23,-2.66,z,2.38,.32,hauteur,"craie")
+            if vitrines:
+                # Au-dessus des vitrines, seul le bandeau de façade reste maçonné.
+                boite(cote*2.23,-2.66,3.15,2.38,.32,.34,"craie")
+            else:
+                boite(cote*2.23,-2.66,z,2.38,.32,hauteur,"craie")
         boite(0,2.66,z,6.85,.32,hauteur,"craie")
 
     piece("Soubassement_maison_du_quai")
@@ -445,21 +508,21 @@ def foyer_visitable(centre, rotation, atelier=False):
     terminer(True)
 
     piece("Murs_hauts_maison_du_quai")
-    murs(1.15,2.34)
+    murs(1.15,2.34,atelier)
     boite(0,-2.66,3.15,2.1,.32,.34,"craie")
     for x in (-1.12,1.12):
         boite(x,-2.83,.12,.19,.19,3.02,"creme")
     boite(0,-2.83,3.02,2.43,.21,.17,"creme")
     if atelier:
-        fenetre(-2.19,-2.85,1.29,1.86,"chene")
-        boite(-2.19,-3.01,1.87,1.65,.075,.065,"creme")
+        for cx in (-2.165,2.165):
+            vitrine(cx)
     else:
         fenetre(-2.19,-2.85,1.63,1.03,"cuivre")
+        fenetre(2.19,-2.85,1.63,1.03,"cuivre")
     for x in (-3.21,3.21):
         boite(x,-2.83,.13,.21,.18,3.33,"chene")
     for x in (-2.22,2.22):
         boite(x,-2.83,.77,2.32,.15,.14,"chene")
-    fenetre(2.19,-2.85,1.63,1.03,"cuivre")
     # Vantail déjà entrouvert vers l'intérieur après le départ.
     morceau([(1,-2.54,.16),(1,-.91,.16),(1,-.91,2.99),(1,-2.54,2.99),
              (.87,-2.54,.16),(.87,-.91,.16),(.87,-.91,2.99),(.87,-2.54,2.99)],
@@ -485,15 +548,21 @@ def foyer_visitable(centre, rotation, atelier=False):
             for y in (-2.17,-.22):
                 boite(x,y,.12,.16,.16,1.22,"bois")
         boite(-2.22,-1.19,1.34,1.54,2.36,.14,"chene")
-        for x in (-1.53,1.53):
-            boite(x,1.75,.12,2.6,1.1,.41,"bois")
-            boite(x,1.75,.53,2.54,1.06,.18,"creme")
-            boite(x,1.75,.71,1.89,1.07,.08,"toit_sauge" if x<0 else "corail")
+        # Comptoir de vente adossé au fond, étagères à bobines au-dessus.
+        boite(.9,1.8,.12,3.0,.85,1.32,"chene")
+        boite(.9,1.76,1.44,3.2,1.0,.11,"bois")
+        for z in (2.06,2.66):
+            boite(.9,2.36,z,3.1,.28,.06,"chene")
+        for x in (-.6,2.4):
+            boite(x,2.42,1.55,.1,.14,1.3,"bois")
+        for x in (-3.06,-1.5):
+            pilier(x,.9,.12,.04,2.9,"cuivre")
+        pilier(-1.5,2.48,.12,.04,2.9,"cuivre")
         for y in (-.61,.95):
             boite(2.83,y,.12,.46,.09,1.25,"chene")
         for h in (.32,.65,1.29):
             boite(2.83,.17,h,.49,1.65,.08,"chene")
-        pilier(1.86,.13,.12,.25,.16,"bois")
+        pilier(2.25,-1.95,.12,.25,.16,"bois")
         siege(-.89,-.68,False)
         terminer(True)
         piece("Mannequin_et_outils")
@@ -555,7 +624,7 @@ def foyer_visitable(centre, rotation, atelier=False):
         terminer()
 
     piece("Valise_des_couturieres" if atelier else "Premiere_valise")
-    x,y,z = 1.85,-1.42,.14
+    x,y,z = (1.85,-1.0,.14) if atelier else (1.85,-1.42,.14)
     boite(x,y,z,1.13,.53,.68,"cuivre")
     for x_sangle in (x-.36,x+.36):
         boite(x_sangle,y,z+.02,.094,.557,.696,"or")
@@ -576,6 +645,565 @@ def foyer_visitable(centre, rotation, atelier=False):
         else:
             for dz in ((.32,.39,.46) if segments == "E" else (.39,.46)):
                 boite(bx+.031,y-.292,z+dz,.078,.015,.013,"bois")
+    terminer()
+
+def fenetre_haute(x, y, z, largeur, hauteur):
+    # Haute fenêtre de classe à imposte cintrée, petits bois et appui de pierre.
+    demi = largeur/2
+    arc = [(x+demi*math.cos(t*math.pi/6), z+hauteur+.42*math.sin(t*math.pi/6)) for t in range(7)]
+    cadre = [(x-demi-.12,z), (x+demi+.12,z)] + [(a+(.12 if a>x else -.12 if a<x else 0), b+.12)
+             for a,b in arc]
+    extrusion_facade(cadre, y-.12, y+.02, "creme")
+    extrusion_facade([(x-demi,z+.1),(x+demi,z+.1)]+arc, y-.16, y-.12, "vitre_fumee")
+    boite(x,y-.19,z+.1,.07,.06,hauteur+.36,"creme")
+    for h in (z+hauteur*.42, z+hauteur):
+        boite(x,y-.19,h,largeur,.06,.07,"creme")
+    boite(x,y-.2,z-.12,largeur+.42,.38,.14,"pierre")
+
+def ecole(centre, rotation):
+    # École de village : long bâtiment bas, clocheton, préau de bois et cour à marelle.
+    global origine, angle
+
+    def piece(nom):
+        global origine, angle
+        commencer(nom)
+        origine, angle = centre, rotation
+
+    L, P, h = 11, 7, 4.6
+    piece("Socle_ecole")
+    bloc_chanfreine(L+.5,P+.5,-1.9,2.15,.3,"pierre")
+    # Perron de pierre devant la porte, où l'ancien corps s'est assis.
+    boite(0,-4.15,-.9,6.2,1.3,1.13,"pierre")
+    bas=[(-1.2,-5.4,-.4),(1.2,-5.4,-.4),(1.2,-4.8,-.4),(-1.2,-4.8,-.4)]
+    prisme(bas,[(x,y,-.05 if y<-5 else .23) for x,y,_ in bas],"sable")
+    terminer(True)
+
+    def murs(z, hauteur, fond=None):
+        # fond=None : tous les murs ; True : seulement les murs nord et ouest ; False : les autres.
+        if fond is not True:
+            boite(-(L/2-.18),0,z,.36,P,hauteur,"peche")
+            for cote in (-1,1):
+                boite(cote*3.36,-(P/2-.18),z,4.28,.36,hauteur,"peche")
+        if fond is not False:
+            boite(L/2-.18,0,z,.36,P,hauteur,"peche")
+            boite(0,P/2-.18,z,L,.36,hauteur,"peche")
+
+    def bandeau(fond):
+        # Corniche en couronne : on garde l'intérieur ouvert vers le ciel.
+        if fond:
+            boite(L/2-.18,0,h,.6,P+.3,.24,"creme")
+            boite(0,P/2-.18,h,L+.3,.6,.24,"creme")
+        else:
+            boite(-(L/2-.18),0,h,.6,P+.3,.24,"creme")
+            boite(0,-(P/2-.18),h,L+.3,.6,.24,"creme")
+
+    piece("Soubassement_ecole")
+    murs(.25,1.1)
+    terminer(True)
+
+    # Les murs côté rue et côté caméra s'effacent quand le robot entre.
+    piece("Murs_hauts_ecole")
+    murs(1.35,h-1.35,False)
+    boite(0,-(P/2-.18),3.45,2.44,.36,h-3.45,"peche")
+    for x in (-1.22,1.22):
+        boite(x,-P/2-.06,.25,.22,.2,3.3,"creme")
+    boite(0,-P/2-.06,3.45,2.66,.24,.26,"creme")
+    for x in (-4.2,-2.5,2.5,4.2):
+        fenetre_haute(x,-P/2,1.55,1.05,1.75)
+    # Deux vantaux grands ouverts vers l'intérieur.
+    for signe in (-1,1):
+        boite(signe*1.08,-P/2+.78,.27,.09,1.12,3.12,"bois")
+        boite(signe*1.02,-P/2+1.12,1.62,.06,.14,.08,"or")
+    angle = rotation - math.pi/2
+    fenetre_haute(0,-L/2,1.55,1.05,1.75)
+    angle = rotation
+    bandeau(False)
+    terminer()
+
+    # Les murs nord et ouest restent debout : le tableau et les patères y sont accrochés.
+    piece("Murs_du_fond_ecole")
+    murs(1.35,h-1.35,True)
+    bandeau(True)
+    angle = rotation + math.pi
+    for x in (-3.9,-1.3,1.3,3.9):
+        fenetre_haute(x,-P/2,1.55,1.05,1.75)
+    terminer()
+
+    piece("Toit_ecole")
+    toit(0,0,h+.24,L+1.0,P+1.0,2.5,"ardoise")
+    # Faîtage clair et rangs d'ardoises plus sombres.
+    boite(0,0,h+2.66,L+1.1,.3,.12,"creme")
+    for t in (.25,.5,.75):
+        for signe in (-1,1):
+            y=signe*(P+1.0)/2*(1-t)
+            boite(0,y,h+.24+2.5*t+.03,L+1.02,.07,.05,"ombre")
+    # Clocheton : socle, quatre poteaux, cloche de cuivre et flèche d'ardoise.
+    z=h+2.2
+    boite(0,0,z,1.2,1.2,.7,"creme")
+    for dx in (-.45,.45):
+        for dy in (-.45,.45):
+            boite(dx,dy,z+.7,.14,.14,1.05,"bois")
+    pilier(0,0,z+.95,.34,.5,"cuivre",.13)
+    pilier(0,0,z+1.45,.07,.12,"cuivre")
+    base=[(a*.72,b*.72,z+1.75) for a,b in [(-1,-1),(1,-1),(1,1),(-1,1)]]
+    prisme(base,[(a*.04,b*.04,z+2.75) for a,b,_ in base],"ardoise")
+    # Le toit du préau, côté caméra, s'efface avec celui de l'école.
+    pan=[(-8.25,-3.3,3.15),(-5.5,-3.3,3.95),(-5.5,3.3,3.95),(-8.25,3.3,3.15)]
+    prisme(pan,[(x,y,z+.14) for x,y,z in pan],"cuivre")
+    for y in (-2.8,-1.4,0,1.4,2.8):
+        bande=[(-8.25,y-.03,3.29),(-5.5,y-.03,4.09),(-5.5,y+.03,4.09),(-8.25,y+.03,3.29)]
+        prisme(bande,[(a,b,c+.03) for a,b,c in bande],"miel")
+    terminer()
+
+    piece("Preau_de_l_ecole")
+    # Toit en appentis appuyé sur le pignon sud, quatre poteaux de bois.
+    # La maison d'Aube occupe le côté nord : le préau s'ouvre vers les couturières.
+    for y in (-2.9,-.95,.95,2.9):
+        boite(-7.85,y,-.9,.24,.24,4.1,"chene")
+    boite(-7.85,0,3.15,.32,6.2,.22,"chene")
+    # Un long banc et des cartables oubliés sous le préau.
+    for y in (.9,2.6):
+        boite(-6.6,y,-.6,.5,.2,1.3,"bois")
+    boite(-6.6,1.75,.7,.6,2.3,.1,"chene")
+    for i,ton in enumerate(("corail","ardoise","miel")):
+        boite(-6.55,1.05+i*.6,.8,.24,.42,.36,ton)
+        boite(-6.55,1.05+i*.6,1.16,.06,.2,.1,"bois")
+    terminer(True)
+
+    piece("Cour_de_l_ecole")
+    # Marelle peinte à la craie, du « 1 » jusqu'au ciel en demi-lune.
+    cases=[(0,0),(0,1),(0,2),(-.5,3),(.5,3),(0,4),(-.5,5),(.5,5)]
+    def sol(x):
+        return .036+(x-2)*.019+.025
+    for dx,rang in cases:
+        x=1.7+rang*.64
+        boite(x,-6.0+dx*1.24,-.1,.58,.58,sol(x)+.1,"creme")
+    xc=1.7+6*.64-.3
+    ciel=[(xc+.4*math.sin(t*math.pi/6),-6.0+.4*math.cos(t*math.pi/6)) for t in range(7)]
+    prisme([(a,b,-.1) for a,b in ciel],[(a,b,sol(xc)) for a,b in ciel],"corail")
+    pilier(2.3,-6.55,sol(2.3)-.04,.09,.07,"corail")
+    terminer()
+
+    piece("Mobilier_ecole")
+    # Estrade le long du mur nord, sous le tableau.
+    boite(L/2-1.0,0,.25,1.3,P-.8,.3,"chene")
+    # Pupitres doubles à hauteur de Semeur, tournés vers le tableau, banc attaché derrière.
+    for x in (-3.9,-2.0,2.2):
+        for y in (-1.75,1.75):
+            for dy in (-.95,.95):
+                boite(x,y+dy,.25,.6,.14,.92,"bois")
+            plateau=[(x-.38,y-1.1,1.24),(x+.38,y-1.1,1.12),(x+.38,y+1.1,1.12),(x-.38,y+1.1,1.24)]
+            prisme(plateau,[(a,b,c+.09) for a,b,c in plateau],"chene")
+            if (x,y)==(2.2,1.75):
+                # Banc renversé en arrière : quelqu'un est parti en courant.
+                boite(x-1.25,y,.27,.08,2.2,.48,"chene")
+                for dy in (-.8,.8):
+                    boite(x-1.0,y+dy,.27,.5,.42,.12,"bois")
+                continue
+            boite(x-.72,y,.25,.42,2.1,.5,"bois")
+            boite(x-.72,y,.75,.48,2.2,.08,"chene")
+    # Bureau du maître sur l'estrade, près de la fenêtre.
+    for dy in (-.7,.7):
+        boite(L/2-1.0,-2.0+dy,.55,.7,.16,1.0,"bois")
+    boite(L/2-1.0,-2.0,1.55,.95,1.8,.1,"chene")
+    terminer(True)
+
+    def sur_pupitre(x0, x, y, l, p, e, ton):
+        # Objet plat posé sur le plateau incliné du pupitre centré en x0.
+        def z(xx):
+            return 1.33-(xx-(x0-.38))/.76*.12+.005
+        bas=[(x+a*l/2,y+b*p/2,z(x+a*l/2)) for a,b in [(-1,-1),(1,-1),(1,1),(-1,1)]]
+        prisme(bas,[(a,b,c+e) for a,b,c in bas],ton)
+
+    piece("Affaires_de_classe")
+    # La classe a été quittée en pleine journée : cahiers ouverts, ardoises, craies.
+    for x0,y,ton in ((-2.0,-2.3,"rose"),(-2.0,1.2,"verre"),(2.2,-1.2,"or"),(2.2,2.3,"sauge")):
+        sur_pupitre(x0,x0,y,.42,.62,.02,"creme")
+        sur_pupitre(x0,x0+.01,y,.44,.03,.025,ton)
+    for x0,y in ((-3.9,1.2),(-2.0,-1.2),(2.2,-2.3)):
+        sur_pupitre(x0,x0-.05,y,.4,.52,.03,"chene")
+        sur_pupitre(x0,x0-.05,y,.32,.44,.035,"ombre")
+        sur_pupitre(x0,x0+.2,y+.3,.05,.16,.06,"creme")
+    # Bureau du maître : cloche à main et pile de cahiers.
+    pilier(L/2-1.0,-2.55,1.65,.13,.2,"cuivre",.05)
+    tige((L/2-1.0,-2.55,1.85),(L/2-1.0,-2.55,2.0),.035,"bois")
+    for k,ton in enumerate(("corail","sauge","miel","rose","verre")):
+        boite(L/2-1.0+(k%2)*.03,-1.55,1.65+k*.045,.4,.55,.045,ton)
+    # Feuilles mortes et poussière entrées par la porte ouverte.
+    feuilles=random.Random(22)
+    for k in range(18):
+        fx,fy=feuilles.uniform(-1.6,1.6),-P/2+.5+feuilles.uniform(0,1.8)**1.6
+        t=feuilles.uniform(0,math.pi)
+        f=[(fx+.14*math.cos(t+a*math.pi/2)*(1 if a%2==0 else .55),fy+.14*math.sin(t+a*math.pi/2)*(1 if a%2==0 else .55),.275) for a in range(4)]
+        prisme(f,[(a,b,c+.012) for a,b,c in f],feuilles.choice(("miel","ocre","corail","herbe_seche")))
+    for x,y,l,p in ((0,-P/2+1.0,2.2,1.4),(-.6,-P/2+2.0,1.3,.9)):
+        boite(x,y,.272,l,p,.004,"terre_claire")
+    terminer()
+
+    piece("Pupitre_Aube")
+    # La place d'Aube : le dernier pupitre près de la fenêtre côté rue.
+    xa,ya=-3.9,-2.3
+    # Le bois gravé au canif : une maison, un soleil et des petits traits.
+    for a,b,c,d in ((-.15,-.2,.1,-.2),(.1,-.2,.1,0),(.1,0,-.15,0),(-.15,0,-.15,-.2),(-.15,0,-.02,.13),(-.02,.13,.1,0)):
+        a,b,c,d=.27+a*.45,b*.45,.27+c*.45,d*.45
+        za=1.33-(a+.38)/.76*.12+.006
+        zb=1.33-(c+.38)/.76*.12+.006
+        tige((xa+a,ya+.3+b,za),(xa+c,ya+.3+d,zb),.008,"ombre")
+    # Son ardoise couverte de petits bonshommes : ses amis cachés.
+    sur_pupitre(xa,xa,ya-.05,.46,.6,.03,"chene")
+    sur_pupitre(xa,xa,ya-.05,.38,.52,.035,"ombre")
+    for k in range(5):
+        bx,by=xa-.12+(k%2)*.22,ya-.25+k*.1
+        sur_pupitre(xa,bx,by,.035,.035,.04,"creme")
+        sur_pupitre(xa,bx-.045,by,.06,.012,.04,"creme")
+        sur_pupitre(xa,bx-.09,by-.015,.035,.012,.04,"creme")
+        sur_pupitre(xa,bx-.09,by+.015,.035,.012,.04,"creme")
+    terminer()
+
+    # Le dessin « ma cachette sous l'escalier » est posé par la scène Godot (page_lisible.gd).
+
+    piece("Tableau_et_dessins")
+    # Repère tourné : x local = le long du mur nord, y local = vers l'intérieur.
+    angle = rotation + math.pi/2
+    y=-L/2+.37
+    # Le tableau de la comptine : lignes à la craie et quatre ronds de couleur.
+    boite(0,y,1.35,4.6,.08,2.3,"chene")
+    boite(0,y+.05,1.45,4.4,.06,2.1,"ombre")
+    # La comptine et les quatre ronds sont dessinés à la craie sur une image (tools/affiches/tableau_comptine.html),
+    # posée sur l'ardoise par la scène Godot.
+    boite(0,y+.06,1.3,4.5,.18,.07,"chene")
+    for i in range(3):
+        boite(-1.6+i*.3,y+.13,1.36,.18,.05,.05,("creme","rose","or")[i])
+    # Frise de dessins d'enfants punaisés au-dessus du tableau.
+    for i in range(6):
+        cx = -2.6+i*1.04
+        boite(cx,y+.02,3.78,.72,.03,.56,"creme")
+        for j,ton in enumerate(("corail","sauge","or")):
+            boite(cx-.18+j*.17,y+.04,3.88+(i+j)%3*.09,.14,.02,.14,ton)
+        pilier(cx,y+.04,4.28,.025,.02,"corail")
+    # Patères, manteaux et cartables sur le mur ouest.
+    angle = rotation + math.pi
+    yo=-P/2+.37
+    boite(2.4,yo+.05,2.55,4.2,.1,.14,"chene")
+    for i in range(8):
+        x=.6+i*.52
+        tige((x,yo+.09,2.6),(x,yo+.29,2.72),.03,"cuivre")
+        if i%2==0:
+            boite(x,yo+.23,1.6,.4,.2,1.0,("corail","sauge","rose","ocre")[i//2])
+        else:
+            boite(x,yo+.21,1.85,.32,.16,.38,("miel","ardoise","cuivre","corail")[i//2])
+            tige((x-.1,yo+.21,2.23),(x,yo+.21,2.64),.012,"bois")
+    angle = rotation
+    for i in range(16):
+        boite(-5.1+i*.68,0,.25,.66,P-.72,.02,"sable" if i%3 else "terre_claire")
+    terminer()
+
+def rampe(x0, x1, y0, y1, z0, z1, epaisseur=.3):
+    # Plan incliné le long de y (de y0 à z0 jusqu'à y1 à z1), pour la collision des escaliers.
+    bas=[(x0,y0,z0-epaisseur),(x1,y0,z0-epaisseur),(x1,y1,z1-epaisseur),(x0,y1,z1-epaisseur)]
+    prisme(bas,[(x,y,z+epaisseur) for x,y,z in bas],"pierre")
+
+def marches(x0, x1, y0, y1, z0, z1, n, ton, plein=None):
+    # Marches visibles ; plein donne le bas du massif sous chaque marche (sinon une simple volée).
+    for k in range(n):
+        ya, yb = y0+(y1-y0)*k/n, y0+(y1-y0)*(k+1)/n
+        zh = z0+(z1-z0)*(k+1)/n
+        bas = plein if plein is not None else zh-.32
+        boite((x0+x1)/2,(ya+yb)/2,bas,abs(x1-x0),abs(yb-ya),zh-bas,ton)
+
+def maison_aube(centre, rotation):
+    # Maison étroite et haute : cave à hauteur du sol, étage avec la chambre d'Aube,
+    # escalier extérieur au sud, cour close à l'arrière, traversée par le tuyau des câbles.
+    global origine, angle
+
+    def piece(nom):
+        global origine, angle
+        commencer(nom)
+        origine, angle = centre, rotation
+
+    L, P = 5.2, 6.0
+    xi, yi = L/2-.3, P/2-.3        # faces intérieures
+    zc, zp, ze, zm, zh = .25, 2.45, 2.6, 3.7, 5.8   # cave, plancher, étage, bandeau, corniche
+    enduit, volet = "ardoise", "creme"
+    sx0, sx1 = -1.5, -.5           # soupirail dans le mur du fond, côté cour
+    tx0, tx1 = 1.25, 2.3           # trémie de l'escalier intérieur, le long du mur nord
+    ty0, ty1 = -2.0, 1.0
+
+    piece("Socle_Aube")
+    bloc_chanfreine(L+.4,P+.4,-1.9,2.15,.28,"pierre")
+    terminer(True)
+
+    def murs_cave(z0, z1, haut, fond=None):
+        # Mur du fond percé du soupirail ; le linteau n'existe que dans la partie haute.
+        # fond=True : murs nord et ouest (loin de la caméra) ; False : murs sud et rue.
+        if fond is not True:
+            boite(-(L/2-.15),0,z0,.3,P,z1-z0,"pierre")
+            boite(0,-(P/2-.15),z0,L,.3,z1-z0,"pierre")
+        if fond is not False:
+            boite(L/2-.15,0,z0,.3,P,z1-z0,"pierre")
+            for a,b in ((-L/2,sx0),(sx1,L/2)):
+                boite((a+b)/2,P/2-.15,z0,b-a,.3,z1-z0,"pierre")
+            if haut:
+                boite((sx0+sx1)/2,P/2-.15,2.3,sx1-sx0,.3,z1-2.3,"pierre")
+
+    piece("Cave_bas_Aube")
+    murs_cave(zc,1.0,False)
+    for i in range(10):
+        boite(-L/2+.3+i*.46+.23,0,zc,.45,P-.6,.02,"terre_claire" if i%3 else "fissure")
+    terminer(True)
+
+    piece("Cave_haut_Aube")
+    murs_cave(1.0,zp,True,False)
+    terminer(True)
+    piece("Cave_fond_Aube")
+    murs_cave(1.0,zp,True,True)
+    terminer(True)
+
+    piece("Mobilier_cave_Aube")
+    # Caisses, tonneaux et réserve de lanternes neuves : la peur s'entassait jusque dans la cave.
+    for x,y,t in ((-1.75,-1.75,.9),(-1.75,-.85,.7),(-.8,-1.85,.8)):
+        boite(x,y,zc,t,t,t,"bois")
+        boite(x,y,zc+t,t+.04,t+.04,.05,"chene")
+    for x in (-1.85,-1.2):
+        pilier(x,.6,zc,.36,1.05,"chene",.33)
+        pilier(x,.6,zc+1.05,.37,.05,"ombre")
+    for z in (.9,1.6):
+        boite(.45,2.45,zc+z,1.4,.42,.06,"chene")
+        for i in range(4):
+            pilier(-.05+i*.34,2.45,zc+z+.06,.12,.32,"or",.1)
+            pilier(-.05+i*.34,2.45,zc+z+.38,.13,.06,"ardoise",.05)
+    # La grille du soupirail, dévissée par Aube, posée contre le mur.
+    for i in range(5):
+        tige((-2.1+i*.16,2.55,zc),(-2.0+i*.16,2.2,zc+1.7),.025,"ombre")
+    tige((-2.12,2.52,zc+.2),(-1.4,2.52,zc+.2),.03,"ombre")
+    tige((-2.03,2.25,zc+1.5),(-1.31,2.25,zc+1.5),.03,"ombre")
+    terminer(True)
+
+    piece("Escalier_cave_Aube")
+    marches(tx0,tx1,-2.4,ty1,zc,ze,11,"chene")
+    for y in (-2.4,-.7,ty1):
+        boite(tx0+.05,y,zc,.1,.1,max(.1,zc+(y+2.4)/3.4*(ze-zc)-zc),"bois")
+    terminer()
+    piece("Rampe_cave_Aube")
+    rampe(tx0,tx1,-2.4,ty1,zc,ze)
+    terminer("-colonly")
+
+    piece("Plancher_Aube")
+    # Plancher de l'étage, ouvert sur la trémie de l'escalier.
+    for a,b,c,d in ((-L/2,tx0,-P/2,P/2),(tx0,L/2,-P/2,ty0),(tx0,L/2,ty1,P/2)):
+        boite((a+b)/2,(c+d)/2,zp,b-a,d-c,ze-zp,"bois")
+    for i in range(11):
+        x, ton = -xi+i*.42+.21, "sable" if i%3 else "miel"
+        if x+.2 <= tx0:
+            boite(x,0,ze,.4,P-.6,.015,ton)
+        else:
+            for a,b in ((-yi,ty0),(ty1,yi)):
+                boite(x,(a+b)/2,ze,.4,b-a,.015,ton)
+    terminer(True)
+
+    def murs_etage(z0, z1, fond=None):
+        if fond is not True:
+            boite(-(L/2-.15),0,z0,.3,P,z1-z0,enduit)
+            boite(0,-(P/2-.15),z0,L,.3,z1-z0,enduit)
+        if fond is not False:
+            boite(L/2-.15,0,z0,.3,P,z1-z0,enduit)
+            boite(0,P/2-.15,z0,L,.3,z1-z0,enduit)
+
+    piece("Etage_bas_Aube")
+    murs_etage(ze,zm)
+    # Cloison entre la chambre (devant) et la pièce commune, porte ouverte.
+    for a,b in ((-xi,-.6),(.6,tx0)):
+        boite((a+b)/2,0,ze,b-a,.14,zm-ze,"craie")
+    # Garde-corps autour de la trémie.
+    boite(tx0,(ty0+ty1)/2,ze,.08,ty1-ty0,1.0,"chene")
+    boite((tx0+tx1)/2,ty0,ze,tx1-tx0,.08,1.0,"chene")
+    terminer(True)
+
+    piece("Murs_hauts_Aube")
+    murs_etage(zm,zh,False)
+    for a,b in ((-xi,-.6),(.6,tx0)):
+        boite((a+b)/2,0,zm,b-a,.14,1.2,"craie")
+    boite(0,0,zm+1.2,1.2,.14,.3,"craie")
+    for x0,y0,l,p in ((0,-(P/2-.2),L+.24,.4),(-(L/2-.2),0,.4,P+.24)):
+        boite(x0,y0,zh,l,p,.2,"creme")
+    # Façade sur la rue : volets clos, la maison est fermée de l'intérieur.
+    for x in (-1.25,1.25):
+        fenetre(x,-P/2,3.4,1.0,volet,True)
+    # Porte de l'étage sur le palier sud, close ; la barre est mise à l'intérieur.
+    angle = rotation - math.pi/2
+    origine = (centre[0], centre[1], centre[2]+ze-.24)
+    portail(-.9,-L/2,"chene")
+    origine = centre
+    fenetre(1.6,-L/2,3.4,.9,volet,True)
+    angle = rotation
+    boite(-xi+.08,.9,ze+1.3,.12,1.9,.16,"bois")
+    for y in (.1,1.7):
+        boite(-xi+.04,y,ze+1.22,.1,.12,.32,"ombre")
+    terminer(True)
+
+    # Murs nord et ouest de l'étage : ils restent debout, les lanternes y sont pendues.
+    piece("Murs_fond_Aube")
+    murs_etage(zm,zh,True)
+    for x0,y0,l,p in ((0,P/2-.2,L+.24,.4),(L/2-.2,0,.4,P+.24)):
+        boite(x0,y0,zh,l,p,.2,"creme")
+    angle = rotation + math.pi
+    fenetre(0,-P/2,3.4,1.0,volet,True)
+    angle = rotation
+    terminer(True)
+
+    piece("Toit_Aube")
+    # Pignon sur rue, toit raide d'ardoise ; lucarne de la chambre côté sud.
+    profil=[(-3.05,zh+.15),(3.05,zh+.15),(0,zh+3.3)]
+    extrusion_facade(profil,-P/2-.35,P/2+.35,"toit_sauge")
+    for t in (.2,.4,.6,.8):
+        for signe in (-1,1):
+            x=signe*3.05*(1-t)
+            boite(x,0,zh+.15+3.15*t+.02,.08,P+.72,.05,"ombre")
+    boite(0,0,zh+3.25,.3,P+.8,.12,"creme")
+    # Lucarne : petit toit, vitre où Aube a collé ses dessins.
+    angle = rotation - math.pi/2
+    ly, lz = 1.4, zh+.55
+    boite(ly,-2.0,lz,1.3,1.1,1.25,enduit)
+    morceau([(ly-.75,-2.6,lz+1.2),(ly+.75,-2.6,lz+1.2),(ly+.75,-1.4,lz+1.55),(ly-.75,-1.4,lz+1.55),
+             (ly,-2.6,lz+1.8),(ly,-1.4,lz+2.0)],
+            [(0,1,4),(1,2,5,4),(2,3,5),(3,0,4,5)],"toit_sauge")
+    boite(ly,-2.58,lz+.2,.95,.06,.85,"creme")
+    boite(ly,-2.62,lz+.28,.8,.04,.7,"vitre_fumee")
+    for i,(dx,dz,ton) in enumerate(((-.2,.55,"rose"),(.18,.5,"or"),(.02,.22,"corail"))):
+        boite(ly+dx,-2.65,lz+dz,.24,.02,.2,"creme")
+        boite(ly+dx,-2.66,lz+dz+.05,.1,.02,.1,ton)
+    angle = rotation
+    # Cheminée côté nord.
+    boite(1.6,1.6,zh+1.2,.6,.6,2.4,"pierre")
+    boite(1.6,1.6,zh+3.6,.72,.72,.12,"creme")
+    terminer()
+
+    piece("Mobilier_etage_Aube")
+    # Chambre d'Aube, côté rue : lit d'enfant, bureau, étagère.
+    boite(-1.7,-1.65,ze,1.1,2.0,.45,"chene")
+    boite(-1.7,-1.65,ze+.45,1.04,1.94,.18,"creme")
+    boite(-1.7,-.75,ze+.45,1.1,.12,1.1,"chene")
+    for x in (-.2,1.0):
+        boite(x,-2.4,ze,.1,.42,.95,"chene")
+    boite(.4,-2.4,ze+.95,1.4,.5,.07,"chene")
+    boite(.4,-1.85,ze,.5,.5,.55,"bois")
+    boite(-2.05,-.35,ze,.4,.4,.55,"chene")
+    # Pièce commune, côté cour : grande table, deux chaises de Semeurs.
+    for dx in (-.8,.8):
+        for dy in (-.45,.45):
+            boite(-.8+dx,1.55+dy,ze,.12,.12,1.4,"bois")
+    boite(-.8,1.55,ze+1.4,2.0,1.2,.1,"chene")
+    for x in (-1.6,0.1):
+        boite(x,2.45,ze,.6,.5,.85,"bois")
+        boite(x,2.65,ze+.85,.6,.1,1.0,"bois")
+    terminer(True)
+
+    piece("Objets_Aube")
+    # Le carnet ouvert sur le bureau, les crayons, la boîte à musique et sa petite prise.
+    boite(.2,-2.4,ze+1.02,.32,.24,.02,"creme")
+    boite(.2,-2.4,ze+1.04,.01,.24,.01,"bois")
+    for i,ton in enumerate(("rose","verre","or")):
+        tige((.48+i*.05,-2.5,ze+1.03),(.5+i*.05,-2.3,ze+1.03),.012,ton)
+    bx, by, bz = .8, -2.42, ze+1.02
+    boite(bx,by,bz,.34,.24,.16,"corail")
+    boite(bx,by,bz+.16,.36,.26,.03,"chene")
+    tige((bx-.1,by,bz+.22),(bx+.1,by,bz+.22),.035,"cuivre")
+    tige((bx+.18,by,bz+.08),(bx+.25,by,bz+.08),.012,"cuivre")
+    tige((bx+.25,by,bz+.08),(bx+.25,by,bz+.16),.012,"cuivre")
+    pilier(bx-.05,by+.13,bz+.05,.03,.02,"or")
+    # Dessins d'Aube punaisés partout sur la cloison et le mur de la rue.
+    for i,(x,z) in enumerate(((-2.0,1.3),(-1.55,1.7),(-1.1,1.35),(-2.0,2.05),(-1.3,2.1),(.9,1.4),(.95,1.85))):
+        z = ze+z
+        boite(x,-.09,z,.3,.02,.24,"creme")
+        boite(x-.04,-.11,z+.06,.12,.01,.1,("corail","sauge","or","rose","verre","peche","ocre")[i])
+    for i in range(4):
+        y, z = -1.75+i*.42, ze+1.5+(i%2)*.35
+        boite(xi-.03,y,z,.02,.32,.26,"creme")
+        boite(xi-.05,y,z+.06,.01,.12,.1,("rose","or","sauge","verre")[i])
+    # Sa lanterne de chevet, recouverte d'un tissu pour faire le noir.
+    pilier(-2.05,-.35,ze+.55,.12,.3,"or",.1)
+    pilier(-2.05,-.35,ze+.54,.24,.42,"saumon",.06)
+    # Sa petite valise « Nef », fermée, devant la porte de la chambre.
+    boite(-1.0,-.35,ze,.6,.3,.42,"cuivre")
+    boite(-1.0,-.52,ze+.18,.2,.02,.1,"creme")
+    boite(-1.0,-.35,ze+.42,.2,.06,.06,"bois")
+    # Côté pièce commune : les deux grandes valises des parents et dix lanternes alignées.
+    for i in range(2):
+        boite(-1.75+i*.7,.4,ze,.62,.35,.62,"cuivre")
+        boite(-1.75+i*.7,.21,ze+.3,.24,.02,.12,"creme")
+    for i in range(10):
+        pilier(-1.9+i*.36,2.55,ze+1.85+(i%2)*.2,.1,.26,"or",.08)
+        tige((-1.9+i*.36,2.55,ze+2.11+(i%2)*.2),(-1.9+i*.36,2.55,ze+2.5),.01,"ombre")
+    # Une barre de bois condamne la porte de l'étage, de l'intérieur.
+    terminer()
+
+    piece("Palier_Aube")
+    # Volée de pierre en porte-à-faux contre le mur sud, puis un palier massif percé
+    # d'une petite porte d'enfant : le passage d'Aube vers la cour.
+    marches(-4.0,-2.6,-4.4,-.2,-.25,ze,10,"pierre")
+    for x in (-3.9,-2.7):
+        boite(x,1.4,-.25,.2,3.2,2.35,"pierre")
+    boite(-3.3,1.4,2.1,1.4,3.2,ze-2.1,"pierre")
+    boite(-3.3,1.4,ze,1.5,3.3,.1,"sable")
+    for y in (-.2,3.0):
+        pilier(-3.98,y,ze,.06,1.0,"ombre")
+    tige((-3.98,-.2,ze+1.0),(-3.98,3.0,ze+1.0),.04,"ombre")
+    terminer()
+    piece("Palier_Aube_creux")
+    # Le passage reste visible de dessus quand le palier s'efface.
+    boite(-3.3,1.4,-.2,1.0,3.2,.02,"terre_claire")
+    for y in (-.25,3.05):
+        for x in (-3.83,-2.77):
+            boite(x,y,-.2,.1,.12,2.32,"chene")
+        boite(-3.3,y,2.02,1.16,.14,.12,"chene")
+    terminer()
+    piece("Palier_Aube_collision")
+    rampe(-4.0,-2.6,-4.4,-.2,-.25,ze,.35)
+    boite(-3.3,1.4,2.1,1.4,3.2,ze+.25-2.1,"pierre")
+    for x in (-3.9,-2.7):
+        boite(x,1.4,-.25,.2,3.2,2.35,"pierre")
+    boite(-3.98,1.4,ze,.1,3.2,1.0,"pierre")
+    terminer("-colonly")
+
+    piece("Cour_Aube")
+    # Murets bas : la cour se voit de la caméra, mais le robot ne peut pas les sauter.
+    for x0,y0,l,p in ((-4.0+.15,5.0,.3,4.0),(2.75,4.95,.3,4.1),(-.62,7.0-.15,6.75,.3)):
+        boite(x0,y0,-.6,l,p,2.3,"craie")
+        boite(x0,y0,1.7,l+.1,p+.1,.1,"tuile")
+    # Un petit arbre et des pots, des ronds dessinés à la craie au sol.
+    arbre(1.8,6.1,-.1,1.8,("feuille_ombre","feuille"))
+    for x in (-3.3,-2.8):
+        pilier(x,6.55,-.2,.22,.45,"tuile",.27)
+    for i in range(5):
+        pilier(.2+math.cos(i*1.26)*.9,4.9+math.sin(i*1.26)*.6,-.08,.18,.1,"creme")
+    terminer(True)
+
+    piece("Tuyau_Aube")
+    # Gros tuyau des câbles de lanternes : il sort du mur de la cour et bouche le soupirail.
+    # Un tronçon cassé, tombé à côté, laisse une ouverture à hauteur d'Aube.
+    cx = (sx0+sx1)/2
+    plancher=[(cx-.55,5.6,-.1),(cx+.55,5.6,-.1),(cx+.55,P/2,zc),(cx-.55,P/2,zc)]
+    prisme([(x,y,z-.15) for x,y,z in plancher],plancher,"cuivre")
+    for signe in (-1,1):
+        boite(cx+signe*.62,(P/2+5.6)/2,-.2,.14,5.6-P/2,2.55,"cuivre")
+    for y in (3.2,4.0,4.8,5.5):
+        for signe in (-1,1):
+            boite(cx+signe*.71,y,-.2,.06,.14,2.6,"ombre")
+    boite(cx,6.88,-.2,1.38,.25,2.6,"cuivre")
+    # Le tronçon tombé, couché dans l'herbe le long du muret.
+    boite(-2.6,4.7,-.15,.8,1.3,.8,"cuivre")
+    boite(-2.6,4.7,.65,.82,1.32,.06,"ombre")
+    # Les câbles noirs qui montent vers les lanternes de la rue.
+    for i in range(3):
+        tige((cx-.3+i*.3,6.9,2.3),(cx-.6+i*.5,7.4,4.2),.035,"ombre")
+    terminer(True)
+    piece("Couvercle_tuyau_Aube")
+    arc=[(cx-.69,2.35),(cx-.5,2.6),(cx,2.72),(cx+.5,2.6),(cx+.69,2.35)]
+    for (xa,za),(xb,zb) in zip(arc,arc[1:]):
+        panneau_rampant(xa,za+.1,xb,zb+.1,P/2,5.6,.12,"cuivre")
+    for y in (3.2,4.0,4.8,5.5):
+        for (xa,za),(xb,zb) in zip(arc,arc[1:]):
+            panneau_rampant(xa,za+.16,xb,zb+.16,y-.07,y+.07,.06,"ombre")
     terminer()
 
 modeles_fermes = {}
@@ -749,26 +1377,25 @@ for i in range(len(angles)-1):
             foyer_visitable((-8,-23.4,z),0)
         elif i == 3:
             foyer_visitable(adresse(45),angle_rue,atelier=True)
+        elif i == 4:
+            ecole(adresse(45),angle_rue)
+        elif i == 5:
+            maison_aube(adresse(45),angle_rue)
         elif i in noms:
             maison(noms[i], adresse(45), angle_rue, largeur, 7, 7 if public else 4.4+(i>10)*2,
                    enduit, "ardoise" if i>10 or public else "tuile", i>10 or public)
         else:
             logis_de_decor(i, adresse(45), angle_rue, "exterieure")
-        if public:
-            commencer("Beffroi_civique" if i==12 else "Preau_de_l_ecole")
+        if i == 12:
+            commencer("Beffroi_civique")
             origine,angle=adresse(45),angle_rue
-            if i==12:
-                boite(4,1,0,3.3,3.3,10.8,"craie")
-                boite(4,1,10.8,3.8,3.8,.4,"cuivre")
-                for dx in (-1.3,1.3):
-                    for dy in (-1.3,1.3):
-                        boite(4+dx,1+dy,11.2,.32,.32,2.2,"ardoise")
-                pilier(4,1,11.6,.82,1.2,"or",.48)
-                toit(4,1,13.4,4.2,4.2,2.7,"ardoise")
-            else:
-                toit(0,-4.7,3.7,10.2,2.9,.8,"cuivre")
-                for dx in (-4.6,-1.9,1.9,4.6):
-                    boite(dx,-5.9,0,.25,.25,3.8,"bois")
+            boite(4,1,0,3.3,3.3,10.8,"craie")
+            boite(4,1,10.8,3.8,3.8,.4,"cuivre")
+            for dx in (-1.3,1.3):
+                for dy in (-1.3,1.3):
+                    boite(4+dx,1+dy,11.2,.32,.32,2.2,"ardoise")
+            pilier(4,1,11.6,.82,1.2,"or",.48)
+            toit(4,1,13.4,4.2,4.2,2.7,"ardoise")
             terminer(True)
         if 1<=i<=16 and i not in (4,12):
             logis_de_decor(i, adresse(30), angle_rue + math.pi, "lagon")

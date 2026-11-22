@@ -22,6 +22,8 @@ const VERSION := 1
 const SCENE_ILE := "res://scenes/ile_01_maquette.tscn"
 const SCENE_ILE_02 := "res://scenes/ile_02_maquette.tscn"
 const CHEMIN_ILE_02 := "user://partie_ile_02.json"
+## Îles accessibles par le menu de développement, pas encore sauvegardées.
+const ILES_SANS_SAUVEGARDE := ["res://scenes/ile_03_maquette.tscn"]
 const SCENE_TITRE := "res://scenes/ecran_titre.tscn"
 ## Scripts dont des variables statiques sont sauvées (chargés à la demande : pas de preload, ces
 ## scripts utilisent eux-mêmes Sauvegarde).
@@ -73,6 +75,15 @@ func en_partie() -> bool:
 		return false
 	var scene := get_tree().current_scene
 	return scene != null and scene.scene_file_path in [SCENE_ILE, SCENE_ILE_02]
+
+
+## Vrai sur n'importe quelle île jouable, même celles qui n'ont pas encore de sauvegarde
+## (la Colonie) : le menu pause y fonctionne, mais rien n'y est écrit.
+func en_jeu() -> bool:
+	if en_partie():
+		return true
+	var scene := get_tree().current_scene if is_inside_tree() else null
+	return scene != null and scene.scene_file_path in ILES_SANS_SAUVEGARDE
 
 
 func _sur_ile_02(source: Node = null) -> bool:

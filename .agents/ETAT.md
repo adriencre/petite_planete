@@ -1,6 +1,16 @@
 # État du projet — passation entre agents
 
-> Mis à jour le **2026-11-20** par **codex** pour la reprise sur Mac.
+> Mis à jour le **2026-11-22** par **claude** (PC fixe).
+
+## En cours : l'école de la Colonie (22 novembre)
+
+- La boutique des couturières, l'école, l'ancien corps de l'école et la maison d'Aube sont décrits dans ILE_03_COLONIE.md. Le travail du 20 au soir n'est **pas commité**.
+- La classe est habillée dans Blender : affaires abandonnées, banc renversé, pupitre d'Aube et pièce séparée `Dessin_escalier`. GLB régénéré, **pas encore réimporté dans Godot**.
+- Interactions de l'école câblées dans `scenes/ile_03_maquette.tscn` (GLB réimporté via MCP) : `TableauComptine` (page_lisible, image `tableau_comptine.png` posée sur l'ardoise, lueur 0,3), `DessinEscalier` (à ramasser sur le pupitre d'Aube), `Carnet` et `Guidage` ajoutés à l'île 3. Cinématique de l'ancien corps : `scripts/souvenir_ancien_corps.gd` (nœud `Souvenir` dans `scenes/ile03/ancien_corps_ecole.tscn`), avec `carnet.ouvrir_sur_image()`.
+- **Pas encore essayé en jeu.** À vérifier : orientation et lisibilité de l'image du tableau et du dessin, cadrage de la cinématique.
+- **Piège** : la sauvegarde ne couvre que l'île 1 et l'île 2 (`Sauvegarde.en_partie`). Le carnet de la Colonie lit celui de l'île 1, donc il n'a pas le dessin du Phare : la cinématique saute alors l'ouverture du carnet. À régler avec le raccord des îles.
+- La Colonie est dans le menu de développement (`ecran_titre.gd`, « Île 3 — La Colonie »). Pause active via `Sauvegarde.en_jeu()`, mais **rien n'est sauvegardé** sur l'île 3 (`ILES_SANS_SAUVEGARDE`) : la cinématique de l'ancien corps se rejoue à chaque visite.
+- Ensuite : la maison d'Aube (le script Blender a déjà une fonction `maison_aube`).
 
 ## Menu principal
 

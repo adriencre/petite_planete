@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _transition_en_cours or _reglages.is_visible_in_tree() or not Sauvegarde.en_partie():
+	if _transition_en_cours or _reglages.is_visible_in_tree() or not Sauvegarde.en_jeu():
 		return
 	if not event.is_action_pressed("ui_cancel"):
 		return
@@ -38,7 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not ouvert and not _transition_en_cours and Sauvegarde.en_partie():
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not ouvert and not _transition_en_cours and Sauvegarde.en_jeu():
 		ouvrir()
 
 
