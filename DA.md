@@ -16,6 +16,7 @@
 
 ## Caméra — v6 : vue de dessus
 - **Exploration en vue de dessus**, caméra haute et inclinée, robot vu en entier, effet maquette (décidé le 2026-11-16, remplace la 1re personne validée plus tôt le même jour).
+- **Bâtiment qui masque entièrement le robot** : en exploration, ses murs et son toit passent en gris translucide et les aménagements intérieurs sont masqués. La coupe de visite s’active au seuil.
 - **À décider** : angle et focale exacts, caméra fixe ou orientable, flou de maquette (tilt-shift) ou non.
 - **L'ampoule de l'antenne reste la jauge de batterie (zéro HUD)**, lue directement sur le robot : elle brille plus ou moins, grésille quand elle faiblit et éclaire le sol autour de lui. Elle doit être assez grosse et lumineuse pour se lire de haut.
 - ~~Bras dans le champ~~, ~~ampoule en haut de l'écran~~ : abandonnés avec la 1re personne.

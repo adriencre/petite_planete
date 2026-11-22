@@ -1,0 +1,7 @@
+arche_entree -52.000 2.285 -12.200
+arrivee_entree -50.780 2.905 -12.200
+arche_grotte -51.030 -28.700 -10.850
+arrivee_grotte -50.170 -28.570 -10.850
+salle -48.300 -30.300 -20.400
+entree_salle -46.575 -30.285 -18.476
+milieu_galerie -45.506 -30.152 -12.741

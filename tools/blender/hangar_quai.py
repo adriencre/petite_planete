@@ -208,7 +208,7 @@ def modele_meshy(nom, pos, longueur, matiere, parent, horizontal=False):
 
 
 def hangar():
-    fixe, coupe, toit = (groupe(n) for n in ("Atelier", "Coupe", "Toit"))
+    fixe, coupe, toit, interieur = (groupe(n) for n in ("Atelier", "Coupe", "Toit", "Mobilier"))
     # Assise, allée et chariots laissent le seuil à niveau avec le quai.
     boite("Assise de calcaire", (0, 0, -.15), (9.4, 8.92, .30), pierre[1], fixe)
     rampe = [(-1.81,-4.46,.044),(1.81,-4.46,.044),(1.81,-5.42,-.106),(-1.81,-5.42,-.106)]
@@ -217,9 +217,9 @@ def hangar():
         x = -4.40 + k*.40
         boite("Plancher de pin", (x, 0, .014), (.391, 8.78, .06), pins[k % 4], fixe)
     for x in (-.86, .86):
-        boite("Rail de mise sur ber", (x, -.47, .051), (.075, 7.4, .038), fer, fixe)
+        boite("Rail de mise sur ber", (x, -.47, .051), (.075, 7.4, .038), fer, interieur)
         for y in (-3.95, 3.23):
-            boite("Butée du rail", (x, y, .085), (.16, .25, .12), or_pale, fixe)
+            boite("Butée du rail", (x, y, .085), (.16, .25, .12), or_pale, interieur)
     # Murs en planches et hautes fenêtres. La façade sud s'efface avec la toiture.
     for signe in (-1, 1):
         x = signe*4.51
@@ -277,42 +277,42 @@ def hangar():
     for x,y in ((-2.94,-1.04),(2.98,.22)):
         for dy in (-1.03,1.03):
             for dx in (-.48,.48):
-                barre("Pied de tréteau", (x+dx*1.18,y+dy,.06),(x+dx*.71,y+dy,.53),(.13,.17),chene,fixe)
-            boite("Traverse de ber", (x,y+dy,.54),(1.48,.29,.18),pins[1],fixe)
-    coque((-2.94,-1.04,.92), 3.88, 1.74, cuivre, fixe, True)
-    coque((2.98,.22,.82), 4.24, 1.72, bleus[3], fixe, False)
+                barre("Pied de tréteau", (x+dx*1.18,y+dy,.06),(x+dx*.71,y+dy,.53),(.13,.17),chene,interieur)
+            boite("Traverse de ber", (x,y+dy,.54),(1.48,.29,.18),pins[1],interieur)
+    coque((-2.94,-1.04,.92), 3.88, 1.74, cuivre, interieur, True)
+    coque((2.98,.22,.82), 4.24, 1.72, bleus[3], interieur, False)
     # Établi au fond, outils à hauteur de Semeur et accastillage en cours de tri.
     for x in (-3.91,-1.24):
         for y in (3.26,4.08):
-            boite("Pied d’établi", (x,y,.63), (.18,.18,1.16),chene,fixe)
-    boite("Plateau d’établi", (-2.58,3.67,1.22),(3.03,1.12,.17),pins[2],fixe)
-    boite("Étagère basse", (-2.58,3.70,.38),(2.77,.95,.10),pins[1],fixe)
-    boite("Panneau d’outils", (-2.58,4.22,2.12),(3.07,.09,1.27),pins[1],fixe)
+            boite("Pied d’établi", (x,y,.63), (.18,.18,1.16),chene,interieur)
+    boite("Plateau d’établi", (-2.58,3.67,1.22),(3.03,1.12,.17),pins[2],interieur)
+    boite("Étagère basse", (-2.58,3.70,.38),(2.77,.95,.10),pins[1],interieur)
+    boite("Panneau d’outils", (-2.58,4.22,2.12),(3.07,.09,1.27),pins[1],interieur)
     for x in (-3.55,-3.17,-2.71,-2.37):
-        barre("Manche d’outil", (x,4.11,1.75),(x+.09,4.10,2.38),(.09,.083),chene,fixe)
-        boite("Fer d’outil", (x+.09,4.09,2.35),(.20,.12,.13),fer,fixe)
+        barre("Manche d’outil", (x,4.11,1.75),(x+.09,4.10,2.38),(.09,.083),chene,interieur)
+        boite("Fer d’outil", (x+.09,4.09,2.35),(.20,.12,.13),fer,interieur)
     for i in range(3):
-        anneau("Couronne de corde", (-1.87,3.76,1.35+i*.052),.26-i*.024,.036,corde,fixe)
-    boite("Étau", (-3.57,3.23,1.45),(.40,.33,.27),fer,fixe)
-    rondin("Vis de l’étau", (-3.57,2.95,1.43),(-3.57,3.36,1.43),.055,or_pale,fixe)
-    rondin("Poignée d’étau", (-3.78,2.97,1.43),(-3.33,2.97,1.43),.041,fer,fixe)
+        anneau("Couronne de corde", (-1.87,3.76,1.35+i*.052),.26-i*.024,.036,corde,interieur)
+    boite("Étau", (-3.57,3.23,1.45),(.40,.33,.27),fer,interieur)
+    rondin("Vis de l’étau", (-3.57,2.95,1.43),(-3.57,3.36,1.43),.055,or_pale,interieur)
+    rondin("Poignée d’étau", (-3.78,2.97,1.43),(-3.33,2.97,1.43),.041,fer,interieur)
     for x,y,z,t in ((3.64,3.75,.05,.72),(2.89,3.88,.05,.67),(3.63,3.75,.77,.52),(-3.71,1.88,.05,.73)):
-        caisse(x,y,z,fixe,t)
+        caisse(x,y,z,interieur,t)
     for x in (2.0,2.42,2.84):
-        barre("Planche de rechange", (x,3.76,.06),(x+.29,4.22,2.45),(.17,.085),pins[2],fixe)
+        barre("Planche de rechange", (x,3.76,.06),(x+.29,4.22,2.45),(.17,.085),pins[2],interieur)
     for y in (1.92,2.23):
-        barre("Gaffe", (-4.14,y,.05),(-4.38,y+.67,3.25),(.073,.067),chene,fixe)
+        barre("Gaffe", (-4.14,y,.05),(-4.38,y+.67,3.25),(.073,.067),chene,interieur)
     for x in (-3.9,3.9):
-        boite("Patère d’atelier", (x,4.23,2.77),(.23,.21,.13),or_pale,fixe)
+        boite("Patère d’atelier", (x,4.23,2.77),(.23,.21,.13),or_pale,interieur)
     for x in (-2.55,2.54):
-        rondin("Tringle de suspension", (x,-.16,4.48),(x,-.16,3.61),.027,fer,toit)
-        cylindre("Abat-jour émaillé", (x,-.16,3.52),.33,.23,bleus[3],toit,12,.11)
-        cylindre("Verre de lampe suspendue", (x,-.16,3.39),.12,.13,ambre,toit)
-    modele_meshy("grappin", (3.84,2.22,.06), .94, fer, fixe)
-    modele_meshy("toile_voile", (-2.75,3.60,1.31), .88, toile, fixe, horizontal=True)
-    for racine in (fixe, coupe, toit):
+        rondin("Tringle de suspension", (x,-.16,4.48),(x,-.16,3.61),.027,fer,interieur)
+        cylindre("Abat-jour émaillé", (x,-.16,3.52),.33,.23,bleus[3],interieur,12,.11)
+        cylindre("Verre de lampe suspendue", (x,-.16,3.39),.12,.13,ambre,interieur)
+    modele_meshy("grappin", (3.84,2.22,.06), .94, fer, interieur)
+    modele_meshy("toile_voile", (-2.75,3.60,1.31), .88, toile, interieur, horizontal=True)
+    for racine in (fixe, coupe, toit, interieur):
         regrouper(racine)
-    export("hangar_quai", (fixe, coupe, toit))
+    export("hangar_quai", (fixe, coupe, toit, interieur))
     return fixe, coupe, toit
 
 

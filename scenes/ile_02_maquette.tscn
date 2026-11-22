@@ -36,6 +36,8 @@
 [ext_resource type="Shader" uid="uid://bu0ebrb5bkj3b" path="res://shaders/vision.gdshader" id="s_vision"]
 [ext_resource type="Script" path="res://scripts/guidage.gd" id="guidage"]
 
+[ext_resource type="Script" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
+
 [sub_resource type="ShaderMaterial" id="facettes_mat"]
 render_priority = 0
 shader = ExtResource("s_facettes")
@@ -329,6 +331,11 @@ vue_dessus = true
 distance_dessus = 9.0
 angle_dessus = 40.0
 orientation_dessus = 0.0
+
+[node name="BatimentsFantomes" type="Node" parent="." node_paths=PackedStringArray("joueur", "monde_phare")]
+script = ExtResource("fantomes")
+joueur = NodePath("../Joueur")
+monde_phare = NodePath("../Monde")
 
 [node name="Vision" type="CanvasLayer" parent="." unique_id=2053372943]
 

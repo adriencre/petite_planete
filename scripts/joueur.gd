@@ -68,6 +68,7 @@ var _index_cible = null  # Vector3 monde ou null
 const EPAULE_D := Vector3(0.25, -0.36, 0.12)
 const EPAULE_G := Vector3(-0.25, -0.36, 0.12)
 const LONG_BRAS := 0.34
+const SILHOUETTE := preload("res://shaders/silhouette_robot.gdshader")
 @onready var bras_droit: Node3D = $Camera/Mains/BrasDroit
 @onready var bras_gauche: Node3D = $Camera/Mains/BrasGauche
 @onready var fiche: Node3D = $Camera/Mains/MainDroite/Fiche
@@ -87,6 +88,9 @@ var _vitesse_lissee := 0.0
 var _blend := 0.0  # 0 = 3e personne, 1 = 1re personne
 var _gravite: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var _depart: Vector3
+## Sous cette altitude, le robot est tombé de l'île : il revient au départ. Abaissée dans la grotte
+## d'Aube, construite sous l'île (passage_grotte.gd).
+var altitude_chute: float = -2.0
 
 
 func _ready() -> void:
@@ -110,6 +114,7 @@ func _ready() -> void:
 	_preparer_lueur()
 
 
+
 ## La lueur de l'antenne : accrochée en haut de la tête du modèle (os « head_end »), elle suit la tête
 ## même pendant les animations ; un halo doux toujours tourné vers la caméra, et la lumière part de là.
 var _lueur: Node3D
@@ -120,6 +125,17 @@ var _coeur_mat := StandardMaterial3D.new()
 ## Rayon du cœur lumineux de l'ampoule (m) et sa force (> 1 : il déclenche le glow).
 @export var rayon_coeur: float = 0.07
 @export var eclat_coeur: float = 3.0
+
+
+## Quand une maison ou un toit cache le robot (vue de dessus), sa silhouette dorée se voit à travers
+## (shaders/silhouette_robot.gdshader, en calque sur ses maillages).
+func _preparer_silhouette() -> void:
+	var calque := ShaderMaterial.new()
+	calque.shader = SILHOUETTE
+	for m in modele.find_children("*", "MeshInstance3D", true, false):
+		var maillage := m as MeshInstance3D
+		if maillage.material_overlay == null:
+			maillage.material_overlay = calque
 
 
 func _preparer_lueur() -> void:
@@ -247,7 +263,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y -= _gravite * delta
 	move_and_slide()
-	if global_position.y < -2.0:
+	if global_position.y < altitude_chute:
 		global_position = _depart
 		velocity = Vector3.ZERO
 	_animer(delta, dir)

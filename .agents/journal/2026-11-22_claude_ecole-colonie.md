@@ -14,9 +14,14 @@ Reprise après deux jours : « dis-moi où on en était ». Puis : « on finit l
 - Commit `586cebb` (école, couturières, ancien corps).
 - Maison d'Aube reprise « tout d'un coup » : conduite de cuivre, petite porte cintrée, chambre meublée, boîte à musique avec prise au pied du bureau, lanterne de chevet. Carnet d'Aube dessiné (`tools/affiches/carnet_aube.html`). Script `boite_musique.gd`. Thème provisoire `tools/audio/theme_aube.py`. GLB réimporté via MCP, scène enregistrée.
 - Retour : escalier bloqué (rampe 25 cm sous le palier, corrigé) ; chemin sous l'escalier peu clair → porte d'enfant directement dans la cave, niche fermée, cour en décor. Porte du palier barrée (`porte_aube.tscn`, `porte_barree.gd`), sons `tools/audio/sons_ile_03.py`.
+- Commit `cebbd6e` (maison d'Aube). Coin noir : rempart ruiné, Aube en silhouette de mousse, dernier dessin au-dessus du lit, lumière négative, lueurs des amis à batterie faible, cinématique de découverte. Piège trouvé : le coin noir était ajouté après l'export GLB.
+- Rempart refusé → grotte sous la ville (entrée dans la ruelle, grotte à z -30 reliée par fondu), Aube via Meshy (27 crédits), dessin du coin noir refait. Premier essai de grotte « en place » (grille) abandonné : parois en escalier, pas de place sous la ville.
+- Retour : « je ne peux pas entrer dans la grotte » (pas encore installée, partie ouverte) et « on ne voit pas mon robot caché derrière une maison » → silhouette dorée du robot à travers les obstacles (shader de profondeur, toutes les îles). Entrée de la grotte déplacée (toit de l'école, limite de secteur).
 
 ## Décisions de l'utilisateur
 - Maison d'Aube : tout reprendre d'un coup ; tuyau = conduite de cuivre ; boîte à musique = thème d'Aube + petit moment (caméra sur la chambre, lanterne de chevet), sans conséquence de jeu.
+- Coin noir (2e version) : grotte dans le sol, entrée par dalle effondrée + escalier taillé, grotte naturelle + racines, Aube = concept Meshy A (statue de mousse), 3D texturée.
+- Coin noir (1re version, refusée) : arche du vieux rempart au bord de l'eau ; silhouette de mousse sans os ; dernier dessin dans la chambre ; lueurs simples sous ~15 % de batterie.
 - Chemin d'Aube : porte d'enfant sous l'escalier → cave (recommandé, choisi). Grande porte : elle résiste, puis raccourci une fois la barre enlevée de l'intérieur.
 - Ancien corps : mise en scène + carnet ouvert sur le dessin du Phare, sans texte (pensées du robot retirées). Tableau : document dessiné à la craie.
 - Tableau lisible tout de suite, sans lanterne. Pupitre d'Aube avec le dessin « sous l'escalier ». Petite cinématique pour l'ancien corps. Cloche du clocheton = décor. (reportées dans ILE_03_COLONIE.md, § L'école)

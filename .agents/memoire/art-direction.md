@@ -25,3 +25,5 @@ Processus que l'utilisateur aime : débattre en texte d'abord (il teste parfois 
 **Habitations fermées de la Colonie (2026-11-20)** : l’utilisateur a rejeté le rendu Meshy pour ces maisons et demandé de les refaire dans Blender. Source éditable et variantes architecturales documentées dans ILE_03_COLONIE.md.
 
 **Végétation de la Colonie (2026-11-20)** : ville abandonnée depuis longtemps. L’utilisateur veut une végétation sauvage qui gagne les rues. Voir ILE_03_COLONIE.md pour la répartition.
+
+- 2026-11-22 : sur les îles jouables, si un bâtiment masque entièrement le robot en vue de dessus, son enveloppe passe en gris translucide et ses aménagements restent masqués. Voir DA.md.

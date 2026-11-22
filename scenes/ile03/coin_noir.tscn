@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/passage_grotte.gd" id="passage"]
+[ext_resource type="Script" path="res://scripts/souvenir_ancien_corps.gd" id="souvenir"]
+[ext_resource type="Script" path="res://scripts/lueurs_amis.gd" id="lueurs"]
+[ext_resource type="PackedScene" path="res://assets/models/ile03/aube_coin_noir.glb" id="aube"]
+
+[sub_resource type="BoxShape3D" id="arche"]
+size = Vector3(0.65, 2.5, 2.24)
+
+[sub_resource type="BoxShape3D" id="arche_exterieure"]
+size = Vector3(0.9, 2.5, 2.2)
+
+[sub_resource type="BoxMesh" id="plafond_mesh"]
+size = Vector3(40, 0.2, 40)
+
+[node name="CoinNoir" type="Node3D"]
+
+[node name="PassageEntree" type="Area3D" parent="." node_paths=PackedStringArray("cible")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 2.285, -12.2)
+monitorable = false
+script = ExtResource("passage")
+cible = NodePath("../ArriveeGrotte")
+
+[node name="Forme" type="CollisionShape3D" parent="PassageEntree"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("arche_exterieure")
+
+[node name="ArriveeEntree" type="Marker3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -50.78, 2.905, -12.2)
+
+[node name="PassageGrotte" type="Area3D" parent="." node_paths=PackedStringArray("cible")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.03, -28.7, -10.85)
+monitorable = false
+script = ExtResource("passage")
+cible = NodePath("../ArriveeEntree")
+
+[node name="Forme" type="CollisionShape3D" parent="PassageGrotte"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("arche")
+
+[node name="ArriveeGrotte" type="Marker3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -50.17, -28.57, -10.85)
+
+[node name="PlafondOmbre" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47, -26.9, -15)
+cast_shadow = 3
+mesh = SubResource("plafond_mesh")
+
+[node name="Ombre" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.3, -29, -20.4)
+light_energy = 0.4
+light_negative = true
+omni_range = 3.2
+
+[node name="Aube" parent="." instance=ExtResource("aube")]
+transform = Transform3D(0.7557, 0, 0.6549, 0, 1, 0, -0.6549, 0, 0.7557, -48.693, -30.3, -20.854)
+
+[node name="Souvenir" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.693, -30.5, -20.854)
+script = ExtResource("souvenir")
+distance_declenchement = 2.4
+
+[node name="Lueurs" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.693, -30.3, -20.854)
+script = ExtResource("lueurs")

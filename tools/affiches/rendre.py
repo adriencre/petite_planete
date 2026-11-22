@@ -43,6 +43,7 @@ DOCUMENTS = {
     "dessin_aube_escalier": (960, 690),
     "tableau_comptine": (1320, 630),
     "carnet_aube": (1000, 1000),
+    "dessin_aube_coin_noir": (960, 690),
 }
 
 

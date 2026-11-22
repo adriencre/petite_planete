@@ -1,6 +1,7 @@
 """Construit la Colonie en quartiers éditables et exporte son décor pour Godot."""
 import math
 import random
+import sys
 from pathlib import Path
 
 import bmesh
@@ -1403,6 +1404,9 @@ for indice in range(len(angles)-1):
     triangles_du_sol.append(triangles)
 verticale = Vector((0,0,-1))
 
+# La grotte d'Aube (tools/blender/grotte_aube.py) : chemin, découpe du secteur 5, construction.
+exec((Path(__file__).parent/"grotte_aube.py").read_text(encoding="utf-8"), globals())
+
 def sol_du_secteur(i, t, rayon, relief=.025):
     a = point(i, rayon, hauteurs[i])
     b = point(i+1, rayon, hauteurs[i+1])
@@ -1415,6 +1419,8 @@ def sol_du_secteur(i, t, rayon, relief=.025):
     return x, y, z+relief
 
 def tache_au_sol(i, t, rayon, largeur, profondeur, couleur, relief=.025, cotes=7):
+    if dans_grotte(i, t, rayon, .9):
+        return
     contours = []
     for coin in range(cotes):
         a = coin*math.tau/cotes
@@ -1424,6 +1430,8 @@ def tache_au_sol(i, t, rayon, largeur, profondeur, couleur, relief=.025, cotes=7
     morceau(contours, [tuple(range(cotes))], couleur)
 
 def touffe(i, t, rayon, hauteur, nombre=7):
+    if dans_grotte(i, t, rayon):
+        return
     x, y, z = sol_du_secteur(i,t,rayon)
     teintes = ("herbe_sombre", "herbe_olive", "herbe_tendre", "herbe_seche")
     for _ in range(nombre):
@@ -1479,7 +1487,7 @@ def bordures_sauvages(i):
             for _ in range(7):
                 touffe(i,t+friche.uniform(-.079,.079),rayon+friche.uniform(-.52,.52),
                        friche.uniform(.34,.86))
-            if ext and r > 48 and friche.random() < .58:
+            if ext and r > 48 and friche.random() < .58 and not dans_grotte(i, t, rayon, 1.2):
                 x,y,z = sol_du_secteur(i,t,rayon)
                 taille = friche.uniform(.36,.79)
                 pilier(x,y,z-.04,taille*.72,taille*.42,"herbe_sombre",taille)
@@ -1490,6 +1498,9 @@ for i in range(len(angles)-1):
     j=i+1
     commencer("Terrasse_%02d"%i)
     for ra,rb,couleur in bandes:
+        if i == GROTTE_SECTEUR and couleur == "sauge":
+            bande_herbe_trouee()
+            continue
         pts=quadrilatere(i,ra,rb)
         morceau(pts,[(0,3,2),(0,2,1)],couleur)
     # Couronnes géologiques continues, y compris les coupes aux deux bouts de la passe.
@@ -1652,9 +1663,13 @@ for i in range(18):
         largeur=hasard.uniform(.8,2.6)
         pilier(x,y,-1.7,largeur,hasard.uniform(1.7,3.2),"ocre" if n%3 else "pierre",largeur*.65)
 terminer()
+
+construire_grotte()
+
 chemin=racine/"assets/models/ile03/colonie_du_lagon.glb"
 bpy.ops.export_scene.gltf(filepath=str(chemin),export_format='GLB')
 # Le plan d'eau du rendu est remplacé en jeu par une surface translucide.
+
 commencer("Mer_de_presentation")
 boite(0,0,-.35,500,500,.3,"mer")
 terminer()
@@ -1694,4 +1709,5 @@ scene.render.resolution_y=1100
 scene.render.resolution_percentage=100
 scene.render.filepath=str(dossier/"colonie_du_lagon.png")
 bpy.ops.wm.save_as_mainfile(filepath=str(dossier/"colonie_du_lagon.blend"))
-bpy.ops.render.render(write_still=True)
+if "--sans-rendu" not in sys.argv:
+    bpy.ops.render.render(write_still=True)

@@ -18,6 +18,8 @@
 [ext_resource type="Shader" uid="uid://bu0ebrb5bkj3b" path="res://shaders/vision.gdshader" id="s_vision"]
 [ext_resource type="Shader" uid="uid://da3k48k6bfflr" path="res://shaders/zone_endormie.gdshader" id="s_zone"]
 
+[ext_resource type="Script" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
+
 [sub_resource type="ShaderMaterial" id="ciel_mat"]
 resource_local_to_scene = true
 shader = ExtResource("s_ciel")
@@ -211,6 +213,11 @@ vue_dessus = true
 distance_dessus = 4.5
 angle_dessus = 40.0
 orientation_dessus = 0.0
+
+[node name="BatimentsFantomes" type="Node" parent="." node_paths=PackedStringArray("joueur", "maquette_reveil")]
+script = ExtResource("fantomes")
+joueur = NodePath("../Joueur")
+maquette_reveil = NodePath("../Maquette")
 
 [node name="CameraApercu" type="Camera3D" parent="." unique_id=191535945]
 transform = Transform3D(0.91037, 0.03074, 0.41266, 0, 0.99724, -0.07428, -0.4138, 0.06762, 0.90785, -6, 4, 22)

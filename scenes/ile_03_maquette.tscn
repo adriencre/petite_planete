@@ -11,9 +11,12 @@
 [ext_resource type="AudioStream" uid="uid://cypqtjujsigpu" path="res://assets/audio/theme_aube.wav" id="13_je6up"]
 [ext_resource type="Texture2D" uid="uid://bg20ab76iy0q0" path="res://assets/affiches/carnet_aube.png" id="14_w7tjp"]
 [ext_resource type="PackedScene" path="res://scenes/ile03/porte_aube.tscn" id="15_je6up"]
+[ext_resource type="PackedScene" path="res://scenes/ile03/coin_noir.tscn" id="16_07pbo"]
+[ext_resource type="Texture2D" uid="uid://7hvpow0h2o5u" path="res://assets/affiches/dessin_aube_coin_noir.png" id="17_qqh4o"]
 [ext_resource type="Environment" uid="uid://6ed2n2pcb23t" path="res://assets/ambiances/ile_02.tres" id="ambiance"]
 [ext_resource type="PackedScene" uid="uid://djrd5wf4ymo5y" path="res://assets/models/ile03/colonie_du_lagon.glb" id="colonie"]
 [ext_resource type="Script" uid="uid://b8yipboy6f2xc" path="res://scripts/coupe_maison.gd" id="coupe_maison"]
+[ext_resource type="Script" uid="uid://c83v2owqjrp1g" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
 [ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="joueur"]
 
 [sub_resource type="BoxShape3D" id="Interieur_quai"]
@@ -42,9 +45,6 @@ size = Vector3(1.4, 2.2, 4.2)
 
 [sub_resource type="BoxShape3D" id="Volume_TuyauAube"]
 size = Vector3(1.1, 2.1, 2.6)
-
-[sub_resource type="BoxShape3D" id="Volume_RuelleEcoleAube"]
-size = Vector3(3, 2.8, 7.6)
 
 [node name="Ile03Maquette" type="Node3D" unique_id=1408208231]
 
@@ -83,6 +83,7 @@ murs_hauts = NodePath("../Colonie/Murs_hauts_des_couturieres")
 shape = SubResource("Interieur_quai")
 
 [node name="Mer" type="MeshInstance3D" parent="." unique_id=429233188]
+transform = Transform3D(0.99940133, -0.010746681, 0.032886717, 0.010544285, 0.9999244, 0.0063218735, -0.032952163, -0.005971337, 0.9994392, 0, 0, 0)
 mesh = SubResource("Surface")
 
 [node name="Joueur" parent="." unique_id=962232854 instance=ExtResource("joueur")]
@@ -147,15 +148,10 @@ autres = Array[NodePath]([NodePath("../Colonie/Couvercle_tuyau_Aube"), NodePath(
 [node name="Volume" type="CollisionShape3D" parent="TuyauAube" unique_id=1080430770]
 shape = SubResource("Volume_TuyauAube")
 
-[node name="RuelleEcoleAube" type="Area3D" parent="." unique_id=832031098]
-transform = Transform3D(0.3430751, 0, 0.939308, 0, 1, 0, -0.939308, 0, 0.3430751, -41.9229, 5.05, -10.9471)
-collision_layer = 0
-monitorable = false
-script = ExtResource("coupe_maison")
-autres = Array[NodePath]([NodePath("../Colonie/Toit_ecole"), NodePath("../Colonie/Murs_du_fond_ecole"), NodePath("../Colonie/Murs_hauts_ecole")])
-
-[node name="Volume" type="CollisionShape3D" parent="RuelleEcoleAube" unique_id=1607532443]
-shape = SubResource("Volume_RuelleEcoleAube")
+[node name="BatimentsFantomes" type="Node" parent="." unique_id=934715538 node_paths=PackedStringArray("colonie", "joueur")]
+script = ExtResource("fantomes")
+colonie = NodePath("../Colonie")
+joueur = NodePath("../Joueur")
 
 [node name="Carnet" type="CanvasLayer" parent="." unique_id=1349839232]
 script = ExtResource("6_dgjo8")
@@ -223,6 +219,18 @@ ramasser = false
 [node name="PorteAube" parent="." unique_id=2073300561 instance=ExtResource("15_je6up")]
 transform = Transform3D(0.34298828, 0, 0.9393397, 0, 1, 0, -0.9393397, 0, 0.34298828, -41.2677, 3.95, -15.0727)
 
+[node name="CoinNoir" parent="." unique_id=1028905104 instance=ExtResource("16_07pbo")]
+
+[node name="DessinCoinNoir" type="Node3D" parent="." unique_id=1209876959]
+transform = Transform3D(-0.34271342, -0.93944, 3.4007635e-06, 0, -3.6199901e-06, -1, 0.93944, -0.34271342, 1.2406192e-06, -39.353, 8, -12.564)
+script = ExtResource("9_ybcho")
+texte = "Dessin d’Aube, au-dessus de son lit : « Là où mes amis dansent. » Entre l’école et sa maison, un trou dans les pavés ; des marches descendent sous la terre, dans le noir. En bas, Aube danse en rond avec de petites lumières."
+distance_lecture = 1.7
+hauteur_lecture = 1.9
+taille_feuille = Vector2(0.42, 0.3)
+image = ExtResource("17_qqh4o")
+intensite_lueur = 0.6
+
 [connection signal="body_entered" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_entre"]
 [connection signal="body_exited" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_sort"]
 [connection signal="body_entered" from="InterieurCouturieres" to="InterieurCouturieres" method="_robot_entre"]
@@ -237,5 +245,3 @@ transform = Transform3D(0.34298828, 0, 0.9393397, 0, 1, 0, -0.9393397, 0, 0.3429
 [connection signal="body_exited" from="PassageAube" to="PassageAube" method="_robot_sort"]
 [connection signal="body_entered" from="TuyauAube" to="TuyauAube" method="_robot_entre"]
 [connection signal="body_exited" from="TuyauAube" to="TuyauAube" method="_robot_sort"]
-[connection signal="body_entered" from="RuelleEcoleAube" to="RuelleEcoleAube" method="_robot_entre"]
-[connection signal="body_exited" from="RuelleEcoleAube" to="RuelleEcoleAube" method="_robot_sort"]
