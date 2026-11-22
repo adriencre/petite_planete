@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Le carnet d’Aube</title>
+<link rel="stylesheet" href="commun.css">
+<style>
+/* Le carnet d'Aube, ouvert sur son bureau (ILE_03_COLONIE.md, texte validé le 2026-11-16).
+   Une page d'écolière : lignes bleues, marge rose, écriture d'enfant qui penche. */
+.page {
+  inset: 40px 46px 46px;
+  transform: rotate(-1.2deg);
+  clip-path: polygon(0 .6%, 30% 0, 66% .8%, 100% 0, 99.6% 52%, 100% 100%, 62% 99.4%, 27% 100%, .3% 99.2%);
+  background:
+    linear-gradient(90deg, transparent 96px, #e59aa6aa 97px 99px, transparent 100px),
+    repeating-linear-gradient(0deg, transparent 0 63px, #8fb5c86b 64px 66px),
+    radial-gradient(ellipse at 88% 92%, #c4a06a55, transparent 36%),
+    linear-gradient(104deg, #fbf3df, #f6ead0 70%, #ecdcb9);
+  color: #3e3a63;
+  font: 500 46px/66px Caveat, cursive;
+  padding: 38px 40px 0 120px;
+}
+.page p { margin: 0; white-space: nowrap; }
+.p1 { transform: rotate(-1.5deg); }
+.p2 { transform: rotate(.8deg); letter-spacing: .5px; }
+.p3 { transform: rotate(-.6deg); }
+.p4 { transform: rotate(1.4deg); }
+.p5 { transform: rotate(-1deg); }
+.p6 { transform: rotate(.5deg); }
+.p7 { transform: rotate(-1.8deg); }
+.p8 { transform: rotate(1deg); }
+.gros { font-weight: 600; font-size: 54px; }
+.dessin-coucou { position: absolute; left: 120px; right: 40px; bottom: 20px; height: 230px; }
+</style>
+</head>
+<body>
+<main class="feuille page">
+<p class="p1">Papa dit on part ce soir avec la Nef.</p>
+<p class="p2"><span class="gros">TOUT LE MONDE.</span><br>même les arbres on les laisse.</p>
+<p class="p3">mes amis viennent que quand il fait noir.</p>
+<p class="p4">ici il fait jamais noir. ☹</p>
+<p class="p5">Iris elle les voit aussi.</p>
+<p class="p6">elle dit faut pas avoir peur du noir.</p>
+<p class="p7">je vais leur dire au revoir</p>
+<p class="p8">au coin noir. après je pars. promis.</p>
+<!-- des petites lumières qui font coucou -->
+<svg class="dessin-coucou" viewBox="0 0 760 260" aria-label="Des petites lumières qui font coucou">
+<path d="M30 200q170-40 340-6t360-14" fill="none" stroke="#4d4a6e" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+<path d="M40 60q60-30 120 6t100-8" fill="none" stroke="#4d4a6e" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" opacity=".5"/>
+<g stroke="#4d4a6e" stroke-width="5" stroke-linecap="round" fill="none">
+<circle cx="150" cy="150" r="26" fill="#ffe08a"/>
+<path d="M126 140l-26-28m76 26 22-34"/>
+<circle cx="142" cy="146" r="3" fill="#4d4a6e"/><circle cx="158" cy="146" r="3" fill="#4d4a6e"/>
+<path d="M143 158q7 6 14 0"/>
+<circle cx="300" cy="120" r="20" fill="#ffd27a"/>
+<path d="M282 112l-20-20m38 14 16-26"/>
+<circle cx="294" cy="117" r="2.6" fill="#4d4a6e"/><circle cx="306" cy="117" r="2.6" fill="#4d4a6e"/>
+<circle cx="430" cy="160" r="23" fill="#ffe8a3"/>
+<path d="M410 150l-18-30m40 20 26-20"/>
+<circle cx="423" cy="156" r="3" fill="#4d4a6e"/><circle cx="437" cy="156" r="3" fill="#4d4a6e"/>
+<path d="M424 168q6 5 12 0"/>
+<circle cx="560" cy="110" r="17" fill="#ffd98a"/>
+<path d="M545 104l-14-24m30 18 20-16"/>
+<circle cx="555" cy="108" r="2.4" fill="#4d4a6e"/><circle cx="565" cy="108" r="2.4" fill="#4d4a6e"/>
+</g>
+<g stroke="#f2b94a" stroke-width="4" stroke-linecap="round" opacity=".8">
+<path d="M150 112v-12m-30 22-9-8m69 8 9-8M300 92v-10m130 40v-12m130-34v-10"/>
+</g>
+<path d="M650 60q20-26 42 0q20-26 42 0q0 30-42 52q-42-22-42-52z" fill="#f3a6b5" stroke="#4d4a6e" stroke-width="4"/>
+</svg>
+</main>
+</body>
+</html>

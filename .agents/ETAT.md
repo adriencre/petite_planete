@@ -10,7 +10,11 @@
 - **Pas encore essayé en jeu.** À vérifier : orientation et lisibilité de l'image du tableau et du dessin, cadrage de la cinématique.
 - **Piège** : la sauvegarde ne couvre que l'île 1 et l'île 2 (`Sauvegarde.en_partie`). Le carnet de la Colonie lit celui de l'île 1, donc il n'a pas le dessin du Phare : la cinématique saute alors l'ouverture du carnet. À régler avec le raccord des îles.
 - La Colonie est dans le menu de développement (`ecran_titre.gd`, « Île 3 — La Colonie »). Pause active via `Sauvegarde.en_jeu()`, mais **rien n'est sauvegardé** sur l'île 3 (`ILES_SANS_SAUVEGARDE`) : la cinématique de l'ancien corps se rejoue à chaque visite.
-- Ensuite : la maison d'Aube (le script Blender a déjà une fonction `maison_aube`).
+- **Maison d'Aube (22 nov., suite)** : refaite dans `maison_aube()`. Conduite de cuivre octogonale (moitié basse marchable + `Couvercle_tuyau_Aube` qui s'efface, colliers, berceaux, tronçon tombé), petite porte orange cintrée sous l'escalier, chambre meublée (lit et patchwork, peluche, bureau, chaise, tapis, étagère aux jouets), chaises de Semeurs. Nouvelles pièces : `Boite_musique_Aube`, `Prise_boite_Aube`, `Lanterne_chevet_Aube`. Outils `ccw()` et `normales()` ajoutés au script.
+- Interactions : `CarnetAube` (page_lisible, `carnet_aube.png`), `BoiteMusiqueAube` (`scripts/boite_musique.gd` : geste « brancher », thème, lanterne de chevet qui s'éclaire ; E pendant la musique pour débrancher). Thème **provisoire** synthétisé (`tools/audio/theme_aube.py`) ; consigne pour la vraie version dans `tools/audio/ace_step/PROMPTS.md`.
+- **Retour de l'utilisateur** : escalier impossible à monter (marche invisible de 25 cm en haut de la rampe, corrigée) et chemin sous l'escalier incompréhensible. **Nouveau chemin** : niche sous le palier → petite porte d'enfant orange dans le mur de la cave → cave → étage. La grande porte du palier résiste (barre), puis s'ouvre de l'intérieur : `scenes/ile03/porte_aube.tscn` + `scripts/porte_barree.gd`, sons `porte_bloquee`/`barre` (`tools/audio/sons_ile_03.py`). La cour et la conduite deviennent du décor.
+- Trémie de la cave ouverte jusqu'au mur sud (le robot se cognait au plancher). GLB réimporté, `PorteAube` posée dans la Colonie. **Validé en jeu par l'utilisateur** (« ça fonctionne bien »).
+- **Pas encore essayé en jeu** : parcours des trois cachettes (passage étroit sous la volée, conduite, soupirail), lisibilité de la petite porte en vue de dessus, cadrage de la boîte à musique, collisions de la conduite.
 
 ## Menu principal
 

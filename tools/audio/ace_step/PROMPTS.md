@@ -88,3 +88,22 @@ désactivé et colle ces « paroles » qui ne sont que des balises :)
 
 Couches : dans le menu « … » du titre → Get Stems (Get Full Stems : une piste
 par instrument, abonnement payant) → tout télécharger dans `entree/`.
+
+---
+
+## Île 3 — Le thème d'Aube (boîte à musique de sa chambre)
+
+Joué une fois quand le robot branche son câble sur la boîte à musique d'Aube (`scripts/boite_musique.gd`).
+Une version provisoire synthétisée existe : `tools/audio/theme_aube.py` → `assets/audio/theme_aube.wav`.
+Le fichier téléchargé remplacera ce WAV **sous le même nom** (environ 30 s, pas de boucle, fin qui ralentit).
+
+**Style** :
+```
+solo music box lullaby, child's wind-up music box, fragile, slightly detuned, A minor,
+slow 60 bpm, intimate, nostalgic, tender, mechanism slowly running down at the end,
+small room reverb, no drums, no vocals, no other instruments
+```
+
+**Instrumental** : activé. **Durée** : 30-35 s.
+
+**Titre** : Ile 3 - Theme d'Aube

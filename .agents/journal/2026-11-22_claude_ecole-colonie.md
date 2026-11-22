@@ -11,8 +11,13 @@ Reprise après deux jours : « dis-moi où on en était ». Puis : « on finit l
 
 - Interactions (demandé : « réimporte et passe aux interactions ») : la feuille et la craie modélisées sont retirées de Blender et remplacées par deux documents dessinés (`tools/affiches/dessin_aube_escalier.html`, `tableau_comptine.html`, rendus par rendre.py). Ajouts dans la Colonie : tableau lisible, dessin à ramasser, carnet et guidage. Script `souvenir_ancien_corps.gd`. `page_lisible.gd` reçoit `intensite_lueur`, `carnet.gd` reçoit `ouvrir_sur_image()`. GLB réimporté via MCP godot-ai, scène enregistrée. Pas de lancement du jeu.
 - « J'ai pas accès à l'île 3 dans le menu » : ajoutée au menu de développement ; nouvelle `Sauvegarde.en_jeu()` pour que la pause marche sur la Colonie sans écrire dans la sauvegarde de l'île 1.
+- Commit `586cebb` (école, couturières, ancien corps).
+- Maison d'Aube reprise « tout d'un coup » : conduite de cuivre, petite porte cintrée, chambre meublée, boîte à musique avec prise au pied du bureau, lanterne de chevet. Carnet d'Aube dessiné (`tools/affiches/carnet_aube.html`). Script `boite_musique.gd`. Thème provisoire `tools/audio/theme_aube.py`. GLB réimporté via MCP, scène enregistrée.
+- Retour : escalier bloqué (rampe 25 cm sous le palier, corrigé) ; chemin sous l'escalier peu clair → porte d'enfant directement dans la cave, niche fermée, cour en décor. Porte du palier barrée (`porte_aube.tscn`, `porte_barree.gd`), sons `tools/audio/sons_ile_03.py`.
 
 ## Décisions de l'utilisateur
+- Maison d'Aube : tout reprendre d'un coup ; tuyau = conduite de cuivre ; boîte à musique = thème d'Aube + petit moment (caméra sur la chambre, lanterne de chevet), sans conséquence de jeu.
+- Chemin d'Aube : porte d'enfant sous l'escalier → cave (recommandé, choisi). Grande porte : elle résiste, puis raccourci une fois la barre enlevée de l'intérieur.
 - Ancien corps : mise en scène + carnet ouvert sur le dessin du Phare, sans texte (pensées du robot retirées). Tableau : document dessiné à la craie.
 - Tableau lisible tout de suite, sans lanterne. Pupitre d'Aube avec le dessin « sous l'escalier ». Petite cinématique pour l'ancien corps. Cloche du clocheton = décor. (reportées dans ILE_03_COLONIE.md, § L'école)
 
@@ -20,5 +25,6 @@ Reprise après deux jours : « dis-moi où on en était ». Puis : « on finit l
 - ILE_03_COLONIE.md, tools/blender/colonie_du_lagon.py, assets/models/ile03/colonie_du_lagon.glb, concept/ile_03/colonie_du_lagon.{blend,png}
 
 ## Reste à faire / questions ouvertes
-- Essayer en jeu (avec accord) : tableau, dessin, cinématique.
+- Essayer en jeu (avec accord) : tableau, dessin, cinématique ; maison d'Aube (cachettes, porte, boîte à musique).
+- Remplacer le thème provisoire par la vraie musique (consigne dans PROMPTS.md).
 - Le carnet de l'île 3 n'a pas les pages du Phare (sauvegarde par île).

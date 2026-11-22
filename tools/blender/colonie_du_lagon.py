@@ -3,6 +3,7 @@ import math
 import random
 from pathlib import Path
 
+import bmesh
 import bpy
 from mathutils import Vector
 from mathutils.geometry import intersect_ray_tri
@@ -138,6 +139,20 @@ def extrusion_facade(profil, avant, arriere, couleur):
     points = [(x,y,z) for y in (avant, arriere) for x,z in profil]
     cotes = [(i,i+n,(i+1)%n+n,(i+1)%n) for i in range(n)]
     morceau(points, [tuple(range(n)), tuple(reversed(range(n,2*n)))] + cotes, couleur)
+
+def ccw(points):
+    # Remet un contour (x, z) dans le sens direct.
+    aire = sum(a[0]*b[1]-b[0]*a[1] for a,b in zip(points, points[1:]+points[:1]))
+    return points if aire > 0 else list(reversed(points))
+
+def normales(obj):
+    # Normales tournées vers l'extérieur (le rendu Godot cache les faces arrière).
+    m = bmesh.new()
+    m.from_mesh(obj.data)
+    bmesh.ops.recalc_face_normals(m, faces=m.faces)
+    m.to_mesh(obj.data)
+    m.free()
+    return obj
 
 def portail(x, y, couleur):
     # Le vantail se loge sous un linteau polygonal, avec joint et poignée en cuivre.
@@ -927,7 +942,10 @@ def maison_aube(centre, rotation):
     enduit, volet = "ardoise", "creme"
     sx0, sx1 = -1.5, -.5           # soupirail dans le mur du fond, côté cour
     tx0, tx1 = 1.25, 2.3           # trémie de l'escalier intérieur, le long du mur nord
-    ty0, ty1 = -2.0, 1.0
+    # La trémie s'ouvre jusqu'au mur sud : aucun plancher au-dessus de la volée (la tête du robot passe).
+    ty0, ty1 = -(P/2-.3), 1.0
+    cy0, cy1, ch = 1.05, 2.15, 2.38   # porte d'enfant de la cave, dans le mur ouest, sous le palier
+    py0, py1, ph = .14, 1.66, 2.73    # porte de l'étage sur le palier (battant : porte_aube.tscn)
 
     piece("Socle_Aube")
     bloc_chanfreine(L+.4,P+.4,-1.9,2.15,.28,"pierre")
@@ -937,7 +955,10 @@ def maison_aube(centre, rotation):
         # Mur du fond percé du soupirail ; le linteau n'existe que dans la partie haute.
         # fond=True : murs nord et ouest (loin de la caméra) ; False : murs sud et rue.
         if fond is not True:
-            boite(-(L/2-.15),0,z0,.3,P,z1-z0,"pierre")
+            for a,b in ((-P/2,cy0),(cy1,P/2)):
+                boite(-(L/2-.15),(a+b)/2,z0,.3,b-a,z1-z0,"pierre")
+            if z1 > ch:
+                boite(-(L/2-.15),(cy0+cy1)/2,max(z0,ch),.3,cy1-cy0,z1-max(z0,ch),"pierre")
             boite(0,-(P/2-.15),z0,L,.3,z1-z0,"pierre")
         if fond is not False:
             boite(L/2-.15,0,z0,.3,P,z1-z0,"pierre")
@@ -998,12 +1019,16 @@ def maison_aube(centre, rotation):
             boite(x,0,ze,.4,P-.6,.015,ton)
         else:
             for a,b in ((-yi,ty0),(ty1,yi)):
-                boite(x,(a+b)/2,ze,.4,b-a,.015,ton)
+                if b-a > .01:
+                    boite(x,(a+b)/2,ze,.4,b-a,.015,ton)
     terminer(True)
 
     def murs_etage(z0, z1, fond=None):
         if fond is not True:
-            boite(-(L/2-.15),0,z0,.3,P,z1-z0,enduit)
+            for a,b in ((-P/2,py0),(py1,P/2)):
+                boite(-(L/2-.15),(a+b)/2,z0,.3,b-a,z1-z0,enduit)
+            if z1 > ze+ph:
+                boite(-(L/2-.15),(py0+py1)/2,max(z0,ze+ph),.3,py1-py0,z1-max(z0,ze+ph),enduit)
             boite(0,-(P/2-.15),z0,L,.3,z1-z0,enduit)
         if fond is not False:
             boite(L/2-.15,0,z0,.3,P,z1-z0,enduit)
@@ -1016,7 +1041,6 @@ def maison_aube(centre, rotation):
         boite((a+b)/2,0,ze,b-a,.14,zm-ze,"craie")
     # Garde-corps autour de la trémie.
     boite(tx0,(ty0+ty1)/2,ze,.08,ty1-ty0,1.0,"chene")
-    boite((tx0+tx1)/2,ty0,ze,tx1-tx0,.08,1.0,"chene")
     terminer(True)
 
     piece("Murs_hauts_Aube")
@@ -1029,14 +1053,16 @@ def maison_aube(centre, rotation):
     # Façade sur la rue : volets clos, la maison est fermée de l'intérieur.
     for x in (-1.25,1.25):
         fenetre(x,-P/2,3.4,1.0,volet,True)
-    # Porte de l'étage sur le palier sud, close ; la barre est mise à l'intérieur.
+    # Porte de l'étage sur le palier : encadrement crème et seuil. Le battant et la barre posée à
+    # l'intérieur sont dans scenes/ile03/porte_aube.tscn (elle résiste, puis sert de raccourci).
+    for y in (py0-.11,py1+.11):
+        boite(-L/2-.04,y,ze,.2,.22,ph,"creme")
+    boite(-L/2-.04,(py0+py1)/2,ze+ph,.2,py1-py0+.44,.24,"creme")
+    boite(-L/2-.2,(py0+py1)/2,ze-.12,.5,py1-py0+.5,.22,"sable")
     angle = rotation - math.pi/2
-    origine = (centre[0], centre[1], centre[2]+ze-.24)
-    portail(-.9,-L/2,"chene")
-    origine = centre
     fenetre(1.6,-L/2,3.4,.9,volet,True)
     angle = rotation
-    boite(-xi+.08,.9,ze+1.3,.12,1.9,.16,"bois")
+    # Les crochets de la barre, de chaque côté de la porte, à l'intérieur.
     for y in (.1,1.7):
         boite(-xi+.04,y,ze+1.22,.1,.12,.32,"ombre")
     terminer(True)
@@ -1079,39 +1105,86 @@ def maison_aube(centre, rotation):
     terminer()
 
     piece("Mobilier_etage_Aube")
-    # Chambre d'Aube, côté rue : lit d'enfant, bureau, étagère.
-    boite(-1.7,-1.65,ze,1.1,2.0,.45,"chene")
-    boite(-1.7,-1.65,ze+.45,1.04,1.94,.18,"creme")
-    boite(-1.7,-.75,ze+.45,1.1,.12,1.1,"chene")
-    for x in (-.2,1.0):
-        boite(x,-2.4,ze,.1,.42,.95,"chene")
-    boite(.4,-2.4,ze+.95,1.4,.5,.07,"chene")
-    boite(.4,-1.85,ze,.5,.5,.55,"bois")
-    boite(-2.05,-.35,ze,.4,.4,.55,"chene")
+    # Chambre d'Aube, côté rue. Le lit d'enfant, tête contre le mur de la rue.
+    for x in (-2.2,-1.2):
+        boite(x,-2.6,ze,.1,.1,1.0,"chene")
+        boite(x,-.8,ze,.1,.1,.62,"chene")
+    boite(-1.7,-2.63,ze+.45,1.0,.06,.5,"chene")
+    boite(-1.7,-2.63,ze+.98,1.12,.08,.07,"chene")
+    boite(-1.7,-.8,ze+.38,1.0,.06,.24,"chene")
+    for x in (-2.2,-1.2):
+        boite(x,-1.7,ze+.25,.06,1.8,.2,"chene")
+    boite(-1.7,-1.7,ze+.3,1.0,1.8,.15,"bois")
+    # Le bureau, contre le mur de la rue : quatre pieds et un caisson à tiroir.
+    for x in (-.3,1.0):
+        for y in (-2.6,-2.2):
+            boite(x,y,ze,.08,.08,.9,"chene")
+    boite(.35,-2.4,ze+.9,1.42,.52,.07,"chene")
+    boite(.78,-2.4,ze+.58,.46,.42,.32,"bois")
+    boite(.78,-2.18,ze+.7,.12,.03,.06,"or")
+    # Sa petite chaise, tirée en arrière comme si elle venait de se lever.
+    for dx in (-.17,.17):
+        for dy in (-.16,.16):
+            boite(.55+dx,-1.8+dy,ze,.06,.06,.46,"chene")
+    boite(.55,-1.8,ze+.46,.44,.42,.06,"chene")
+    for dx in (-.17,.17):
+        boite(.55+dx,-1.6,ze+.52,.06,.06,.5,"chene")
+    boite(.55,-1.6,ze+.86,.42,.06,.14,"chene")
+    # La table de chevet.
+    boite(-.9,-2.35,ze,.42,.42,.55,"bois")
+    boite(-.9,-2.35,ze+.55,.46,.46,.04,"chene")
+    # Étagère aux jouets, au-dessus du pied du lit.
+    boite(-2.17,-1.15,ze+1.4,.26,.8,.05,"chene")
     # Pièce commune, côté cour : grande table, deux chaises de Semeurs.
     for dx in (-.8,.8):
         for dy in (-.45,.45):
             boite(-.8+dx,1.55+dy,ze,.12,.12,1.4,"bois")
     boite(-.8,1.55,ze+1.4,2.0,1.2,.1,"chene")
     for x in (-1.6,0.1):
-        boite(x,2.45,ze,.6,.5,.85,"bois")
-        boite(x,2.65,ze+.85,.6,.1,1.0,"bois")
+        for dx in (-.24,.24):
+            for dy in (-.2,.2):
+                boite(x+dx,2.45+dy,ze,.08,.08,.85,"bois")
+        boite(x,2.45,ze+.85,.62,.52,.08,"chene")
+        for dx in (-.24,.24):
+            boite(x+dx,2.67,ze+.93,.08,.08,1.0,"bois")
+        for z in (1.3,1.7):
+            boite(x,2.67,ze+z,.56,.06,.14,"chene")
     terminer(True)
 
     piece("Objets_Aube")
-    # Le carnet ouvert sur le bureau, les crayons, la boîte à musique et sa petite prise.
-    boite(.2,-2.4,ze+1.02,.32,.24,.02,"creme")
-    boite(.2,-2.4,ze+1.04,.01,.24,.01,"bois")
+    # Le lit fait : matelas, couverture en patchwork, oreiller et sa peluche.
+    boite(-1.7,-1.7,ze+.45,.96,1.76,.16,"creme")
+    boite(-1.7,-1.42,ze+.61,1.02,1.26,.06,"rose")
+    for a in (-1,1):
+        boite(-1.7+a*.5,-1.42,ze+.36,.03,1.26,.3,"rose")
+    for i in range(3):
+        for j in range(4):
+            if (i+j)%2:
+                boite(-2.02+i*.32,-1.9+j*.32,ze+.67,.28,.28,.01,"corail")
+    boite(-1.7,-2.08,ze+.61,1.02,.18,.09,"creme")
+    boite(-1.7,-2.4,ze+.61,.7,.3,.12,"creme")
+    pilier(-1.98,-2.42,ze+.73,.09,.16,"ocre",.07)
+    pilier(-1.98,-2.42,ze+.89,.075,.11,"ocre",.06)
+    for dx in (-.05,.05):
+        pilier(-1.98+dx,-2.42,ze+.99,.025,.03,"ocre")
+    # Tapis rond au pied du lit.
+    tapis=[(-.45+.7*math.cos(i*math.tau/8+.39),-1.25+.7*math.sin(i*math.tau/8+.39),ze+.016) for i in range(8)]
+    prisme(tapis,[(x,y,z+.01) for x,y,z in tapis],"rose")
+    tapis2=[(-.45+.42*math.cos(i*math.tau/8+.39),-1.25+.42*math.sin(i*math.tau/8+.39),ze+.026) for i in range(8)]
+    prisme(tapis2,[(x,y,z+.004) for x,y,z in tapis2],"creme")
+    # Les jouets sur l'étagère : un petit bateau, une toupie, trois livres.
+    coque=[(-2.25,-1.45,ze+1.45),(-2.09,-1.45,ze+1.45),(-2.05,-1.2,ze+1.52),(-2.17,-1.13,ze+1.52),(-2.29,-1.2,ze+1.52)]
+    prisme(coque,[(x,y,z+.07) for x,y,z in coque],"verre")
+    tige((-2.17,-1.3,ze+1.59),(-2.17,-1.3,ze+1.85),.01,"bois")
+    morceau([(-2.17,-1.29,ze+1.62),(-2.17,-1.29,ze+1.84),(-2.17,-1.16,ze+1.62)],[(0,1,2),(2,1,0)],"creme")
+    pilier(-2.15,-.95,ze+1.45,.01,.1,"corail",.1)
+    pilier(-2.15,-.95,ze+1.55,.1,.06,"or",.02)
+    for k,ton in enumerate(("sauge","corail","ardoise")):
+        boite(-2.17,-.72+k*.07,ze+1.45,.2,.06,.26-k*.03,ton)
+    # Les crayons sur le bureau (le carnet ouvert est posé par la scène Godot).
     for i,ton in enumerate(("rose","verre","or")):
-        tige((.48+i*.05,-2.5,ze+1.03),(.5+i*.05,-2.3,ze+1.03),.012,ton)
-    bx, by, bz = .8, -2.42, ze+1.02
-    boite(bx,by,bz,.34,.24,.16,"corail")
-    boite(bx,by,bz+.16,.36,.26,.03,"chene")
-    tige((bx-.1,by,bz+.22),(bx+.1,by,bz+.22),.035,"cuivre")
-    tige((bx+.18,by,bz+.08),(bx+.25,by,bz+.08),.012,"cuivre")
-    tige((bx+.25,by,bz+.08),(bx+.25,by,bz+.16),.012,"cuivre")
-    pilier(bx-.05,by+.13,bz+.05,.03,.02,"or")
-    # Dessins d'Aube punaisés partout sur la cloison et le mur de la rue.
+        tige((.48+i*.05,-2.5,ze+.98),(.5+i*.05,-2.3,ze+.98),.012,ton)
+    # Dessins d'Aube punaisés partout sur la cloison et le mur du fond.
     for i,(x,z) in enumerate(((-2.0,1.3),(-1.55,1.7),(-1.1,1.35),(-2.0,2.05),(-1.3,2.1),(.9,1.4),(.95,1.85))):
         z = ze+z
         boite(x,-.09,z,.3,.02,.24,"creme")
@@ -1120,9 +1193,6 @@ def maison_aube(centre, rotation):
         y, z = -1.75+i*.42, ze+1.5+(i%2)*.35
         boite(xi-.03,y,z,.02,.32,.26,"creme")
         boite(xi-.05,y,z+.06,.01,.12,.1,("rose","or","sauge","verre")[i])
-    # Sa lanterne de chevet, recouverte d'un tissu pour faire le noir.
-    pilier(-2.05,-.35,ze+.55,.12,.3,"or",.1)
-    pilier(-2.05,-.35,ze+.54,.24,.42,"saumon",.06)
     # Sa petite valise « Nef », fermée, devant la porte de la chambre.
     boite(-1.0,-.35,ze,.6,.3,.42,"cuivre")
     boite(-1.0,-.52,ze+.18,.2,.02,.1,"creme")
@@ -1134,16 +1204,46 @@ def maison_aube(centre, rotation):
     for i in range(10):
         pilier(-1.9+i*.36,2.55,ze+1.85+(i%2)*.2,.1,.26,"or",.08)
         tige((-1.9+i*.36,2.55,ze+2.11+(i%2)*.2),(-1.9+i*.36,2.55,ze+2.5),.01,"ombre")
-    # Une barre de bois condamne la porte de l'étage, de l'intérieur.
+    terminer()
+
+    piece("Boite_musique_Aube")
+    # La boîte à musique : coffret corail, couvercle ouvert, petite danseuse et manivelle de cuivre.
+    bx, by, bz = .05, -2.45, ze+.97
+    boite(bx,by,bz,.36,.26,.17,"corail")
+    boite(bx,by,bz+.17,.38,.28,.02,"chene")
+    boite(bx,by+.15,bz+.19,.38,.02,.26,"chene")
+    boite(bx,by+.14,bz+.21,.3,.01,.2,"vitre_fumee")
+    pilier(bx,by-.02,bz+.19,.035,.02,"or")
+    pilier(bx,by-.02,bz+.21,.012,.1,"rose",.02)
+    pilier(bx,by-.02,bz+.29,.05,.04,"rose",.01)
+    tige((bx+.18,by,bz+.09),(bx+.25,by,bz+.09),.012,"cuivre")
+    tige((bx+.25,by,bz+.09),(bx+.25,by,bz+.18),.012,"cuivre")
+    # Le cordon de cuivre descend le long du pied du bureau jusqu'à la prise.
+    tige((bx-.18,by,bz+.05),(-.3,-2.17,ze+.95),.01,"cuivre")
+    tige((-.3,-2.17,ze+.95),(-.3,-2.17,ze+.42),.01,"cuivre")
+    terminer()
+
+    piece("Prise_boite_Aube")
+    # La prise des Semeurs, au pied du bureau : plaque de cuivre et deux trous.
+    boite(-.3,-2.15,ze+.22,.15,.03,.2,"cuivre")
+    for dz in (.27,.35):
+        boite(-.3,-2.13,ze+dz,.03,.01,.03,"ombre")
+    terminer()
+
+    piece("Lanterne_chevet_Aube")
+    # Sa lanterne de chevet, recouverte d'un tissu pour faire le noir.
+    pilier(-.9,-2.35,ze+.59,.11,.3,"or",.09)
+    pilier(-.9,-2.35,ze+.58,.22,.42,"saumon",.05)
     terminer()
 
     piece("Palier_Aube")
     # Volée de pierre en porte-à-faux contre le mur sud, puis un palier massif percé
     # d'une petite porte d'enfant : le passage d'Aube vers la cour.
     marches(-4.0,-2.6,-4.4,-.2,-.25,ze,10,"pierre")
-    for x in (-3.9,-2.7):
-        boite(x,1.4,-.25,.2,3.2,2.35,"pierre")
-    boite(-3.3,1.4,2.1,1.4,3.2,ze-2.1,"pierre")
+    # La niche sous le palier : fermée au fond ; la porte d'enfant s'ouvre dans le mur de la cave.
+    boite(-3.9,1.4,-.25,.2,3.2,2.6,"pierre")
+    boite(-3.2,2.9,-.25,1.2,.2,2.6,"pierre")
+    boite(-3.3,1.4,2.35,1.4,3.2,ze-2.35,"pierre")
     boite(-3.3,1.4,ze,1.5,3.3,.1,"sable")
     for y in (-.2,3.0):
         pilier(-3.98,y,ze,.06,1.0,"ombre")
@@ -1152,16 +1252,44 @@ def maison_aube(centre, rotation):
     piece("Palier_Aube_creux")
     # Le passage reste visible de dessus quand le palier s'efface.
     boite(-3.3,1.4,-.2,1.0,3.2,.02,"terre_claire")
-    for y in (-.25,3.05):
-        for x in (-3.83,-2.77):
-            boite(x,y,-.2,.1,.12,2.32,"chene")
-        boite(-3.3,y,2.02,1.16,.14,.12,"chene")
-    terminer()
+    for x in (-3.83,-2.77):
+        boite(x,-.25,-.2,.1,.12,2.55,"chene")
+    # La petite porte d'enfant, orange et cintrée, comme sur le dessin de l'école.
+    arc=[(-3.3+.5*math.cos(math.radians(a)),1.6+.5*math.sin(math.radians(a))) for a in range(180,-1,-15)]
+    # Écoinçons de pierre au-dessus du cintre : un éventail de triangles depuis chaque coin.
+    for coin,moitie in (((-3.8,2.35),arc[:7]),((-2.8,2.35),arc[6:])):
+        for a,b in zip(moitie,moitie[1:]):
+            extrusion_facade(ccw([coin,a,b]),-.34,-.2,"pierre")
+    for (xa,za),(xb,zb) in zip(arc,arc[1:]):
+        tige((xa,-.36,za),(xb,-.36,zb),.035,"chene")
+    # Deux marches de pierre montent au seuil de la cave.
+    boite(-3.13,(cy0+cy1)/2,-.2,.66,cy1-cy0,.2,"pierre")
+    boite(-2.96,(cy0+cy1)/2,-.2,.32,cy1-cy0,.33,"pierre")
+    # La petite porte d'enfant dans le mur de la cave : arche de pierre, cintre de bois.
+    cz = ch-.55
+    arc2=[((cy0+cy1)/2+.55*math.cos(math.radians(a)),cz+.55*math.sin(math.radians(a))) for a in range(0,181,15)]
+    for coin,moitie in (((cy1,ch+.07),arc2[:7]),((cy0,ch+.07),arc2[6:])):
+        for a,b in zip(moitie,moitie[1:]):
+            tri=ccw([coin,a,b])
+            prisme([(-2.75,y,z) for y,z in tri],[(-2.6,y,z) for y,z in tri],"pierre")
+    for (ya,za),(yb,zb) in zip(arc2,arc2[1:]):
+        tige((-2.77,ya,za),(-2.77,yb,zb),.035,"chene")
+    # Le battant orange, grand ouvert dans la cave, rabattu contre le tonneau.
+    battant=ccw([(-2.3,zc+.03),(-1.2,zc+.03)]+[(-1.75+.55*math.cos(math.radians(a)),cz+.55*math.sin(math.radians(a))) for a in range(0,181,15)])
+    extrusion_facade(battant,cy0+.01,cy0+.07,"miel")
+    for x in (-2.0,-1.75,-1.5):
+        boite(x,cy0+.075,zc+.1,.03,.01,1.5,"bois")
+    pilier(-1.4,cy0+.1,zc+1.0,.04,.03,"cuivre")
+    normales(terminer())
     piece("Palier_Aube_collision")
-    rampe(-4.0,-2.6,-4.4,-.2,-.25,ze,.35)
-    boite(-3.3,1.4,2.1,1.4,3.2,ze+.25-2.1,"pierre")
-    for x in (-3.9,-2.7):
-        boite(x,1.4,-.25,.2,3.2,2.35,"pierre")
+    # La rampe arrive au ras du dallage du palier (ze+.1) : pas de marche invisible en haut.
+    rampe(-4.0,-2.6,-4.4,-.2,-.25,ze+.1,.35)
+    boite(-3.3,1.4,2.35,1.4,3.2,ze+.1-2.35,"pierre")
+    boite(-3.9,1.4,-.25,.2,3.2,2.6,"pierre")
+    boite(-3.2,2.9,-.25,1.2,.2,2.6,"pierre")
+    # Rampe vers le seuil de la cave (les deux marches de pierre sont dans Palier_Aube_creux).
+    bas=[(-3.75,cy0-.05,-.48),(-2.8,cy0-.05,-.03),(-2.8,cy1+.05,-.03),(-3.75,cy1+.05,-.48)]
+    prisme(bas,[(x,y,z+.3) for x,y,z in bas],"pierre")
     boite(-3.98,1.4,ze,.1,3.2,1.0,"pierre")
     terminer("-colonly")
 
@@ -1175,36 +1303,63 @@ def maison_aube(centre, rotation):
     for x in (-3.3,-2.8):
         pilier(x,6.55,-.2,.22,.45,"tuile",.27)
     for i in range(5):
-        pilier(.2+math.cos(i*1.26)*.9,4.9+math.sin(i*1.26)*.6,-.08,.18,.1,"creme")
+        pilier(1.6+math.cos(i*1.26)*.55,5.3+math.sin(i*1.26)*.4,-.08,.15,.1,"creme")
     terminer(True)
 
+    # La conduite de cuivre des câbles de lanternes : octogone à fond plat, colliers et berceaux de
+    # pierre. Elle bouche le soupirail ; cassée côté cour, elle laisse une ouverture à la taille du robot.
+    cx, R = (sx0+sx1)/2, 1.32
+    ya, yb = P/2-.02, 5.6
+    def axe(y):
+        # Le fond plat descend du seuil du soupirail jusqu'à l'herbe de la cour.
+        return zc-.02+(y-ya)/(yb-ya)*(-.12-zc+.02)+R*math.cos(math.pi/8)
+    def angle_face(k):
+        return -math.pi/2-math.pi/8+k*math.pi/4
+    def plaque(y0,y1,k,ep,ton,r=R,z0=None,z1=None):
+        a, b = angle_face(k), angle_face(k+1)
+        za = axe(y0) if z0 is None else z0
+        zb = axe(y1) if z1 is None else z1
+        def p(t,rr,y,z):
+            return (cx+rr*math.cos(t),y,z+rr*math.sin(t))
+        bas=[p(a,r,y0,za),p(b,r,y0,za),p(b,r-ep,y0,za),p(a,r-ep,y0,za)]
+        haut=[p(a,r,y1,zb),p(b,r,y1,zb),p(b,r-ep,y1,zb),p(a,r-ep,y1,zb)]
+        prisme(bas,haut,ton)
+    casse=random.Random(8)
     piece("Tuyau_Aube")
-    # Gros tuyau des câbles de lanternes : il sort du mur de la cour et bouche le soupirail.
-    # Un tronçon cassé, tombé à côté, laisse une ouverture à hauteur d'Aube.
-    cx = (sx0+sx1)/2
-    plancher=[(cx-.55,5.6,-.1),(cx+.55,5.6,-.1),(cx+.55,P/2,zc),(cx-.55,P/2,zc)]
-    prisme([(x,y,z-.15) for x,y,z in plancher],plancher,"cuivre")
-    for signe in (-1,1):
-        boite(cx+signe*.62,(P/2+5.6)/2,-.2,.14,5.6-P/2,2.55,"cuivre")
-    for y in (3.2,4.0,4.8,5.5):
-        for signe in (-1,1):
-            boite(cx+signe*.71,y,-.2,.06,.14,2.6,"ombre")
-    boite(cx,6.88,-.2,1.38,.25,2.6,"cuivre")
-    # Le tronçon tombé, couché dans l'herbe le long du muret.
-    boite(-2.6,4.7,-.15,.8,1.3,.8,"cuivre")
-    boite(-2.6,4.7,.65,.82,1.32,.06,"ombre")
-    # Les câbles noirs qui montent vers les lanternes de la rue.
+    # Moitié basse (fond et flancs) : on y marche.
+    for k in (7,0,1,2):
+        plaque(ya,yb,k,.1,"cuivre")
+    # Le moignon qui sort du muret de la cour, après la cassure.
+    for k in range(8):
+        plaque(6.35,6.9,k,.1,"cuivre",z0=axe(yb),z1=axe(yb))
+    for y in (6.42,6.8):
+        for k in range(8):
+            plaque(y,y+.08,k,.04,"ombre",r=R+.05,z0=axe(yb),z1=axe(yb))
+    # Berceaux de pierre sous la conduite.
+    for y in (3.7,4.9,6.6):
+        boite(cx,y,-.3,1.4,.4,axe(y)-R*math.cos(math.pi/8)+.3,"pierre")
+    # Le tronçon tombé : une demi-coquille couchée dans l'herbe, comme un berceau.
+    for k in range(4):
+        a, b = math.pi+k*math.pi/4, math.pi+(k+1)*math.pi/4
+        def q(t,rr,x):
+            return (x,4.0+rr*math.cos(t)*.75,.95+rr*math.sin(t)*.75)
+        prisme([q(a,R,.9),q(b,R,.9),q(b,R-.1,.9),q(a,R-.1,.9)],[q(a,R,1.6),q(b,R,1.6),q(b,R-.1,1.6),q(a,R-.1,1.6)],"cuivre")
+    # Les câbles noirs qui montent du moignon vers les lanternes de la rue.
     for i in range(3):
-        tige((cx-.3+i*.3,6.9,2.3),(cx-.6+i*.5,7.4,4.2),.035,"ombre")
-    terminer(True)
+        tige((cx-.3+i*.3,6.9,axe(yb)+.9),(cx-.6+i*.5,7.4,4.2),.035,"ombre")
+    # Le faisceau de câbles court au fond de la conduite, le long du flanc.
+    for i in range(3):
+        tige((cx+.42+i*.07,yb,axe(yb)-R*.86+.12),(cx+.42+i*.07,ya,axe(ya)-R*.86+.12),.03,"ombre")
+    normales(terminer(True))
     piece("Couvercle_tuyau_Aube")
-    arc=[(cx-.69,2.35),(cx-.5,2.6),(cx,2.72),(cx+.5,2.6),(cx+.69,2.35)]
-    for (xa,za),(xb,zb) in zip(arc,arc[1:]):
-        panneau_rampant(xa,za+.1,xb,zb+.1,P/2,5.6,.12,"cuivre")
-    for y in (3.2,4.0,4.8,5.5):
-        for (xa,za),(xb,zb) in zip(arc,arc[1:]):
-            panneau_rampant(xa,za+.16,xb,zb+.16,y-.07,y+.07,.06,"ombre")
-    terminer()
+    # Moitié haute : s'efface quand le robot est dedans. Bord déchiré du côté de la cassure.
+    for k in (3,4,5,6):
+        plaque(ya,yb-casse.uniform(0,.45),k,.1,"cuivre")
+    for y in (3.3,4.1,4.9):
+        for k in range(8):
+            plaque(y,y+.08,k,.04,"ombre",r=R+.05)
+    normales(terminer())
+
 
 modeles_fermes = {}
 variantes_fermees = {

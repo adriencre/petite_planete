@@ -72,14 +72,16 @@ L’ancien corps du robot est assis sur un petit banc d’écolier, sur le perro
 
 ### La maison d’Aube
 
-Voisine nord de l’école (décidé le 2026-11-20). Une maison étroite et haute, enduit bleu ardoise, sous un toit raide vert sauge, pignon sur rue. En bas, une cave en pierre à hauteur du sol, sans porte. Au-dessus, un étage aux volets clos. On y monte par un escalier extérieur de pierre, côté sud, jusqu’à une porte barrée de l’intérieur. Une lucarne côté sud éclaire la chambre d’Aube, et des dessins sont collés à sa vitre. Derrière, une cour close par des murets que le robot ne peut pas sauter.
+Voisine nord de l’école (décidé le 2026-11-20). Une maison étroite et haute, enduit bleu ardoise, sous un toit raide vert sauge, pignon sur rue. En bas, une cave en pierre à hauteur du sol, sans porte sur la rue. Au-dessus, un étage aux volets clos. On y monte par un escalier extérieur de pierre, côté sud, jusqu’à une porte barrée de l’intérieur. Une lucarne côté sud éclaire la chambre d’Aube, et des dessins sont collés à sa vitre. Derrière, une cour close par des murets que le robot ne peut pas sauter.
 
-**Le chemin d’Aube, en trois cachettes** :
-1. **Sous l’escalier** : on se glisse sous la volée de pierre. Une petite porte d’enfant s’ouvre dans le palier, et un passage le traverse jusqu’à la cour.
-2. **Le tuyau** : le gros tuyau des câbles de lanternes traverse la cour et bouche le soupirail de la cave. Un tronçon cassé gît dans l’herbe et laisse une ouverture à hauteur d’Aube. On remonte le tuyau jusqu’au soupirail.
-3. **La cave** : la grille du soupirail, dévissée par Aube, est posée contre le mur. Caisses, tonneaux et réserve de lanternes neuves. Un escalier de bois monte par une trémie jusqu’à l’étage.
+**Le chemin d’Aube** (simplifié le 2026-11-22 : le passage par la cour et le tuyau était peu lisible) :
+1. **Sous l’escalier** : sous le palier de pierre s’ouvre une petite niche, fermée au fond. Dans son mur, côté maison, une petite porte d’enfant, orange et cintrée comme sur le dessin de l’école, donne directement dans la cave. Deux marches montent au seuil.
+2. **La cave** : le battant orange est ouvert contre un tonneau. Caisses, tonneaux et réserve de lanternes neuves. La grille du soupirail, dévissée par Aube, est posée contre le mur. Un escalier de bois monte par une trémie jusqu’à l’étage.
+3. **La porte barrée** : du palier, quand on pousse la grande porte, elle bouge à peine et cogne contre la barre. Une fois à l’étage par le chemin d’Aube, on soulève la barre de ses crochets et on la pose contre le mur. La porte s’ouvre et sert ensuite de raccourci.
 
-**L’étage** : côté cour, la pièce commune, avec une grande table, deux chaises de Semeurs, les deux grandes valises « Nef » des parents et dix lanternes pendues au mur. Une cloison sépare la chambre d’Aube, côté rue. Dans la chambre, un lit d’enfant, sa lanterne de chevet recouverte d’un tissu pour faire le noir, et sa petite valise « Nef » fermée près de la porte. Ses dessins sont punaisés partout. Sur le bureau, son carnet ouvert, ses crayons et la boîte à musique. La boîte à musique a une petite prise : le robot y branche son câble et elle joue le thème d’Aube (gameplay à faire).
+La conduite de cuivre des câbles de lanternes reste dans la cour, en décor : cerclée de colliers, posée sur des berceaux de pierre, cassée, elle bouche le soupirail (décidé le 2026-11-22).
+
+**L’étage** : côté cour, la pièce commune, avec une grande table, deux chaises de Semeurs, les deux grandes valises « Nef » des parents et dix lanternes pendues au mur. Une cloison sépare la chambre d’Aube, côté rue. Dans la chambre, un lit d’enfant, sa lanterne de chevet recouverte d’un tissu pour faire le noir, et sa petite valise « Nef » fermée près de la porte. Ses dessins sont punaisés partout. Sur le bureau, son carnet ouvert, ses crayons et la boîte à musique. La boîte à musique a une petite prise, au pied du bureau, reliée à la boîte par un cordon de cuivre. Le robot s’agenouille et y branche son câble, comme pour une lanterne. Elle joue alors le thème d’Aube : la caméra se pose sur la chambre et la lanterne de chevet s’éclaire doucement sous son tissu. C’est un moment d’émotion, sans conséquence de jeu (décidé le 2026-11-22).
 
 ### Les habitations
 

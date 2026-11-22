@@ -7,6 +7,10 @@
 [ext_resource type="Script" uid="uid://cs83c2sk7j15m" path="res://scripts/page_lisible.gd" id="9_ybcho"]
 [ext_resource type="Texture2D" uid="uid://dycr7lolcu3k2" path="res://assets/affiches/tableau_comptine.png" id="10_je6up"]
 [ext_resource type="Texture2D" uid="uid://huufeex4raql" path="res://assets/affiches/dessin_aube_escalier.png" id="11_w7tjp"]
+[ext_resource type="Script" uid="uid://6yar3ejee7s2" path="res://scripts/boite_musique.gd" id="12_ybcho"]
+[ext_resource type="AudioStream" uid="uid://cypqtjujsigpu" path="res://assets/audio/theme_aube.wav" id="13_je6up"]
+[ext_resource type="Texture2D" uid="uid://bg20ab76iy0q0" path="res://assets/affiches/carnet_aube.png" id="14_w7tjp"]
+[ext_resource type="PackedScene" path="res://scenes/ile03/porte_aube.tscn" id="15_je6up"]
 [ext_resource type="Environment" uid="uid://6ed2n2pcb23t" path="res://assets/ambiances/ile_02.tres" id="ambiance"]
 [ext_resource type="PackedScene" uid="uid://djrd5wf4ymo5y" path="res://assets/models/ile03/colonie_du_lagon.glb" id="colonie"]
 [ext_resource type="Script" uid="uid://b8yipboy6f2xc" path="res://scripts/coupe_maison.gd" id="coupe_maison"]
@@ -184,6 +188,40 @@ distance_lecture = 1.5
 hauteur_lecture = 1.6
 taille_feuille = Vector2(0.42, 0.3)
 image = ExtResource("11_w7tjp")
+
+[node name="ChevetAube" type="Marker3D" parent="." unique_id=1297214447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.369, 7.34, -13.421)
+
+[node name="CentreChambreAube" type="Marker3D" parent="." unique_id=115980331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.226, 7.35, -13.841)
+
+[node name="BoiteMusiqueAube" type="Node3D" parent="." unique_id=1785053800 node_paths=PackedStringArray("lanterne", "centre_chambre")]
+transform = Transform3D(-0.34271342, 0, -0.93944, 0, 1, 0, 0.93944, 0, -0.34271342, -39.37, 6.87, -14.06)
+script = ExtResource("12_ybcho")
+theme = ExtResource("13_je6up")
+lanterne = NodePath("../ChevetAube")
+centre_chambre = NodePath("../CentreChambreAube")
+
+[node name="CarnetAube" type="Node3D" parent="." unique_id=339921660]
+transform = Transform3D(-0.34271342, 0, -0.93944, 0, 1, 0, 0.93944, 0, -0.34271342, -38.741, 7.525, -15.054)
+script = ExtResource("9_ybcho")
+texte = "Papa dit on part ce soir avec la Nef.
+TOUT LE MONDE. même les arbres on les laisse.
+mes amis viennent que quand il fait noir.
+ici il fait jamais noir.
+Iris elle les voit aussi.
+elle dit faut pas avoir peur du noir.
+je vais leur dire au revoir
+au coin noir. après je pars. promis."
+signature = "Aube"
+distance_lecture = 1.6
+hauteur_lecture = 1.6
+taille_feuille = Vector2(0.32, 0.32)
+image = ExtResource("14_w7tjp")
+ramasser = false
+
+[node name="PorteAube" parent="." unique_id=2073300561 instance=ExtResource("15_je6up")]
+transform = Transform3D(0.34298828, 0, 0.9393397, 0, 1, 0, -0.9393397, 0, 0.34298828, -41.2677, 3.95, -15.0727)
 
 [connection signal="body_entered" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_entre"]
 [connection signal="body_exited" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_sort"]
