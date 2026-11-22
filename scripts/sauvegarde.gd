@@ -22,8 +22,12 @@ const VERSION := 1
 const SCENE_ILE := "res://scenes/ile_01_maquette.tscn"
 const SCENE_ILE_02 := "res://scenes/ile_02_maquette.tscn"
 const CHEMIN_ILE_02 := "user://partie_ile_02.json"
+## La Colonie a sa propre sauvegarde depuis le 2026-11-22 (pages lues rangées dans le carnet, objets
+## pris) ; elle sera raccordée aux autres îles avec la navigation.
+const SCENE_ILE_03 := "res://scenes/ile_03_maquette.tscn"
+const CHEMIN_ILE_03 := "user://partie_ile_03.json"
 ## Îles accessibles par le menu de développement, pas encore sauvegardées.
-const ILES_SANS_SAUVEGARDE := ["res://scenes/ile_03_maquette.tscn"]
+const ILES_SANS_SAUVEGARDE: Array[String] = []
 const SCENE_TITRE := "res://scenes/ecran_titre.tscn"
 ## Scripts dont des variables statiques sont sauvées (chargés à la demande : pas de preload, ces
 ## scripts utilisent eux-mêmes Sauvegarde).
@@ -36,6 +40,7 @@ const LANTERNE := "res://scripts/lanterne_fleur.gd"
 ## L'état lu au lancement de la partie : clé -> Dictionary.
 var _charge: Dictionary = {}
 var _charge_ile_02: Dictionary = {}
+var _charge_ile_03: Dictionary = {}
 var _minuterie: float = 0.0
 var _transition: CanvasLayer
 
@@ -44,6 +49,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().set_auto_accept_quit(false)
 	_charge_ile_02 = _lire_fichier(CHEMIN_ILE_02)
+	_charge_ile_03 = _lire_fichier(CHEMIN_ILE_03)
 	_transition = TRANSITION.instantiate()
 	add_child(_transition)
 
@@ -74,7 +80,7 @@ func en_partie() -> bool:
 	if not is_inside_tree():
 		return false
 	var scene := get_tree().current_scene
-	return scene != null and scene.scene_file_path in [SCENE_ILE, SCENE_ILE_02]
+	return scene != null and scene.scene_file_path in [SCENE_ILE, SCENE_ILE_02, SCENE_ILE_03]
 
 
 ## Vrai sur n'importe quelle île jouable, même celles qui n'ont pas encore de sauvegarde
@@ -87,25 +93,41 @@ func en_jeu() -> bool:
 
 
 func _sur_ile_02(source: Node = null) -> bool:
+	return _scene_de(source) == SCENE_ILE_02
+
+
+func _sur_ile_03(source: Node = null) -> bool:
+	return _scene_de(source) == SCENE_ILE_03
+
+
+## La scène d'île où se trouve un objet (ou la scène courante).
+func _scene_de(source: Node = null) -> String:
 	# Certains objets restaurent leur état avant que SceneTree ait fini d'installer la scène.
 	while source != null:
-		if source.scene_file_path == SCENE_ILE_02:
-			return true
+		if source.scene_file_path in [SCENE_ILE_02, SCENE_ILE_03]:
+			return source.scene_file_path
 		source = source.get_parent()
 	var scene := get_tree().current_scene
-	return scene != null and scene.scene_file_path == SCENE_ILE_02
+	return scene.scene_file_path if scene != null else ""
+
+
+## L'état chargé de l'île où se trouve l'objet.
+func _charge_de(source: Node = null) -> Dictionary:
+	if _sur_ile_02(source):
+		return _charge_ile_02
+	if _sur_ile_03(source):
+		return _charge_ile_03
+	return _charge
 
 
 ## Pour un objet qui va quitter la scène : son dernier état est gardé pour la prochaine sauvegarde.
 func noter(cle: String, etat: Dictionary) -> void:
-	var charge := _charge_ile_02 if _sur_ile_02() else _charge
-	charge[cle] = etat
+	_charge_de()[cle] = etat
 
 
 ## L'état sauvé d'un objet (vide pour une nouvelle partie).
 func donnees(cle: String, source: Node = null) -> Dictionary:
-	var charge := _charge_ile_02 if _sur_ile_02(source) else _charge
-	var d = charge.get(cle, {})
+	var d = _charge_de(source).get(cle, {})
 	return d if d is Dictionary else {}
 
 
@@ -176,7 +198,8 @@ func ecrire() -> void:
 	# on part de l'état déjà sauvé : un objet qui a quitté la scène (feuille rangée dans le carnet,
 	# luciole partie) garde son dernier état
 	var ile_02 := _sur_ile_02()
-	var d := (_charge_ile_02 if ile_02 else _charge).duplicate(true)
+	var ile_03 := _sur_ile_03()
+	var d := _charge_de().duplicate(true)
 	d["_version"] = VERSION
 	d["_date"] = Time.get_datetime_string_from_system()
 	d["_statiques"] = {
@@ -186,11 +209,14 @@ func ecrire() -> void:
 	for n in get_tree().get_nodes_in_group("sauvegarde"):
 		if n.has_method("cle_sauvegarde") and n.has_method("sauver"):
 			d[str(n.call("cle_sauvegarde"))] = n.call("sauver")
-	var f := FileAccess.open(CHEMIN_ILE_02 if ile_02 else CHEMIN, FileAccess.WRITE)
+	var chemin := CHEMIN_ILE_02 if ile_02 else (CHEMIN_ILE_03 if ile_03 else CHEMIN)
+	var f := FileAccess.open(chemin, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(d, "\t"))
 	if ile_02:
 		_charge_ile_02 = d
+	elif ile_03:
+		_charge_ile_03 = d
 	else:
 		_charge = d
 
@@ -233,7 +259,7 @@ func garder_image(tex: Texture2D, nom: String) -> String:
 	var img := tex.get_image()
 	if img == null:
 		return ""
-	var dossier := "user://images_ile_02" if _sur_ile_02() else "user://images"
+	var dossier := "user://images_ile_02" if _sur_ile_02() else ("user://images_ile_03" if _sur_ile_03() else "user://images")
 	var chemin := "%s/%s.png" % [dossier, nom]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dossier))
 	img.save_png(chemin)

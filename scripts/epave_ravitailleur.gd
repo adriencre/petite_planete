@@ -67,7 +67,8 @@ func _dans_cabine() -> bool:
 
 
 func _cle_a_portee() -> bool:
-	return _cle_a_portee_brute() and not _journal._a_portee()
+	# le journal, une fois lu, est rangé dans le carnet : il n'est plus là
+	return _cle_a_portee_brute() and not (is_instance_valid(_journal) and _journal._a_portee())
 
 
 func _cle_a_portee_brute() -> bool:
@@ -84,6 +85,8 @@ func _peut_lire_journal() -> bool:
 		return true
 	var pied := Vector2(_robot.global_position.x, _robot.global_position.z)
 	var cle := Vector2(_cle.global_position.x, _cle.global_position.z)
+	if not is_instance_valid(_journal):
+		return false
 	var journal := Vector2(_journal.global_position.x, _journal.global_position.z)
 	return pied.distance_squared_to(journal) < pied.distance_squared_to(cle)
 

@@ -223,7 +223,6 @@ texte = "Plan des miroirs : Cap Est → Cap du Large. Le reste du tracé est eff
 distance_lecture = 1.85
 hauteur_lecture = 1.92
 taille_feuille = Vector2(0.52, 0.33)
-ramasser = false
 image = ExtResource("4_releves")
 
 [node name="NoteDeLaCle" type="Node3D" parent="DocumentsBureau"]
@@ -235,7 +234,6 @@ hauteur_lecture = 1.92
 taille_feuille = Vector2(0.43, 0.295)
 image = ExtResource("billet")
 garder_cle_sans_image = true
-ramasser = false
 
 [node name="DessinDAube" type="Node3D" parent="DocumentsBureau"]
 position = Vector3(6.077, 5.457, 1.58)
@@ -247,7 +245,6 @@ hauteur_lecture = 1.96
 taille_feuille = Vector2(0.34, 0.2735)
 image = ExtResource("dessin_toit")
 garder_cle_sans_image = true
-ramasser = false
 
 [node name="DocumentsCartes" type="Node3D" parent="."]
 
@@ -259,7 +256,6 @@ distance_lecture = 0.98
 hauteur_lecture = 2.06
 taille_feuille = Vector2(0.75, 0.49)
 image = ExtResource("relevements_cartes")
-ramasser = false
 
 [node name="RegistreDesLanternes" type="Node3D" parent="DocumentsCartes"]
 position = Vector3(-0.1597, 10.172, 0.6918)
@@ -271,7 +267,6 @@ hauteur_lecture = 1.75
 taille_feuille = Vector2(0.73, 0.49)
 image = ExtResource("registre")
 garder_cle_sans_image = true
-ramasser = false
 
 
 [node name="DocumentsChambre" type="Node3D" parent="."]
@@ -296,7 +291,6 @@ distance_lecture = 1.25
 hauteur_lecture = 1.65
 taille_feuille = Vector2(0.39, 0.305)
 image = ExtResource("dessin_brume")
-ramasser = false
 
 [node name="LunetteIris" parent="." instance=ExtResource("lunette_iris")]
 position = Vector3(-1.26, 13.62, 1.87)

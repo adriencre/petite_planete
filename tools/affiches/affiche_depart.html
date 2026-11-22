@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- La dernière affiche, clouée sur la grande porte de la maison commune (ILE_03_COLONIE.md §7, affiche 5).
+     Plus de maquette officielle : une feuille du bureau, écrite vite, à la plume. Rendu : 900 × 1250. -->
+<html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="commun.css">
+<style>
+  .feuille { inset: 40px 50px 44px 46px; transform: rotate(1.6deg); border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(120,90,50,.25) inset;
+    background:
+      linear-gradient(90deg, transparent 49.6%, rgba(120,90,50,.12) 50%, rgba(255,255,255,.2) 50.5%, transparent 51.5%),
+      radial-gradient(ellipse at 50% 45%, #f6eedb 55%, #e7d6b3 100%); }
+  .entete { position: absolute; top: 70px; left: 0; right: 0; text-align: center;
+    font-family: 'IM Fell English SC', serif; font-size: 26px; letter-spacing: 6px; color: var(--encre-pale); }
+  .entete svg { width: 60px; height: 60px; display: block; margin: 0 auto 8px; }
+  .texte { position: absolute; left: 76px; right: 70px; top: 230px; font-family: 'Dancing Script', cursive;
+    font-weight: 600; color: #3f2a1c; transform: rotate(-1.2deg); }
+  .grand { font-size: 104px; line-height: 1.02; }
+  .moyen { font-size: 82px; line-height: 1.05; margin-top: 26px; }
+  .sauf { font-family: 'Caveat', cursive; font-weight: 600; font-size: 56px; line-height: 1.12; margin-top: 54px; color: #5a3a26; }
+  .sauf u { text-decoration-thickness: 3px; text-underline-offset: 8px; }
+  .signe { position: absolute; right: 90px; bottom: 120px; font-family: 'Mrs Saint Delafield', cursive;
+    font-size: 104px; color: #3f2a1c; transform: rotate(-4deg); }
+  .clou { position: absolute; width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #e9c77f, #8f6a33 70%); box-shadow: 0 2px 3px rgba(60,40,20,.4); }
+  .bavure { position: absolute; left: 330px; top: 560px; width: 44px; height: 30px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(63,42,28,.55), rgba(63,42,28,0) 70%); }
+  .age { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(160,115,55,.22) 100%),
+      linear-gradient(180deg, rgba(215,175,95,.08), rgba(200,155,80,.12)); }
+</style></head>
+<body>
+<div class="feuille">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="31"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.3 0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+  <div class="entete">
+    <svg viewBox="-50 -50 100 100"><g fill="none" stroke="#b5583f" stroke-width="3" stroke-linecap="round"><circle r="30"/><path d="M0 -38 v-8 M0 38 v8 M-38 0 h-8 M38 0 h8 M27 -27 l6 -6 M-27 27 l-6 6 M27 27 l6 6 M-27 -27 l-6 -6"/><path d="M0 18 C-2 6 2 -4 0 -14"/></g></svg>
+    Maison commune
+  </div>
+  <div class="texte">
+    <div class="grand">Départ ce soir.</div>
+    <div class="moyen">Tous à la Nef.</div>
+    <div class="sauf"><u>Sauf</u> : personnel de la Centrale,<br>malades de l'île blanche.</div>
+  </div>
+  <div class="bavure"></div>
+  <div class="signe">Ysolde</div>
+  <div class="clou" style="left:40px; top:34px"></div>
+  <div class="clou" style="right:38px; top:40px"></div>
+  <div class="age"></div>
+</div>
+</body></html>

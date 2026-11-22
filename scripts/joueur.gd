@@ -82,6 +82,10 @@ var _ampoule_mat := StandardMaterial3D.new()
 var _retard := Vector2.ZERO
 
 var _yaw := 0.0
+## Vue de dessus : l'orientation des commandes. Quand la caméra tourne (zones de cadrage, camera_zones.gd),
+## les touches gardent leur sens tant qu'on les tient ; elles suivent la nouvelle vue au relâchement.
+var _yaw_commandes := 0.0
+var _entree_precedente := Vector2.ZERO
 var _pitch := -0.15
 var _phase := 0.0
 var _vitesse_lissee := 0.0
@@ -250,7 +254,13 @@ func _physics_process(delta: float) -> void:
 		var pitch_c := atan2(vers.y, Vector2(vers.x, vers.z).length())
 		_yaw = lerp_angle(_yaw, yaw_c, 1.0 - exp(-2.5 * delta))
 		_pitch = lerpf(_pitch, pitch_c, 1.0 - exp(-2.5 * delta))
-	var basis_cam := Basis(Vector3.UP, _yaw)
+	var yaw_commandes := _yaw
+	if vue_dessus and not cinematique:
+		if dir_input != _entree_precedente or dir_input == Vector2.ZERO:
+			_yaw_commandes = _yaw
+		yaw_commandes = _yaw_commandes
+	_entree_precedente = dir_input
+	var basis_cam := Basis(Vector3.UP, yaw_commandes)
 	var dir := basis_cam * Vector3(dir_input.x, 0.0, dir_input.y)
 	if dir.length() > 1.0:
 		dir = dir.normalized()

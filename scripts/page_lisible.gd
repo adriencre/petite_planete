@@ -30,6 +30,14 @@ const SONS := preload("res://scripts/sons.gd")  # les effets sonores (assets/aud
 @export var largeur_papier: float = 560.0
 ## Force de la lueur dorée. Une grande surface (le tableau de l'école) brille moins fort qu'une feuille.
 @export_range(0.0, 1.0) var intensite_lueur: float = 1.0
+## Un papier à trouver (énigme) : tant qu'il n'est pas lu, halo fort qui pulse, petite lumière dorée et
+## rayon de lumière vertical qu'on voit de loin, comme une pierre-soleil (décidé le 2026-11-22).
+@export var appel_fort: bool = false
+@export var hauteur_rayon: float = 5.0
+## Un morceau d'un document déchiré : le carnet le recolle avec les autres morceaux du même assemblage sur
+## une seule page (carnet.noter_morceau), puis s'ouvre dessus quand on referme la lecture.
+@export var assemblage: String = ""
+@export var titre_assemblage: String = ""
 
 var lecture_autorisee: Callable
 var deja_lue: bool = false
@@ -44,6 +52,9 @@ var _en_cours: bool = false
 var _ecriture: Tween
 var _doc: Control          # ce qui apparaît à l'écran : le papier écrit, ou le document dessiné
 var _voile: ColorRect
+var _rayon: MeshInstance3D
+var _recolle: Texture2D
+var _halo := OmniLight3D.new()
 
 
 func _ready() -> void:
@@ -67,6 +78,9 @@ func _ready() -> void:
 	_lueur.material_override = _lueur_mat
 	_lueur.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(_lueur)
+	if appel_fort:
+		q.size = taille_feuille * 1.6
+		_preparer_appel()
 	if image:
 		_feuille_dessinee()
 	_construire_papier()
@@ -136,7 +150,51 @@ func _process(_delta: float) -> void:
 	var force: float = 0.18 if deja_lue else 0.3
 	if _distance() < distance_lecture:
 		force = 0.55
-	_lueur_mat.albedo_color.a = force * intensite_lueur * (0.6 + 0.4 * onde) * (0.0 if _ouverte else 1.0)
+	# ce qu'on ne peut pas emporter (le tableau, une inscription) : une fois copié dans le carnet,
+	# il ne luit plus (décidé le 2026-11-22)
+	if deja_lue and not ramasser:
+		force = 0.0
+	var appel: bool = appel_fort and not deja_lue and not _ouverte
+	if appel:
+		force = 1.0
+	_lueur_mat.albedo_color.a = minf(1.0, force * intensite_lueur * (0.6 + 0.4 * onde) * (0.0 if _ouverte else 1.0))
+	if _rayon:
+		_rayon.visible = appel and is_visible_in_tree()
+		_halo.visible = _rayon.visible
+		if _rayon.visible:
+			var sortie: Vector3 = global_basis.y.normalized() * 0.3
+			_rayon.global_transform = Transform3D(Basis.IDENTITY, global_position + sortie + Vector3.UP * (hauteur_rayon * 0.5 - 0.3))
+			_halo.global_position = global_position + global_basis.y.normalized() * 0.6
+			_halo.light_energy = 1.2 + 0.8 * onde
+
+
+## Le rayon vertical et la petite lumière d'un papier à trouver (`appel_fort`). Ils restent droits même
+## si la feuille est debout contre un mur : on les place dans le monde, pas dans le repère de la feuille.
+func _preparer_appel() -> void:
+	_rayon = MeshInstance3D.new()
+	_rayon.name = "Rayon"
+	var cone := CylinderMesh.new()
+	cone.top_radius = 0.55
+	cone.bottom_radius = 0.14
+	cone.height = hauteur_rayon
+	cone.radial_segments = 16
+	cone.cap_top = false
+	cone.cap_bottom = false
+	var mat := ShaderMaterial.new()
+	mat.shader = preload("res://shaders/rayon_lumiere.gdshader")
+	mat.set_shader_parameter("couleur", Color(1.0, 0.8, 0.45))
+	mat.set_shader_parameter("hauteur", hauteur_rayon)
+	mat.set_shader_parameter("intensite", 0.8)
+	cone.material = mat
+	_rayon.mesh = cone
+	_rayon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_rayon.top_level = true
+	add_child(_rayon)
+	_halo.light_color = Color(1.0, 0.8, 0.45)
+	_halo.omni_range = 3.5
+	_halo.shadow_enabled = false
+	_halo.top_level = true
+	add_child(_halo)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -184,7 +242,9 @@ func _lire() -> void:
 		await get_tree().create_timer(0.6, false).timeout
 	# le papier apparaît ; le carnet en garde une copie
 	var carnet := get_tree().get_first_node_in_group("carnet")
-	if carnet:
+	if carnet and not assemblage.is_empty():
+		_recolle = carnet.call("noter_morceau", assemblage, image, titre_assemblage) as Texture2D
+	elif carnet:
 		carnet.call("noter_texte", texte, signature, image)
 	SONS.jouer("page")
 	if _texte:
@@ -227,6 +287,12 @@ func _fermer() -> void:
 		await t.finished
 	_joueur.set("cinematique", false)
 	_en_cours = false
+	# Un morceau de document : on voit tout de suite où il se place parmi ceux déjà trouvés.
+	if _recolle:
+		var carnet := get_tree().get_first_node_in_group("carnet")
+		if carnet:
+			carnet.call("ouvrir_sur_image", _recolle)
+		_recolle = null
 	if ramasser:
 		_ranger()
 

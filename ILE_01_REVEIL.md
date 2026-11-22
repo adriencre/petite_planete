@@ -75,7 +75,7 @@ Schéma : `concept/ile_01_formes.png` (variante A), dessiné par `tools/carte_is
 ## 5. Côté lumière
 
 ### Le déroulé (première boucle)
-1. **Le réveil** (~23 s, sans contrôle) : noir → le robot couché sur le flanc → un œil vacille, puis l'autre → il se redresse, regarde ses mains, se lève en titubant, regarde autour de lui. On prend la main.
+1. **Le réveil** (*2026-11-22 : remplacé par le réveil court, voir §batterie*) (~23 s, sans contrôle) : noir → le robot couché sur le flanc → un œil vacille, puis l'autre → il se redresse, regarde ses mains, se lève en titubant, regarde autour de lui. On prend la main.
 2. **La sortie** : la caméra recule lentement sur l'île grise (sans contrôle). Une **luciole** apparaît et guide.
 3. **L'antenne est vide** : on la recharge à la **pierre-soleil**.
 4. **La première lumière** (longue cinématique) : le robot s'accroupit, branche le câble de son poignet dans la prise de la lanterne → pulsations dorées → la lanterne se charge et s'ouvre en crans → la zone se réveille en vague de couleur → il débranche. Les suivantes sont plus courtes. *(2026-11-16 : remplace le glyphe tracé dans l'air — pas de magie, voir DA.md.)*
@@ -96,6 +96,10 @@ L'île 1 est un tutoriel : ses énigmes sont petites.
 
 ### Le premier « échec »
 - Tôt ou tard, la batterie se vide : le robot s'éteint **sur place** et se réveille dans l'abri, **dans un corps neuf**. Son ancien corps reste là-bas.
+- **Le réveil (décidé le 2026-11-22)** : même au tout premier lancement, on joue le réveil court (fondu, l'antenne s'allume, il se lève). Le réveil long de ~24 s est mis de côté (`premier_reveil_long` dans `reveil.gd`).
+- **La brume est un vrai brouillard (décidé le 2026-11-22)** : épaisse, on ne voit pas à travers. Seul le rond de lumière de l'antenne y voit clair, et il rétrécit avec la batterie : on comprend que c'est la brume qui use la lampe.
+- **La place du niveau 1 (décidé le 2026-11-22)** : retirée entièrement (fontaine, dallage et bancs). Il n'y a plus rien.
+- **Les ponts (décidé le 2026-11-22)** : on ne marche plus sur la rivière. Un petit pont de bois en dos d'âne (`scenes/pont.tscn`) au niveau 0, là où le chemin la traverse, un au niveau 1 et un au niveau 2, celui de l'atelier (`ponts_supplementaires` de la maquette ; le gué des pas de géants reste à côté) ; pas au sommet (falaise de l'autre côté) ; ailleurs l'eau ne se traverse pas, sauf au gué des pas de géants, passage secret vers l'atelier.
 - Les lanternes allumées avec cette batterie **s'éteignent** : l'île se rendort.
 - Le joueur ne comprend pas encore que ces corps sont lui.
 

@@ -10,6 +10,8 @@ const SONS := preload("res://scripts/sons.gd")  # les effets sonores (assets/aud
 @export var joueur: CharacterBody3D
 ## Décoché : on saute directement au réveil court (pour tester).
 @export var premier_reveil: bool = true
+## Décidé le 2026-11-22 : le premier réveil utilise aussi le réveil court (le long de ~24 s est mis de côté).
+@export var premier_reveil_long: bool = false
 ## Seuil de batterie sous lequel le robot s'éteint.
 @export var seuil_mort: float = 0.03
 ## Batterie à la fin du premier réveil : l'antenne est presque vide, il faut aller à la pierre-soleil.
@@ -30,6 +32,8 @@ const CENTRE_COUCHE := -0.17
 var morts: int = 0
 ## Le premier réveil a été vu jusqu'au bout (ou passé) : « Continuer » fera un réveil court.
 var _premier_fini: bool = false
+## Le réveil court en cours remplace le premier réveil : à la fin, l'antenne se vide comme après le long.
+var _premier_court: bool = false
 var _en_cours: bool = false
 ## Réveil en cours : "long", "court" ou "" ; `_seq` change quand on le passe (les étapes en attente s'arrêtent).
 var _reveil: String = ""
@@ -86,9 +90,10 @@ func _ready() -> void:
 		for xf in sauve.get("corps", []):
 			n += 1
 			_poser_corps(Sauvegarde.en_transfo(xf), n)
-	if premier_reveil:
+	if premier_reveil and premier_reveil_long:
 		_reveil_long()
 	else:
+		_premier_court = premier_reveil
 		_reveil_court()
 
 
@@ -350,6 +355,10 @@ func _reveil_court() -> void:
 
 
 func _finir_court() -> void:
+	if _premier_court:
+		_premier_court = false
+		_finir_long()
+		return
 	_robot.call("fin_action")
 	joueur.set("cinematique", false)
 	_en_cours = false

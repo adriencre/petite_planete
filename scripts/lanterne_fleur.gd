@@ -269,7 +269,15 @@ func _prete() -> bool:
 
 func _proche_et_regarde(distance: float) -> bool:
 	if _joueur.vue_dessus:  # vue de dessus : on ne vise pas avec la caméra, la proximité suffit
-		return _joueur.global_position.distance_to(global_position) < distance
+		var d: float = _joueur.global_position.distance_to(global_position)
+		if d >= distance:
+			return false
+		# Plusieurs lanternes à portée (le parvis des Trois-Soleils) : seule la plus proche répond.
+		for l in get_tree().get_nodes_in_group("lanternes"):
+			if l != self and (l as Node3D).is_visible_in_tree() \
+					and _joueur.global_position.distance_to((l as Node3D).global_position) < d:
+				return false
+		return true
 	var cam: Camera3D = _joueur.camera
 	var vers := (global_position + Vector3.UP * 1.2) - cam.global_position
 	if vers.length() > distance:

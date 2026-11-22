@@ -60,7 +60,6 @@ Jour 22. La petite voulait voir la mer remonter. Nous sommes restées à la fen�
 Jour 40. Le petit jardinier est reparti vers le Phare à la fin de la basse mer. Je lui ai crié d'attendre. Il n'entend"
 distance_lecture = 2.8
 taille_feuille = Vector2(0.84, 0.6)
-ramasser = false
 image = ExtResource("7_cahier")
 
 [node name="DessinAube" type="Node3D" parent="."]
@@ -71,4 +70,3 @@ distance_lecture = 1.0
 hauteur_lecture = 1.2
 taille_feuille = Vector2(0.38, 0.273)
 image = ExtResource("8_dessin")
-ramasser = false

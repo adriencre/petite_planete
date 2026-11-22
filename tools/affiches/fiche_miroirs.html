@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- Affiche : la fiche d'atelier du miroir d'essai, punaisée au-dessus de l'établi du hangar du port (île 2).
+     Le tutoriel muet des miroirs : la lumière de la bouée, le miroir tourné cran par cran, le voyant du
+     capteur, la porte qui glisse. Ne donne pas l'ordre des caps (c'est l'énigme du Phare).
+     Taille de rendu : 1400 × 1000. Rendu : python tools/affiches/rendre.py fiche_miroirs
+     Texte provisoire (2026-11-22), à valider avec l'utilisateur. -->
+<html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="commun.css">
+<style>
+  .feuille { padding: 56px 70px; transform: rotate(-.6deg); inset: 18px; border-radius: 4px 10px 6px 8px;
+             box-shadow: 0 10px 22px #3a241455; }
+  .cadre { position: absolute; inset: 26px; border: 2.5px solid var(--encre-pale); border-radius: 4px; opacity: .55; }
+  .punaise { position: absolute; width: 26px; height: 26px; border-radius: 50%; top: 14px;
+             background: radial-gradient(circle at 35% 35%, #f2b9a7, #a8432f 70%); box-shadow: 1px 3px 4px #3a241466; }
+  .punaise.g { left: 46%; }
+
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--encre-pale);
+           padding-bottom: 10px; margin-top: 8px; }
+  .atelier { font-family: 'IM Fell English SC', serif; letter-spacing: 6px; font-size: 22px; color: var(--encre-pale); }
+  h1 { font-family: 'IM Fell English SC', serif; font-weight: normal; font-size: 64px; line-height: .95; color: var(--encre); }
+  .ref { font-family: 'IM Fell English SC', serif; font-size: 22px; color: var(--encre-pale); text-align: right; line-height: 1.4; }
+
+  .plan { display: block; width: 100%; height: 430px; margin-top: 14px; }
+  .etapes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 4px; }
+  .etape { display: flex; gap: 12px; align-items: flex-start; }
+  .num { flex: none; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--or); background: rgba(230,192,106,.25);
+         font-family: 'IM Fell English SC', serif; font-size: 26px; line-height: 38px; text-align: center; color: var(--encre); }
+  .etape p { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 25px; line-height: 1.16; }
+  .etape b { color: #7a4f1f; }
+
+  .note { margin-top: 26px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .note p { font-family: 'Caveat', cursive; font-size: 36px; color: var(--encre); line-height: 1.12; max-width: 840px; transform: rotate(-1.2deg); }
+  .note p em { color: var(--cire); font-style: normal; }
+  .signe { font-family: 'IM Fell English SC', serif; font-size: 22px; letter-spacing: 4px; color: var(--encre-pale); text-align: right; }
+  .signe span { display: block; font-family: 'Mrs Saint Delafield', cursive; font-size: 70px; letter-spacing: 0; color: var(--encre); line-height: .9; }
+
+  .age { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background:
+      radial-gradient(ellipse 13% 10% at 90% 62%, transparent 70%, rgba(150,105,50,.18) 76%, transparent 86%),
+      radial-gradient(ellipse 10% 8% at 12% 82%, rgba(150,105,50,.14) 0%, transparent 75%),
+      radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(160,115,55,.28) 100%),
+      linear-gradient(180deg, rgba(215,175,95,.16), rgba(200,155,80,.22)); }
+</style></head>
+<body>
+<div class="feuille">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="9"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.35 0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="crayon" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="5" result="b"/><feDisplacementMap in="SourceGraphic" in2="b" scale="3"/></filter>
+      <filter id="aqua" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="14" result="d"/><feGaussianBlur in="d" stdDeviation="1.6"/></filter>
+      <radialGradient id="lueur"><stop offset="0" stop-color="#ffe7a3" stop-opacity=".95"/><stop offset=".45" stop-color="#f3c96a" stop-opacity=".45"/><stop offset="1" stop-color="#f3c96a" stop-opacity="0"/></radialGradient>
+      <linearGradient id="rayon" x1="0" x2="1"><stop offset="0" stop-color="#f3c96a" stop-opacity=".9"/><stop offset="1" stop-color="#f3c96a" stop-opacity=".55"/></linearGradient>
+    </defs>
+  </svg>
+  <div class="cadre"></div>
+  <div class="punaise g"></div>
+
+  <header>
+    <div>
+      <div class="atelier">Atelier du port</div>
+      <h1>Le miroir d'essai</h1>
+    </div>
+    <div class="ref">Fiche n° 3<br>à garder au-dessus de l'établi</div>
+  </header>
+
+  <svg class="plan" viewBox="0 0 1240 430">
+    <!-- la mer et le quai, à l'aquarelle -->
+    <path d="M40 304 Q170 286 320 302 T640 300 Q668 318 640 338 Q470 356 300 344 T60 340 Q24 322 40 304 Z" fill="#a7cbd2" opacity=".5" filter="url(#aqua)"/>
+    <path d="M120 318 Q260 308 400 318" stroke="#7fa9b2" stroke-width="3" fill="none" opacity=".5" filter="url(#crayon)"/>
+    <path d="M660 302 Q900 292 1210 302 Q1232 320 1206 338 Q940 350 680 340 Q648 322 660 302 Z" fill="#d9c7a5" opacity=".55" filter="url(#aqua)"/>
+    <!-- le rayon : bouée -> miroir -> capteur -->
+    <path d="M178 196 L590 178" stroke="url(#rayon)" stroke-width="16" stroke-linecap="round" opacity=".8"/>
+    <path d="M598 178 L980 132" stroke="url(#rayon)" stroke-width="13" stroke-linecap="round" opacity=".75"/>
+    <!-- 1. la bouée et sa lanterne -->
+    <g filter="url(#crayon)" fill="none" stroke="#4f3624" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="170" cy="190" r="56" fill="url(#lueur)" stroke="none"/>
+      <path d="M118 300 Q122 262 170 256 Q218 262 222 300 Z" fill="#e2b0a4"/>
+      <path d="M126 282 H214"/>
+      <path d="M150 256 L156 214 H184 L190 256"/>
+      <path d="M152 214 Q170 170 188 214" fill="#f3c96a"/>
+      <path d="M170 176 v-16"/>
+    </g>
+    <!-- 2. le miroir sur son pied, avec ses crans -->
+    <g filter="url(#crayon)" fill="none" stroke="#4f3624" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M560 300 L640 300 L628 280 L572 280 Z" fill="#d9c7a5"/>
+      <path d="M600 280 V214"/>
+      <ellipse cx="600" cy="176" rx="20" ry="46" fill="#cfe3e3" transform="rotate(-18 600 176)"/>
+      <path d="M586 140 l26 70" stroke="#ffffff" stroke-width="3" opacity=".8"/>
+      <!-- le cadran gradué -->
+      <path d="M548 262 A56 56 0 0 1 652 262"/>
+      <g stroke-width="2"><path d="M552 254 l-8 -4"/><path d="M566 236 l-6 -7"/><path d="M584 226 l-3 -8"/><path d="M600 222 v-9"/><path d="M616 226 l3 -8"/><path d="M634 236 l6 -7"/><path d="M648 254 l8 -4"/></g>
+      <path d="M600 262 L626 232" stroke="#a8432f" stroke-width="3"/>
+      <circle cx="600" cy="262" r="5" fill="#4f3624"/>
+      <!-- la main qui tourne, en flèche courbe -->
+      <path d="M676 150 Q700 182 676 214" stroke="#c89a3f" stroke-width="3"/>
+      <path d="M672 206 l4 10 l9 -6" stroke="#c89a3f" stroke-width="3"/>
+    </g>
+    <!-- 3. le capteur et son voyant -->
+    <g filter="url(#crayon)" fill="none" stroke="#4f3624" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="972" y="96" width="62" height="76" rx="8" fill="#d6cfdf"/>
+      <circle cx="1003" cy="122" r="13" fill="#f3c96a"/>
+      <circle cx="1003" cy="122" r="30" fill="url(#lueur)" stroke="none"/>
+      <path d="M984 156 H1022"/>
+    </g>
+    <!-- 4. la porte du hangar qui glisse sur son rail -->
+    <g filter="url(#crayon)" fill="none" stroke="#4f3624" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1050 196 H1236"/>
+      <rect x="1060" y="200" width="60" height="100" fill="#a7cbd2" opacity=".9"/>
+      <rect x="1166" y="200" width="60" height="100" fill="#a7cbd2" opacity=".9"/>
+      <path d="M1090 248 h-34 m8 -7 l-8 7 l8 7"/>
+      <path d="M1196 248 h34 m-8 -7 l8 7 l-8 7"/>
+      <path d="M1120 300 V210 M1166 300 V210" stroke-dasharray="5 7" opacity=".6"/>
+    </g>
+    <g font-family="Caveat, cursive" font-size="30" fill="#4f3624">
+      <text x="110" y="385">la bouée</text>
+      <text x="548" y="385">le miroir</text>
+      <text x="940" y="214">le capteur</text>
+      <text x="1100" y="385">la porte</text>
+    </g>
+    <g font-family="Caveat, cursive" font-size="26" fill="#8a6a4f">
+      <text x="300" y="168" transform="rotate(-3 300 168)">la lumière file…</text>
+      <text x="720" y="128" transform="rotate(-7 720 128)">…et rebondit</text>
+    </g>
+  </svg>
+
+  <section class="etapes">
+    <div class="etape"><div class="num">1</div><p>Une lanterne ne se rallume pas de loin. <b>Sa lumière</b>, si.</p></div>
+    <div class="etape"><div class="num">2</div><p>Le <b>miroir</b> la renvoie là où on le tourne, <b>cran par cran</b>.</p></div>
+    <div class="etape"><div class="num">3</div><p>Bien visé, le <b>voyant</b> du capteur s'allume.</p></div>
+    <div class="etape"><div class="num">4</div><p>La <b>porte</b> se déverrouille et glisse sur son rail.</p></div>
+  </section>
+
+  <div class="note">
+    <p>Les grands miroirs des caps se règlent de la même façon.<br><em>Un seul de travers, et le Phare reste aveugle.</em></p>
+    <div class="signe"><span>Atelier</span>du port</div>
+  </div>
+  <div class="age"></div>
+</div>
+</body></html>

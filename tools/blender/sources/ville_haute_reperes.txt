@@ -1,0 +1,24 @@
+# angle du parvis (rotation Y Godot, radians) : -1.7847
+lanterne_1_motif	44.712	6.080	6.643
+lanterne_2_leurre	44.075	6.080	9.575
+lanterne_3_motif	43.438	6.080	12.506
+lanterne_4_leurre	41.976	6.080	6.049
+lanterne_5_leurre	41.339	6.080	8.980
+lanterne_6_leurre	40.702	6.080	11.912
+lanterne_7_leurre	39.240	6.080	5.454
+lanterne_8_motif	38.603	6.080	8.386
+lanterne_9_leurre	37.966	6.080	11.318
+porte_centre	46.323	6.080	10.063
+pupitre_voyants	44.647	7.680	12.360
+affiche_5_porte	46.205	9.380	10.038
+plan_archipel	51.396	8.830	10.449
+ordres_ysolde	53.592	7.380	10.517
+lettres_tavin	54.039	6.730	13.172
+affiche_1	29.417	9.990	-17.787	2.6268
+affiche_2	37.282	9.650	-15.491	-2.7914
+affiche_3	36.817	8.370	-2.988	2.0368
+affiche_4	36.132	6.727	11.329	-3.3555
+borne_prise	-9.550	1.820	29.540	-1.5708
+morceau_A	-9.850	2.695	22.350	1.5708
+morceau_B	-45.394	4.605	9.298	-2.9277
+morceau_C	-42.419	5.055	-7.314	1.5048

@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" path="res://assets/models/ile02/hangar_quai.glb" id="2_modele"]
 [ext_resource type="PackedScene" path="res://assets/models/ile02/vantail_hangar.glb" id="3_porte"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/capteur_miroir.tscn" id="4_capteur"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="5_fiche"]
+[ext_resource type="Texture2D" path="res://assets/affiches/fiche_miroirs.png" id="6_fiche_img"]
 
 [sub_resource type="BoxShape3D" id="interieur"]
 size = Vector3(9, 3.9, 8.8)
@@ -140,3 +142,17 @@ position = Vector3(1.3, 2.9, 2.5)
 light_color = Color(1, 0.87, 0.65, 1)
 light_energy = 0.55
 omni_range = 6.0
+
+[node name="FicheAtelierMiroirs" type="Node3D" parent="."]
+position = Vector3(-2.2, 1.32, -3.45)
+script = ExtResource("5_fiche")
+texte = "Miroir d'essai du port.
+
+Une lanterne ne se rallume pas de loin. Sa lumière, si : un miroir la renvoie là où on le tourne. On le tourne cran par cran, jusqu'à ce que le voyant du capteur s'allume.
+
+Les grands miroirs des caps se règlent de la même façon. Un seul de travers, et le Phare reste aveugle."
+signature = "Atelier du port"
+distance_lecture = 1.9
+hauteur_lecture = 1.32
+taille_feuille = Vector2(0.56, 0.4)
+image = ExtResource("6_fiche_img")

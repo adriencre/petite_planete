@@ -1,8 +1,10 @@
-"""Aube au coin noir (île 3) : le modèle Meshy (concept/ile_03/aube_concept_a.png, image → 3D meshy-t2 +
-texture meshy-n1, 2026-11-22) mis à l'échelle, posé au sol et exporté pour Godot.
+"""Aube au coin noir (île 3) : le modèle Meshy (concept/ile_03/aube_squelette_concept.png, image → 3D
+meshy-t2 + texture meshy-n1, 2026-11-22) mis à l'échelle, posé au sol et exporté pour Godot.
 
-Une petite fille assise, genoux serrés, faite de mousse et de fleurs, avec sa lanterne sous un tissu.
-Hauteur assise : ~0,85 m (une enfant de Semeurs ; les adultes font 2,5 à 3 m).
+Décidé le 2026-11-22 : la statue de mousse passait pour une enfant vivante. Aube est un petit squelette
+de Semeur assis, genoux serrés, la tête en cage où pousse une fleur corail, un nœud corail, de la mousse,
+et sa lanterne éteinte sous un tissu saumon. Hauteur assise, cage comprise : ~1,15 m (une enfant de
+Semeurs ; les adultes font 2,5 à 3 m). L'ancienne version : tools/blender/sources/meshy/aube/aube_meshy.glb.
 
 Lancer :  blender -b --factory-startup --python tools/blender/aube_coin_noir.py
 """
@@ -12,10 +14,10 @@ import bpy
 from mathutils import Vector
 
 RACINE = Path(__file__).resolve().parents[2]
-SOURCE = RACINE / "tools/blender/sources/meshy/aube/aube_meshy.glb"
+SOURCE = RACINE / "tools/blender/sources/meshy/aube/aube_squelette_meshy.glb"
 SORTIE = RACINE / "assets/models/ile03/aube_coin_noir.glb"
 APERCU = RACINE / "concept/ile_03/aube_coin_noir.png"
-HAUTEUR = 0.85
+HAUTEUR = 1.15
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=str(SOURCE))
@@ -36,9 +38,9 @@ racine.scale = (k, k, k)
 racine.location = (-centre.x * k, -centre.y * k, -bas.z * k)
 bpy.context.view_layer.update()
 for o in objets:
-    o.name = "Aube_mousse"
+    o.name = "Aube_squelette"
     for m in o.data.materials:
-        m.name = "aube_mousse"
+        m.name = "aube_squelette"
 print("dimensions", [round(v, 3) for v in (haut - bas) * k])
 
 bpy.ops.export_scene.gltf(filepath=str(SORTIE), export_format="GLB")
@@ -48,8 +50,8 @@ scene = bpy.context.scene
 cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam"))
 scene.collection.objects.link(cam)
 scene.camera = cam
-cam.location = (1.1, -1.5, 1.0)
-cam.rotation_euler = (Vector((0, 0, .4)) - cam.location).to_track_quat("-Z", "Y").to_euler()
+cam.location = (1.4, -1.9, 1.3)
+cam.rotation_euler = (Vector((0, 0, .55)) - cam.location).to_track_quat("-Z", "Y").to_euler()
 soleil = bpy.data.objects.new("Soleil", bpy.data.lights.new("Soleil", "SUN"))
 soleil.data.energy = 3
 soleil.rotation_euler = (.7, .2, .6)

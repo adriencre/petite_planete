@@ -110,6 +110,9 @@ func sauver() -> Dictionary:
 	var t: Array = []
 	for x in textes:
 		var img: Texture2D = x.image
+		if x.has("assemblage"):
+			t.append({"texte": x.texte, "signature": x.signature, "assemblage": x.assemblage, "morceaux": x.morceaux})
+			continue
 		t.append({"texte": x.texte, "signature": x.signature, "image": img.resource_path if img else ""})
 	var d: Array = []
 	for i in dessins.size():
@@ -136,6 +139,11 @@ func _charger(d: Dictionary) -> void:
 				lieux.append({"ch": rep.ch, "nom": rep.nom, "pos": rep.pos, "croquis": croquis, "dessine": bool(x.get("dessine", false))})
 				break
 	for x in d.get("textes", []):
+		if x.has("assemblage"):
+			var morceaux: Array = x.get("morceaux", [])
+			textes.append({"texte": str(x.get("texte", "")), "signature": str(x.get("signature", "")),
+				"assemblage": str(x.assemblage), "morceaux": morceaux, "image": _recoller(morceaux)})
+			continue
 		textes.append({"texte": str(x.get("texte", "")), "signature": str(x.get("signature", "")), "image": Sauvegarde.charger_image(str(x.get("image", "")))})
 	for x in d.get("dessins", []):
 		var img: Texture2D = Sauvegarde.charger_image(str(x.get("image", "")))
@@ -198,6 +206,45 @@ func noter_texte(texte: String, signature: String, image: Texture2D = null) -> v
 			return
 	textes.append({"texte": texte, "signature": signature, "image": image})
 	_signaler()
+
+
+## Les morceaux d'un même document déchiré (le plan d'éclairage des Trois-Soleils, ILE_03_COLONIE.md G2)
+## se recollent sur une seule page. Chaque morceau est dessiné sur la feuille entière, à sa place exacte,
+## le reste transparent : il suffit de les superposer. Renvoie l'image recollée.
+func noter_morceau(assemblage: String, image: Texture2D, titre: String) -> Texture2D:
+	if image == null:
+		return null
+	for t in textes:
+		if str(t.get("assemblage", "")) == assemblage:
+			var chemins: Array = t.morceaux
+			if not chemins.has(image.resource_path):
+				chemins.append(image.resource_path)
+				t.image = _recoller(chemins)
+				_signaler()
+			return t.image
+	var entree := {"texte": titre, "signature": "", "assemblage": assemblage, "morceaux": [image.resource_path]}
+	entree["image"] = _recoller(entree.morceaux)
+	textes.append(entree)
+	_signaler()
+	return entree.image
+
+
+func _recoller(chemins: Array) -> Texture2D:
+	var feuille: Image = null
+	for chemin in chemins:
+		var tex := load(str(chemin)) as Texture2D
+		if tex == null:
+			continue
+		var morceau := tex.get_image()
+		if morceau.is_compressed():
+			morceau.decompress()
+		morceau.clear_mipmaps()
+		morceau.convert(Image.FORMAT_RGBA8)
+		if feuille == null:
+			feuille = morceau.duplicate() as Image
+		else:
+			feuille.blend_rect(morceau, Rect2i(Vector2i.ZERO, morceau.get_size()), Vector2i.ZERO)
+	return ImageTexture.create_from_image(feuille) if feuille else null
 
 
 func noter_archipel() -> void:

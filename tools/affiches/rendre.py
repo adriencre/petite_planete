@@ -44,6 +44,19 @@ DOCUMENTS = {
     "tableau_comptine": (1320, 630),
     "carnet_aube": (1000, 1000),
     "dessin_aube_coin_noir": (960, 690),
+    "fiche_miroirs": (1400, 1000),
+    # La rue des Trois-Soleils et la maison commune (île 3, G2)
+    "affiche_commandante_1": (900, 1250),
+    "affiche_commandante_2": (900, 1250),
+    "affiche_commandante_3": (900, 1250),
+    "affiche_commandante_4": (900, 1250),
+    "affiche_depart": (900, 1250),
+    "plan_eclairage_a": (1100, 1300),
+    "plan_eclairage_b": (1100, 1300),
+    "plan_eclairage_c": (1100, 1300),
+    "ordres_ysolde_commune": (1000, 1300),
+    "lettres_tavin": (1000, 1300),
+    "plan_archipel_semeurs": (1400, 1000),
 }
 
 

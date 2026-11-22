@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- Les lettres de l'Ingénieur Tavin à la Commandante, retrouvées froissées dans la corbeille du bureau
+     d'Ysolde (ILE_03_COLONIE.md §7, validées le 2026-11-16). Trois billets dépliés et épinglés ensemble,
+     de plus en plus inquiets. Rendu : 1000 × 1300. -->
+<html lang="fr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="commun.css">
+<style>
+  .billet { position: absolute; border-radius: 2px; color: #3f2a1c;
+    box-shadow: 0 0 0 1px rgba(120,90,50,.25) inset;
+    background:
+      linear-gradient(120deg, transparent 30%, rgba(120,90,50,.10) 31%, transparent 33%),
+      linear-gradient(40deg, transparent 58%, rgba(120,90,50,.12) 59%, rgba(255,255,255,.15) 60%, transparent 62%),
+      linear-gradient(170deg, transparent 70%, rgba(120,90,50,.10) 71%, transparent 73%),
+      radial-gradient(ellipse at 50% 50%, #f3ead4 50%, #e2cfa8 100%); }
+  .b1 { left: 40px; top: 40px; width: 860px; height: 380px; transform: rotate(-2deg); }
+  .b2 { left: 90px; top: 430px; width: 860px; height: 400px; transform: rotate(1.6deg); }
+  .b3 { left: 50px; top: 850px; width: 880px; height: 400px; transform: rotate(-1deg); }
+  .entete { position: absolute; top: 26px; left: 40px; font-family: 'IM Fell English SC', serif; font-size: 22px;
+    letter-spacing: 4px; color: var(--encre-pale); }
+  .mot { position: absolute; top: 74px; left: 40px; right: 40px; font-family: 'Caveat', cursive; font-weight: 600;
+    font-size: 48px; line-height: 1.16; }
+  .sig { position: absolute; right: 50px; bottom: 26px; font-family: 'Caveat', cursive; font-size: 40px; color: #5a3a26; }
+  .b3 .mot { font-size: 50px; }
+  .souligne { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .epingle { position: absolute; width: 16px; height: 16px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f0d79a, #9a7438 70%); box-shadow: 0 2px 3px rgba(60,40,20,.45); }
+  .age { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(160,115,55,.25) 100%); }
+  .grain { border-radius: 2px; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="52"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0.3 0"/></filter></svg>
+
+<div class="billet b1">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" filter="url(#g)"/></svg>
+  <div class="entete">Centrale — à la Commandante</div>
+  <div class="mot">Commandante, la centrale ne tiendra pas une saison de plus à ce régime.</div>
+  <div class="sig">Tavin, ingénieur</div>
+  <div class="age"></div>
+</div>
+
+<div class="billet b2">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" filter="url(#g)"/></svg>
+  <div class="entete">Centrale — à la Commandante</div>
+  <div class="mot">Chaque lanterne que nous ajoutons, la brume semble la sentir. Elle s'épaissit autour.</div>
+  <div class="sig">Tavin</div>
+  <div class="age"></div>
+</div>
+
+<div class="billet b3">
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" filter="url(#g)"/></svg>
+  <div class="entete">Centrale</div>
+  <div class="mot">Le berceau du jardinier a sa propre ligne. <span class="souligne">Quoi qu'il arrive, il tiendra.</span></div>
+  <div class="sig">T.</div>
+  <div class="age"></div>
+</div>
+
+<div class="epingle" style="left:470px; top:44px"></div>
+<div class="epingle" style="left:520px; top:436px"></div>
+<div class="epingle" style="left:480px; top:856px"></div>
+</body></html>

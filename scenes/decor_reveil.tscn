@@ -28,7 +28,7 @@ carte = ". . . . . . . . . . . .
 . 2 2 2J 2 2^E 2 2wC 2W . . .
 . 2t 2N 2H 2R 2 2 2w 2 2t . .
 . 2 0bQ 12 1^ 1 1 1w 1 1 . .
-. 0bB 0bM 1 1 1F 1 1w 13 . . .
+. 0bB 0bM 1 1 1 1 1w 13 . . .
 . 0bK 0b 0 0^ 0 0 0w 0 . . .
 . . 0 0 0 0 0 0w 01 1h 1hA .
 . . . 0 0 0 . . 0P 0^ . .
@@ -41,7 +41,6 @@ noms = {
 "B": "Barque",
 "C": "Cascade",
 "E": "Montée",
-"F": "La place",
 "G": "Grande lanterne (sommet)",
 "H": "Charrette",
 "J": "Jardin mort",
@@ -58,3 +57,4 @@ materiau_terrain = SubResource("facettes_mat")
 taille_case = 6.0
 chemin = "AP12RHNJEG"
 chemin_geants = "EW"
+ponts_supplementaires = PackedVector2Array(4, 7, 3, 7)

@@ -102,7 +102,6 @@ distance_lecture = 1.18
 hauteur_lecture = 1.45
 taille_feuille = Vector2(0.57, 0.47)
 image = ExtResource("6_journal")
-ramasser = false
 
 [node name="Accostage" type="Node3D" parent="."]
 script = ExtResource("3_amarre")

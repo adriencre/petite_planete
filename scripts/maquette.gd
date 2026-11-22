@@ -42,6 +42,12 @@ const PIERRE_SCRIPT := preload("res://scripts/pierre_soleil.gd")  # recharge de 
 ## pas de grand volume, les nappes et bancs de brume ne sont que sur les cases « b ».
 @export var brume_partout: bool = true:
 	set(v): brume_partout = v; _construire()
+## Brouillard de toute l'île (brume_partout) : densité et hauteur. Décidé le 2026-11-22 : un vrai brouillard,
+## épais, qu'on ne traverse pas du regard ; seul le rond de lumière du robot y voit clair.
+@export var densite_brume_ile: float = 0.6
+@export var hauteur_brume_ile: float = 2.6
+## Opacité des nappes au ras du sol (brume_partout).
+@export var opacite_nappes: float = 0.5
 @export_group("Brume épaisse (cases « b », sans brume_partout)")
 ## Opacité, couleur et hauteur des nappes de la brume épaisse.
 @export_range(0.0, 1.0) var epaisse_opacite: float = 0.78:
@@ -86,6 +92,9 @@ const PIERRE_SCRIPT := preload("res://scripts/pierre_soleil.gd")  # recharge de 
 ## Les pas de géants (ILE_01_REVEIL.md §13, 2026-11-18) : suite de repères, ex. "EW". De grandes dalles
 ## moussues, espacées d'une enjambée de Semeur, en gué sur la rivière : le seul indice de l'atelier.
 @export var chemin_geants: String = ""
+## Ponts en plus de ceux du chemin : cases de rivière (x = ligne, y = colonne de la carte).
+@export var ponts_supplementaires: PackedVector2Array = PackedVector2Array():
+	set(v): ponts_supplementaires = v; _construire()
 ## Enjambée d'un Semeur (2,5 à 3 m de haut), en m.
 @export var enjambee: float = 2.4
 @export var cailloux_par_case: int = 5
@@ -140,6 +149,7 @@ func _construire() -> void:
 	_racines()
 	_details()
 	_vie()
+	_ponts()
 	_pas_de_geants()   # en dernier : le tirage au sort des autres détails ne change pas
 
 
@@ -366,6 +376,8 @@ func _brume_ile() -> void:
 	sm.set_shader_parameter("sol", ImageTexture.create_from_image(img))
 	sm.set_shader_parameter("sol_rect", Vector4(-colonnes * taille_case * 0.5, -lignes * taille_case * 0.5, colonnes * taille_case, lignes * taille_case))
 	sm.set_shader_parameter("sol_max", sol_max)
+	sm.set_shader_parameter("densite", densite_brume_ile)
+	sm.set_shader_parameter("hauteur", hauteur_brume_ile)
 	ile.material = sm
 	add_child(ile)
 
@@ -467,6 +479,7 @@ func _nappes() -> void:
 	m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var mat := ShaderMaterial.new()
 	mat.shader = BRUME_NAPPES
+	mat.set_shader_parameter("opacite", opacite_nappes)
 	m.material_override = mat
 	m.add_to_group("brume_ile")
 	add_child(m)
@@ -489,7 +502,7 @@ func _nature() -> Array[AABB]:
 			for ch in str(k.suf):
 				if ch != "b" and ch != "t":
 					libre = false
-			if "w" in k.suf or "^" in k.suf or "v" in k.suf or "<" in k.suf or ">" in k.suf or "X" in k.suf or "F" in k.suf:  # X : le sol de l'atelier ; F : le dallage de la place
+			if "w" in k.suf or "^" in k.suf or "v" in k.suf or "<" in k.suf or ">" in k.suf or "X" in k.suf:  # X : le sol de l'atelier
 				exclus.append(AABB(k.centre + Vector3(-d, -1, -d), Vector3(taille_case, 3, taille_case)))
 			if not libre:
 				continue
@@ -611,8 +624,6 @@ func _reperes() -> void:
 					add_child(abri)
 				elif ch == "B":
 					_barque(p)
-				elif ch == "F":
-					_place(p)
 				elif ch == "X":
 					_atelier(p)
 				elif ACCESSOIRES.has(ch) and ResourceLoader.exists(ACCESSOIRES[ch][0]):
@@ -857,74 +868,11 @@ func _lanterne_sommet(p: Vector3) -> void:
 		_collision_cylindres(l, "CollisionLanterneSommet", [Vector3(1.4, 0.8, 0.0)])
 
 
-## La place des Semeurs, au centre du niveau 1 (repère « F ») : un dallage octogonal, une fontaine à sec
-## (bassin, colonne brisée, mousse) et trois bancs de pierre. Pour le peuple caché, c'est « la grande
-## place » (ILE_01_REVEIL.md §8) ; pour le robot, un indice muet qu'il y avait de la vie ici.
-func _place(p: Vector3) -> void:
-	var n := Node3D.new()
-	n.name = "Place"
-	n.position = p
-	add_child(n)
-	var dalle := _mat_simple(Color(0.88, 0.83, 0.76))
-	var dalle_sombre := _mat_simple(Color(0.78, 0.72, 0.66))
-	var pierre := _mat_simple(Color(0.9, 0.86, 0.8))
-	var fond := _mat_simple(Color(0.55, 0.5, 0.47))
-	var mousse := _mat_simple(Color(0.5, 0.64, 0.4))
-	_piece_place(n, dalle_sombre, 2.75, 2.75, 0.06, Vector3(0, 0.03, 0), 8)
-	_piece_place(n, dalle, 2.55, 2.55, 0.08, Vector3(0, 0.04, 0), 8)
-	# la fontaine : un bassin octogonal à sec, une colonne brisée au milieu
-	_piece_place(n, pierre, 1.2, 1.3, 0.55, Vector3(0, 0.33, 0), 8)
-	_piece_place(n, fond, 0.95, 0.95, 0.05, Vector3(0, 0.58, 0), 8)
-	var colonne := _piece_place(n, pierre, 0.2, 0.26, 1.1, Vector3(0, 1.05, 0), 6)
-	colonne.rotation = Vector3(0.12, 0, -0.08)   # un peu de travers
-	_piece_place(n, pierre, 0.22, 0.2, 0.35, Vector3(0.55, 0.72, 0.35), 6).rotation = Vector3(1.4, 0.6, 0)   # le morceau tombé
-	for i in 4:   # des plaques de mousse sur le rebord
-		var a := TAU * (i + 0.3 * _rng.randf()) / 4.0
-		_piece_place(n, mousse, 0.32, 0.38, 0.06, Vector3(cos(a) * 1.15, 0.61, sin(a) * 1.15), 5)
-	# trois bancs de pierre tournés vers la fontaine
-	for i in 3:
-		var a := TAU * i / 3.0 + 0.5
-		var b := MeshInstance3D.new()
-		var bm := BoxMesh.new()
-		bm.size = Vector3(1.4, 0.42, 0.45)
-		bm.material = pierre
-		b.mesh = bm
-		b.position = Vector3(cos(a) * 2.05, 0.29, sin(a) * 2.05)
-		b.rotation.y = -a + PI * 0.5
-		n.add_child(b)
-	if Engine.is_editor_hint():
-		return
-	var corps := StaticBody3D.new()
-	var cyl := CylinderShape3D.new()
-	cyl.radius = 1.3
-	cyl.height = 0.6
-	var cs := CollisionShape3D.new()
-	cs.shape = cyl
-	cs.position = Vector3.UP * 0.3
-	corps.add_child(cs)
-	n.add_child(corps)
-
-
 func _mat_simple(c: Color) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
 	m.albedo_color = c
 	m.roughness = 1.0
 	return m
-
-
-func _piece_place(parent: Node3D, mat: Material, r_haut: float, r_bas: float, haut: float, pos: Vector3, cotes: int) -> MeshInstance3D:
-	var mi := MeshInstance3D.new()
-	var c := CylinderMesh.new()
-	c.top_radius = r_haut
-	c.bottom_radius = r_bas
-	c.height = haut
-	c.radial_segments = cotes
-	c.rings = 1
-	c.material = mat
-	mi.mesh = c
-	mi.position = pos
-	parent.add_child(mi)
-	return mi
 
 
 ## L'atelier des robots : la salle occupe toute sa case, porte au sud (vers le rebord caché).
@@ -1102,6 +1050,81 @@ func _pas_de_geants() -> void:
 			p.y = cel.centre.y - (0.0 if "w" in cel.suf else 0.06)
 			_polyedre(st, p, Vector3(_rng.randf_range(1.1, 1.4), 0.22, _rng.randf_range(0.85, 1.05)))
 	_ajouter_mesh("PasDeGeants", st, materiau_terrain)
+
+
+## Les ponts (décidé le 2026-11-22 : on marchait sur la rivière). Un pont de bois (scenes/pont.tscn)
+## sur chaque case de rivière que traverse le chemin ; ailleurs, l'eau ne se traverse plus (collision
+## invisible), sauf au gué des pas de géants, qui reste le passage secret vers l'atelier.
+const PONT := preload("res://scenes/pont.tscn")
+
+func _ponts() -> void:
+	var pos := {}
+	for r in _grille.size():
+		for c in _grille[r].size():
+			for ch in str(_grille[r][c].suf):
+				pos[ch] = _grille[r][c].centre
+	var lignes := _grille.size()
+	var colonnes: int = _grille[0].size() if lignes > 0 else 0
+	var cle := func(p: Vector3) -> Vector2i:
+		return Vector2i(int(floor(p.z / taille_case + lignes * 0.5)), int(floor(p.x / taille_case + colonnes * 0.5)))
+	var ponts := {}
+	for i in chemin.length() - 1:
+		if not pos.has(chemin[i]) or not pos.has(chemin[i + 1]):
+			continue
+		var a: Vector3 = pos[chemin[i]]
+		var b: Vector3 = pos[chemin[i + 1]]
+		var n := int(Vector2(b.x - a.x, b.z - a.z).length() / 0.3)
+		for k in range(1, n):
+			var p := a.lerp(b, float(k) / n)
+			if "w" in str(_case_a(p).suf):
+				ponts[cle.call(p)] = true
+	for v in ponts_supplementaires:
+		ponts[Vector2i(int(v.x), int(v.y))] = true
+	var gue := {}
+	for i in chemin_geants.length() - 1:
+		if not pos.has(chemin_geants[i]) or not pos.has(chemin_geants[i + 1]):
+			continue
+		var a: Vector3 = pos[chemin_geants[i]]
+		var b: Vector3 = pos[chemin_geants[i + 1]]
+		var n := int(Vector2(b.x - a.x, b.z - a.z).length() / 0.3)
+		for k in range(0, n + 1):
+			gue[cle.call(a.lerp(b, float(k) / n))] = true
+	var d := taille_case * 0.5
+	var l := d * 0.7   # demi-largeur de la rivière (comme _eau)
+	var barrage := StaticBody3D.new()
+	barrage.name = "BergesDeLaRiviere"
+	for r in lignes:
+		for c in colonnes:
+			var k: Dictionary = _grille[r][c]
+			if k.niv < 0 or not "w" in str(k.suf):
+				continue
+			var v := Vector2i(r, c)
+			if ponts.has(v):
+				var pont: Node3D = PONT.instantiate()
+				pont.name = "Pont_%d_%d" % [r, c]
+				pont.position = k.centre
+				pont.set("longueur", l * 2.0 + 1.4)
+				add_child(pont)
+				# de part et d'autre du pont, l'eau reste infranchissable
+				var largeur_pont: float = float(pont.get("largeur"))
+				var reste := (taille_case - largeur_pont) * 0.5
+				for sens in [-1.0, 1.0]:
+					_bloc_eau(barrage, k.centre + Vector3(0, 0, sens * (largeur_pont * 0.5 + reste * 0.5)), Vector3(l * 2.0, 2.0, reste))
+			elif not gue.has(v):
+				_bloc_eau(barrage, k.centre, Vector3(l * 2.0, 2.0, taille_case))
+	if not Engine.is_editor_hint():
+		add_child(barrage)
+	else:
+		barrage.free()
+
+
+func _bloc_eau(corps: StaticBody3D, centre: Vector3, taille: Vector3) -> void:
+	var boite := BoxShape3D.new()
+	boite.size = taille
+	var cs := CollisionShape3D.new()
+	cs.shape = boite
+	cs.position = centre + Vector3.UP * (taille.y * 0.5)
+	corps.add_child(cs)
 
 
 ## Case de la grille sous un point du monde.

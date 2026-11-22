@@ -1,0 +1,110 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/porte_trois_soleils.gd" id="porte"]
+[ext_resource type="PackedScene" path="res://assets/models/lanterne_tulipe.glb" id="tulipe"]
+[ext_resource type="Script" path="res://scripts/lanterne_fleur.gd" id="fleur"]
+[ext_resource type="Script" path="res://scripts/page_lisible.gd" id="page"]
+[ext_resource type="Texture2D" path="res://assets/affiches/affiche_depart.png" id="depart"]
+
+[sub_resource type="BoxShape3D" id="battants"]
+size = Vector3(2.8, 4, 0.25)
+
+[node name="ParvisTroisSoleils" type="Node3D" node_paths=PackedStringArray("lanternes", "battants_fermes", "affiche_porte")]
+script = ExtResource("porte")
+lanternes = [NodePath("Lanterne1"), NodePath("Lanterne2"), NodePath("Lanterne3"), NodePath("Lanterne4"), NodePath("Lanterne5"), NodePath("Lanterne6"), NodePath("Lanterne7"), NodePath("Lanterne8"), NodePath("Lanterne9")]
+motif = "101000010"
+battants_fermes = NodePath("BattantsFermes/Forme")
+affiche_porte = NodePath("AfficheDepart")
+
+[node name="Lanterne1" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 44.712, 6.08, 6.643)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne2" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 44.075, 6.08, 9.575)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne3" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 43.438, 6.08, 12.506)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne4" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 41.976, 6.08, 6.049)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne5" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 41.339, 6.08, 8.98)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne6" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 40.702, 6.08, 11.912)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne7" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 39.24, 6.08, 5.454)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne8" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 38.603, 6.08, 8.386)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="Lanterne9" parent="." instance=ExtResource("tulipe")]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 37.966, 6.08, 11.318)
+script = ExtResource("fleur")
+premiere_fois = false
+index_zone = -1
+distance_activation = 1.6
+distance_appel = 4.0
+
+[node name="BattantsFermes" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 46.44, 8.08, 10.088)
+
+[node name="Forme" type="CollisionShape3D" parent="BattantsFermes"]
+shape = SubResource("battants")
+
+[node name="AfficheDepart" type="Node3D" parent="."]
+transform = Transform3D(-0.21228, -0.97721, 0, 0, 0, -1, 0.97721, -0.21228, 0, 46.503, 8.98, 9.2324)
+script = ExtResource("page")
+texte = "Cloué sur la grande porte de la maison commune, d'une écriture pressée :
+
+Départ ce soir. Tous à la Nef.
+Sauf : personnel de la Centrale, malades de l'île blanche."
+distance_lecture = 2.2
+taille_feuille = Vector2(0.7, 0.97)
+image = ExtResource("depart")
+ramasser = false
+intensite_lueur = 0.6
+appel_fort = true
+hauteur_rayon = 3.5

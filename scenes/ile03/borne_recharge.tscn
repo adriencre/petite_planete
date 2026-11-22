@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pierre_soleil.gd" id="pierre"]
+
+[sub_resource type="StandardMaterial3D" id="or"]
+albedo_color = Color(1, 0.8, 0.43, 1)
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="coeur"]
+material = SubResource("or")
+top_radius = 0.1
+bottom_radius = 0.15
+height = 0.38
+radial_segments = 8
+rings = 0
+
+[node name="BorneRecharge" type="Node3D"]
+script = ExtResource("pierre")
+distance_activation = 1.8
+distance_appel = 5.0
+hauteur_rayon = 2.5
+eclat_repos = 2.0
+eclat_appel = 3.0
+energie_lumiere = 1.6
+
+[node name="Cristal" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.57, 0)
+mesh = SubResource("coeur")

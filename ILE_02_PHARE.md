@@ -174,7 +174,7 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 - **Maquette jouable** : E sur la galerie, flèches pour tourner. Les cinq vues sont des illustrations en attendant les décors de l’archipel. Le cran gravé d’une maison reprend le cap 318° de la commande du Phare. Le quai et la ville haute partagent la direction de la Colonie avec deux cadrages rapprochés.
 
 ### Les petites
-- **Le miroir du port** : un miroir d'essai renvoie la lumière de la bouée sur la porte du hangar, qui s'ouvre. C'est le tutoriel muet des miroirs.
+- **Le miroir du port** : un miroir d'essai renvoie la lumière de la bouée sur la porte du hangar, qui s'ouvre. C'est le tutoriel muet des miroirs. **Précisé le 2026-11-22** (on ne comprenait pas le hangar) : le premier allumage est filmé lentement, du rayon qui touche le capteur à la porte qui glisse, puis la caméra regarde l'établi. Sur l'établi, la **fiche d'atelier des miroirs** (affiche dessinée `tools/affiches/fiche_miroirs.html`) explique le principe en quatre vignettes, bouée → miroir à crans → voyant du capteur → porte, sans donner l'ordre des caps (texte provisoire, à valider).
 - **La bouée du port** : la rallumer (depuis la barque) donne un point de recharge.
 - **Le raccourci des grottes** : quand la mer découvre le seuil, le robot amarre la barque à la borne de l'estran et gagne la galerie à pied. La galerie et la crypte restent abritées de la marée. Une échelle de service dans un puits rejoint le plateau au pied du Phare dans les deux sens. Si la mer remonte pendant la visite, le robot peut donc repartir par le plateau.
 

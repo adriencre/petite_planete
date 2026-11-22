@@ -53,6 +53,14 @@ func _preparer_colonie() -> void:
 	_amenager("couturieres", ["Toit_des_couturieres", "Murs_hauts_des_couturieres", "Socle_des_couturieres", "Soubassement_des_couturieres"],
 		["Mobilier_des_couturieres", "Mannequin_et_outils", "Ouvrage_et_linge", "Valise_des_couturieres"],
 		[], ["InterieurCouturieres"])
+	_amenager("commune", ["Toit_maison_commune", "Murs_hauts_maison_commune", "Murs_du_fond_maison_commune",
+			"Socle_maison_commune", "Soubassement_maison_commune", "Murs_hauts_bureau_commune",
+			"Murs_du_fond_bureau_commune", "Soubassement_bureau_commune", "Socle_bureau_commune",
+			"Porte_commune_gauche", "Porte_commune_droite", "Serrure_commune", "Verrou_commune",
+			"Cran_commune_1", "Cran_commune_2", "Cran_commune_3"],
+		["Sol_maison_commune", "Mobilier_maison_commune", "Objets_maison_commune", "Mobilier_bureau_commune",
+			"Papiers_bureau_commune"],
+		["PlanArchipel", "OrdresYsolde", "LettresTavin"], ["InterieurCommune"])
 
 
 func _preparer_reveil() -> void:

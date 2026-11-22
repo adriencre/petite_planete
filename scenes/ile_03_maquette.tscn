@@ -18,7 +18,20 @@
 [ext_resource type="Script" uid="uid://b8yipboy6f2xc" path="res://scripts/coupe_maison.gd" id="coupe_maison"]
 [ext_resource type="Script" uid="uid://c83v2owqjrp1g" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
 [ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="joueur"]
-
+[ext_resource type="PackedScene" path="res://scenes/ile03/parvis_trois_soleils.tscn" id="vh_parvis"]
+[ext_resource type="PackedScene" path="res://scenes/ile03/borne_recharge.tscn" id="vh_borne"]
+[ext_resource type="Script" path="res://scripts/camera_zones.gd" id="vh_camera"]
+[ext_resource type="Script" path="res://scripts/zone_camera.gd" id="vh_zone"]
+[ext_resource type="Texture2D" path="res://assets/affiches/affiche_commandante_1.png" id="vh_affiche_1"]
+[ext_resource type="Texture2D" path="res://assets/affiches/affiche_commandante_2.png" id="vh_affiche_2"]
+[ext_resource type="Texture2D" path="res://assets/affiches/affiche_commandante_3.png" id="vh_affiche_3"]
+[ext_resource type="Texture2D" path="res://assets/affiches/affiche_commandante_4.png" id="vh_affiche_4"]
+[ext_resource type="Texture2D" path="res://assets/affiches/plan_eclairage_a.png" id="vh_morceau_A"]
+[ext_resource type="Texture2D" path="res://assets/affiches/plan_eclairage_b.png" id="vh_morceau_B"]
+[ext_resource type="Texture2D" path="res://assets/affiches/plan_eclairage_c.png" id="vh_morceau_C"]
+[ext_resource type="Texture2D" path="res://assets/affiches/plan_archipel_semeurs.png" id="vh_plan_archipel"]
+[ext_resource type="Texture2D" path="res://assets/affiches/ordres_ysolde_commune.png" id="vh_ordres_ysolde"]
+[ext_resource type="Texture2D" path="res://assets/affiches/lettres_tavin.png" id="vh_lettres_tavin"]
 [sub_resource type="BoxShape3D" id="Interieur_quai"]
 size = Vector3(6.08, 3, 5.14)
 
@@ -43,8 +56,20 @@ size = Vector3(4.6, 1.75, 5.4)
 [sub_resource type="BoxShape3D" id="Volume_PassageAube"]
 size = Vector3(1.4, 2.2, 4.2)
 
-[sub_resource type="BoxShape3D" id="Volume_TuyauAube"]
-size = Vector3(1.1, 2.1, 2.6)
+[sub_resource type="BoxShape3D" id="vh_zone_secteur"]
+size = Vector3(15, 26, 34)
+
+[sub_resource type="BoxShape3D" id="vh_zone_parvis"]
+size = Vector3(13.5, 20, 21)
+
+[sub_resource type="BoxShape3D" id="vh_zone_bureau"]
+size = Vector3(6.6, 4, 3.4)
+
+[sub_resource type="BoxShape3D" id="vh_salle"]
+size = Vector3(11.5, 3, 4.8)
+
+[sub_resource type="BoxShape3D" id="vh_bureau"]
+size = Vector3(6.2, 3, 3.0)
 
 [node name="Ile03Maquette" type="Node3D" unique_id=1408208231]
 
@@ -138,16 +163,6 @@ autres = Array[NodePath]([NodePath("../Colonie/Palier_Aube")])
 [node name="Volume" type="CollisionShape3D" parent="PassageAube" unique_id=1593594687]
 shape = SubResource("Volume_PassageAube")
 
-[node name="TuyauAube" type="Area3D" parent="." unique_id=398441037]
-transform = Transform3D(0.3430751, 0, 0.939308, 0, 1, 0, -0.939308, 0, 0.3430751, -45.6498, 4.9, -15.6086)
-collision_layer = 0
-monitorable = false
-script = ExtResource("coupe_maison")
-autres = Array[NodePath]([NodePath("../Colonie/Couvercle_tuyau_Aube"), NodePath("../Colonie/Tuyau_Aube")])
-
-[node name="Volume" type="CollisionShape3D" parent="TuyauAube" unique_id=1080430770]
-shape = SubResource("Volume_TuyauAube")
-
 [node name="BatimentsFantomes" type="Node" parent="." unique_id=934715538 node_paths=PackedStringArray("colonie", "joueur")]
 script = ExtResource("fantomes")
 colonie = NodePath("../Colonie")
@@ -214,7 +229,6 @@ distance_lecture = 1.6
 hauteur_lecture = 1.6
 taille_feuille = Vector2(0.32, 0.32)
 image = ExtResource("14_w7tjp")
-ramasser = false
 
 [node name="PorteAube" parent="." unique_id=2073300561 instance=ExtResource("15_je6up")]
 transform = Transform3D(0.34298828, 0, 0.9393397, 0, 1, 0, -0.9393397, 0, 0.34298828, -41.2677, 3.95, -15.0727)
@@ -231,6 +245,320 @@ taille_feuille = Vector2(0.42, 0.3)
 image = ExtResource("17_qqh4o")
 intensite_lueur = 0.6
 
+[node name="ParvisTroisSoleils" parent="." node_paths=PackedStringArray("colonie") instance=ExtResource("vh_parvis")]
+colonie = NodePath("../Colonie")
+
+[node name="BorneRecharge" parent="." instance=ExtResource("vh_borne")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55, 1.12, 29.2)
+
+[node name="CameraColonie" type="Node" parent="." node_paths=PackedStringArray("joueur")]
+script = ExtResource("vh_camera")
+joueur = NodePath("../Joueur")
+
+[node name="AfficheCommandante1" type="Node3D" parent="."]
+transform = Transform3D(-0.49235, -0.87039, 0, 0, 0, -1, 0.87039, -0.49235, 0, 29.461, 9.99, -17.762)
+script = ExtResource("9_ybcho")
+texte = "Affiche de la Commandante, n° 1 :
+
+« Une lanterne par foyer. »"
+distance_lecture = 1.8
+taille_feuille = Vector2(0.48, 0.67)
+image = ExtResource("vh_affiche_1")
+ramasser = false
+intensite_lueur = 0.6
+appel_fort = true
+
+[node name="MorceauPlanA" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 3.6732e-06, 0, 1, 0, -3.6732e-06, 0, 1, -9.85, 2.699, 22.35)
+script = ExtResource("9_ybcho")
+texte = "Sur la table de la maison du quai, un morceau d'affiche déchirée. « Éclairage réglementaire de la rue des Trois-Soleils », par ordre de la Commandante.
+
+En haut, la porte de la maison commune. Dessous, la première rangée commence : un soleil, puis un rond. Le reste est arraché."
+distance_lecture = 1.6
+hauteur_lecture = 1.8
+assemblage = "plan_eclairage"
+titre_assemblage = "Le plan d'éclairage de la rue des Trois-Soleils, recollé morceau par morceau."
+taille_feuille = Vector2(0.45, 0.53)
+image = ExtResource("vh_morceau_A")
+ramasser = false
+intensite_lueur = 0.8
+appel_fort = true
+
+[node name="AfficheCommandante2" type="Node3D" parent="."]
+transform = Transform3D(0.34308, -0.93931, 0, 0, 0, -1, 0.93931, 0.34308, 0, 37.282, 9.65, -15.491)
+script = ExtResource("9_ybcho")
+texte = "Affiche de la Commandante, n° 2 :
+
+« La nuit, restez dans la lumière. »"
+distance_lecture = 2.2
+taille_feuille = Vector2(0.9, 1.25)
+image = ExtResource("vh_affiche_2")
+ramasser = false
+intensite_lueur = 0.6
+appel_fort = true
+
+[node name="AfficheCommandante3" type="Node3D" parent="."]
+transform = Transform3D(-0.89337, -0.44932, 0, 0, 0, -1, 0.44932, -0.89337, 0, 36.839, 8.37, -2.9433)
+script = ExtResource("9_ybcho")
+texte = "Ordre de la Commandante, n° 3 :
+
+« Jamais d'ombre. »"
+distance_lecture = 1.8
+taille_feuille = Vector2(0.48, 0.67)
+image = ExtResource("vh_affiche_3")
+ramasser = false
+intensite_lueur = 0.6
+appel_fort = true
+
+[node name="MorceauPlanB" type="Node3D" parent="."]
+transform = Transform3D(-0.21227, 0, 0.97721, 0, 1, 0, -0.97721, 0, -0.21227, -45.394, 4.609, 9.298)
+script = ExtResource("9_ybcho")
+texte = "Sur le comptoir des couturières, un autre morceau de la même affiche. « Éclairage réglementaire de la rue des Trois-Soleils », par ordre de la Commandante.
+
+Il reste le bout de la première rangée, côté droit : un soleil. Et toute la rangée du milieu : trois ronds."
+distance_lecture = 1.6
+hauteur_lecture = 1.8
+assemblage = "plan_eclairage"
+titre_assemblage = "Le plan d'éclairage de la rue des Trois-Soleils, recollé morceau par morceau."
+taille_feuille = Vector2(0.4, 0.47)
+image = ExtResource("vh_morceau_B")
+ramasser = false
+intensite_lueur = 0.8
+appel_fort = true
+
+[node name="AfficheCommandante4" type="Node3D" parent="."]
+transform = Transform3D(-0.21228, -0.97721, 0, 0, 0, -1, 0.97721, -0.21228, 0, 36.132, 6.727, 11.329)
+script = ExtResource("9_ybcho")
+texte = "Ordre de la Commandante, n° 4 :
+
+« Toute ombre est un danger. Signalez les lanternes éteintes. »"
+distance_lecture = 2.2
+taille_feuille = Vector2(0.9, 1.25)
+image = ExtResource("vh_affiche_4")
+ramasser = false
+intensite_lueur = 0.6
+appel_fort = true
+
+[node name="MorceauPlanC" type="Node3D" parent="."]
+transform = Transform3D(0.99782, 0, -0.065948, 0, 1, 0, 0.065948, 0, 0.99782, -42.419, 5.059, -7.314)
+script = ExtResource("9_ybcho")
+texte = "Sur le bureau du maître, à l'école, le bas de l'affiche. « Éclairage réglementaire de la rue des Trois-Soleils », par ordre de la Commandante.
+
+La dernière rangée : un rond, un soleil, un rond.
+« Soleil : allumée. Rond : éteinte. »"
+distance_lecture = 1.6
+hauteur_lecture = 1.8
+assemblage = "plan_eclairage"
+titre_assemblage = "Le plan d'éclairage de la rue des Trois-Soleils, recollé morceau par morceau."
+taille_feuille = Vector2(0.4, 0.47)
+image = ExtResource("vh_morceau_C")
+ramasser = false
+intensite_lueur = 0.8
+appel_fort = true
+
+[node name="PlanArchipel" type="Node3D" parent="."]
+transform = Transform3D(-0.21228, -0.97721, 0, 0, 0, -1, 0.97721, -0.21228, 0, 51.396, 8.83, 10.449)
+script = ExtResource("9_ybcho")
+texte = "Au mur de la salle du conseil, le plan de l'archipel des Semeurs. Les îles ont leur nom : la Colonie, le Phare, l'île blanche, la Nef, la Centrale, l'île du Réveil. Au nord-ouest, une petite tache d'encre, là où il n'y a rien."
+distance_lecture = 3.0
+hauteur_lecture = 0.0
+taille_feuille = Vector2(2.7, 1.93)
+image = ExtResource("vh_plan_archipel")
+ramasser = false
+intensite_lueur = 0.3
+appel_fort = true
+
+[node name="OrdresYsolde" type="Node3D" parent="."]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 53.592, 7.385, 10.517)
+script = ExtResource("9_ybcho")
+texte = "Le registre des ordres de la Commandante, sur son bureau :
+
+« Doubler les lanternes de la ville haute avant la saison sombre. »
+« Les malades seront envoyés à l'île blanche jusqu'à guérison. »
+« La Nef est réparée. Nous partons. »"
+distance_lecture = 1.6
+hauteur_lecture = 1.6
+taille_feuille = Vector2(0.6, 0.78)
+image = ExtResource("vh_ordres_ysolde")
+ramasser = true
+intensite_lueur = 1.0
+appel_fort = true
+
+[node name="LettresTavin" type="Node3D" parent="."]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 54.039, 6.75, 13.172)
+script = ExtResource("9_ybcho")
+texte = "Dans la corbeille d'Ysolde, trois billets froissés de l'ingénieur Tavin :
+
+« Commandante, la centrale ne tiendra pas une saison de plus à ce régime. »
+« Chaque lanterne que nous ajoutons, la brume semble la sentir. Elle s'épaissit autour. »
+« Le berceau du jardinier a sa propre ligne. Quoi qu'il arrive, il tiendra. »"
+distance_lecture = 1.5
+hauteur_lecture = 1.6
+taille_feuille = Vector2(0.42, 0.55)
+image = ExtResource("vh_lettres_tavin")
+ramasser = true
+intensite_lueur = 1.0
+appel_fort = true
+
+[node name="InterieurCommune" type="Area3D" parent="." node_paths=PackedStringArray("toit", "murs_hauts")]
+collision_layer = 0
+monitorable = false
+script = ExtResource("coupe_maison")
+toit = NodePath("../Colonie/Toit_maison_commune")
+murs_hauts = NodePath("../Colonie/Murs_hauts_maison_commune")
+autres = Array[NodePath]([NodePath("../Colonie/Murs_hauts_bureau_commune")])
+
+[node name="Salle" type="CollisionShape3D" parent="InterieurCommune"]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 49.059, 7.58, 10.657)
+shape = SubResource("vh_salle")
+
+[node name="Bureau" type="CollisionShape3D" parent="InterieurCommune"]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 53.554, 7.58, 11.634)
+shape = SubResource("vh_bureau")
+
+[node name="ZoneRue06" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = 11.9
+distance = 9.6
+angle = 46.4
+priorite = 0
+
+[node name="Secteur6" type="CollisionShape3D" parent="ZoneRue06"]
+transform = Transform3D(0.60995, 0, 0.79244, 0, 1, 0, -0.79244, 0, 0.60995, -30.228, 11.4, -23.267)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue07" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -31.3
+distance = 10.125
+angle = 52.0
+priorite = 0
+
+[node name="Secteur7" type="CollisionShape3D" parent="ZoneRue07"]
+transform = Transform3D(0.83983, 0, 0.54285, 0, 1, 0, -0.54285, 0, 0.83983, -19.564, 13.6, -30.266)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue08" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -73.9
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur8" type="CollisionShape3D" parent="ZoneRue08"]
+transform = Transform3D(0.98073, 0, 0.19538, 0, 1, 0, -0.19538, 0, 0.98073, -6.767, 15.4, -33.968)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue09" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -90.0
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur9" type="CollisionShape3D" parent="ZoneRue09"]
+transform = Transform3D(0.98073, 0, -0.19538, 0, 1, 0, 0.19538, 0, 0.98073, 6.767, 16, -33.968)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue10" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -106.1
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur10" type="CollisionShape3D" parent="ZoneRue10"]
+transform = Transform3D(0.83983, 0, -0.54285, 0, 1, 0, 0.54285, 0, 0.83983, 19.564, 15.7, -30.266)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue11" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -123.3
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur11" type="CollisionShape3D" parent="ZoneRue11"]
+transform = Transform3D(0.60995, 0, -0.79244, 0, 1, 0, 0.79244, 0, 0.60995, 30.228, 14.75, -23.267)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue12" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -142.3
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur12" type="CollisionShape3D" parent="ZoneRue12"]
+transform = Transform3D(0.34308, 0, -0.93931, 0, 1, 0, 0.93931, 0, 0.34308, 37.599, 13.65, -13.733)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue13" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -163.5
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur13" type="CollisionShape3D" parent="ZoneRue13"]
+transform = Transform3D(0.065965, 0, -0.99782, 0, 1, 0, 0.99782, 0, 0.065965, 40.874, 12.6, -2.7021)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue14" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = 174.1
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur14" type="CollisionShape3D" parent="ZoneRue14"]
+transform = Transform3D(-0.21229, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21229, 39.694, 11.4, 8.6231)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue15" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = 152.1
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur15" type="CollisionShape3D" parent="ZoneRue15"]
+transform = Transform3D(-0.48593, 0, -0.874, 0, 1, 0, 0.874, 0, -0.48593, 34.189, 10.2, 19.009)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneRue16" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = 132.0
+distance = 10.5
+angle = 56.0
+priorite = 0
+
+[node name="Secteur16" type="CollisionShape3D" parent="ZoneRue16"]
+transform = Transform3D(-0.73832, 0, -0.67445, 0, 1, 0, 0.67445, 0, -0.73832, 24.959, 8.8, 27.323)
+shape = SubResource("vh_zone_secteur")
+
+[node name="ZoneParvis" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -102.3
+distance = 12.5
+angle = 52.0
+priorite = 1
+
+[node name="Volume" type="CollisionShape3D" parent="ZoneParvis"]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 45.248, 10.08, 9.8295)
+shape = SubResource("vh_zone_parvis")
+
+[node name="ZoneBureau" type="Area3D" parent="."]
+script = ExtResource("vh_zone")
+orientation = -12.3
+distance = 9.0
+angle = 55.0
+priorite = 2
+
+[node name="Volume" type="CollisionShape3D" parent="ZoneBureau"]
+transform = Transform3D(-0.21228, 0, -0.97721, 0, 1, 0, 0.97721, 0, -0.21228, 53.554, 7.58, 11.634)
+shape = SubResource("vh_zone_bureau")
+
 [connection signal="body_entered" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_entre"]
 [connection signal="body_exited" from="InterieurMaisonDuQuai" to="InterieurMaisonDuQuai" method="_robot_sort"]
 [connection signal="body_entered" from="InterieurCouturieres" to="InterieurCouturieres" method="_robot_entre"]
@@ -243,5 +571,5 @@ intensite_lueur = 0.6
 [connection signal="body_exited" from="CaveAube" to="CaveAube" method="_robot_sort"]
 [connection signal="body_entered" from="PassageAube" to="PassageAube" method="_robot_entre"]
 [connection signal="body_exited" from="PassageAube" to="PassageAube" method="_robot_sort"]
-[connection signal="body_entered" from="TuyauAube" to="TuyauAube" method="_robot_entre"]
-[connection signal="body_exited" from="TuyauAube" to="TuyauAube" method="_robot_sort"]
+[connection signal="body_entered" from="InterieurCommune" to="InterieurCommune" method="_robot_entre"]
+[connection signal="body_exited" from="InterieurCommune" to="InterieurCommune" method="_robot_sort"]

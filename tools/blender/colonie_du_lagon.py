@@ -963,10 +963,7 @@ def maison_aube(centre, rotation):
             boite(0,-(P/2-.15),z0,L,.3,z1-z0,"pierre")
         if fond is not False:
             boite(L/2-.15,0,z0,.3,P,z1-z0,"pierre")
-            for a,b in ((-L/2,sx0),(sx1,L/2)):
-                boite((a+b)/2,P/2-.15,z0,b-a,.3,z1-z0,"pierre")
-            if haut:
-                boite((sx0+sx1)/2,P/2-.15,2.3,sx1-sx0,.3,z1-2.3,"pierre")
+            boite(0,P/2-.15,z0,L,.3,z1-z0,"pierre")   # mur du fond plein : plus de soupirail
 
     piece("Cave_bas_Aube")
     murs_cave(zc,1.0,False)
@@ -1007,7 +1004,10 @@ def maison_aube(centre, rotation):
         boite(tx0+.05,y,zc,.1,.1,max(.1,zc+(y+2.4)/3.4*(ze-zc)-zc),"bois")
     terminer()
     piece("Rampe_cave_Aube")
-    rampe(tx0,tx1,-2.4,ty1,zc,ze)
+    # Le dessus de la rampe suit le nez des marches et part sous le sol de la cave : pas de
+    # rebord à sauter en bas (corrigé le 2026-11-22 : il dépassait de 28 cm), arrivée au ras de l'étage.
+    pente = (ze-zc)/(ty1+2.4)
+    rampe(tx0,tx1,-2.6,ty1,zc-.2*pente-.3,ze-.3)
     terminer("-colonly")
 
     piece("Plancher_Aube")
@@ -1136,11 +1136,8 @@ def maison_aube(centre, rotation):
     boite(-.9,-2.35,ze+.55,.46,.46,.04,"chene")
     # Étagère aux jouets, au-dessus du pied du lit.
     boite(-2.17,-1.15,ze+1.4,.26,.8,.05,"chene")
-    # Pièce commune, côté cour : grande table, deux chaises de Semeurs.
-    for dx in (-.8,.8):
-        for dy in (-.45,.45):
-            boite(-.8+dx,1.55+dy,ze,.12,.12,1.4,"bois")
-    boite(-.8,1.55,ze+1.4,2.0,1.2,.1,"chene")
+    # Pièce commune, côté cour : deux chaises de Semeurs contre le mur (la grande table est retirée
+    # le 2026-11-22 : elle bloquait le passage vers la porte du palier).
     for x in (-1.6,0.1):
         for dx in (-.24,.24):
             for dy in (-.2,.2):
@@ -1263,9 +1260,10 @@ def maison_aube(centre, rotation):
             extrusion_facade(ccw([coin,a,b]),-.34,-.2,"pierre")
     for (xa,za),(xb,zb) in zip(arc,arc[1:]):
         tige((xa,-.36,za),(xb,-.36,zb),.035,"chene")
-    # Deux marches de pierre montent au seuil de la cave.
-    boite(-3.13,(cy0+cy1)/2,-.2,.66,cy1-cy0,.2,"pierre")
-    boite(-2.96,(cy0+cy1)/2,-.2,.32,cy1-cy0,.33,"pierre")
+    # Trois marches de pierre dans l'axe de la niche, puis un seuil au niveau de la cave
+    # (avant le 2026-11-22, les marches montaient de côté : on butait dessus en entrant).
+    marches(-3.8,-2.8,.1,1.0,-.2,zc+.02,3,"pierre",-.2)
+    boite(-3.2,(1.0+2.8)/2,-.2,1.2,1.8,zc+.22,"pierre")
     # La petite porte d'enfant dans le mur de la cave : arche de pierre, cintre de bois.
     cz = ch-.55
     arc2=[((cy0+cy1)/2+.55*math.cos(math.radians(a)),cz+.55*math.sin(math.radians(a))) for a in range(0,181,15)]
@@ -1288,78 +1286,17 @@ def maison_aube(centre, rotation):
     boite(-3.3,1.4,2.35,1.4,3.2,ze+.1-2.35,"pierre")
     boite(-3.9,1.4,-.25,.2,3.2,2.6,"pierre")
     boite(-3.2,2.9,-.25,1.2,.2,2.6,"pierre")
-    # Rampe vers le seuil de la cave (les deux marches de pierre sont dans Palier_Aube_creux).
-    bas=[(-3.75,cy0-.05,-.48),(-2.8,cy0-.05,-.03),(-2.8,cy1+.05,-.03),(-3.75,cy1+.05,-.48)]
-    prisme(bas,[(x,y,z+.3) for x,y,z in bas],"pierre")
+    # Rampe dans l'axe de la niche vers le seuil de la cave (les marches sont dans Palier_Aube_creux) :
+    # elle part sous le sol de la rue et arrive au niveau du plancher de la cave.
+    haut_seuil = zc+.02
+    bas=[(-3.8,0,-.55),(-2.6,0,-.55),(-2.6,1.0,haut_seuil-.3),(-3.8,1.0,haut_seuil-.3)]
+    prisme(bas,[(-3.8,0,-.25),(-2.6,0,-.25),(-2.6,1.0,haut_seuil),(-3.8,1.0,haut_seuil)],"pierre")
+    boite(-3.2,(1.0+2.8)/2,-.2,1.2,1.8,haut_seuil+.2,"pierre")
     boite(-3.98,1.4,ze,.1,3.2,1.0,"pierre")
     terminer("-colonly")
 
-    piece("Cour_Aube")
-    # Murets bas : la cour se voit de la caméra, mais le robot ne peut pas les sauter.
-    for x0,y0,l,p in ((-4.0+.15,5.0,.3,4.0),(2.75,4.95,.3,4.1),(-.62,7.0-.15,6.75,.3)):
-        boite(x0,y0,-.6,l,p,2.3,"craie")
-        boite(x0,y0,1.7,l+.1,p+.1,.1,"tuile")
-    # Un petit arbre et des pots, des ronds dessinés à la craie au sol.
-    arbre(1.8,6.1,-.1,1.8,("feuille_ombre","feuille"))
-    for x in (-3.3,-2.8):
-        pilier(x,6.55,-.2,.22,.45,"tuile",.27)
-    for i in range(5):
-        pilier(1.6+math.cos(i*1.26)*.55,5.3+math.sin(i*1.26)*.4,-.08,.15,.1,"creme")
-    terminer(True)
-
-    # La conduite de cuivre des câbles de lanternes : octogone à fond plat, colliers et berceaux de
-    # pierre. Elle bouche le soupirail ; cassée côté cour, elle laisse une ouverture à la taille du robot.
-    cx, R = (sx0+sx1)/2, 1.32
-    ya, yb = P/2-.02, 5.6
-    def axe(y):
-        # Le fond plat descend du seuil du soupirail jusqu'à l'herbe de la cour.
-        return zc-.02+(y-ya)/(yb-ya)*(-.12-zc+.02)+R*math.cos(math.pi/8)
-    def angle_face(k):
-        return -math.pi/2-math.pi/8+k*math.pi/4
-    def plaque(y0,y1,k,ep,ton,r=R,z0=None,z1=None):
-        a, b = angle_face(k), angle_face(k+1)
-        za = axe(y0) if z0 is None else z0
-        zb = axe(y1) if z1 is None else z1
-        def p(t,rr,y,z):
-            return (cx+rr*math.cos(t),y,z+rr*math.sin(t))
-        bas=[p(a,r,y0,za),p(b,r,y0,za),p(b,r-ep,y0,za),p(a,r-ep,y0,za)]
-        haut=[p(a,r,y1,zb),p(b,r,y1,zb),p(b,r-ep,y1,zb),p(a,r-ep,y1,zb)]
-        prisme(bas,haut,ton)
-    casse=random.Random(8)
-    piece("Tuyau_Aube")
-    # Moitié basse (fond et flancs) : on y marche.
-    for k in (7,0,1,2):
-        plaque(ya,yb,k,.1,"cuivre")
-    # Le moignon qui sort du muret de la cour, après la cassure.
-    for k in range(8):
-        plaque(6.35,6.9,k,.1,"cuivre",z0=axe(yb),z1=axe(yb))
-    for y in (6.42,6.8):
-        for k in range(8):
-            plaque(y,y+.08,k,.04,"ombre",r=R+.05,z0=axe(yb),z1=axe(yb))
-    # Berceaux de pierre sous la conduite.
-    for y in (3.7,4.9,6.6):
-        boite(cx,y,-.3,1.4,.4,axe(y)-R*math.cos(math.pi/8)+.3,"pierre")
-    # Le tronçon tombé : une demi-coquille couchée dans l'herbe, comme un berceau.
-    for k in range(4):
-        a, b = math.pi+k*math.pi/4, math.pi+(k+1)*math.pi/4
-        def q(t,rr,x):
-            return (x,4.0+rr*math.cos(t)*.75,.95+rr*math.sin(t)*.75)
-        prisme([q(a,R,.9),q(b,R,.9),q(b,R-.1,.9),q(a,R-.1,.9)],[q(a,R,1.6),q(b,R,1.6),q(b,R-.1,1.6),q(a,R-.1,1.6)],"cuivre")
-    # Les câbles noirs qui montent du moignon vers les lanternes de la rue.
-    for i in range(3):
-        tige((cx-.3+i*.3,6.9,axe(yb)+.9),(cx-.6+i*.5,7.4,4.2),.035,"ombre")
-    # Le faisceau de câbles court au fond de la conduite, le long du flanc.
-    for i in range(3):
-        tige((cx+.42+i*.07,yb,axe(yb)-R*.86+.12),(cx+.42+i*.07,ya,axe(ya)-R*.86+.12),.03,"ombre")
-    normales(terminer(True))
-    piece("Couvercle_tuyau_Aube")
-    # Moitié haute : s'efface quand le robot est dedans. Bord déchiré du côté de la cassure.
-    for k in (3,4,5,6):
-        plaque(ya,yb-casse.uniform(0,.45),k,.1,"cuivre")
-    for y in (3.3,4.1,4.9):
-        for k in range(8):
-            plaque(y,y+.08,k,.04,"ombre",r=R+.05)
-    normales(terminer())
+    # La cour de derrière et la conduite de cuivre sont retirées le 2026-11-22 : on entre par la
+    # porte de la cave ; le soupirail est muré.
 
 
 modeles_fermes = {}
@@ -1376,10 +1313,18 @@ def logis_de_decor(numero, centre, rotation, rive):
     forme = variantes[(numero + (rive == "exterieure")) % 2]
     nom = f"Logis_{rive}_{numero:02d}_{forme}"
     maison_fermee(nom, centre, rotation, variantes_fermees[forme])
+    if numero in INTENSITE:
+        noter_logis(nom, centre, rotation, forme, numero, rive)
 
 # Du quai occidental à la digue orientale, le profil passe par la crête nord.
 hauteurs=[1,1.2,2,2.8,3.3,3.5,4.4,6.4,8.8,10,10,9.4,8.1,7.2,6,4.8,3.6,2,1]
 # Sens horaire en plan, départ au sud-est. Miroir pour placer le départ à l'ouest.
+# Secteurs qui gardent un vrai banc sur la promenade (1 = près du quai, 11 = verriers, 12 = entrée
+# de la ville haute ; la maison commune est passée au secteur 14 le 2026-11-22). Le secteur 0 est exclu : son banc tombait dans la maison du quai.
+BANCS_GARDES = (1, 11, 12)
+# Décalage du banc sur la promenade (repère du secteur) : loin des maisons du bord du lagon.
+Y_BANC = 1.8
+
 def point(i, rayon, h):
     a=math.radians(angles[i])
     return (rayon*math.cos(a), rayon*.84*math.sin(a), h)
@@ -1406,6 +1351,8 @@ verticale = Vector((0,0,-1))
 
 # La grotte d'Aube (tools/blender/grotte_aube.py) : chemin, découpe du secteur 5, construction.
 exec((Path(__file__).parent/"grotte_aube.py").read_text(encoding="utf-8"), globals())
+# La ville haute (tools/blender/ville_haute.py) : maison commune, parvis des Trois-Soleils.
+exec((Path(__file__).parent/"ville_haute.py").read_text(encoding="utf-8"), globals())
 
 def sol_du_secteur(i, t, rayon, relief=.025):
     a = point(i, rayon, hauteurs[i])
@@ -1419,7 +1366,7 @@ def sol_du_secteur(i, t, rayon, relief=.025):
     return x, y, z+relief
 
 def tache_au_sol(i, t, rayon, largeur, profondeur, couleur, relief=.025, cotes=7):
-    if dans_grotte(i, t, rayon, .9):
+    if hors_friche(i, t, rayon, .9):
         return
     contours = []
     for coin in range(cotes):
@@ -1430,7 +1377,7 @@ def tache_au_sol(i, t, rayon, largeur, profondeur, couleur, relief=.025, cotes=7
     morceau(contours, [tuple(range(cotes))], couleur)
 
 def touffe(i, t, rayon, hauteur, nombre=7):
-    if dans_grotte(i, t, rayon):
+    if hors_friche(i, t, rayon):
         return
     x, y, z = sol_du_secteur(i,t,rayon)
     teintes = ("herbe_sombre", "herbe_olive", "herbe_tendre", "herbe_seche")
@@ -1487,7 +1434,7 @@ def bordures_sauvages(i):
             for _ in range(7):
                 touffe(i,t+friche.uniform(-.079,.079),rayon+friche.uniform(-.52,.52),
                        friche.uniform(.34,.86))
-            if ext and r > 48 and friche.random() < .58 and not dans_grotte(i, t, rayon, 1.2):
+            if ext and r > 48 and friche.random() < .58 and not hors_friche(i, t, rayon, 1.2):
                 x,y,z = sol_du_secteur(i,t,rayon)
                 taille = friche.uniform(.36,.79)
                 pilier(x,y,z-.04,taille*.72,taille*.42,"herbe_sombre",taille)
@@ -1535,7 +1482,7 @@ for i in range(len(angles)-1):
         arbre(2,1,0,friche.uniform(2.9,4.4),tons_arbre)
         terminer()
     else:
-        noms={0:"Maison_du_quai",3:"Maison_des_couturieres",4:"Ecole",5:"Maison_Aube",6:"Maison_de_la_cour",11:"Maison_des_verriers",12:"Maison_commune",13:"Maison_du_palier",14:"Maison_des_trois_soleils"}
+        noms={0:"Maison_du_quai",3:"Maison_des_couturieres",4:"Ecole",5:"Maison_Aube",6:"Maison_de_la_cour",11:"Maison_des_verriers",12:"Maison_aux_projecteurs",13:"Maison_du_palier"}
         public=i in (4,12)
         largeur = 11 if public else hasard.uniform(6.4,8.7)
         enduit = hasard.choice(["ocre","craie","peche"])
@@ -1547,34 +1494,42 @@ for i in range(len(angles)-1):
             ecole(adresse(45),angle_rue)
         elif i == 5:
             maison_aube(adresse(45),angle_rue)
+        elif i == COMMUNE_SECTEUR:
+            pass  # La maison commune et son parvis : construire_ville_haute().
         elif i in noms:
             maison(noms[i], adresse(45), angle_rue, largeur, 7, 7 if public else 4.4+(i>10)*2,
                    enduit, "ardoise" if i>10 or public else "tuile", i>10 or public)
+            if i in INTENSITE:
+                noter_maison(noms[i], adresse(45), angle_rue, largeur, 7,
+                             7 if public else 4.4+(i>10)*2, i>10 or public, i, "exterieure")
         else:
             logis_de_decor(i, adresse(45), angle_rue, "exterieure")
-        if i == 12:
-            commencer("Beffroi_civique")
-            origine,angle=adresse(45),angle_rue
-            boite(4,1,0,3.3,3.3,10.8,"craie")
-            boite(4,1,10.8,3.8,3.8,.4,"cuivre")
-            for dx in (-1.3,1.3):
-                for dy in (-1.3,1.3):
-                    boite(4+dx,1+dy,11.2,.32,.32,2.2,"ardoise")
-            pilier(4,1,11.6,.82,1.2,"or",.48)
-            toit(4,1,13.4,4.2,4.2,2.7,"ardoise")
-            terminer(True)
-        if 1<=i<=16 and i not in (4,12):
+        # Pas de logis côté lagon devant l'école ni en face du parvis : la place s'ouvre sur le lagon.
+        if 1<=i<=16 and i not in (4, COMMUNE_SECTEUR):
             logis_de_decor(i, adresse(30), angle_rue + math.pi, "lagon")
     commencer("Promenade_%02d"%i)
     origine,angle=adresse(36),angle_rue
-    lumineux(-3,2.8,0)
+    # Côté terre du secteur de la maison commune, le perron du parvis remplace les lampadaires.
+    if i != COMMUNE_SECTEUR:
+        lumineux(-3,2.8,0)
     if 11<=i<=15:
-        lumineux(2.8,2.8,0)
+        if i != COMMUNE_SECTEUR:
+            lumineux(2.8,2.8,0)
         lumineux(2.8,-2.8,0)
-    for x in (-2.5,2.5):
-        boite(x,-2,0,.35,.6,.75,"pierre")
-    boite(0,-2,.75,5.5,.7,.18,"bois")
     terminer()
+    # Décidé le 2026-11-22 : plus de bancs de décor qu'on traverse. Trois vrais bancs seulement,
+    # avec collision : au quai, devant la maison commune, chez les verriers (près des serres).
+    if i in BANCS_GARDES:
+        commencer("Banc_promenade_%02d"%i)
+        origine,angle=adresse(36),angle_rue
+        # À l'échelle des Semeurs : assise à 0,75 m, dossier de planches.
+        for x in (-2.1,2.1):
+            boite(x,Y_BANC,0,.35,.6,.75,"pierre")
+        boite(0,Y_BANC,.75,5.0,.7,.18,"bois")
+        for x in (-2.1,2.1):
+            boite(x,Y_BANC-.3,.93,.16,.12,.8,"pierre")
+        boite(0,Y_BANC-.3,1.35,5.0,.1,.32,"bois")
+        terminer(True)
     rue_enfrichee(i)
     bordures_sauvages(i)
 commencer("Ponton_du_carillon")
@@ -1665,6 +1620,7 @@ for i in range(18):
 terminer()
 
 construire_grotte()
+construire_ville_haute()
 
 chemin=racine/"assets/models/ile03/colonie_du_lagon.glb"
 bpy.ops.export_scene.gltf(filepath=str(chemin),export_format='GLB')

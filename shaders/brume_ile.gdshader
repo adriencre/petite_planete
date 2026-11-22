@@ -68,7 +68,7 @@ void fog() {
 	// bords du volume : la brume s'efface doucement
 	float bord = min(min(UVW.x, 1.0 - UVW.x), min(UVW.z, 1.0 - UVW.z));
 	float fondu = smoothstep(0.0, 0.12, bord) * smoothstep(0.0, 0.1, 1.0 - UVW.y);
-	float d = densite * h * (0.12 + 0.88 * nappes(p)) * fondu;
+	float d = densite * h * (0.4 + 0.6 * nappes(p)) * fondu;   // un fond partout : un vrai brouillard, pas des trous
 	// la lumière de l'antenne repousse la brume autour du robot
 	float bulle = robot.w > 0.0 ? smoothstep(robot.w * 0.55, robot.w, distance(p.xz, robot.xz)) : 1.0;
 	// et la lanterne de proue autour de la barque
