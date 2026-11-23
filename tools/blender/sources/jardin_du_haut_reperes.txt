@@ -1,0 +1,24 @@
+# Repères G3, coordonnées Godot : x, y (hauteur), z
+# niveaux bas des sas : [0.5, 2.6, 4.7, 6.800000000000001] ; montée 2.1 ; franc-bord du ponton 1.1
+angle_ecluse	0.398	0.000	0.000
+vanne_0	-17.847	0.000	-11.274
+sas_1_centre	-15.450	0.500	-12.281
+vanne_1	-13.053	0.000	-13.288
+sas_2_centre	-10.657	2.600	-14.296
+vanne_2	-8.260	0.000	-15.303
+sas_3_centre	-5.863	4.700	-16.311
+vanne_3	-3.466	0.000	-17.318
+sas_4_centre	-1.069	6.800	-18.326
+ponton_repos	-20.152	0.000	-10.305
+arrivee_jardin	-3.239	10.100	-23.488
+flotteur	-19.711	0.000	-13.256
+cloche_relais	-23.109	3.400	-13.726
+levier	-19.241	1.100	-11.881
+lampe_mere	4.888	10.100	-23.379
+lampe_prise	4.745	10.450	-22.727
+mur_projection	5.762	13.300	-26.221
+premier_arbre	1.588	10.100	-24.607
+porte_service	-4.033	10.100	-26.817
+belvedere	11.255	10.100	-18.284
+etabli	-6.677	10.100	-24.177
+plaque_carillon	-6.675	2.450	34.270

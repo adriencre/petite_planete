@@ -113,3 +113,14 @@
 - [ ] 5.13 Maison d'Aube : plus d'arrière-cour ni de conduite ; soupirail muré
 - [ ] 5.14 Documents (îles 2 et 3) : après lecture, ils vont dans le carnet (Tab) et quittent le décor ; ils ne reviennent pas en relançant l'île 3
 - [ ] 5.15 Tableau de la comptine et inscription de la crypte : copiés au carnet, ils restent en place mais ne luisent plus
+
+## 6. Navigation entre les îles (2026-11-23, jamais jouée)
+- [ ] 6.1 Réveil, même avant la fin : cap sur le Phare → on part (le verrou est retiré) ; sans île devant la proue, le courant ramène à ~60 m
+- [ ] 6.2 Réveil : la silhouette de la Colonie (et le Phare) visibles au large ; cap dessus → la brume blanchit l'écran ~6 s → « Traversée vers … » → la barque sort de la brume devant le ponton
+- [ ] 6.3 Demi-tour dans la brume : elle se dissipe doucement, sans partir
+- [ ] 6.4 À l'arrivée : robot assis, câble branché, on a la barre tout de suite ; la batterie est celle du départ ; E pour accoster
+- [ ] 6.5 Colonie : accostage le long du ponton du carillon (côté est, au bout), le robot saute sur les planches ; la barque monte et descend avec la marée
+- [ ] 6.6 Retour sur le Réveil : pas de réveil au berceau ; l'île reste au coucher du soleil ; lanternes et carnet conservés
+- [ ] 6.7 Les points d'arrivée sont bien en eau libre (Réveil 18,65/46 ; Phare 8,65/70 ; Colonie −5/62) : déplacer `Large/Arrivee` dans l'éditeur sinon
+- [ ] 6.8 Silhouettes : lisibles à l'horizon, ni trop grosses ni dans la brume totale (`distance_silhouettes`, 130 m)
+

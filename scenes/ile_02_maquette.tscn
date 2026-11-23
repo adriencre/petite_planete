@@ -37,6 +37,9 @@
 [ext_resource type="Script" path="res://scripts/guidage.gd" id="guidage"]
 
 [ext_resource type="Script" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
+[ext_resource type="PackedScene" path="res://scenes/large.tscn" id="large"]
+[ext_resource type="PackedScene" path="res://scenes/archipel/silhouette_reveil.tscn" id="sil_reveil"]
+[ext_resource type="PackedScene" path="res://scenes/archipel/silhouette_colonie.tscn" id="sil_colonie"]
 
 [sub_resource type="ShaderMaterial" id="facettes_mat"]
 render_priority = 0
@@ -391,3 +394,14 @@ carnet = NodePath("../Carnet")
 engrenages = NodePath("../Monde/Phare/Engrenages")
 commande = NodePath("../Monde/Phare/CommandeLentille")
 lunette = NodePath("../Monde/Phare/LunetteIris")
+
+[node name="Large" parent="." instance=ExtResource("large")]
+ile = "phare"
+rayon_depart = 90.0
+
+[node name="Arrivee" parent="Large" index="0"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 8.65, 0, 70)
+
+[node name="reveil" parent="Large/Silhouettes" instance=ExtResource("sil_reveil")]
+
+[node name="colonie" parent="Large/Silhouettes" instance=ExtResource("sil_colonie")]

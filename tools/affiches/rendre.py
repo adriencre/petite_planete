@@ -44,6 +44,7 @@ DOCUMENTS = {
     "tableau_comptine": (1320, 630),
     "carnet_aube": (1000, 1000),
     "dessin_aube_coin_noir": (960, 690),
+    "dessin_aube_serres": (960, 690),
     "fiche_miroirs": (1400, 1000),
     # La rue des Trois-Soleils et la maison commune (île 3, G2)
     "affiche_commandante_1": (900, 1250),

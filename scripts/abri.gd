@@ -511,14 +511,11 @@ func _zone(jeu: Node3D, sol: float) -> void:
 func _entre(corps: Node3D) -> void:
 	if corps is CharacterBody3D:
 		_dedans += 1
-		_montrer_toit(false)
 
 
 func _sort(corps: Node3D) -> void:
 	if corps is CharacterBody3D:
 		_dedans = maxi(0, _dedans - 1)
-		if _dedans == 0:
-			_montrer_toit(true)
 
 
 func _montrer_toit(visible_: bool) -> void:
@@ -538,3 +535,15 @@ func _montrer_toit(visible_: bool) -> void:
 		_fondu.tween_property(g, "transparency", 0.0 if visible_ else 1.0, duree_fondu)
 	if not visible_:
 		_fondu.chain().tween_callback(func() -> void: _toit.visible = false)
+
+## La coupe (toit, haut des murs) n'est utile que si l'on voit le robot de l'extérieur : en 1re personne,
+## le toit reste en place (décidé le 2026-11-22). Changer de caméra dedans (touche V) la met à jour.
+var _coupe := false
+
+
+func _process(_delta: float) -> void:
+	var j := get_tree().get_first_node_in_group("joueur")
+	var couper: bool = _dedans > 0 and (j == null or bool(j.call("troisieme_personne")))
+	if couper != _coupe:
+		_coupe = couper
+		_montrer_toit(not couper)

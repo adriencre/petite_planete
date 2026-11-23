@@ -10,6 +10,7 @@ Ajoute une ligne ici pour chaque nouvelle note ; supprime ou corrige une note qu
 - [Pas de magie](no-magic-robot.md) — le robot allume les lanternes avec un câble au poignet + fiche ; pas de glyphes
 - [Pas de plantation](no-planting.md) — rien qui pousse pour ouvrir un chemin ; de simples escaliers
 - [Direction Outer Wilds](outer-wilds-direction.md) — pas une mécanique par île ; enquête « Où sont les Semeurs ? », énigmes variées
+- [Caméra 1re personne](camera-premiere-personne.md) — dev (V) : cinématiques en 3e puis retour, toits gardés, voûte de grotte, branchement filmé de près
 - [Indices visibles](indices-visibles.md) — papiers d'énigme avec appel fort (halo + rayon), caméra qui les montre, intérieurs sans meubles à escalader
 
 ## Projet

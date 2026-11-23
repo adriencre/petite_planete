@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/large.gd" id="1_large"]
+
+[node name="Large" type="Node3D"]
+script = ExtResource("1_large")
+
+[node name="Arrivee" type="Marker3D" parent="."]
+gizmo_extents = 3.0
+
+[node name="Silhouettes" type="Node3D" parent="."]
+
+[node name="Brume" type="CanvasLayer" parent="."]
+layer = 15
+
+[node name="Voile" type="ColorRect" parent="Brume"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.9, 0.89, 0.95, 1)

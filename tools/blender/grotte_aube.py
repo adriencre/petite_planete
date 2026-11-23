@@ -312,6 +312,57 @@ def _g_contour_salle(anneau_final):
     return [anneau_final[1], *contour, anneau_final[0]]
 
 
+def _g_voute(anneaux, fin, contour_salle):
+    """La voûte (ajoutée le 2026-11-22 pour la 1re et la 3e personne) : elle referme la galerie au-dessus
+    de la coupe et coiffe la salle d'un dôme. Godot la cache en vue de dessus (elle n'y fait que l'ombre)."""
+    commencer("Voute_grotte_aube")
+    # Galerie : chaque anneau reçoit un arc à facettes, du haut d'une paroi au haut de l'autre.
+    def arc(k, g, d):
+        milieu = (g+d)/2
+        pts = []
+        for n, (t, h) in enumerate(((0, 0), (.22, .5), (.5, .78), (.78, .5), (1, 0))):
+            q = g.lerp(d, t)
+            bosse = .12*_g_bruit(k, 3+n) if 0 < n < 4 else 0
+            pts.append(Vector((q.x, q.y, q.z+h+bosse)))
+        return pts, milieu
+    arcs = [arc(k, anneaux[k][0][-1], anneaux[k][1][-1]) for k in range(fin)]
+    for k in range(fin-1):
+        (A, ma), (B, mb) = arcs[k], arcs[k+1]
+        dessous = (ma+mb)/2-Vector((0, 0, 1.5))
+        for n in range(len(A)-1):
+            quad = [A[n], B[n], B[n+1], A[n+1]]
+            _g_face(quad, dessous-sum(quad, Vector())/4, "roche_sombre" if (k+n) % 3 else "roche")
+    # Le bout de départ : l'arc du premier anneau fermé contre le mur de l'arche.
+    A, ma = arcs[0]
+    _g_face(A, Vector((0, 0, -1)), "roche_sombre")
+    # La salle : un dôme facetté, du haut de son mur jusqu'à un sommet un peu décentré.
+    sommet = Vector((GROTTE_SALLE.x+.3, GROTTE_SALLE.y-.2, GROTTE_HAUT+1.5))
+    hauts = [profil[-1] for profil in contour_salle]
+    anneaux_dome = [hauts]
+    for f, dz in ((.45, .85), (.78, 1.3)):
+        anneaux_dome.append([p.lerp(sommet, f)+Vector((0, 0, dz-(sommet.z-GROTTE_HAUT)*f+.08*_g_bruit(i, f*9)))
+                             for i, p in enumerate(hauts)])
+    centre_bas = Vector((GROTTE_SALLE.x, GROTTE_SALLE.y, GROTTE_SALLE.z+.5))
+    for A, B in zip(anneaux_dome, anneaux_dome[1:]):
+        for i in range(len(A)-1):
+            quad = [A[i], A[i+1], B[i+1], B[i]]
+            _g_face(quad, centre_bas-sum(quad, Vector())/4, "roche" if i % 4 else "strate")
+    dernier = anneaux_dome[-1]
+    for i in range(len(dernier)-1):
+        tri = [dernier[i], dernier[i+1], sommet]
+        _g_face(tri, centre_bas-sum(tri, Vector())/3, "roche_sombre")
+    # Le raccord entre la fin de la galerie et le dôme (les deux bouts de l'arc de la salle).
+    _g_face([hauts[0], hauts[-1], anneaux_dome[1][-1], anneaux_dome[1][0]],
+            centre_bas-(hauts[0]+hauts[-1])/2, "roche_sombre")
+    # Et l'éventail qui ferme le haut de l'arc de la galerie contre le dôme.
+    bouche = (anneaux_dome[1][0]+anneaux_dome[1][-1])/2+Vector((0, 0, .25))
+    dernier_arc, _ = arcs[fin-1]
+    for n in range(len(dernier_arc)-1):
+        tri = [dernier_arc[n], dernier_arc[n+1], bouche]
+        _g_face(tri, centre_bas-sum(tri, Vector())/3, "roche_sombre")
+    terminer()
+
+
 def construire_grotte():
     global origine, angle
     _entree()
@@ -355,6 +406,7 @@ def construire_grotte():
     for triangle in sol_salle:
         _g_sol_face(triangle, "mousse_sombre")
     terminer()
+    _g_voute(anneaux, fin, contour_salle)
 
     commencer("Collisions_galerie_et_salle_aube")
     sections = [(gauche[0], droite[0]) for gauche, droite, _ in anneaux[:fin]]

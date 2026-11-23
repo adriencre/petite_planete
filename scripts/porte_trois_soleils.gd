@@ -117,10 +117,7 @@ func _ouvrir() -> void:
 	_joueur.set("cinematique", true)
 	var centre: Vector3 = (_gauche.global_position + _droite.global_position) * 0.5 + Vector3.UP * 2.0
 	_joueur.set("regard_cible", centre)
-	var cam: Camera3D = get_viewport().get_camera_3d()
-	var recul := Vector3(0.0, 1.0, 1.0).normalized()
-	if cam:
-		recul = (cam.global_position - centre).normalized()
+	var recul: Vector3 = _joueur.call("recul_cinematique", centre)
 	_joueur.set("cine_cible", centre)
 	_joueur.set("cine_position", centre + recul * 8.5)
 	var approche := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

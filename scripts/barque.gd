@@ -10,6 +10,8 @@ extends Node3D
 ##   doucement contre la côte. La caméra la suit de derrière, en souplesse.
 ## - Près d'un ponton, sa petite lanterne s'éveille : E, la barque vient s'amarrer toute seule,
 ##   la corde se noue, le robot se débranche et saute sur le ponton.
+## - Au large (large.gd) : cap sur la silhouette d'une autre île, on entre dans la brume et on traverse ;
+##   sur l'autre île, la barque arrive en mer devant le port, le robot déjà à la barre.
 
 const CABLE := preload("res://scripts/cable.gd")
 const SONS := preload("res://scripts/sons.gd")
@@ -32,7 +34,8 @@ const SONS := preload("res://scripts/sons.gd")
 @export var reactivite_barre: float = 2.4
 ## Plus c'est haut, moins elle dérive de côté dans les virages.
 @export var quille: float = 2.2
-## On ne s'éloigne pas à plus de ça du centre de l'île (en attendant l'archipel et la brume en mer).
+## Sans nœud « Large » dans la scène : on ne s'éloigne pas à plus de ça du centre de l'île.
+## Avec un Large (large.gd), c'est lui qui décide : brume du large, traversée ou courant.
 @export var rayon_max: float = 60.0
 @export var suit_maree := false
 @export_group("Caméra")
@@ -44,6 +47,12 @@ const SONS := preload("res://scripts/sons.gd")
 @export var suivi_camera: float = 1.4
 ## Durée du passage vue de dessus <-> caméra de la barque (s).
 @export var duree_bascule: float = 2.2
+## 1re personne : à la barre, rester dans les yeux du robot assis. Décidé le 2026-11-23 : non, la barque se
+## pilote toujours en vue extérieure (caméra de poursuite) ; on revient dans ses yeux en débarquant.
+@export var yeux_a_la_barre: bool = false
+## Hauteur des yeux du robot assis au-dessus du plancher, et durée du passage poursuite <-> yeux.
+@export var hauteur_yeux_assis: float = 1.28
+@export var duree_yeux: float = 1.4
 @export_group("Ponton")
 ## Distance (m) à l'amarre d'un ponton sous laquelle on peut accoster (E).
 @export var distance_amarrage: float = 7.0
@@ -94,6 +103,11 @@ var _enfonce: float = 0.0           # quand le robot saute dedans
 
 # la caméra
 var _cam_melange: float = 0.0
+## 1re personne : 0 = caméra de la barque (poursuite), 1 = dans les yeux du robot assis.
+var _yeux: float = 0.0
+## Le regard du robot assis, par rapport à la proue (souris, en 1re personne).
+var _regard_yaw: float = 0.0
+var _regard_pitch: float = -0.08
 var _cam_yaw: float = 0.0
 var _cam_recul: float = 8.0
 
@@ -112,6 +126,7 @@ var _sillage: CPUParticles3D
 var _ecume: CPUParticles3D
 var _rayon_brume: float = 0.0
 var _lanterne: Node3D
+var _large: Node3D
 @onready var _touche: Label3D = get_node_or_null("ToucheEmbarquement") as Label3D
 
 
@@ -153,6 +168,45 @@ func _ready() -> void:
 	var port := _port()
 	if port:
 		_amarrer_tout_de_suite(port)
+	_large = get_tree().get_first_node_in_group("large") as Node3D
+	if _large and _joueur and bool(_large.call("arrivee_par_la_mer")):
+		_arriver_du_large()
+
+
+## Après une traversée (large.gd) : la barque sort de la brume devant le port, le robot déjà assis et
+## branché, avec un peu d'erre ; on reprend la barre tout de suite.
+func _arriver_du_large() -> void:
+	var a: Transform3D = _large.call("arrivee")
+	_pos = Vector3(a.origin.x, 0.0, a.origin.z)
+	_cap = atan2(a.basis.z.x, a.basis.z.z)
+	_vel = _avant() * vitesse_max * 0.45
+	_v_prec = _vel.length()
+	_vit_ang = 0.0
+	_ponton = null
+	_noue = 0.0
+	_corde.visible = false
+	var b: float = float(Sauvegarde.batterie_arrivee)
+	if b >= 0.0:
+		_joueur.set("batterie", b)
+	_joueur.set("cinematique", true)
+	_joueur.set("embarque", self)
+	_joueur.velocity = Vector3.ZERO
+	if _corps:
+		_joueur.add_collision_exception_with(_corps)
+	_poser()
+	_tenir = true
+	_tenir_robot()
+	if _robot:
+		_robot.call("jouer_action", "assis", 1.0, 0.2)
+	_cam_yaw = _cap
+	_cam_recul = distance_camera
+	_cam_melange = 1.0
+	_branche = 1.0
+	_cable.materiau.set_shader_parameter("flux", 0.0)
+	_cable.visible = true
+	_lanterne_mat.emission_energy_multiplier = 1.5
+	_lueur.light_energy = 1.2
+	pilotee = true
 
 
 ## Après une mort : la barque revient au port d'attache, toujours à flot (ILE_01_REVEIL.md §13.2).
@@ -388,8 +442,12 @@ func _choc(force: float) -> void:
 	_tangage += 0.03 * force
 
 
-## Trop loin de l'île : un courant la ramène doucement.
+## Trop loin de l'île : un courant la ramène doucement. Avec un Large : la brume du large et la traversée.
 func _au_large(delta: float) -> void:
+	if _large:
+		var courant: Vector3 = _large.call("au_large", _pos, _avant(), delta)
+		_vel += courant * delta
+		return
 	if maquette == null:
 		return
 	var centre := _plat((maquette as Node3D).global_position)
@@ -442,9 +500,35 @@ func _placer_camera(delta: float) -> void:
 	var oeil := _pos + Vector3.UP * hauteur_camera - dir * _cam_recul
 	var vise := _pos + dir * regard_avant + Vector3.UP * 0.5
 	var poursuite := Transform3D(Basis.looking_at(vise - oeil), oeil)
-	var dessus: Transform3D = _joueur.call("transform_vue_dessus", _joueur.global_position)
+	# d'où l'on part et où l'on revient : la vue du joueur (de dessus, ou dans ses yeux, ou derrière lui)
+	var libre: Transform3D = _joueur.call("transform_vue_libre")
 	var k := _cam_melange * _cam_melange * (3.0 - 2.0 * _cam_melange)
-	cam.global_transform = dessus.interpolate_with(poursuite, k)
+	var vue := libre.interpolate_with(poursuite, k)
+	# en 1re personne, une fois à la barre (hors manœuvres filmées), on revient dans les yeux du robot assis
+	var yeux_voulus: bool = yeux_a_la_barre and _en_1re() and pilotee and not _en_cours and not is_instance_valid(_prise_externe)
+	_yeux = move_toward(_yeux, 1.0 if yeux_voulus else 0.0, delta / maxf(0.1, duree_yeux))
+	if _yeux > 0.0:
+		var y := _yeux * _yeux * (3.0 - 2.0 * _yeux)
+		vue = vue.interpolate_with(_vue_yeux(), y)
+	cam.global_transform = vue
+	# la lumière de l'antenne suit le robot assis (en 1re personne elle resterait collée à la caméra)
+	var lum: Node3D = _joueur.get("lumiere")
+	if lum:
+		lum.global_position = _place_robot() + global_basis.y * 2.0
+	# on ne voit pas le robot quand on est dans sa tête (ni la caméra le traverser)
+	if _robot:
+		var tete := _place_robot() + global_basis.y * hauteur_yeux_assis
+		_robot.visible = cam.global_position.distance_to(tete) > 0.75 and not (_yeux > 0.6)
+
+
+func _en_1re() -> bool:
+	return not bool(_joueur.get("vue_dessus")) and bool(_joueur.get("premiere_personne"))
+
+
+## Les yeux du robot assis : face à la proue, la tête suit la souris ; la barque le berce.
+func _vue_yeux() -> Transform3D:
+	var oeil := _place_robot() + global_basis * Vector3(0, hauteur_yeux_assis, 0.12)
+	return Transform3D(global_basis * Basis.from_euler(Vector3(_regard_pitch, PI + _regard_yaw, 0)), oeil)
 
 
 func _basculer_camera(vers: float) -> Tween:
@@ -492,6 +576,13 @@ func reprendre_navigation() -> void:
 # ---------------------------------------------------------------- monter / s'amarrer
 
 func _unhandled_input(event: InputEvent) -> void:
+	# 1re personne à la barre : la souris tourne la tête du robot (pas plus loin qu'un cou de robot)
+	if event is InputEventMouseMotion and _joueur and _joueur.get("embarque") == self and _yeux > 0.0:
+		var m := event as InputEventMouseMotion
+		var sens: float = float(_joueur.get("sensibilite_souris"))
+		_regard_yaw = clampf(_regard_yaw - m.relative.x * sens, -1.9, 1.9)
+		_regard_pitch = clampf(_regard_pitch - m.relative.y * sens, -0.9, 0.7)
+		return
 	if not (event is InputEventKey) or _joueur == null or _en_cours:
 		return
 	var k := event as InputEventKey
@@ -552,6 +643,8 @@ func _embarquer() -> void:
 		_joueur.add_collision_exception_with(_corps)
 	_cam_yaw = _cap
 	_cam_recul = distance_camera
+	_regard_yaw = 0.0
+	_regard_pitch = -0.08
 	_basculer_camera(1.0)
 	# il saute dans la barque ; elle s'enfonce un peu sous son poids
 	await _sauter(_joueur.global_position, _place_robot, 0.75, 0.8, func() -> Basis: return global_basis)
@@ -642,11 +735,12 @@ func _amarrer(p: Node3D) -> void:
 	if _robot:
 		_robot.call("fin_action")
 	await get_tree().create_timer(0.4, false).timeout
-	# il se lève et saute sur le ponton ; la caméra revient au-dessus de l'île
+	# il se lève et saute sur le ponton ; la caméra revient au-dessus de l'île (ou dans ses yeux, face à la terre)
 	_tenir = false
-	var bascule := _basculer_camera(0.0)
 	var pied: Vector3 = p.call("debarquement")
 	var vers_terre := -_plat(p.global_basis.z).normalized()
+	_joueur.call("regarder_vers", vers_terre)
+	var bascule := _basculer_camera(0.0)
 	var face := Basis(Vector3.UP, atan2(vers_terre.x, vers_terre.z))
 	await _sauter(_joueur.global_position, func() -> Vector3: return pied, 0.8, 0.9, func() -> Basis: return face)
 	_enfonce = 0.07
@@ -655,6 +749,8 @@ func _amarrer(p: Node3D) -> void:
 		_robot.transform = Transform3D(face, Vector3.ZERO)
 	_joueur.velocity = Vector3.ZERO
 	await bascule.finished
+	if _robot:
+		_robot.visible = true
 	if _corps:
 		_joueur.remove_collision_exception_with(_corps)
 	_joueur.set("embarque", null)

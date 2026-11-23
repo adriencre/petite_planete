@@ -51,6 +51,7 @@ Un petit robot jardinier se réveille sur un archipel noyé de brume, où tout e
 - **Repères en mer** : les bouées-lanternes (points de recharge, routes), le faisceau du Phare, les rochers, les épaves.
 - **Mort loin de l'île 1** : réveil au berceau ; la barque revient **cachée dans la crique** de l'île 1, toujours à flot.
 - **Accès aux îles** : tout est ouvert dès qu'on a la barque ; **seul le savoir bloque** (voir `ENQUETE.md`).
+- **La traversée (décidé le 2026-11-23, en attendant une seule mer)** : chaque île reste sa propre scène. Du port, on voit les autres îles en **silhouettes** à l'horizon, avec un feu qui perce la brume. On met le cap dessus et on sort par la **brume du large** : elle s'épaissit sur ~25 m (≈ 6 s) jusqu'à tout couvrir, puis la barque **sort de la brume devant le port** de l'île visée, le robot à la barre. Sans île devant la proue, un courant ramène doucement. On peut partir de n'importe quelle île à tout moment (verrou « après la fin de l'île 1 » retiré le 2026-11-23 à la demande de l'utilisateur ; `Large.apres_fin_ile_1` le remet). Positions des îles : `scripts/archipel.gd` (Phare à 170 m à l'est du Réveil ; Colonie au cap 129° du Phare, à 120 m). Code : `scripts/large.gd`, `scenes/large.tscn`, `scenes/archipel/silhouette_*.tscn`.
 
 ## Les cycles du monde (permanents, jamais remis à zéro)
 | Cycle | Durée | Ce qu'il change |

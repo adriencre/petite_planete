@@ -41,7 +41,24 @@ extends CharacterBody3D
 @onready var main_gauche: Node3D = $Camera/Mains/MainGauche
 
 ## Mode cinématique : plus de contrôle, le regard est guidé vers `regard_cible`.
-var cinematique := false
+## En 1re personne, chaque cinématique commence par un recul doux jusqu'à la 3e personne (on voit le
+## robot faire son geste), puis la caméra revient dans ses yeux à la fin (décidé le 2026-11-22).
+var cinematique := false:
+	set(v):
+		if v == cinematique:
+			return
+		cinematique = v
+		if v:
+			_cine_3e = premiere_personne and not vue_dessus and not sur_echelle and embarque == null
+		elif _cine_3e:
+			_cine_3e = false
+		_transition_lente = true
+## Vrai pendant une cinématique jouée en 3e personne alors que le joueur était en 1re.
+var _cine_3e := false
+## La caméra passe lentement entre 1re et 3e personne (recul de cinématique, puis retour).
+var _transition_lente := false
+## Durée du recul 1re → 3e personne et du retour (secondes).
+@export var duree_recul_cinematique: float = 1.1
 ## Sur l’échelle, la scène place le robot au rythme des barreaux.
 var sur_echelle := false
 ## Le banc place le corps et oriente le modèle pendant l’assise.
@@ -219,8 +236,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventKey and event.pressed and not event.echo:
 		var k := event as InputEventKey
-		if k.physical_keycode == KEY_V and not sur_echelle:   # (Échap : le menu pause, menu_pause.gd)
-			premiere_personne = not premiere_personne
+		if k.physical_keycode == KEY_V and not sur_echelle and not cinematique:   # (Échap : le menu pause, menu_pause.gd)
+			# DEV : V fait le tour des caméras, sur toutes les îles :
+			# vue de dessus → 1re personne → 3e personne → vue de dessus.
+			if vue_dessus:
+				vue_dessus = false
+				premiere_personne = true
+				_blend = 1.0
+			elif premiere_personne:
+				premiere_personne = false
+			else:
+				vue_dessus = true
+			print("Caméra : ", "vue de dessus" if vue_dessus else ("1re personne" if premiere_personne else "3e personne"))
 
 
 func _physics_process(delta: float) -> void:
@@ -335,7 +362,13 @@ func _placer_camera(delta: float) -> void:
 		antenne_vue.visible = false
 		lumiere.global_position = global_position + Vector3(0, 2.0 + modele.position.y, 0)
 		return
-	_blend = move_toward(_blend, 1.0 if premiere_personne else 0.0, delta * 2.5)
+	var blend_cible := 1.0 if premiere_personne and not _cine_3e else 0.0
+	var vitesse_blend := 1.0 / maxf(0.1, duree_recul_cinematique) if _transition_lente else 2.5
+	_blend = move_toward(_blend, blend_cible, delta * vitesse_blend)
+	if is_equal_approx(_blend, blend_cible):
+		_transition_lente = false
+	if _cine_3e:
+		mains.visible = false
 	var t := _blend * _blend * (3.0 - 2.0 * _blend)
 	pivot.position = Vector3(0, hauteur_pivot, 0)
 	pivot.rotation = Vector3(_pitch, _yaw, 0)
@@ -344,7 +377,8 @@ func _placer_camera(delta: float) -> void:
 	var tete := global_position + Vector3(0, hauteur_yeux + modele.position.y, 0)
 	var vue_1re := Transform3D(Basis.from_euler(Vector3(_pitch, _yaw, 0)), tete + Basis(Vector3.UP, _yaw) * Vector3(0, 0, -0.36))
 	camera.global_transform = vue_3e.interpolate_with(vue_1re, t)
-	modele.visible = t < 0.6
+	# le corps disparaît dès que la caméra arrive près de la tête (pas de plan à travers le robot)
+	modele.visible = t < 0.6 and camera.global_position.distance_to(tete) > 0.75
 	antenne_vue.visible = t > 0.5
 	# l'antenne ballotte au rythme des pas et traîne derrière le regard
 	_retard = _retard.lerp(Vector2.ZERO, 1.0 - exp(-6.0 * delta))
@@ -375,7 +409,38 @@ func lever_mains(levees: bool, duree: float = 0.8) -> Tween:
 
 ## Vrai quand on voit le robot de l'extérieur (vue de dessus ou caméra 3e personne).
 func troisieme_personne() -> bool:
-	return vue_dessus or _blend < 0.5
+	return vue_dessus or _cine_3e or embarque != null or _blend < 0.5
+
+
+## Où serait la caméra du joueur en ce moment, hors cinématique (vue de dessus, 1re ou 3e personne).
+## Sert aux véhicules (barque.gd) pour partir de la vue du joueur et y revenir sans saut.
+func transform_vue_libre() -> Transform3D:
+	if vue_dessus:
+		return transform_vue_dessus(global_position)
+	var b := Basis.from_euler(Vector3(_pitch, _yaw, 0))
+	if premiere_personne:
+		var tete := global_position + Vector3(0, hauteur_yeux, 0)
+		return Transform3D(b, tete + Basis(Vector3.UP, _yaw) * Vector3(0, 0, -0.36))
+	return Transform3D(b, global_position + Vector3(0, hauteur_pivot, 0) + b * Vector3(0, 0, distance_camera))
+
+
+## Tourne le regard (1re et 3e personne) vers une direction horizontale, la tête un peu baissée.
+func regarder_vers(direction: Vector3, inclinaison: float = -0.12) -> void:
+	_yaw = atan2(-direction.x, -direction.z)
+	_pitch = inclinaison
+
+
+## Pour cadrer une cinématique : direction (unitaire) où reculer la caméra depuis `depuis`.
+## Vue de dessus : celle de la caméra de jeu. Sinon (3e personne, ou recul depuis la 1re) : derrière le
+## robot par rapport à `depuis` (derrière son regard si `depuis` est le robot), un peu en hauteur.
+func recul_cinematique(depuis: Vector3) -> Vector3:
+	if vue_dessus:
+		return (camera.global_position - depuis).normalized()
+	var d := global_position - depuis
+	d.y = 0.0
+	if d.length() < 0.3:
+		d = Basis(Vector3.UP, _yaw) * Vector3(0, 0, 1)
+	return (d.normalized() + Vector3.UP * 0.75).normalized()
 
 
 func _appliquer_cine() -> void:

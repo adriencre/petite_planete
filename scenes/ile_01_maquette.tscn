@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://47fqbbttoutr"]
 
+[ext_resource type="Shader" uid="uid://7qouqxephsnd" path="res://shaders/terrain_facettes.gdshader" id="5_36itk"]
 [ext_resource type="Script" uid="uid://c0kuo8ed53b8g" path="res://scripts/reveil.gd" id="10_v4x7g"]
 [ext_resource type="Script" uid="uid://c7hrsv5akempp" path="res://scripts/brume_batterie.gd" id="11_vhb12"]
 [ext_resource type="Script" uid="uid://cb6kgtatn847n" path="res://scripts/luciole.gd" id="12_qac1t"]
@@ -8,17 +9,18 @@
 [ext_resource type="Script" uid="uid://b1qiswqy8wq58" path="res://scripts/carnet.gd" id="15_j7sqk"]
 [ext_resource type="PackedScene" path="res://scenes/ponton.tscn" id="16_3kbj5"]
 [ext_resource type="Script" uid="uid://c6qdtynw1ange" path="res://scripts/guidage.gd" id="17_o0wjb"]
-[ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
-[ext_resource type="PackedScene" path="res://scenes/ui/hud_batterie.tscn" id="hud_batterie"]
-[ext_resource type="Script" uid="uid://dnxu4hdr80jp5" path="res://scripts/ile_test.gd" id="sc_ile"]
 [ext_resource type="PackedScene" path="res://scenes/decor_reveil.tscn" id="decor_reveil"]
+[ext_resource type="Script" uid="uid://c83v2owqjrp1g" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud_batterie.tscn" id="hud_batterie"]
+[ext_resource type="PackedScene" path="res://scenes/joueur.tscn" id="p_joueur"]
+[ext_resource type="Script" uid="uid://dnxu4hdr80jp5" path="res://scripts/ile_test.gd" id="sc_ile"]
 [ext_resource type="Script" uid="uid://b1728qdtebaac" path="res://scripts/zone_endormie.gd" id="sc_zone"]
 [ext_resource type="Shader" uid="uid://cljsnd7ner40e" path="res://shaders/ciel_pastel.gdshader" id="s_ciel"]
 [ext_resource type="Shader" uid="uid://c1d0stvhb3s2i" path="res://shaders/mer.gdshader" id="s_mer"]
 [ext_resource type="Shader" uid="uid://bu0ebrb5bkj3b" path="res://shaders/vision.gdshader" id="s_vision"]
 [ext_resource type="Shader" uid="uid://da3k48k6bfflr" path="res://shaders/zone_endormie.gdshader" id="s_zone"]
-
-[ext_resource type="Script" path="res://scripts/batiments_fantomes.gd" id="fantomes"]
+[ext_resource type="PackedScene" path="res://scenes/large.tscn" id="large"]
+[ext_resource type="PackedScene" path="res://scenes/archipel/silhouette_colonie.tscn" id="sil_colonie"]
 
 [sub_resource type="ShaderMaterial" id="ciel_mat"]
 resource_local_to_scene = true
@@ -127,6 +129,24 @@ albedo = Color(1, 0.94, 0.95, 1)
 height_falloff = 1.2
 edge_fade = 0.6
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mcplv"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("5_36itk")
+shader_parameter/herbe_a = Color(0.62, 0.82, 0.42, 1)
+shader_parameter/herbe_b = Color(0.54, 0.77, 0.4, 1)
+shader_parameter/herbe_c = Color(0.7, 0.85, 0.46, 1)
+shader_parameter/sable_a = Color(0.93, 0.84, 0.7, 1)
+shader_parameter/sable_b = Color(0.89, 0.79, 0.66, 1)
+shader_parameter/roche_a = Color(0.88, 0.6, 0.56, 1)
+shader_parameter/roche_b = Color(0.94, 0.74, 0.6, 1)
+shader_parameter/roche_c = Color(0.96, 0.86, 0.76, 1)
+shader_parameter/mousse = Color(0.47, 0.66, 0.4, 1)
+shader_parameter/taille_case = 6.0
+shader_parameter/hauteur_niveau = 2.5
+shader_parameter/hauteur_sable = 1.0
+shader_parameter/epaisseur_mousse = 0.3
+
 [sub_resource type="ShaderMaterial" id="zone_mat"]
 render_priority = -10
 shader = ExtResource("s_zone")
@@ -200,6 +220,7 @@ shape = 0
 material = SubResource("brume_mat")
 
 [node name="Maquette" parent="." unique_id=1316080361 instance=ExtResource("decor_reveil")]
+materiau_terrain = SubResource("ShaderMaterial_mcplv")
 
 [node name="Monde" type="Node3D" parent="." unique_id=573836142]
 
@@ -214,10 +235,10 @@ distance_dessus = 4.5
 angle_dessus = 40.0
 orientation_dessus = 0.0
 
-[node name="BatimentsFantomes" type="Node" parent="." node_paths=PackedStringArray("joueur", "maquette_reveil")]
+[node name="BatimentsFantomes" type="Node" parent="." unique_id=1242197672 node_paths=PackedStringArray("maquette_reveil", "joueur")]
 script = ExtResource("fantomes")
-joueur = NodePath("../Joueur")
 maquette_reveil = NodePath("../Maquette")
+joueur = NodePath("../Joueur")
 
 [node name="CameraApercu" type="Camera3D" parent="." unique_id=191535945]
 transform = Transform3D(0.91037, 0.03074, 0.41266, 0, 0.99724, -0.07428, -0.4138, 0.06762, 0.90785, -6, 4, 22)
@@ -268,4 +289,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 24)
 [node name="Guidage" type="Node3D" parent="." unique_id=1590087198]
 script = ExtResource("17_o0wjb")
 
-[node name="HudBatterie" parent="." instance=ExtResource("hud_batterie")]
+[node name="HudBatterie" parent="." unique_id=636088275 instance=ExtResource("hud_batterie")]
+
+[node name="Large" parent="." instance=ExtResource("large")]
+
+[node name="Arrivee" parent="Large" index="0"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 18.65, 0, 46)
+
+[node name="phare" type="Node3D" parent="Large/Silhouettes"]
+editor_description = "Le Phare lui-même est bâti par fin_sommet.gd (PhareAuLoin) ; ce repère sert seulement à viser."
+
+[node name="colonie" parent="Large/Silhouettes" instance=ExtResource("sil_colonie")]

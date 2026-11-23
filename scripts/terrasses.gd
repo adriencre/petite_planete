@@ -14,6 +14,10 @@ extends MeshInstance3D
 @export var materiau_terrain: Material:
 	set(v): materiau_terrain = v; _construire()
 @export var couleur_marches: Color = Color(0.93, 0.80, 0.72)
+## Palier plat au pied de chaque escalier (m) : les marches ne commencent pas au bord de la case, là où il
+## peut y avoir la mer (2026-11-22 : l'escalier de la pierre-soleil, île 1, finissait dans l'eau).
+@export var palier_bas: float = 1.8:
+	set(v): palier_bas = v; _construire()
 @export var couleur_arbres: Color = Color(0.33, 0.50, 0.42)
 ## Découpe les parois en pans décalés, avec corniches en surplomb (style maquette).
 @export var ebrecher: bool = true:
@@ -121,16 +125,18 @@ func _escalier(st: SurfaceTool, ctr: Vector3, d: Vector2, h: float) -> void:
 	var dv := Vector3(d.x, 0, d.y)
 	var perp := Vector3(-d.y, 0, d.x)
 	var demi := taille_case * 0.5
+	var palier := clampf(palier_bas, 0.0, taille_case * 0.5)
+	var longueur := taille_case - palier
 	var nb := maxi(1, roundi(hauteur_niveau / 0.3))
 	for i in nb:
-		var p0 := ctr + dv * (-demi + i * taille_case / nb) - perp * (demi - 0.2)
-		var p1 := ctr + dv * (-demi + (i + 1) * taille_case / nb) + perp * (demi - 0.2)
+		var p0 := ctr + dv * (-demi + palier + i * longueur / nb) - perp * (demi - 0.2)
+		var p1 := ctr + dv * (-demi + palier + (i + 1) * longueur / nb) + perp * (demi - 0.2)
 		var y1 := h + hauteur_niveau * (i + 1) / nb
 		_boite(st, Vector3(minf(p0.x, p1.x), h, minf(p0.z, p1.z)), Vector3(maxf(p0.x, p1.x), y1, maxf(p0.z, p1.z)), false)
-	var a := ctr - dv * demi - perp * demi + Vector3.UP * h
-	var b := ctr - dv * demi + perp * demi + Vector3.UP * h
+	var a := ctr + dv * (-demi + palier) - perp * demi + Vector3.UP * h
+	var b := ctr + dv * (-demi + palier) + perp * demi + Vector3.UP * h
 	var up := Vector3.UP * hauteur_niveau
-	_quad(null, a, b, b + dv * taille_case + up, a + dv * taille_case + up, Vector3.UP, true)
+	_quad(null, a, b, b + dv * longueur + up, a + dv * longueur + up, Vector3.UP, true)
 
 
 ## Bloc cubique collé à un bord (côté dv), posé à y0.

@@ -23,6 +23,10 @@ extends Node3D
 	set(v): sur_terre = v; _construire()
 @export var graine: int = 7:
 	set(v): graine = v; _construire()
+## Faux : pas de bois (le ponton est déjà dans le décor, comme celui du carillon à la Colonie) ;
+## il ne reste que les repères d'amarrage.
+@export var bois_visible: bool = true:
+	set(v): bois_visible = v; _construire()
 
 const BOIS := Color(0.6, 0.44, 0.3)
 const BOIS_CLAIR := Color(0.68, 0.52, 0.36)
@@ -78,6 +82,8 @@ func _construire() -> void:
 	if ancien:
 		remove_child(ancien)
 		ancien.free()
+	if not bois_visible:
+		return
 	var bois := Node3D.new()
 	bois.name = "Bois"
 	add_child(bois)   # pas de propriétaire : rien n'est enregistré dans la scène

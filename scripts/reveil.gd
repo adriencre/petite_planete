@@ -90,6 +90,10 @@ func _ready() -> void:
 		for xf in sauve.get("corps", []):
 			n += 1
 			_poser_corps(Sauvegarde.en_transfo(xf), n)
+	# retour en barque depuis une autre île (large.gd) : pas de réveil, la barque arrive en mer
+	if Sauvegarde.arrivee_de != "":
+		_noir.visible = false
+		return
 	if premier_reveil and premier_reveil_long:
 		_reveil_long()
 	else:

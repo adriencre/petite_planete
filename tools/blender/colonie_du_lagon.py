@@ -1353,6 +1353,8 @@ verticale = Vector((0,0,-1))
 exec((Path(__file__).parent/"grotte_aube.py").read_text(encoding="utf-8"), globals())
 # La ville haute (tools/blender/ville_haute.py) : maison commune, parvis des Trois-Soleils.
 exec((Path(__file__).parent/"ville_haute.py").read_text(encoding="utf-8"), globals())
+# Le jardin du haut (tools/blender/jardin_du_haut.py) : halage, écluse, jardin clos, serres basses (G3).
+exec((Path(__file__).parent/"jardin_du_haut.py").read_text(encoding="utf-8"), globals())
 
 def sol_du_secteur(i, t, rayon, relief=.025):
     a = point(i, rayon, hauteurs[i])
@@ -1465,16 +1467,8 @@ for i in range(len(angles)-1):
         return (r*math.cos(a),r*.84*math.sin(a),z)
     angle_rue=math.atan2(math.sin(a)*.84,math.cos(a))-math.pi/2
     if i in (8,9,10):
-        commencer("Verriere_%02d"%i)
-        origine,angle=adresse(45),angle_rue
-        boite(0,0,-1,11,7,1.5,"pierre")
-        boite(0,0,.5,10.8,6.8,3.7,"verre")
-        toit(0,0,4.2,11,7,2,"verre")
-        for x in (-5.5,-3.3,-1.1,1.1,3.3,5.5):
-            for y in (-3.45,3.45):
-                boite(x,y,.5,.17,.2,3.8,"ardoise")
-            toit(x,0,4.25,.19,7.15,2,"ardoise")
-        terminer(True)
+        # Les serres basses, ouvertes sur la rue, et leurs arbres penchés (jardin_du_haut.py).
+        serre_basse(i, adresse(45), angle_rue)
         commencer("Verger_%02d"%i)
         origine,angle=adresse(55),angle_rue
         arbre(-2,0,0,friche.uniform(2.2,3.5),("feuille_ombre","feuille"))
@@ -1505,7 +1499,8 @@ for i in range(len(angles)-1):
         else:
             logis_de_decor(i, adresse(45), angle_rue, "exterieure")
         # Pas de logis côté lagon devant l'école ni en face du parvis : la place s'ouvre sur le lagon.
-        if 1<=i<=16 and i not in (4, COMMUNE_SECTEUR):
+        # Ni côté lagon des secteurs du jardin du haut (G3).
+        if 1<=i<=16 and i not in (4, COMMUNE_SECTEUR) and i not in SECTEURS_JARDIN:
             logis_de_decor(i, adresse(30), angle_rue + math.pi, "lagon")
     commencer("Promenade_%02d"%i)
     origine,angle=adresse(36),angle_rue
@@ -1621,6 +1616,7 @@ terminer()
 
 construire_grotte()
 construire_ville_haute()
+construire_jardin_du_haut()
 
 chemin=racine/"assets/models/ile03/colonie_du_lagon.glb"
 bpy.ops.export_scene.gltf(filepath=str(chemin),export_format='GLB')

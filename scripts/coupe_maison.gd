@@ -7,16 +7,17 @@ extends Area3D
 @export var autres: Array[NodePath] = []
 
 var _fondu: Tween
+var _dedans := false
 
 
 func _robot_entre(corps: Node3D) -> void:
 	if corps.is_in_group("joueur"):
-		_devoiler(true)
+		_dedans = true
 
 
 func _robot_sort(corps: Node3D) -> void:
 	if corps.is_in_group("joueur"):
-		_devoiler(false)
+		_dedans = false
 
 
 func _pieces() -> Array[GeometryInstance3D]:
@@ -44,3 +45,15 @@ func _devoiler(interieur_visible: bool) -> void:
 			else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		)
 		_fondu.tween_property(piece, "transparency", 1.0 if interieur_visible else 0.0, 0.35)
+
+## La coupe (toit, haut des murs) n'est utile que si l'on voit le robot de l'extérieur : en 1re personne,
+## le toit reste en place (décidé le 2026-11-22). Changer de caméra dedans (touche V) la met à jour.
+var _coupe := false
+
+
+func _process(_delta: float) -> void:
+	var j := get_tree().get_first_node_in_group("joueur")
+	var couper: bool = _dedans and (j == null or bool(j.call("troisieme_personne")))
+	if couper != _coupe:
+		_coupe = couper
+		_devoiler(couper)

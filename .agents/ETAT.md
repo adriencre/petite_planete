@@ -1,24 +1,12 @@
-# État du projet — passation entre agents
+﻿# État du projet — passation entre agents
 
-> Mis à jour le **2026-11-22** par **Claude** (PC fixe).
+> Mis à jour le **2026-11-23** par **Codex**, pour le push de la Colonie et de la navigation.
 
-## G2, la rue des Trois-Soleils (Colonie) — jouable, validé par l'utilisateur (« ça marche »), commité
-- **Blender** : `tools/blender/ville_haute.py` (parvis, maison commune au secteur 14, ville haute habillée, colonnes, panneau, borne). Rendus `concept/ile_03/ville_haute_*.png`.
-- **Documents** : 11 PNG dans `assets/affiches/` (affiches 1 à 4 + départ, plan d'éclairage A/B/C via `plan_eclairage.js`, ordres d'Ysolde, lettres de Tavin, plan de l'archipel).
-- **Godot** : `scenes/ile03/parvis_trois_soleils.tscn` (9 lanternes, `scripts/porte_trois_soleils.gd`), `scenes/ile03/borne_recharge.tscn` (pierre_soleil.gd), documents et coupe `InterieurCommune` dans la Colonie. Généré par `tools/godot/ville_haute_scenes.py` (n'ajoute rien si le parvis existe déjà). `batiments_fantomes.gd` : bâtiment « commune ».
-- `lanterne_fleur.gd` : en vue de dessus, seule la lanterne la plus proche répond à E (avant : n'importe laquelle à moins de 5 m).
-- Après le 1er essai : maison commune réaménagée, appel fort des papiers (`page_lisible.appel_fort`), caméra par zones de cadrage (`scripts/camera_zones.gd`, `scripts/zone_camera.gd`, nœuds Zone* ; la caméra d'anneau, refusée, est supprimée). Relancé sans erreur. À essayer : `.agents/A_TESTER.md` 4.21 à 4.34.
-- Après une modif Blender de la ville haute : `python tools/godot/ville_haute_scenes.py` (il remplace ses blocs dans la Colonie), réimport du GLB, puis `scene_open(force_reload=true)`.
+- **Traversées entre les îles 1 à 3** : silhouettes au large, brume, arrivée en barque devant le port, sauvegarde de l'île quittée. Le Réveil peut être quitté à tout moment. Diagnostic headless réussi lors de la session précédente. Essai en jeu à faire, voir `.agents/A_TESTER.md` §6. Restent le retour de la barque après une mort loin du Réveil, le carnet commun et les îles 4 à 7.
+- **G3, jardin du haut** : marée, écluse à quatre sas, jardin, lampe-mère et souvenir projeté. Import et diagnostic précédents réussis. À jouer de bout en bout, y compris le carillon, la porte de service et les collisions des serres ouvertes. Après une modification Blender, régénérer les scènes avec `python tools/godot/jardin_du_haut_scenes.py`.
+- **G2, rue des Trois-Soleils** : validée par l'utilisateur. Après une modification Blender de la ville haute, relancer `python tools/godot/ville_haute_scenes.py`, réimporter le GLB et recharger la scène. Pour la suite de la Colonie, voir G4 et les éléments en attente dans `ILE_03_COLONIE.md`.
+- **Caméra** : V alterne vue de dessus, première et troisième personne. Les cinématiques reculent en troisième personne puis reviennent. En barque, la caméra reste extérieure à la barre. Branchement de la lampe-mère, boîte à musique, voûte de la grotte et accostage restent à vérifier en jeu.
+- **Réveil et Phare** : vérifier le palier de l'escalier de la pierre-soleil, le parcours du Phare, la marée, le fondu et le retour visuel du menu.
+- **Pièges actifs** : demander avant tout lancement Godot. M saute à la phase suivante de marée (raccourci de développement à retirer). Les objets Blender ajoutés après l'export GLB sont absents de Godot. Si OneDrive ou l'éditeur verrouille le GLB, relancer l'export. Dans l'éditeur, `maquette.gd` règle encore `decor_seul` sur une lanterne dont le script n'est pas `@tool`.
 
-## Colonie, déjà en place
-- Ville basse, école, maison d'Aube, Coin noir (grotte), bâtiments fantômes. Presque rien n'a été essayé en jeu : voir `.agents/A_TESTER.md` (bloc 4 et points 5.7 à 5.15).
-- La Colonie est accessible par le menu de développement, sans sauvegarde de l'île. Le carnet lit celui de l'île 1. Thème d'Aube provisoire.
-- Reste pour l'île : G3 (marée, carillon, écluse, serres, lampe-mère), G4 (pleine lune, vieux port, Centrale), dessins d'Aube éparpillés, valises « Nef », vraies maisons « adresses » de la ville haute (verriers, projecteurs, palier : encore des boîtes).
-
-## Ailleurs
-- Île 2 : parcours continu du Phare, guidage, marée et fondu à essayer. Menu : retour visuel et chargement à vérifier.
-
-## Pièges actifs
-- Tout ce qui est ajouté au script Colonie après `export_scene.gltf` n'arrive pas dans Godot.
-- Blender peut tourner sans MCP : `blender.exe -b -P tools/blender/colonie_du_lagon.py -- --sans-rendu` (voir procédures/blender.md).
-- Demander avant tout lancement ou test Godot. Tout est commité (G2, Coin noir, visibilité, ponts, menu…).
+Les détails de mise en œuvre et les diagnostics précédents sont dans le journal des 22 et 23 novembre.

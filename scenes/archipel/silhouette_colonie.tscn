@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="pierre"]
+albedo_color = Color(0.36, 0.32, 0.42, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="sombre"]
+albedo_color = Color(0.3, 0.26, 0.38, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="feu"]
+shading_mode = 0
+disable_fog = true
+albedo_color = Color(1, 0.76, 0.42, 1)
+
+[sub_resource type="CylinderMesh" id="m0"]
+material = SubResource("pierre")
+top_radius = 56
+bottom_radius = 62
+height = 2
+radial_segments = 11
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m1"]
+material = SubResource("pierre")
+top_radius = 22
+bottom_radius = 28
+height = 5
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m2"]
+material = SubResource("pierre")
+top_radius = 20
+bottom_radius = 26
+height = 12
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m3"]
+material = SubResource("pierre")
+top_radius = 14
+bottom_radius = 20
+height = 16
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m4"]
+material = SubResource("sombre")
+top_radius = 4
+bottom_radius = 5
+height = 6
+radial_segments = 4
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m5"]
+material = SubResource("sombre")
+top_radius = 3
+bottom_radius = 4
+height = 5
+radial_segments = 4
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m6"]
+material = SubResource("sombre")
+top_radius = 4
+bottom_radius = 5
+height = 7
+radial_segments = 4
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m7"]
+material = SubResource("sombre")
+top_radius = 3
+bottom_radius = 4
+height = 6
+radial_segments = 4
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m8"]
+material = SubResource("sombre")
+top_radius = 8
+bottom_radius = 9
+height = 4
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m9"]
+material = SubResource("sombre")
+top_radius = 0
+bottom_radius = 2.2
+height = 10
+radial_segments = 4
+rings = 1
+
+[sub_resource type="SphereMesh" id="boule"]
+material = SubResource("feu")
+radius = 1.2
+height = 2.4
+radial_segments = 8
+rings = 4
+
+[node name="Colonie" type="Node3D"]
+editor_description = "La Colonie vue du large : le lagon, la ville basse à l'ouest, la ville haute sur la falaise, les serres au nord."
+
+[node name="Recifs" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -9)
+cast_shadow = 0
+mesh = SubResource("m0")
+
+[node name="VilleBasse" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 2.5, -6)
+cast_shadow = 0
+mesh = SubResource("m1")
+
+[node name="Falaise" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 6, -24)
+cast_shadow = 0
+mesh = SubResource("m2")
+
+[node name="Cretes" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 8, -40)
+cast_shadow = 0
+mesh = SubResource("m3")
+
+[node name="Maisons1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 8, -2)
+cast_shadow = 0
+mesh = SubResource("m4")
+
+[node name="Maisons2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 7.5, 6)
+cast_shadow = 0
+mesh = SubResource("m5")
+
+[node name="Maisons3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 15.5, -20)
+cast_shadow = 0
+mesh = SubResource("m6")
+
+[node name="Maisons4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 15, -30)
+cast_shadow = 0
+mesh = SubResource("m7")
+
+[node name="Serres" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 18, -42)
+cast_shadow = 0
+mesh = SubResource("m8")
+
+[node name="Clocher" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 10, -14)
+cast_shadow = 0
+mesh = SubResource("m9")
+
+[node name="FeuQuai" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -8, 3, 40)
+cast_shadow = 0
+mesh = SubResource("boule")
+
+[node name="FeuVilleHaute" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 34, 22, -26)
+cast_shadow = 0
+mesh = SubResource("boule")
+
+[node name="FeuJardin" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 6, 22, -44)
+cast_shadow = 0
+mesh = SubResource("boule")

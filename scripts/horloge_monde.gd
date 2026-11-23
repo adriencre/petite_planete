@@ -15,7 +15,8 @@ signal maree_haute_commence
 ## Niveau de la mer (m) à marée basse et à marée haute (ILE_02_PHARE.md §3 : -0,6 / +0,5).
 @export var mer_basse: float = -0.6
 @export var mer_haute: float = 0.5
-## Accélère le temps (tests : 8 = un cycle par minute). Réglable aussi en jeu (F7 / F8).
+## Accélère le temps (tests : 8 = un cycle par minute). Réglable aussi en jeu (Page↓ / Page↑ ;
+## pas F8 : c'est le raccourci de Godot qui arrête le jeu).
 @export var vitesse: float = 1.0
 ## Où commence le cycle (0 ≈ début de la marée basse ; 0,5 ≈ début de la haute). 0,85 : on arrive à
 ## marée haute et la mer se retire moins d'une minute plus tard (on la voit découvrir la chaussée).
@@ -42,15 +43,33 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	# raccourcis de test : F7 ralentit, F8 accélère la marée
+	# raccourcis de test : Page↓ ralentit, Page↑ accélère la marée
 	if event.is_pressed() and not event.is_echo() and event is InputEventKey:
 		var k := (event as InputEventKey).physical_keycode
-		if k == KEY_F7:
+		if k == KEY_PAGEDOWN:
 			vitesse = maxf(1.0, vitesse / 4.0)
 			print("Marée : vitesse x%.0f" % vitesse)
-		elif k == KEY_F8:
+		elif k == KEY_PAGEUP:
 			vitesse = minf(64.0, vitesse * 4.0)
 			print("Marée : vitesse x%.0f" % vitesse)
+		elif (event as InputEventKey).keycode == KEY_M:
+			# touche logique (le M d'un clavier AZERTY n'est pas au même endroit qu'en QWERTY)
+			_test_saut_maree()
+
+
+# --- TEST, À RETIRER : la touche M saute au moment suivant de la marée (2026-11-22, essais de G3). ---
+const _TEST_MOMENTS := [[0.25, "marée basse"], [0.5, "début de la montée"],
+	[0.745, "marée haute, le carillon sonne dans 2 s"], [0.96, "début de la descente"]]
+var _test_moment: int = -1
+
+
+func _test_saut_maree() -> void:
+	_test_moment = (_test_moment + 1) % _TEST_MOMENTS.size()
+	var cible: float = float(_TEST_MOMENTS[_test_moment][0])
+	temps = floorf(temps / duree_maree) * duree_maree + cible * duree_maree
+	vitesse = 1.0
+	print("Marée (test) : ", _TEST_MOMENTS[_test_moment][1])
+# --- fin du TEST ---
 
 
 ## Où on en est dans le cycle, de 0 à 1 (0 = la mer commence à être basse).

@@ -315,6 +315,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _allumer() -> void:
 	# on voit le robot (vue de dessus, 3e personne) et il sait jouer le geste : mise en scène extérieure
 	var robot: Node = _joueur.modele
+	# d'abord la cinématique : en 1re personne, la caméra recule en 3e et on voit le geste
+	_joueur.cinematique = true
 	if _joueur.troisieme_personne() and robot.has_method("jouer_action") and robot.call("a_animation", "brancher"):
 		_allumer_3e(robot)
 	else:

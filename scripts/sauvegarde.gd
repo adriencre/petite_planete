@@ -16,6 +16,7 @@ extends Node
 signal chargement_echoue
 
 const TRANSITION := preload("res://scenes/ui/transition_scene.tscn")
+const ARCHIPEL := preload("res://scripts/archipel.gd")
 
 const CHEMIN := "user://partie.json"
 const VERSION := 1
@@ -43,6 +44,11 @@ var _charge_ile_02: Dictionary = {}
 var _charge_ile_03: Dictionary = {}
 var _minuterie: float = 0.0
 var _transition: CanvasLayer
+## Pendant une traversée en barque (large.gd) : l'île d'où l'on vient, le temps que la nouvelle île
+## s'installe. La barque y arrive alors en mer (barque.gd), et le Réveil ne rejoue pas le réveil.
+var arrivee_de: String = ""
+## La batterie du robot au départ de la traversée (-1 : rien à reprendre).
+var batterie_arrivee: float = -1.0
 
 
 func _ready() -> void:
@@ -151,6 +157,28 @@ func continuer() -> void:
 ## Dev : aller directement sur une île en conservant la sauvegarde.
 func aller_dev(scene: String) -> void:
 	_charger_ile(scene, _restaurer_partie, "Chargement de l’île")
+
+
+## La barque quitte une île par la brume du large et arrive en mer devant le port d'une autre.
+## L'île qu'on quitte est sauvée ; celle où l'on arrive reprend son état sauvé.
+func traverser(depuis: String, vers: String, batterie: float) -> void:
+	if not ARCHIPEL.ILES.has(vers):
+		return
+	var ile: Dictionary = ARCHIPEL.ILES[vers]
+	ecrire()
+	arrivee_de = depuis
+	batterie_arrivee = batterie
+	await _charger_ile(String(ile["scene"]), _preparer_traversee.bind(String(ile["scene"])), "Traversée vers %s" % ile["nom"])
+	arrivee_de = ""
+	batterie_arrivee = -1.0
+
+
+func _preparer_traversee(scene: String) -> void:
+	_minuterie = 0.0
+	# le Réveil relit son fichier (les autres îles gardent le leur en mémoire, tenu à jour par ecrire) ;
+	# les « première fois » (variables statiques) restent celles de la partie en cours
+	if scene == SCENE_ILE:
+		_charge = lire()
 
 
 func _charger_ile(scene: String, preparer: Callable, message: String) -> void:

@@ -129,10 +129,11 @@ func _ecouter() -> void:
 	_en_cours = true
 	_arret_demande = false
 	var premiere: bool = not ecoutee
+	# d'abord la cinématique : en 1re personne, la caméra recule en 3e et on voit le geste
+	_joueur.set("cinematique", true)
 	var robot: Node = _joueur.get("modele")
 	var geste: bool = bool(_joueur.call("troisieme_personne")) and robot != null and robot.has_method("jouer_action") and bool(robot.call("a_animation", "brancher"))
 	var normale := _normale()
-	_joueur.set("cinematique", true)
 	_joueur.set("regard_cible", global_position)
 
 	# 1) il vient se placer devant la prise
@@ -141,12 +142,11 @@ func _ecouter() -> void:
 	var trajet := Vector2(place.x - _joueur.global_position.x, place.z - _joueur.global_position.z).length()
 	var centre: Vector3 = centre_chambre.global_position if centre_chambre else global_position + normale * 1.2 + Vector3.UP * 0.8
 	# la caméra garde l'angle du jeu (vue de dessus), un peu plus près de la chambre
-	var cam: Camera3D = get_viewport().get_camera_3d()
-	var recul := Vector3(0.0, 1.0, 1.0).normalized()
-	if cam:
-		recul = (cam.global_position - _joueur.global_position).normalized()
-	_joueur.set("cine_cible", centre)
-	_joueur.set("cine_position", centre + recul * (5.5 if premiere else 6.5))
+	var recul: Vector3 = _joueur.call("recul_cinematique", _joueur.global_position)
+	# d'abord un plan de côté sur la prise, pour bien voir le geste ; la chambre viendra avec la musique
+	var cible_basse: Vector3 = global_position + normale * (RECUL_GENOU * 0.5) + Vector3.UP * 0.6
+	_joueur.set("cine_cible", cible_basse)
+	_joueur.set("cine_position", _plan_de_cote(cible_basse, normale))
 	var approche := create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	approche.tween_property(_joueur, "global_position", place, clampf(trajet / 1.3, 0.4, 2.5))
 	approche.tween_property(_joueur, "cine_melange", 1.0, 2.2 if premiere else 1.2)
@@ -160,15 +160,21 @@ func _ecouter() -> void:
 		d_brancher = float(robot.call("duree", "brancher"))
 	_cable.visible = true
 	_retrait = -1.0
+	_cable.materiau.set_shader_parameter("flux", 0.0)
 	await get_tree().create_timer(d_brancher * INSTANT_FICHE, false).timeout
 	_fiche_posee = true
 	SONS.jouer("clic", global_position)
+	var courant := create_tween()
+	courant.tween_method(func(v: float) -> void: _cable.materiau.set_shader_parameter("flux", v), 0.0, 1.0, 0.8)
 	await get_tree().create_timer(d_brancher * (1.0 - INSTANT_FICHE) + 0.4, false).timeout
 	if geste:
 		robot.call("jouer_action", "brancher_attente", 0.6, 0.4)
 
-	# 3) la boîte joue ; la lanterne de chevet s'éclaire doucement sous son tissu
+	# 3) la boîte joue ; la caméra se pose sur la chambre ; la lanterne de chevet s'éclaire sous son tissu
 	_son.play()
+	var vers_chambre := create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	vers_chambre.tween_property(_joueur, "cine_cible", centre, 2.8)
+	vers_chambre.tween_property(_joueur, "cine_position", centre + recul * (5.5 if premiere else 6.5), 2.8)
 	var lueur := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	lueur.tween_property(_lumiere, "light_energy", energie_lanterne, 4.0)
 	while _son.playing and not _arret_demande:
@@ -200,6 +206,24 @@ func _ecouter() -> void:
 		robot.call("fin_action")
 	_joueur.set("cinematique", false)
 	_en_cours = false
+
+
+## Plan de côté sur la prise : le premier point d'où l'on voit le geste sans mur entre la caméra et le robot.
+func _plan_de_cote(cible: Vector3, normale: Vector3) -> Vector3:
+	var droite := (-normale).cross(Vector3.UP).normalized()
+	var essais: Array[Vector3] = [
+		cible + droite * 2.4 + normale * 0.5 + Vector3.UP * 0.5,
+		cible - droite * 2.4 + normale * 0.5 + Vector3.UP * 0.5,
+		cible + normale * 2.4 + Vector3.UP * 1.4,
+		cible + droite * 1.6 + normale * 1.6 + Vector3.UP * 1.8,
+	]
+	var espace := get_world_3d().direct_space_state
+	for p: Vector3 in essais:
+		var q := PhysicsRayQueryParameters3D.create(cible, p)
+		q.exclude = [_joueur.get_rid()]
+		if espace.intersect_ray(q).is_empty():
+			return p
+	return cible + normale * 2.0 + Vector3.UP * 1.8
 
 
 func _ranger_cable() -> void:
