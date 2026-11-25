@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ile02/optique_phare.tscn" id="6_optique"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/capteur_miroir.tscn" id="7_capteur"]
 [ext_resource type="PackedScene" path="res://scenes/ile02/engrenages_phare.tscn" id="8_engrenages"]
-[ext_resource type="PackedScene" path="res://assets/models/ile02/miroir_manivelle.glb" id="9_poignee"]
+[ext_resource type="PackedScene" path="res://assets/models/ile02/commande_lentille.glb" id="9_pupitre"]
 [ext_resource type="Script" path="res://scripts/porte_cartes.gd" id="10_porte"]
 [ext_resource type="PackedScene" path="res://assets/models/ile02/cle_salle_cartes.glb" id="11_cle"]
 [ext_resource type="Texture2D" path="res://assets/affiches/page_tournee_phare.png" id="tournee"]
@@ -42,18 +42,9 @@ size = Vector3(0.72, 0.72, 0.66)
 [sub_resource type="BoxShape3D" id="porte_cartes"]
 size = Vector3(1.17, 2.39, 0.2)
 
-[sub_resource type="StandardMaterial3D" id="bronze_commande"]
-albedo_color = Color(0.27, 0.41, 0.39, 1)
-metallic = 0.4
-roughness = 0.46
-
-[sub_resource type="CylinderMesh" id="borne_commande"]
-material = SubResource("bronze_commande")
-top_radius = 0.16
-bottom_radius = 0.25
-height = 0.84
-radial_segments = 8
-rings = 0
+[sub_resource type="CylinderShape3D" id="pied_pupitre"]
+height = 1.0
+radius = 0.3
 
 [node name="Phare" type="Node3D"]
 script = ExtResource("1_coupe")
@@ -71,38 +62,25 @@ position = Vector3(-3.1, 15.56, 0.9)
 rotation = Vector3(0.4114353, -1.5814911, 0)
 
 [node name="CommandeLentille" type="Node3D" parent="."]
-position = Vector3(-1.78, 13.63, 1.68)
+position = Vector3(-1.98, 13.63, 0.531)
+rotation = Vector3(0, -1.309, 0)
 
-[node name="Borne" type="MeshInstance3D" parent="CommandeLentille"]
-position = Vector3(0, 0.42, 0)
-mesh = SubResource("borne_commande")
+[node name="Pupitre" parent="CommandeLentille" instance=ExtResource("9_pupitre")]
 
-[node name="Manivelle" parent="CommandeLentille" instance=ExtResource("9_poignee")]
-position = Vector3(0, 0.71, 0.16)
-scale = Vector3(0.68, 0.68, 0.68)
+[node name="Socle" type="StaticBody3D" parent="CommandeLentille"]
 
-[node name="Touche" type="Label3D" parent="CommandeLentille"]
-position = Vector3(0, 1.29, 0.17)
-visible = false
-billboard = 1
-no_depth_test = true
-modulate = Color(1, 0.86, 0.57, 1)
-outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
-pixel_size = 0.004
-font_size = 46
-outline_size = 6
-text = "E   Orienter la lentille"
+[node name="Forme" type="CollisionShape3D" parent="CommandeLentille/Socle"]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("pied_pupitre")
 
 [node name="Graduation" type="Label3D" parent="CommandeLentille"]
-position = Vector3(0, 0.96, 0.12)
+position = Vector3(0, 1.005, -0.121)
+rotation = Vector3(-1.0821, 0, 0)
 visible = false
-billboard = 1
-no_depth_test = true
-modulate = Color(1, 0.91, 0.68, 1)
-outline_modulate = Color(0.19, 0.1, 0.07, 0.9)
-pixel_size = 0.0035
+pixel_size = 0.0007
+modulate = Color(0.12, 0.08, 0.06, 1)
+outline_size = 0
 font_size = 48
-outline_size = 6
 
 [node name="Interieur" type="Area3D" parent="."]
 collision_layer = 0
@@ -135,19 +113,19 @@ omni_range = 4.8
 position = Vector3(0, 0.35, 3.45)
 
 [node name="ReperePalierIris" type="Marker3D" parent="."]
-position = Vector3(5.2, 4.1, 1.7)
+position = Vector3(0.443, 4.1, 2.511)
 
 [node name="ReperePiedMonteeCartes" type="Marker3D" parent="."]
-position = Vector3(-2.11, 4.1, 0.77)
+position = Vector3(-0.086, 4.1, 2.448)
 
 [node name="ReperePalierCartes" type="Marker3D" parent="."]
 position = Vector3(0, 8.95, -2.27)
 
 [node name="RepereSeuilGalerie" type="Marker3D" parent="."]
-position = Vector3(2.16, 13.62, -0.77)
+position = Vector3(-1.37, 13.62, 1.72)
 
 [node name="PorteCartesVerrouillee" type="StaticBody3D" parent="."]
-position = Vector3(0.3419, 10.145, -1.4810)
+position = Vector3(0.2959, 10.145, -1.2814)
 rotation = Vector3(0, -0.226893, 0)
 script = ExtResource("10_porte")
 
@@ -236,8 +214,8 @@ image = ExtResource("billet")
 garder_cle_sans_image = true
 
 [node name="DessinDAube" type="Node3D" parent="DocumentsBureau"]
-position = Vector3(6.077, 5.457, 1.58)
-rotation = Vector3(1.570796, -1.570796, 0)
+position = Vector3(2.137, 5.457, -2.137)
+rotation = Vector3(1.570796, -0.785398, 0)
 script = ExtResource("3_page")
 texte = "Pour Iris. Ma cachette, c'est par le toit."
 distance_lecture = 1.15
@@ -249,7 +227,7 @@ garder_cle_sans_image = true
 [node name="DocumentsCartes" type="Node3D" parent="."]
 
 [node name="Relevements" type="Node3D" parent="DocumentsCartes"]
-transform = Transform3D(0, 0, -1, 1, 0, 0, 0, -1, 0, -1.11, 10.78, 0.107)
+transform = Transform3D(0, 0, -1, 1, 0, 0, 0, -1, 0, -1.023, 10.78, 0.127)
 script = ExtResource("3_page")
 texte = "Relèvements du Phare\n\nColonie · 129°\nÎle blanche · 058°\nNef · 009°\nCentrale · 287°"
 distance_lecture = 0.98
@@ -258,7 +236,7 @@ taille_feuille = Vector2(0.75, 0.49)
 image = ExtResource("relevements_cartes")
 
 [node name="RegistreDesLanternes" type="Node3D" parent="DocumentsCartes"]
-position = Vector3(-0.1597, 10.172, 0.6918)
+position = Vector3(-0.1395, 10.172, 0.604)
 rotation = Vector3(0, -0.226893, 0)
 script = ExtResource("3_page")
 texte = "Registre des lanternes\n\nRéveil : l'abri, la veilleuse, le sommet. Rien à signaler. Le jardinier dort.\n\nColonie : 40… 90… 160… 310.\n\nÎle blanche : on m'en demande encore. Ils disent que c'est pour soigner. Je n'y crois plus.\n\nNef : aucune, en attendant le départ.\n\nCentrale : ne pas toucher. Tavin s'en occupe.\n\n⌂"
@@ -293,7 +271,7 @@ taille_feuille = Vector2(0.39, 0.305)
 image = ExtResource("dessin_brume")
 
 [node name="LunetteIris" parent="." instance=ExtResource("lunette_iris")]
-position = Vector3(-1.26, 13.62, 1.87)
+position = Vector3(-2.62, 13.62, 1.835)
 
 [node name="AncienCorpsGalerie" type="StaticBody3D" parent="."]
 position = Vector3(-2.12, 13.62, -2.13)

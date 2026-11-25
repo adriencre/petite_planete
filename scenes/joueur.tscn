@@ -93,6 +93,7 @@ rings = 1
 
 [node name="Joueur" type="CharacterBody3D" groups=["joueur"]]
 floor_snap_length = 0.3
+floor_max_angle = 0.8726646
 script = ExtResource("1_joueur")
 balancement_procedural = false
 

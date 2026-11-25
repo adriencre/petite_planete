@@ -11,6 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from phare_ile_02 import (RACINE_PHARE, SORTIE, boite, camera, collection, lumiere, main, mat,
                            montant, mur, origine, profil)
 from salle_machines_phare import construire_interieur, empreinte
+from escalier_phare import (BUREAU, VOLEE_REZ, construire_plancher, debut_tremie, fin_de_chute,
+                            garde_corps_tremie, murs_de_tour, polaire, rayon_mur)
 
 
 def construire_bureau(palette, racine, solides, collisions, suite=None):
@@ -24,22 +26,21 @@ def construire_bureau(palette, racine, solides, collisions, suite=None):
     sol = 4.10
     nouvelles_collisions = set(collisions.objects)
 
-    # Le palier s'ouvre vers la tour. La bordure suit le vide de l'escalier.
-    boite("Passage du palier au bureau", (3.59,-1.65,4.015),(2.08,1.00,.17),sable,groupe,.028)
-    boite("Passage-colonly",(3.59,-1.65,4.015),(2.08,1.00,.17),None,collisions)
-    profil("Dalle octogonale du bureau", [(3.41,3.94),(3.43,4.05),(3.38,sol)],
-           ivoire,groupe)
-    profil("Bureau-sol-colonly", [(3.40,3.94),(3.40,sol)],None,collisions)
+    # Le plancher couvre la salle des machines ; il s'ouvre au-dessus de la volée du rez.
+    tremie = (debut_tremie(VOLEE_REZ, sol, .22), VOLEE_REZ[4])
+    construire_plancher("Plancher du bureau", sol, .22, VOLEE_REZ[6], tremie, ivoire, groupe, collisions)
+    palier = bpy.data.collections.new("Phare · garde-corps du bureau")
+    bpy.context.scene.collection.children.link(palier)
+    garde_corps_tremie("Garde-corps du bureau", sol, VOLEE_REZ[6], tremie, bronze, palier, collisions,
+                       fin_lisse=fin_de_chute(VOLEE_REZ, sol))
+    for o in palier.objects:
+        o.parent = bpy.data.objects["PalierIris"]
+    murs_de_tour(collisions)
     for cote in range(8):
-        # À l'est, l'ouverture diagonale est alignée sur le passage de l'escalier.
         portions = [(0,1)]
-        if cote == 7:
-            portions = [(0,.52)]
-        elif cote == 0:
-            portions = [(.23,1)]
         for i,portion in enumerate(portions):
             mur(f"Bureau-mur-{cote}-{i}-colonly",3.62,3.50,sol,6.15,cote,portion,None,collisions)
-            if cote in (1,3,4):
+            if cote in (3,4):
                 mur("Mur en coupe du bureau",3.54,3.50,sol,5.94,cote,portion,ivoire,groupe)
                 mur("Plinthe couleur terre cuite",3.55,3.55,4.19,4.32,cote,portion,terre,groupe)
     # La baie de veille ouvre également la façade extérieure côté Large.
@@ -67,15 +68,8 @@ def construire_bureau(palette, racine, solides, collisions, suite=None):
     boite("Traverse de la baie",(0,3.02,5.63),(1.60,.095,.054),bronze,groupe,.018)
     for x in (-.48,.48):
         boite("Meneau de la baie",(x,3.02,5.52),(.079,.101,1.14),creme,groupe,.019)
-    for x,t in [(3.56,1.85),(5.37,1.54)]:
-        boite("Bord du palier-colonly",(x,-2.18,4.62),(t,.09,1.04),None,collisions)
-    for x in (2.92,3.57,4.19):
-        montant("Potelet du passage", (x,-2.17,4.10),(x,-2.17,4.95),.045,bronze,groupe)
-    montant("Main courante du passage", (2.91,-2.17,4.95),(4.32,-2.17,4.95),.064,bronze,groupe,6)
-    boite("Bord intérieur du palier-colonly",(3.80,-1.10,4.63),(1.55,.072,1.06),None,collisions)
-    boite("Porte fermée de la chambre-colonly", (6.20,-1.65,5.14), (.16,1.23,2.08), None,collisions)
-
-    # La porte indique la chambre. Son accès par la lucarne sera fait depuis la galerie.
+    # La porte fermée de la chambre, dans le pan nord-est, du côté de l'aile.
+    # On rejoint la chambre par le toit, depuis la galerie.
     avant_porte = set(groupe.objects)
     boite("Refend gauche de la chambre",(2.83,-.87,5.47),(.49,.32,2.73),ivoire,groupe,.035)
     boite("Refend droit de la chambre",(4.54,-.87,5.47),(.18,.32,2.73),ivoire,groupe,.033)
@@ -85,8 +79,9 @@ def construire_bureau(palette, racine, solides, collisions, suite=None):
         boite("Planche de la porte",(x,-1.14,5.35),(.23,.032,2.37),bois,groupe,.014)
     montant("Loquet de la chambre",(4.12,-1.12,5.35),(4.12,-1.27,5.35),.065,bronze,groupe)
     bpy.context.view_layer.update()
-    orientation = (Matrix.Translation((6.20, -1.65, 4.10))
-                   @ Matrix.Rotation(-math.pi / 2, 4, "Z")
+    angle_porte = 45
+    orientation = (Matrix.Translation(polaire(rayon_mur(angle_porte, sol) + .02, angle_porte, sol))
+                   @ Matrix.Rotation(math.radians(angle_porte + 180 - 270), 4, "Z")
                    @ Matrix.Diagonal((1.0, 1.0, .78, 1.0))
                    @ Matrix.Translation((-3.75, 1.06, -4.10)))
     for objet_porte in set(groupe.objects) - avant_porte:

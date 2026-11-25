@@ -284,32 +284,68 @@ def construire_phare(palette):
     profil("Coiffe de cuivre patiné", [(1.89, 17.34), (1.84, 17.54), (.68, 18.13), (.27, 18.24)],
            toit, optique)
     profil("Faîte de la couronne", [(.18, 18.21), (.23, 18.34), (.10, 18.57)], or_pale, optique)
-    anneau("Couronne de roulement", 2.06, .46, 13.66, 13.88, bronze, optique, 32)
-    anneau("Couronne graduée", 2.03, .15, 13.89, 13.94, or_pale, optique, 48)
+    anneau("Couronne de roulement", 1.50, .34, 13.66, 13.88, bronze, optique, 32)
+    anneau("Couronne graduée", 1.48, .12, 13.89, 13.94, or_pale, optique, 48)
     for i in range(32):
         angle = i * TAU/32
-        rayon = 1.95
+        rayon = 1.42
         coche = boite("Graduation de la couronne", (rayon*math.cos(angle), rayon*math.sin(angle), 13.943),
                       (.13 if i%4 == 0 else .068, .031, .012), nuit, optique)
         coche.rotation_euler.z = angle
     rotor = origine("Axe de rotation de la lentille", (0, 0, 13.92), optique)
-    support = boite("Berceau de la lentille", (0, 0, .26), (2.86, .86, .40), bronze, optique, .10)
-    support.parent = rotor
-    lentille = origine("Axe optique", (0, 0, 1.64), optique)
+    # Lentille de phare en ruche : ceinture de verre, anneaux de prismes dessus et dessous,
+    # deux œils de Fresnel sur l'axe du faisceau. Tout tourne avec le rotor.
+    centre, ceinture = 1.64, .46
+
+    def rayon_ruche(dz):
+        return 1.05 - .38 * max(0, abs(dz) - ceinture) / .78
+
+    pieces = [
+        profil("Plateau tournant", [(1.32, 0), (1.32, .09), (1.18, .14)], bronze, optique, 32),
+        profil("Piédestal de la lentille", [(.62, .14), (.44, .30), (.40, .42), (.56, .48)],
+               creme, optique, 8),
+        profil("Verre de la ceinture", [(1.05, centre - ceinture), (1.05, centre + ceinture)],
+               vitre, optique, 16, fermer=False),
+        profil("Coupole de la lentille", [(.70, centre + 1.20), (.56, centre + 1.34),
+               (.30, centre + 1.44), (.06, centre + 1.48)], bronze, optique, 16),
+        profil("Bouton de la coupole", [(.05, centre + 1.47), (.11, centre + 1.55),
+               (.07, centre + 1.64), (.01, centre + 1.67)], or_pale, optique, 8),
+        anneau("Bague basse de la lentille", .74, .10, centre - 1.24, centre - 1.15, bronze, optique, 16),
+    ]
+    # Anneaux de prismes : section en dent, du bord de la ceinture vers les bagues.
+    for bas, haut, nombre in ((centre - 1.15, centre - ceinture, 3), (centre + ceinture, centre + 1.20, 5)):
+        for i in range(nombre):
+            z0 = bas + (haut - bas) * i / nombre
+            z1 = bas + (haut - bas) * (i + 1) / nombre
+            r = rayon_ruche((z0 + z1) / 2 - centre)
+            pieces.append(profil("Anneau de prismes", [(r - .09, z0), (r + .03, (z0 + z1) / 2),
+                                 (r - .09, z1), (r - .09, z0)], vitre, optique, 16, fermer=False))
+    for z in (centre - ceinture, centre + ceinture, centre + 1.20):
+        r = rayon_ruche(z - centre) + .04
+        pieces.append(anneau("Cerclage de la lentille", r, .07, z - .025, z + .025, or_pale, optique, 16))
+    # Montants en laiton qui suivent la ruche.
+    hauteurs = [centre - 1.15, centre - ceinture, centre + ceinture, centre + .80, centre + 1.20]
+    for i in range(8):
+        a = i * TAU / 8 + TAU / 16
+        for z0, z1 in zip(hauteurs, hauteurs[1:]):
+            r0, r1 = rayon_ruche(z0 - centre) + .05, rayon_ruche(z1 - centre) + .05
+            pieces.append(montant("Montant de la lentille", (r0*math.cos(a), r0*math.sin(a), z0),
+                                  (r1*math.cos(a), r1*math.sin(a), z1), .028, bronze, optique, 5))
+    for p in pieces:
+        p.parent = rotor
+    lentille = origine("Axe optique", (0, 0, centre), optique)
     lentille.parent = rotor
     lentille.rotation_euler = (math.radians(90), 0, math.radians(-25))
-    pieces = [
-        anneau("Monture de la lentille", 1.45, .15, -.19, .19, bronze, optique, 16),
-        anneau("Bord de la lentille", 1.37, .052, .19, .235, or_pale, optique, 16),
-        profil("Verre de Fresnel à facettes", [(0.02,-.22), (.71,-.08), (1.30,-.11),
-               (1.30,.11), (1.13,.23), (1.10,.15), (.86,.31), (.83,.21), (.57,.39),
-               (.54,.27), (.24,.43), (.02,.45)], vitre, optique, 16),
-    ]
-    for p in pieces:
-        p.parent = lentille
-    for position in (-1.38, 1.38):
-        bras = montant("Bras du berceau", (position, 0, .43), (position, 0, 1.61), .14, or_pale, optique)
-        bras.parent = rotor
+    for sens in (1, -1):
+        oeil = origine("Œil de Fresnel", (0, 0, .96 * sens), optique)
+        oeil.parent = lentille
+        if sens < 0:
+            oeil.rotation_euler.x = math.pi
+        for p in (profil("Verre de Fresnel à facettes", [(.02, 0), (.36, 0), (.36, .04), (.29, .06),
+                         (.28, .03), (.19, .09), (.18, .05), (.10, .12), (.08, .08), (.02, .14)],
+                         vitre, optique, 16),
+                  anneau("Monture de l’œil", .40, .06, -.02, .08, or_pale, optique, 16)):
+            p.parent = oeil
 
     # Deux roues témoins et chaîne, indépendantes en vue des interactions.
     for x, z, r, dents in [(-1.16, .43, .93, 16), (.74, .43, .68, 12), (1.48, 2.34, .75, 14)]:
@@ -330,9 +366,9 @@ def construire_phare(palette):
         if z > 1:
             roue.rotation_euler.x = math.pi/2
     for i in range(26):
-        x = 1.58 + .13*(i%2)
+        x = 1.38 + .13*(i%2)
         o = anneau("Maillon de la chaîne", .14, .046, -.034, .034, bronze, atelier, 8)
-        o.location = (x, .53, 2.45 + i*.224)
+        o.location = (x, -.07, 2.45 + i*.224)
         o.rotation_euler = (0, math.pi/2, math.pi/2*(i%2))
     for nom, lieu in [("Repère · porte", (0,-4.25,.24)), ("Repère · réception ouest", (-2.50,0,15.68)),
                        ("Repère · lunette vers la mer", (-2.50,1.85,13.64)), ("Repère · lucarne", (5.27,.22,7.34))]:

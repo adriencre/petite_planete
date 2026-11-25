@@ -28,8 +28,8 @@ const CRANS_LENTILLE := [-129.0, -58.0, -9.0, 42.0, 73.0]
 @onready var _montee: MeshInstance3D = optique.get_node("Montee")
 @onready var _rayon: MeshInstance3D = _inclinaison.get_node("Rayon")
 @onready var _matiere: ShaderMaterial = _rayon.mesh.surface_get_material(0) as ShaderMaterial
-@onready var _touche_commande: Label3D = commande.get_node("Touche")
-@onready var _manivelle_commande: Node3D = commande.get_node("Manivelle")
+@onready var _manivelle_commande: Node3D = commande.find_child("Manivelle", true, false)
+@onready var _aiguille: Node3D = commande.find_child("Aiguille", true, false)
 @onready var _graduation: Label3D = commande.get_node("Graduation")
 
 var allume := false
@@ -49,6 +49,9 @@ func _ready() -> void:
 	add_to_group("sauvegarde")
 	if lunette:
 		lunette.commande_lentille_prioritaire = _commande_accessible
+	# La touche E et la lueur viennent du guidage commun (guidage.gd), au-dessus du volant.
+	_manivelle_commande.add_to_group("interactif")
+	_manivelle_commande.set_meta("etat_interaction", func() -> int: return 2 if _commande_accessible() else 0)
 	var etat := Sauvegarde.donnees(cle_sauvegarde(), self)
 	_deja_vu = bool(etat.get("deja_vu", false))
 	_cran_lentille = clampi(int(etat.get("cran_lentille", -1)), -1, CRANS_LENTILLE.size() - 1)
@@ -87,8 +90,8 @@ func _process(delta: float) -> void:
 			_azimut = rotate_toward(_azimut, deg_to_rad(CRANS_LENTILLE[_cran_lentille]), delta * 0.55)
 		elif allume and _deja_vu:
 			_azimut += TAU * delta * HorlogeMonde.vitesse / PERIODE
-	_touche_commande.visible = _commande_accessible()
-	_graduation.visible = (_touche_commande.visible or _manivelle_occupee) and _cran_lentille >= 0
+	_aiguille.rotation.y = _azimut
+	_graduation.visible = _cran_lentille >= 0
 	if _graduation.visible:
 		_graduation.text = "%03d°" % posmod(roundi(-CRANS_LENTILLE[_cran_lentille]), 360)
 	engrenages.call("suivre_lentille", _azimut)

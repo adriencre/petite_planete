@@ -10,7 +10,6 @@ const ANGLE_DU_MODELE := 210.17
 
 var commande_lentille_prioritaire: Callable
 
-@onready var _touche: Label3D = $Touche
 @onready var _pivot: Marker3D = $Pivot
 @onready var _oculaire: CanvasLayer = $Oculaire
 @onready var _fond: Control = $Oculaire/Fond
@@ -26,6 +25,7 @@ var _repose: Array[Transform3D] = []
 
 
 func _ready() -> void:
+	add_to_group("interactif")
 	var modele := get_parent().get_node("Modele")
 	for motif: String in ["Fût de la lunette*", "Bague de l’objectif*", "Verre de la lunette*"]:
 		var matches := modele.find_children(motif, "MeshInstance3D", true, false)
@@ -38,11 +38,19 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not is_instance_valid(_robot):
 		_robot = get_tree().get_first_node_in_group("joueur") as CharacterBody3D
-	_touche.visible = _a_portee()
 	var taille := _fond.size
 	var diametre := minf(taille.x * 0.84, taille.y * 0.80)
 	_image.size = Vector2(diametre, diametre)
 	_image.position = (taille - _image.size) * 0.5
+
+
+## Pour le guidage commun (guidage.gd) : lueur et touche E au-dessus de la lunette.
+func etat_interaction() -> int:
+	return 2 if _a_portee() else 0
+
+
+func point_appel() -> Vector3:
+	return _pivot.global_position + Vector3.DOWN * 0.55
 
 
 func _a_portee() -> bool:

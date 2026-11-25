@@ -19,9 +19,9 @@ roughness = 0.69
 
 [sub_resource type="CylinderMesh" id="socle_crante"]
 material = SubResource("laiton")
-top_radius = 0.21
-bottom_radius = 0.24
-height = 0.095
+top_radius = 0.11
+bottom_radius = 0.12
+height = 0.05
 radial_segments = 12
 
 [node name="LunetteIris" type="Node3D"]
@@ -31,24 +31,11 @@ orientations = PackedFloat32Array(9, 58, 129, 134, 318)
 vues = Array[Texture2D]([ExtResource("4_nef"), ExtResource("5_blanche"), ExtResource("6_quai"), ExtResource("7_ville"), ExtResource("8_mer")])
 
 [node name="Pivot" type="Marker3D" parent="."]
-position = Vector3(-0.37, 1.31, 0.56)
+position = Vector3(0, 1.31, 0)
 
 [node name="SocleCrante" type="MeshInstance3D" parent="."]
-position = Vector3(-0.37, 1.215, 0.56)
+position = Vector3(0, 1.235, 0)
 mesh = SubResource("socle_crante")
-
-[node name="Touche" type="Label3D" parent="."]
-visible = false
-position = Vector3(-0.37, 2.0, 0.56)
-billboard = 1
-no_depth_test = true
-modulate = Color(1, 0.86, 0.56, 1)
-outline_modulate = Color(0.18, 0.12, 0.09, 0.95)
-text = "E · Lunette"
-font = ExtResource("3_police")
-font_size = 46
-outline_size = 8
-pixel_size = 0.008
 
 [node name="Oculaire" type="CanvasLayer" parent="."]
 layer = 17

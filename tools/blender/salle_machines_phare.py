@@ -14,10 +14,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from phare_ile_02 import (MODELES, RACINE_PHARE, SORTIE, anneau, boite, camera, collection,
                            lumiere, main, mat, montant, mur, origine, piece, profil)
 from phare_ile_02_v2 import reconstruire, retirer
+from escalier_phare import VOLEE_REZ, construire_volee
 
 
-# L'embrasure enjambe l'angle sud-est pour déboucher devant la première marche.
-PORTIONS_PASSAGE_ESCALIER = {0: [(.34, 1)], 7: [(0, .78)]}
+# L'ancien passage vers l'escalier de l'aile est refermé : on monte par le colimaçon de la tour.
+PORTIONS_PASSAGE_ESCALIER = {}
 HAUTEUR_PASSAGE_ESCALIER = 2.72
 
 
@@ -127,10 +128,10 @@ def construire_interieur(palette, etage=None):
     profil("Sol en pierre des machines", [(3.47,.331),(3.47,.354)], sable, salle)
     for y in (-2.6,-1.96,-1.32,-.68,-.04):
         boite("Dalle traversante", (0,y,.355), (1.72,.60,.029), pave, salle, .018)
-    for y in (-1.62,-.96,-.30,.36,1.02,1.68):
-        boite("Dalle du passage latéral", (2.52,y,.356), (.94,.61,.028), pave,salle,.015)
-    for x in (3.18,3.75,4.32):
-        boite("Dalle du pied de l'escalier", (x,-1.28,.356), (.55,.85,.028), pave,salle,.015)
+    # Deux dalles mènent du centre au pied du colimaçon, au nord du bâti de chaîne.
+    for x,y in ((.62,.55),(1.12,1.05)):
+        o = boite("Dalle vers l'escalier", (x,y,.356), (.60,.85,.028), pave,salle,.015)
+        o.rotation_euler.z = math.radians(-45)
     for x,y,r in [(-1.15,.68,.92), (-.66,1.88,.64), (1.1,1.82,.75)]:
         o = anneau("Trace circulaire d'usure", r,.077,.356,.361,dalle_claire,salle,18)
         o.location = (x,y,0)
@@ -138,8 +139,8 @@ def construire_interieur(palette, etage=None):
             boite("Marque d'appui", (x+d*r*.55,y,.362), (.14,.061,.009), suie,salle)
 
     # L'établi et le chevalet dessinent la limite arrière de la circulation.
-    boite("Établi du gardien", (-.60,2.53,1.11), (2.68,.55,.19), bois,salle,.055)
-    for x in (-1.68,.46):
+    boite("Établi du gardien", (-.87,2.53,1.11), (2.14,.55,.19), bois,salle,.055)
+    for x in (-1.68,-.06):
         boite("Pied de l'établi", (x,2.53,.72), (.21,.37,.75), bois,salle,.027)
     for i in range(3):
         boite("Cale de maintenance", (-1.23+i*.18,2.48,1.25), (.11,.26,.079), or_pale,salle,.017)
@@ -150,43 +151,15 @@ def construire_interieur(palette, etage=None):
         o.rotation_euler.x = math.pi/2
         montant("Rayon du relevé", (x-r*.58,2.891,z),(x+r*.58,2.891,z),.014,suie,salle,4)
         montant("Rayon du relevé", (x,2.891,z-r*.58),(x,2.891,z+r*.58),.014,suie,salle,4)
-    boite("Pied du bâti de chaîne", (1.62,.60,.51), (.67,.70,.31), sable,salle,.053)
-    for x in (1.29,1.96):
-        montant("Montant du bâti de chaîne", (x,.70,.62),(x,.70,3.62),.074,bronze,salle,4)
-    boite("Support d'axe de chaîne", (1.60,.70,3.57), (.82,.25,.14), bronze,salle,.025)
+    boite("Pied du bâti de chaîne", (1.42,.0,.51), (.67,.70,.31), sable,salle,.053)
+    for x in (1.09,1.76):
+        montant("Montant du bâti de chaîne", (x,.10,.62),(x,.10,3.62),.074,bronze,salle,4)
+    boite("Support d'axe de chaîne", (1.40,.10,3.57), (.82,.25,.14), bronze,salle,.025)
 
-    # Escalier en U. Deux rampes de collision suivent exactement le nez des marches.
+    # Le colimaçon contre le mur est, de la salle des machines au bureau.
     boite("Sol de l'aile", (4.50,.10,.15), (3.52,4.57,.40), sable,salle,.048)
-    boite("Palier vers le bureau", (5.38,-1.65,4.005), (1.52,1.00,.19), creme,salle,.035)
-    boite("Palier haut-colonly", (5.38,-1.65,4.005), (1.52,1.00,.19), None,collisions)
-    for x in (4.67, 6.08):
-        montant("Potelet du palier", (x,-2.13,4.10),(x,-2.13,4.96), .048,bronze,salle)
-    for z in (4.51, 4.96):
-        montant("Barre d'arrêt du palier", (4.67,-2.13,z),(6.08,-2.13,z), .068,bronze,salle)
-    boite("Palier du demi-tour", (4.83,1.85,2.13), (2.62,.81,.19), creme,salle,.042)
-    boite("Demi-tour-colonly", (4.83,1.85,2.13), (2.62,.81,.19), None,collisions)
-    for indice,(x, depart, arrivee, bas, haut) in enumerate(
-        [(4.10,-.60,1.445,.35,2.225),(5.45,1.445,-1.15,2.225,4.10)]
-    ):
-        for pas in range(9):
-            t = (pas+.5)/9
-            y = depart+(arrivee-depart)*t
-            z = bas+(haut-bas)*(pas+1)/9
-            boite("Marche de pierre", (x,y,z-.108), (1.39,abs(arrivee-depart)/9+.011,.216),
-                  creme if pas%3 else ivoire,salle,.024)
-        pente(f"Volée {indice+1}-colonly",x-.70,x+.70,depart,arrivee,bas,haut,collisions)
-        # Garde-corps du côté du vide, avec sa collision en pente.
-        bord = x+(.70 if indice==0 else -.70)
-        a,b = (0,.81) if indice==0 else (.17,1)
-        y_a, y_b = (depart+(arrivee-depart)*t for t in (a,b))
-        z_a, z_b = (bas+(haut-bas)*t for t in (a,b))
-        montant("Main courante du palier", (bord,y_a,z_a+.91),(bord,y_b,z_b+.91),
-                .061,bronze,salle,5)
-        for t in (a,(a+b)/2,b):
-            y = depart+(arrivee-depart)*t
-            z = bas+(haut-bas)*t
-            montant("Potelet d'escalier",(bord,y,z),(bord,y,z+.91),.052,bronze,salle,5)
-        pente(f"Garde-corps {indice+1}-colonly",bord-.025,bord+.025,y_a,y_b,z_a+.88,z_b+.88,collisions)
+    volee = collection("Phare · volée du rez")
+    construire_volee(VOLEE_REZ, creme, ivoire, bronze, volee, collisions)
 
     # Collision du seuil, du sol et de la coque. Les vitres et le toit restent décoratifs.
     pente("Parvis-colonly",-2.06,2.06,-4.86,-3.28,.08,.35,collisions)
@@ -207,25 +180,17 @@ def construire_interieur(palette, etage=None):
         for rb, rh, bas, haut, portions in troncons:
             for indice, portion in enumerate(portions):
                 mur(f"Mur de tour {cote}-{indice}-colonly",rb,rh,bas,haut,cote,portion,None,collisions)
-    boite("Butée du futur bureau-colonly",(5.26,-2.17,4.69),(1.86,.13,1.17),None,collisions)
-    boite("Établi-colonly",(-.60,2.53,.77),(2.62,.51,.84),None,collisions)
-    boite("Bâti de chaîne-colonly",(1.62,.69,.48),(.64,.68,.27),None,collisions)
+    boite("Établi-colonly",(-.87,2.53,.77),(2.08,.51,.84),None,collisions)
+    boite("Bâti de chaîne-colonly",(1.42,.09,.48),(.64,.68,.27),None,collisions)
 
     palier_iris = origine("PalierIris", (0, 0, 0), salle)
     escalier_iris = origine("EscalierIris", (0, 0, 0), salle)
     palier_iris.parent = escalier_iris.parent = racine
     for o in list(salle.objects):
-        if o in (beaux, palier_iris, escalier_iris):
-            continue
-        est_palier = o.name.startswith(("Palier vers le bureau", "Potelet du palier", "Barre d'arrêt du palier"))
-        est_escalier = o.name.startswith(("Marche de pierre", "Palier du demi-tour",
-                                         "Main courante du palier", "Potelet d'escalier"))
-        if est_palier:
-            o.parent = palier_iris
-        elif est_escalier:
-            o.parent = escalier_iris
-        else:
+        if o not in (beaux, palier_iris, escalier_iris):
             o.parent = beaux
+    for o in volee.objects:
+        o.parent = escalier_iris
     for o in list(collisions.objects):
         if o!=solides:
             o.parent=solides

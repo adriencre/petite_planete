@@ -5,6 +5,7 @@ Godot n'est pas dans le PATH :
 ```
 "C:\Users\adrie\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe"
 ```
+- Sur le Mac : `godot` (Homebrew, `/opt/homebrew/bin/godot`, 4.7.2). Lancer le jeu : `godot --path .`
 - **Toujours demander à l'utilisateur avant** de lancer le jeu ou un test, même headless (voir mémoire `ask-before-launching`). Regrouper les changements, demander une fois, ne pas relancer en boucle.
 - Vérifier d'abord la compilation : `<godot> --headless --path . --import` (attrape les erreurs de parsing).
 - Test de diagnostic : `<godot> --headless --path . -s res://tests/diag_xxx.gd` (scripts `extends SceneTree`, voir `tests/diag_*.gd`).

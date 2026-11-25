@@ -15,6 +15,7 @@ from salle_machines_phare import construire_interieur
 from bureau_iris import construire_bureau, cadrages_bureau
 from chambre_iris import construire_chambre
 from sommet_phare import construire_sommet
+from escalier_phare import VOLEE_REZ, dans_tremie, debut_tremie
 
 SOURCES = RACINE / "tools/blender/sources/bureau_iris"
 SOL = 4.10
@@ -115,10 +116,17 @@ def dalles_bureau(groupe,parent):
     contour = [v.xy for v in cercle(3.32,0)]
     couleurs=[mat("Pierre chaude du sol "+str(i),c) for i,c in enumerate([
         (.73,.63,.49),(.69,.58,.45),(.77,.67,.54),(.73,.64,.53)])]
+    # Pas de dalle au-dessus de la trémie de la volée du rez.
+    tremie = (debut_tremie(VOLEE_REZ, SOL, .22), VOLEE_REZ[4])
+    def sur_tremie(px, py):
+        return (dans_tremie(math.degrees(math.atan2(py, px)), tremie)
+                and math.hypot(px, py) > VOLEE_REZ[6] - .02)
     for rang in range(-4,5):
         for colonne in range(-4,5):
             x=colonne*.94+(.45 if rang%2 else 0)
             y=rang*.79
+            if any(sur_tremie(x+dx, y+dy) for dx in (.013,.927) for dy in (.013,.777)):
+                continue
             polygone=[Vector((x+dx,y+dy)) for dx,dy in
                       ((.07,.013),(.87,.013),(.927,.06),(.927,.73),
                        (.87,.777),(.07,.777),(.013,.73),(.013,.06))]
@@ -169,9 +177,9 @@ def decorer(palette,racine,solides,collisions):
     inventaire=[
         ("table","Table des relevés",(-.22,1.13,SOL),(3.04,1.18,1.36),0,None),
         ("siege","Siège de veille en côtes",(1.03,-.05,SOL),(.74,.83,1.56),154,(.72,.78,.75)),
-        ("banquette","Banquette lavande",(2.40,.49,SOL),(1.54,.52,.74),-93,(1.58,.49,.62)),
+        ("banquette","Banquette lavande",(-.40,2.69,SOL),(1.54,.52,.74),-3,(1.58,.49,.62)),
         ("meuble_cartes","Meuble des cartes roulées",(-2.40,1.02,SOL),(1.34,.53,.93),73,(1.26,.47,.89)),
-        ("porte_manteau","Porte-manteau et ciré de quart",(1.91,2.00,SOL),(.86,.43,1.67),-27,(.81,.38,1.52)),
+        ("porte_manteau","Porte-manteau et ciré de quart",(.91,2.49,SOL),(.86,.43,1.67),-2,(.81,.38,1.52)),
         ("etagere","Étagère d’archives",(-1.87,2.03,5.42),(1.28,.36,.72),20,None),
         ("lampe","Lampe mécanique d’Iris",(.89,1.42,TABLE),(.34,.48,.55),24,None),
         ("tasse","Tasse bleue",(.34,1.51,TABLE),(.24,.177,.17),0,None),

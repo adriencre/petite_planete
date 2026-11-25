@@ -107,10 +107,12 @@ Une plaque de service sur le ponton montre une fiche et une bouée. La bouée su
 ### Le Phare, de bas en haut
 | Niveau | Ce qu'on y trouve |
 |---|---|
-| **Rez** | **La salle des machines** : engrenages arrêtés, la chaîne de la lentille, le **schéma des engrenages** peint au mur. Des dalles guident vers une ouverture de plain-pied au sud-est, devant la première marche de l'escalier du bureau. |
-| **1er** | **Le bureau d'Iris** : sa table, ses relevés, la **table des marées**, la **page 1**, le **plan des miroirs**, la note de la clé, la ligne de la pleine lune. La porte fermée de **sa chambre** donne sur le palier. La chambre occupe une aile à côté de la cage d'escalier et se rejoint par le toit. |
-| **2e** | **La salle des cartes**, fermée à clé, avec sa porte marquée face à l'arrivée de l'escalier. À l'intérieur, le registre et les relèvements. |
-| **Sommet** | La **grande lentille**, intacte, sans lampe, avec une couronne graduée. La **galerie extérieure**, avec **la lunette d'Iris** **[à valider]** et l'**ancien corps de la galerie**. |
+| **Rez** | **La salle des machines** : engrenages arrêtés, la chaîne de la lentille, le **schéma des engrenages** peint au mur. Des dalles mènent, entre l'établi et le bâti de chaîne, au pied du colimaçon qui longe le mur est. |
+| **1er** | **Le bureau d'Iris** : sa table, ses relevés, la **table des marées**, la **page 1**, le **plan des miroirs**, la note de la clé, la ligne de la pleine lune. La porte fermée de **sa chambre** est dans le pan nord-est, côté aile, avec le dessin d'Aube punaisé dessus. La chambre occupe l'aile et se rejoint par le toit. |
+| **2e** | **La salle des cartes**, fermée à clé, au centre de la tour ; sa porte marquée est face à l'arrivée de l'escalier, qui continue autour d'elle jusqu'à la galerie. À l'intérieur, le registre et les relèvements. |
+| **Sommet** | La **grande lentille** en ruche (anneaux de prismes ambrés, deux œils de Fresnel sur l'axe du faisceau), intacte, sans lampe, sur une couronne graduée. La **galerie extérieure**, avec **la lunette d'Iris** **[à valider]** et l'**ancien corps de la galerie**. |
+
+**L'escalier (refait le 2026-11-23 pour la 1re personne)** : un colimaçon de pierre contre le mur de la tour, en trois volées dans le sens horaire (rez → bureau → salle des cartes → galerie). Chaque étage a un vrai plancher qui sert de plafond à l'étage du dessous, percé d'une trémie bordée d'un garde-corps au-dessus de la volée. Sous la partie basse des volées, la maçonnerie descend jusqu'au sol. L'aile n'a plus d'escalier. Script : `tools/blender/escalier_phare.py`.
 
 En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènent. À l’extérieur, le Phare devient translucide s’il masque le robot. En entrant dans la salle des cartes, la volée vers la galerie s’efface pour dégager le registre et les relèvements. L'échelle et l'aile d'Iris apparaissent depuis la galerie et le toit. Dans la chambre, la coupe montre le mobilier et les documents de la pièce.
 
@@ -156,6 +158,7 @@ En vue de dessus, la coupe dégage le niveau visité et les marches qui y mènen
 - **Où on l'apprend** : au rez, les engrenages sont démontés, et un **schéma** peint au mur (en partie couvert de suie) montre comment ils s'emboîtent.
 - **La solution** : remettre les engrenages en place (`E` pour déplacer et tourner chaque roue) en suivant le schéma. La partie effacée se devine en regardant **les marques d'usure au sol** sous chaque axe (observation).
 - **Dans la salle** : `E` devant la machine ouvre une grande vue de face. Le joueur choisit une roue dans le râtelier, puis un axe libre. Les commandes permettent de tourner la roue d’un cran ou de la retirer. La taille doit correspondre à l’empreinte et le repère en laiton doit rejoindre la clavette. Le chariot applique les déplacements dans la salle. Le dernier cran ferme la vue, tend la chaîne et libère la manivelle de la galerie.
+- **La commande** (décidé le 2026-11-25) : un **pupitre en laiton** sur la galerie, à l'écart de l'arrivée de l'escalier. Socle de pierre ivoire, plateau incliné avec un cadran gradué dont l'aiguille suit la lentille, un compteur qui affiche le cap, et un volant à poignée de bois en façade. Pas de texte flottant : la touche E vient du guidage commun.
 - **Ce que ça ouvre** : la **lentille orientable**. Sur les trois côtés accessibles de la galerie, l’invite « E · Orienter la lentille » permet de tourner la manivelle depuis sa position. Auprès de la lunette d’Iris, l’instrument le plus proche prend la touche E. Avec les relèvements (G3), on peut la pointer vers chaque île.
 
 ### G5. « La chambre d'Iris » (lieux cachés) — *validé*

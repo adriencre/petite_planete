@@ -74,44 +74,49 @@ func _physics_process(delta: float) -> void:
 	var dans_tour := _dedans > 0 and not dans_annexe
 	var sur_galerie := dans_tour and hauteur_galerie >= -0.04
 	_exterieur_fantome = exterieur
+	# en 1re personne, pas de coupe : tout le phare reste en place, sols et plafonds compris
+	var tout := exterieur or not bool(_joueur_du_phare.call("troisieme_personne"))
 
-	_montrer_noeud(_chambre, exterieur or sur_galerie or dans_annexe)
-	_montrer_noeud(_acces_chambre, exterieur or sur_galerie or sur_toit or sur_echelle)
-	_montrer_noeud(_toit_chambre, not dans_chambre)
-	_montrer_noeud(_facades_chambre, not dans_chambre)
+	_montrer_noeud(_chambre, tout or sur_galerie or dans_annexe)
+	_montrer_noeud(_acces_chambre, tout or sur_galerie or sur_toit or sur_echelle)
+	_montrer_noeud(_toit_chambre, tout or not dans_chambre)
+	_montrer_noeud(_facades_chambre, tout or not dans_chambre)
 	_documents_chambre.visible = dans_chambre
 
 	var au_rez := exterieur or (dans_tour and hauteur_bureau < -0.12)
-	_montrer_noeud(_salle_machines, au_rez)
-	_engrenages.visible = au_rez
-	_lumiere_atelier.visible = au_rez
+	_montrer_noeud(_salle_machines, tout or au_rez)
+	_engrenages.visible = tout or au_rez
+	_lumiere_atelier.visible = tout or au_rez
 	var proche_palier_iris := hauteur_bureau < 0.1 and position.distance_to(_palier.global_position) < 1.35
-	_montrer_noeud(_escalier_iris, au_rez or (dans_tour and proche_palier_iris))
-	_montrer_noeud(_palier_iris, exterieur or (dans_tour and hauteur_bureau >= -0.85 and hauteur_bureau < 1.15))
+	_montrer_noeud(_escalier_iris, tout or au_rez or (dans_tour and proche_palier_iris))
+	_montrer_noeud(_palier_iris, tout or (dans_tour and hauteur_bureau >= -0.85 and hauteur_bureau < 1.15))
 
 	var visite_bureau := dans_tour and hauteur_bureau >= -0.12 and hauteur_bureau < 1.15
-	_bureau.visible = exterieur or visite_bureau
+	_bureau.visible = tout or visite_bureau
 	_documents_bureau.visible = _bureau.visible
-	_montrer_noeud(_montee_cartes, exterieur or (dans_tour and hauteur_bureau >= -0.12 and hauteur_cartes < 0.55))
+	_montrer_noeud(_montee_cartes, tout or (dans_tour and hauteur_bureau >= -0.12 and hauteur_cartes < 0.55))
 
 	var approche_cartes := exterieur or (dans_tour and hauteur_cartes >= -1.10 and hauteur_cartes < 1.30)
-	_montrer_noeud(_entree_cartes, approche_cartes)
-	_plaque_cartes.visible = approche_cartes
+	_montrer_noeud(_entree_cartes, tout or approche_cartes)
+	_plaque_cartes.visible = tout or approche_cartes
 	var visite_cartes := exterieur or (dans_tour and hauteur_cartes >= -0.24 and hauteur_cartes < 1.30)
-	_montrer_noeud(_cartes, visite_cartes)
+	_montrer_noeud(_cartes, tout or visite_cartes)
 	_documents_cartes.visible = visite_cartes
 
 	var proche_sortie := position.distance_to(_seuil_galerie.global_position) < 1.55
 	var ascension_galerie := dans_tour and hauteur_cartes >= -0.24 and (not sur_galerie or proche_sortie)
-	_montrer_noeud(_montee_galerie, exterieur or ascension_galerie)
-	_montrer_noeud(_galerie, exterieur or sur_echelle or (dans_tour and hauteur_galerie >= -0.22))
+	_montrer_noeud(_montee_galerie, tout or ascension_galerie)
+	_montrer_noeud(_galerie, tout or sur_echelle or (dans_tour and hauteur_galerie >= -0.22))
 
 	var coupe_cartes := 0.0
-	if dans_tour and visite_cartes and bool(_plaque_cartes.get("ouverte")):
+	if not tout and dans_tour and visite_cartes and bool(_plaque_cartes.get("ouverte")):
 		var rayon := Vector2(locale.x, locale.z).length()
 		var profondeur := _plaque_cartes.to_local(position).z
 		coupe_cartes = (1.0 - smoothstep(1.62, 1.88, rayon)) * smoothstep(-0.20, 0.15, profondeur)
-	_actualiser_fondu_montee_cartes(visite_bureau, delta)
+	# Vue de dessus sur le palier des cartes : la volée de la galerie, qui l'entoure, devient translucide.
+	if not tout and dans_tour and hauteur_cartes >= -0.24 and hauteur_cartes < 0.6:
+		coupe_cartes = maxf(coupe_cartes, 0.65)
+	_actualiser_fondu_montee_cartes(visite_bureau and not tout, delta)
 	_transparence_montee_galerie = _fondre_maillages(_maillages_montee_galerie,
 		_transparence_montee_galerie, coupe_cartes, delta)
 
