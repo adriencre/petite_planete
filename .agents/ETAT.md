@@ -1,6 +1,8 @@
 # État du projet — passation entre agents
 
-> Mis à jour le **2026-11-25** par **Claude**, après la galerie du Phare refaite (lentille en ruche, pupitre, lunette, rambarde). Tout est commité.
+> Mis à jour le **2026-11-26** par **Claude** : mains articulées et branchement en 1re personne (non commité, pas encore lancé dans Godot).
+
+- **Mains 1re personne (2026-11-26, en cours)** : mains articulées en GLB + clip `tirer_fiche`. À essayer : `tests/essai_branchement.tscn`, avec E, R et G. Voir le journal du 26. Il reste à faire valider le style par l'utilisateur, puis les clips enfoncer et débrancher, plus fins. Les avant-bras sont encore des cylindres. Avant : import headless et compilation.
 
 - **Traversées entre les îles 1 à 3** : silhouettes au large, brume, arrivée en barque devant le port, sauvegarde de l'île quittée. Le Réveil peut être quitté à tout moment. Diagnostic headless réussi lors de la session précédente. Essai en jeu à faire, voir `.agents/A_TESTER.md` §6. Restent le retour de la barque après une mort loin du Réveil, le carnet commun et les îles 4 à 7.
 - **G3, jardin du haut** : marée, écluse à quatre sas, jardin, lampe-mère et souvenir projeté. Import et diagnostic précédents réussis. À jouer de bout en bout, y compris le carillon, la porte de service et les collisions des serres ouvertes. Après une modification Blender, régénérer les scènes avec `python tools/godot/jardin_du_haut_scenes.py`.

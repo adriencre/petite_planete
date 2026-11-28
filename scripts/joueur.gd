@@ -49,10 +49,12 @@ var cinematique := false:
 			return
 		cinematique = v
 		if v:
-			_cine_3e = premiere_personne and not vue_dessus and not sur_echelle and embarque == null
+			_cine_3e = premiere_personne and not vue_dessus and not sur_echelle and embarque == null and not cine_sur_place
 		elif _cine_3e:
 			_cine_3e = false
 		_transition_lente = true
+## À mettre AVANT `cinematique = true` : la cinématique reste dans les yeux du robot (lire, ramasser un papier).
+var cine_sur_place := false
 ## Vrai pendant une cinématique jouée en 3e personne alors que le joueur était en 1re.
 var _cine_3e := false
 ## La caméra passe lentement entre 1re et 3e personne (recul de cinématique, puis retour).
@@ -74,20 +76,28 @@ var cine_cible := Vector3.ZERO
 var embarque: Node3D = null
 var _pos_prec := Vector3.ZERO
 var fov_normal := 60.0
-## Position du bout de l'index droit (repère de la main) et poses des mains (repère caméra).
-const BOUT_INDEX := Vector3(0.0, 0.012, -0.13)
+## Mains articulées (tools/blender/mains_robot.py) : sortie du câble sur la bobine du poignet droit,
+## et la fiche dans la main gauche qui la tient (point de pince et angle, repère de la main gauche ;
+## mêmes valeurs que tools/godot/gestes_mains.py). Poses des mains levées et au repos (repère caméra).
+const SORTIE_CABLE := Vector3(0.0, 0.040, 0.046)
+## Centre de la fiche tenue par la main gauche, dans l'axe des doigts (reperes_mains.json).
+const PINCE_G := Vector3(0.02213, -0.04817, -0.08333)
 const MAIN_D_REPOS := Vector3(0.2, -0.62, -0.38)
 const MAIN_G_REPOS := Vector3(-0.22, -0.62, -0.38)
 const MAIN_D_LEVEE := Vector3(0.16, -0.19, -0.42)
 const MAIN_G_LEVEE := Vector3(-0.19, -0.23, -0.4)
 var _index_cible = null  # Vector3 monde ou null
-## Épaules (repère caméra) et longueurs des segments du bras.
-const EPAULE_D := Vector3(0.25, -0.36, 0.12)
-const EPAULE_G := Vector3(-0.25, -0.36, 0.12)
-const LONG_BRAS := 0.34
+## Vers où pointent les broches de la fiche quand on la porte à une prise (monde) ; ZERO = sans contrainte.
+var _index_direction := Vector3.ZERO
+## La main gauche tient la fiche : elle suit la fiche à chaque image (fiche décrochée par « tirer_fiche »).
+var main_gauche_tient := false
+var _fiche_repos: Transform3D
+var _rot_main_d: Quaternion
+var _rot_main_g: Quaternion
+@onready var gestes: AnimationPlayer = $Camera/Mains/Gestes
+@onready var _doigts_d: AnimationPlayer = $Camera/Mains/MainDroite/Modele/AnimationPlayer
+@onready var _doigts_g: AnimationPlayer = $Camera/Mains/MainGauche/Modele/AnimationPlayer
 const SILHOUETTE := preload("res://shaders/silhouette_robot.gdshader")
-@onready var bras_droit: Node3D = $Camera/Mains/BrasDroit
-@onready var bras_gauche: Node3D = $Camera/Mains/BrasGauche
 @onready var fiche: Node3D = $Camera/Mains/MainDroite/Fiche
 
 ## 0..1 ; lue par la scène pour la vision trouble et les créatures.
@@ -95,6 +105,8 @@ var batterie := 1.0
 ## false en mode N (piloté par la scène).
 var antenne_allumee := true
 var _allumage := 1.0
+## Baisse la lampe de l'antenne quand les mains travaillent de près (sinon tout sature à 60 cm).
+var _lampe_pres := 1.0
 var _ampoule_mat := StandardMaterial3D.new()
 var _retard := Vector2.ZERO
 
@@ -133,6 +145,13 @@ func _ready() -> void:
 	lumiere.omni_attenuation = 0.8
 	lumiere.light_volumetric_fog_energy = 2.5   # un halo dans la brume autour du robot
 	_preparer_lueur()
+	_fiche_repos = fiche.transform
+	_rot_main_d = main_droite.quaternion
+	_rot_main_g = main_gauche.quaternion
+	for m in mains.find_children("*", "MeshInstance3D", true, false):
+		(m as MeshInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_doigts_d.play("repos")
+	_doigts_g.play("repos")
 
 
 
@@ -308,9 +327,6 @@ func _physics_process(delta: float) -> void:
 	_appliquer_cine()
 	_gerer_batterie(delta)
 	_placer_index()
-	if mains.visible:
-		_bras(bras_droit, EPAULE_D, main_droite.position + main_droite.basis * Vector3(0, 0, 0.1), Vector3(1.0, -1.0, 0.3))
-		_bras(bras_gauche, EPAULE_G, main_gauche.position + main_gauche.basis * Vector3(0, 0, 0.1), Vector3(-1.0, -1.0, 0.3))
 
 
 func _animer(delta: float, dir: Vector3) -> void:
@@ -389,18 +405,70 @@ func _placer_camera(delta: float) -> void:
 	lumiere.global_position = haut_3e.lerp(ampoule_vue.global_position, t)
 
 
-## Pose la main droite pour que le bout de l'index touche `p` (monde) ; null = main libre.
-func poser_index(p) -> void:
+## Porte la fiche en `p` (monde), broches tournées vers `direction` si elle est donnée ; null = fiche libre.
+## En 1re personne, la fiche est tenue par la main gauche (après `tirer_fiche`), qui la suit.
+func poser_index(p, direction := Vector3.ZERO) -> void:
 	_index_cible = p
+	_index_direction = direction
+
+
+## Pose des doigts (clips de main_robot_*.glb : repos, ouverte, pincer), avec un fondu.
+func pose_doigts(gauche: bool, pose: StringName, fondu: float = 0.2) -> void:
+	(_doigts_g if gauche else _doigts_d).play(pose, fondu)
+
+
+## Geste 1re personne : la main gauche décroche la fiche du poignet droit et tire le câble jusque devant
+## soi (clip « tirer_fiche », assets/animations/gestes_mains.tres). Ensuite, la main gauche tient la fiche.
+func tirer_fiche(vitesse: float = 1.0) -> void:
+	main_gauche_tient = false
+	gestes.play("tirer_fiche", 0.0, vitesse)
+	await gestes.animation_finished
+	main_gauche_tient = true
+
+
+## La main gauche vient reprendre la fiche là où elle est (branchée dans une prise).
+func prendre_fiche(duree: float) -> Tween:
+	var prise := _main_gauche_sur_fiche()
+	pose_doigts(true, &"ouverte", 0.15)
+	var tw := create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(main_gauche, "position", prise.origin, duree)
+	tw.tween_property(main_gauche, "quaternion", prise.basis.get_rotation_quaternion(), duree)
+	tw.tween_callback(pose_doigts.bind(true, &"pincer", 0.15)).set_delay(duree * 0.7)
+	tw.chain().tween_callback(func() -> void: main_gauche_tient = true)
+	return tw
+
+
+## La main gauche ouvre les doigts et lâche la fiche (elle reste où elle est : prise, ou en l'air).
+func lacher_fiche() -> void:
+	main_gauche_tient = false
+	pose_doigts(true, &"ouverte", 0.15)
+
+
+## La fiche file se ranger dans son agrafe, sur la bobine du poignet : le câble s'enroule derrière elle.
+func ranger_fiche(duree: float) -> Tween:
+	var tw := create_tween().set_parallel().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tw.tween_property(fiche, "position", _fiche_repos.origin, duree)
+	tw.tween_property(fiche, "quaternion", _fiche_repos.basis.get_rotation_quaternion(), duree)
+	return tw
+
+
+## Où mettre la main gauche (repère de Mains) pour que sa pince tienne la fiche.
+func _main_gauche_sur_fiche() -> Transform3D:
+	var pince := Transform3D(Basis(), PINCE_G)
+	return main_droite.transform * fiche.transform * pince.affine_inverse()
 
 
 func lever_mains(levees: bool, duree: float = 0.8) -> Tween:
 	var tw := create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT if levees else Tween.EASE_IN)
 	if levees:
 		mains.visible = premiere_personne
-	tw.tween_property(main_gauche, "position", MAIN_G_LEVEE if levees else MAIN_G_REPOS, duree)
+	if not main_gauche_tient:
+		tw.tween_property(main_gauche, "position", MAIN_G_LEVEE if levees else MAIN_G_REPOS, duree)
+		tw.tween_property(main_gauche, "quaternion", _rot_main_g, duree)
+		pose_doigts(true, &"repos", duree * 0.5)
 	if _index_cible == null:
 		tw.tween_property(main_droite, "position", MAIN_D_LEVEE if levees else MAIN_D_REPOS, duree)
+		tw.tween_property(main_droite, "quaternion", _rot_main_d, duree)
 	tw.tween_property(camera, "fov", fov_normal - 8.0 if levees else fov_normal, duree * 1.5)
 	if not levees:
 		tw.chain().tween_callback(func() -> void: mains.visible = false)
@@ -457,44 +525,14 @@ func bout_index_monde() -> Vector3:
 	if troisieme_personne() and modele.has_method("main_droite_monde"):
 		var p: Vector3 = modele.call("main_droite_monde")
 		return p
-	return main_droite.global_transform * BOUT_INDEX
+	return fiche.global_position
 
 
 func poignet_droit_monde() -> Vector3:
 	if troisieme_personne() and modele.has_method("main_droite_monde"):
 		var p: Vector3 = modele.call("main_droite_monde")
 		return p
-	return main_droite.global_transform * Vector3(0, 0, 0.09)
-
-
-## Bras à deux segments (épaule -> coude -> poignet), coude poussé vers `pole`.
-func _bras(b: Node3D, epaule: Vector3, poignet: Vector3, pole: Vector3) -> void:
-	var v := poignet - epaule
-	var d := clampf(v.length(), 0.05, LONG_BRAS * 2.0 - 0.001)
-	var dir := v.normalized()
-	var a := d * 0.5
-	var h := sqrt(maxf(LONG_BRAS * LONG_BRAS - a * a, 0.0))
-	var p := (pole - dir * pole.dot(dir)).normalized()
-	var coude := epaule + dir * a + p * h
-	var main := epaule + dir * d
-	(b.get_node("Epaule") as Node3D).position = epaule
-	(b.get_node("Coude") as Node3D).position = coude
-	_segment(b.get_node("Haut"), epaule, coude)
-	_segment(b.get_node("Avant"), coude, main)
-
-
-func _segment(n: Node3D, a: Vector3, b: Vector3) -> void:
-	var y := b - a
-	var l := y.length()
-	if l < 0.001:
-		return
-	y /= l
-	var x := y.cross(Vector3.BACK)
-	if x.length() < 0.01:
-		x = Vector3.RIGHT
-	x = x.normalized()
-	var z := x.cross(y)
-	n.transform = Transform3D(Basis(x, y * l, z), (a + b) * 0.5)
+	return main_droite.global_transform * SORTIE_CABLE
 
 
 func position_ampoule() -> Vector3:
@@ -502,11 +540,16 @@ func position_ampoule() -> Vector3:
 
 
 func _placer_index() -> void:
-	if _index_cible == null:
-		return
-	var cible: Vector3 = camera.global_transform.affine_inverse() * (_index_cible as Vector3)
-	var voulu := cible - main_droite.basis * BOUT_INDEX
-	main_droite.position = main_droite.position.lerp(voulu, 0.35)
+	if _index_cible != null:
+		# la fiche (repère de la main droite) glisse vers sa cible ; la main droite ne bouge pas
+		var repere := main_droite.global_transform.affine_inverse()
+		fiche.position = fiche.position.lerp(repere * (_index_cible as Vector3), 0.35)
+		if _index_direction != Vector3.ZERO:
+			var dir := (repere.basis * _index_direction).normalized()
+			var voulu := Basis.looking_at(dir, repere.basis * Vector3.UP).get_rotation_quaternion()
+			fiche.quaternion = fiche.quaternion.slerp(voulu, 0.25)
+	if main_gauche_tient:
+		main_gauche.transform = _main_gauche_sur_fiche()
 
 
 func _gerer_batterie(delta: float) -> void:
@@ -517,7 +560,8 @@ func _gerer_batterie(delta: float) -> void:
 	var niveau := batterie * _allumage
 	if batterie < 0.3:
 		niveau *= 0.55 + 0.45 * float(randf() > 0.25 - batterie * 0.5)
-	lumiere.light_energy = energie_lumiere * niveau
+	_lampe_pres = move_toward(_lampe_pres, 0.3 if mains.visible else 1.0, delta * 1.2)
+	lumiere.light_energy = energie_lumiere * niveau * _lampe_pres
 	lumiere.omni_range = 3.0 + 4.5 * batterie
 	if _lueur:
 		_halo_mat.albedo_color = Color(couleur_lumiere.r, couleur_lumiere.g, couleur_lumiere.b, 0.75 * niveau)

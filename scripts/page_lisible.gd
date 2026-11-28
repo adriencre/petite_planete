@@ -226,8 +226,12 @@ func _lire() -> void:
 	_ouverte = true
 	var premiere: bool = not deja_lue
 	deja_lue = true
+	# lire ou ramasser une feuille se fait dans ses yeux : pas de recul en 3e personne
+	_joueur.set("cine_sur_place", true)
 	_joueur.set("cinematique", true)
 	_joueur.set("regard_cible", global_position)
+	if not bool(_joueur.call("troisieme_personne")):
+		_joueur.call("lever_mains", true, 1.2 if premiere else 0.6)
 	if premiere:
 		# il se tourne vers la page ; la caméra descend dessus
 		var cible: Vector3 = global_position + Vector3.UP * 0.1
@@ -281,11 +285,16 @@ func _fermer() -> void:
 	await f.finished
 	_calque.visible = false
 	_ouverte = false
-	if float(_joueur.get("cine_melange")) > 0.0:
+	if not bool(_joueur.call("troisieme_personne")):
+		_joueur.set("cine_melange", 0.0)   # plan invisible en 1re personne : pas d'attente
+	elif float(_joueur.get("cine_melange")) > 0.0:
 		var t := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		t.tween_property(_joueur, "cine_melange", 0.0, 1.5)
 		await t.finished
+	if not bool(_joueur.call("troisieme_personne")):
+		await _joueur.call("lever_mains", false, 0.6).finished
 	_joueur.set("cinematique", false)
+	_joueur.set("cine_sur_place", false)
 	_en_cours = false
 	# Un morceau de document : on voit tout de suite où il se place parmi ceux déjà trouvés.
 	if _recolle:

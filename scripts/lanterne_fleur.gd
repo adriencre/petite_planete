@@ -315,7 +315,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _allumer() -> void:
 	# on voit le robot (vue de dessus, 3e personne) et il sait jouer le geste : mise en scène extérieure
 	var robot: Node = _joueur.modele
-	# d'abord la cinématique : en 1re personne, la caméra recule en 3e et on voit le geste
+	# en 1re personne, le branchement se joue dans ses yeux, aux deux mains (décidé le 2026-11-26) ;
+	# en vue de dessus ou en 3e personne, mise en scène extérieure
+	_joueur.cine_sur_place = _joueur.premiere_personne and not _joueur.vue_dessus
 	_joueur.cinematique = true
 	if _joueur.troisieme_personne() and robot.has_method("jouer_action") and robot.call("a_animation", "brancher"):
 		_allumer_3e(robot)
@@ -473,30 +475,32 @@ func _allumer_1re() -> void:
 
 	# 1) il s'approche et s'accroupit devant la prise
 	var yeux_debout: float = _joueur.hauteur_yeux
-	var place: Vector3 = prise + normale * 0.8
+	var place: Vector3 = prise + normale * 0.65
 	place.y = _joueur.global_position.y
 	var approche := create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	approche.tween_property(_joueur, "global_position", place, 1.6 * k)
 	approche.tween_property(_joueur, "hauteur_yeux", 1.15, 1.2 * k).set_delay(0.8 * k)
 	await approche.finished
 
-	# 2) la fiche sort du poignet, la main la porte jusqu'à la prise
-	_joueur.fiche.visible = true
+	# 2) la main gauche décroche la fiche du poignet droit et tire le câble de la bobine (deux mains),
+	#    puis la porte devant la prise, broches alignées, et l'enfonce
 	_cable.visible = true
 	_cable.materiau.set_shader_parameter("flux", 0.0)
 	await _joueur.lever_mains(true, 0.8 * k).finished
-	await _poser_index_vers(prise + normale * 0.22, 0.9 * k)
+	await _joueur.tirer_fiche(1.0 / k)
+	await _poser_index_vers(prise + normale * 0.22, 0.9 * k, -normale)
 	await get_tree().create_timer(0.25 * k, false).timeout
-	await _poser_index_vers(prise + normale * 0.02, 0.35 * k)
-	# clic : la fiche est branchée, la prise s'allume
+	await _poser_index_vers(prise + normale * 0.005, 0.35 * k, -normale)
+	# clic : la fiche est branchée, la prise s'allume ; la main recule d'un rien sous le choc
 	_fiche_posee = true
 	SONS.jouer("clic", _prise_position())
-	_joueur.fiche.visible = false
+	await _poser_index_vers(prise + normale * 0.02, 0.12, -normale)
 	var clic := create_tween()
 	clic.tween_property(_prise_mat, "emission_energy_multiplier", 3.0, 0.08)
 	clic.tween_property(_prise_mat, "emission_energy_multiplier", 1.2, 0.4)
 	await get_tree().create_timer(0.35 * k, false).timeout
-	_joueur.poser_index(null)
+	# la fiche reste dans la prise (poser_index la garde là) ; la main gauche la lâche et se retire
+	_joueur.lacher_fiche()
 	_joueur.lever_mains(true, 0.6 * k)
 
 	# 3) la lumière passe : pulsations dorées du robot vers la lanterne
@@ -529,20 +533,23 @@ func _allumer_1re() -> void:
 	vague.tween_method(_eveil, 0.01, rayon_zone + 2.0, 4.5 * maxf(k, 0.55)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await get_tree().create_timer(1.6 * k, false).timeout
 
-	# 6) il débranche, le câble s'enroule dans le poignet, il se relève
-	await _poser_index_vers(prise + normale * 0.02, 0.5 * k)
+	# 6) la main gauche reprend la fiche et tire d'un coup sec ; lâchée, la fiche file se ranger sur la
+	#    bobine et le câble s'enroule derrière elle ; il se relève
+	await _joueur.prendre_fiche(0.5 * k).finished
 	_fiche_posee = false
-	_joueur.fiche.visible = true
 	_prise_mat.emission_energy_multiplier = 0.6
-	await _poser_index_vers(prise + normale * 0.3, 0.4 * k)
+	await _poser_index_vers(prise + normale * 0.3, 0.3 * k, -normale)
 	_joueur.poser_index(null)
-	_joueur.fiche.visible = false
+	_joueur.lacher_fiche()
+	_joueur.lever_mains(true, 0.4 * k)
+	await _joueur.ranger_fiche(0.55 * k).finished
 	_cable.visible = false
 	var fin := create_tween().set_parallel().set_trans(Tween.TRANS_SINE)
 	fin.tween_property(_joueur, "hauteur_yeux", yeux_debout, 1.0 * k)
 	_joueur.lever_mains(false, 0.8 * k)
 	await fin.finished
 	_joueur.cinematique = false
+	_joueur.cine_sur_place = false
 	await vague.finished
 	allumee = true
 	premiere_fois = false   # on la rallumera (après une mort, une reprise) : la séquence sera courte
@@ -730,16 +737,16 @@ func _remettre_pollen() -> void:
 	_pollen.explosiveness = 0.8
 
 
-## Amène le bout de l'index (qui tient la fiche) jusqu'à `cible`, en douceur.
-func _poser_index_vers(cible: Vector3, duree: float) -> Signal:
+## Amène la fiche jusqu'à `cible`, en douceur, broches tournées vers `direction` (si donnée).
+func _poser_index_vers(cible: Vector3, duree: float, direction := Vector3.ZERO) -> Signal:
 	var depart: Vector3 = _joueur.bout_index_monde()
 	var tw := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_method(_index_entre.bind(depart, cible), 0.0, 1.0, duree)
+	tw.tween_method(_index_entre.bind(depart, cible, direction), 0.0, 1.0, duree)
 	return tw.finished
 
 
-func _index_entre(t: float, a: Vector3, b: Vector3) -> void:
-	_joueur.poser_index(a.lerp(b, t))
+func _index_entre(t: float, a: Vector3, b: Vector3, direction: Vector3) -> void:
+	_joueur.poser_index(a.lerp(b, t), direction)
 
 
 func _flux(v: float) -> void:
